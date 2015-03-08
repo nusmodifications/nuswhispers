@@ -1,4 +1,12 @@
-/vendor
-/node_modules
-/public/assets/vendor
+vendor
+node_modules
 .env
+node_modules/
+.sass-cache
+.DS_Store
+npm-debug.log
+zip/
+scss/
+bower_components/
+.project
+.gitignore

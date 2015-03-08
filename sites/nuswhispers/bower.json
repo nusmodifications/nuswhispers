@@ -3,13 +3,25 @@
   "version": "0.1.0",
   "description": "Laravel 5 + AngularJS project.",
   "private": true,
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
   "dependencies": {
+    "angular": "*",
+    "angular-resource": "*",
+    "angular-cookies": "*",
+    "angular-sanitize": "*",
+    "angular-route": "*",
+    "angular-animate": "*",
+    "angular-ui-utils": "*",
+    "angular-bootstrap": "*",
+    "angular-ui-router": "*",
+    "ng-grid": "*",
+    "jquery": "*",
+    "modernizr": "*"
+  },
+  "devDependencies": {
+    "angular-mocks": "*",
+    "angular-scenario": "*"
+  },
+  "overrides": {
+
   }
 }

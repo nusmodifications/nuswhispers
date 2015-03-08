@@ -20,9 +20,26 @@ Laravel 5 + AngularJS setup. Development environment powered by [Laravel Homeste
     $ vagrant up
     ```
 
-* After all the setup scripts are completed, and if everything runs smoothly, you can view http://nuswhispers.local/ using your browser.
+* After you have regained control of your terminal, SSH the virtual terminal by running:
+    ```bash
+    $ vagrant ssh
+    ```
+
+* Run *npm* and *bower* to ensure that the dependencies are installed by running:
+    ```bash
+    $ cd /home/vagrant/sites/nuswhispers
+    $ npm install
+    $ bower install
+    ```
+* If everything is running perfectly, you should be able to access the website by requesting http://nuswhispers.local with your web browser.
+
+## Development
+If you are developing the frontend (AngularJS), run *gulp* to automatically compile the scripts:
+```bash
+$ cd /home/vagrant/sites/nuswhispers
+$ gulp
+```
 
 ## TODO
-* AngularJS and Grunt setup
-
+* Automate the last two steps.
 
