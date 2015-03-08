@@ -7,7 +7,7 @@ provider: virtualbox
 folders:
     - map: ./sites
       to: /home/vagrant/sites
-      type: smb
+      # type: smb
 
 sites:
     - map: nuswhispers.local
