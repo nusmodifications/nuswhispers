@@ -1,0 +1,25 @@
+---
+ip: "192.168.10.10"
+memory: 2048
+cpus: 1
+provider: virtualbox
+
+folders:
+    - map: ./sites
+      to: /home/vagrant/sites
+      type: smb
+
+sites:
+    - map: nuswhispers.local
+      to: /home/vagrant/sites/nuswhispers/public
+
+databases:
+    - nuswhispers
+
+variables:
+    - key: APP_ENV
+      value: local
+
+# blackfire:
+#     - id: foo
+#       token: bar

@@ -1,0 +1,15 @@
+{
+  "name": "nuswhispers",
+  "version": "0.1.0",
+  "description": "Laravel 5 + AngularJS project.",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+  }
+}
