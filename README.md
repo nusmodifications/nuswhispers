@@ -40,6 +40,7 @@ $ cd /home/vagrant/sites/nuswhispers
 $ gulp
 ```
 
-## TODO
-* Automate the last two steps.
+## Credits
+* https://github.com/Swader/homestead_improved
+* https://www.npmjs.com/package/generator-boom
 
