@@ -25,7 +25,7 @@ Laravel 5 + AngularJS setup. Development environment powered by [Laravel Homeste
     $ vagrant ssh
     ```
 
-* Run *npm* and *bower* to ensure that the dependencies are installed by running:
+* Ensure that the dependencies are installed by checking the presence of *node_modules* and *bower_components* in *~/sites/nuswhispers*. If they are not there, run *npm* and *bower* to ensure that the dependencies are installed by running:
     ```bash
     $ cd /home/vagrant/sites/nuswhispers
     $ npm install
