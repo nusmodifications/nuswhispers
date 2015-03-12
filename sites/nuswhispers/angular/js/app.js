@@ -12,7 +12,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
 
 	$routeProvider
 		.when('/home', {
-			templateUrl: 'templates/home.html'
+			templateUrl: 'assets/templates/home.html'
 		})
 		.otherwise({
 			redirectTo: '/home'
@@ -26,11 +26,11 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
 
 
 /*================================================================
-=>                  nuswhispersApp App Run()  
+=>                  nuswhispersApp App Run()
 ==================================================================*/
 
 app.run(['$rootScope', function ($rootScope) {
-	
+
 	'use strict';
 
 	console.log('Angular.js run() function...');
