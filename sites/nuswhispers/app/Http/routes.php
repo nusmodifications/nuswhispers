@@ -17,7 +17,10 @@ Route::get('/', function() {
 
 // API Routes
 Route::group(array('prefix' => 'api'), function() {
-	Route::resource('confessions', 'ConfessionsController');
+	Route::resource('confessions', 'ConfessionsController',
+		['only' => ['index', 'store']]);
+	Route::resource('categories', 'CategoriesController',
+		['only' => ['index']]);
 });
 
 /*Route::get('home', 'HomeController@index');

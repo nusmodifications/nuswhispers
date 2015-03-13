@@ -9,5 +9,4 @@ appServices.factory('Confession', function ($http) {
 			});
 		}
 	};
-	
 });
