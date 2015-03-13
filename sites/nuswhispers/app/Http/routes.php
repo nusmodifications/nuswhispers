@@ -15,6 +15,11 @@ Route::get('/', function() {
     return File::get(public_path() . '/index.html');
 });
 
+// API Routes
+Route::group(array('prefix' => 'api'), function() {
+	Route::resource('confessions', 'ConfessionsController');
+});
+
 /*Route::get('home', 'HomeController@index');
 
 Route::controllers([

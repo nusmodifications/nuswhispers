@@ -4,8 +4,13 @@
 ==================================================================*/
 /*global angular*/
 
-var app = angular.module('nuswhispersApp', ["ngCookies", "ngResource", "ngSanitize", "ngRoute", "ngAnimate", "ui.utils", "ui.bootstrap", "ui.router", "ngGrid"]);
+filepicker.setKey("AnsmRtYIsR9qh79Hxxrpez");
 
+var appServices = angular.module('nuswhispersApp.services', []);
+
+var appControllers = angular.module('nuswhispersApp.controllers', ['nuswhispersApp.services']);
+
+var app = angular.module('nuswhispersApp', ['nuswhispersApp.controllers', 'ngCookies', 'ngResource', 'ngSanitize', 'ngRoute', 'ngAnimate', 'ui.utils', 'ui.bootstrap', 'ui.router', 'ngGrid']);
 
 app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($routeProvider, $locationProvider, $httpProvider) {
 	'use strict';
@@ -13,6 +18,10 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
 	$routeProvider
 		.when('/home', {
 			templateUrl: 'assets/templates/home.html'
+		})
+		.when('/submit', {
+			templateUrl: 'assets/templates/submit.html',
+			controller: 'SubmitController'
 		})
 		.otherwise({
 			redirectTo: '/home'

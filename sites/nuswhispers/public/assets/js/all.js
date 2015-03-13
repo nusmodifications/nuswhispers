@@ -4,8 +4,13 @@
 ==================================================================*/
 /*global angular*/
 
-var app = angular.module('nuswhispersApp', ["ngCookies", "ngResource", "ngSanitize", "ngRoute", "ngAnimate", "ui.utils", "ui.bootstrap", "ui.router", "ngGrid"]);
+filepicker.setKey("AnsmRtYIsR9qh79Hxxrpez");
 
+var appServices = angular.module('nuswhispersApp.services', []);
+
+var appControllers = angular.module('nuswhispersApp.controllers', ['nuswhispersApp.services']);
+
+var app = angular.module('nuswhispersApp', ['nuswhispersApp.controllers', 'ngCookies', 'ngResource', 'ngSanitize', 'ngRoute', 'ngAnimate', 'ui.utils', 'ui.bootstrap', 'ui.router', 'ngGrid']);
 
 app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($routeProvider, $locationProvider, $httpProvider) {
 	'use strict';
@@ -13,6 +18,10 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
 	$routeProvider
 		.when('/home', {
 			templateUrl: 'assets/templates/home.html'
+		})
+		.when('/submit', {
+			templateUrl: 'assets/templates/submit.html',
+			controller: 'SubmitController'
 		})
 		.otherwise({
 			redirectTo: '/home'
@@ -42,3 +51,47 @@ app.run(['$rootScope', function ($rootScope) {
 /* ---> Do not delete this comment (Values) <--- */
 
 /* ---> Do not delete this comment (Constants) <--- */
+
+appControllers.controller('SubmitController', function ($scope, $http, Confession) {
+	$scope.confessionData = {};
+
+	$scope.submitConfession = function () {
+		$scope.loading = true;
+
+		Confession.submit($scope.confessionData)
+			.success(function (data) {
+				$scope.loading = false;
+				console.log(data);
+			})
+			. error(function (data) {
+				console.log(data);
+			});
+	};
+
+	$scope.uploadConfessionImage = function () {
+			filepicker.pick({
+				mimetypes: ['image/*'],
+				container: 'window',
+			},
+			function (fp) {
+				$scope.confessionData.image = fp.url;
+			},
+			function (fpError) {
+				console.log(fpError.toString());
+			});
+	}
+	
+});
+appServices.factory('Confession', function ($http) {
+	return {
+		submit: function (confessionData) {
+			return $http({
+				method: 'POST',
+				url: '/api/confessions',
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+				data: $.param(confessionData)
+			});
+		}
+	};
+	
+});
