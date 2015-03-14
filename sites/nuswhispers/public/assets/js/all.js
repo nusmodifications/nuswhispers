@@ -8,7 +8,7 @@ filepicker.setKey("AnsmRtYIsR9qh79Hxxrpez");
 
 var appServices = angular.module('nuswhispersApp.services', []);
 
-var appControllers = angular.module('nuswhispersApp.controllers', ['nuswhispersApp.services']);
+var appControllers = angular.module('nuswhispersApp.controllers', ['nuswhispersApp.services', 'vcRecaptcha']);
 
 var app = angular.module('nuswhispersApp', ['nuswhispersApp.controllers', 'ngCookies', 'ngResource', 'ngSanitize', 'ngRoute', 'ngAnimate', 'ui.utils', 'ui.bootstrap', 'ui.router', 'ngGrid']);
 
@@ -52,7 +52,7 @@ app.run(['$rootScope', function ($rootScope) {
 
 /* ---> Do not delete this comment (Constants) <--- */
 
-appControllers.controller('SubmitController', function ($scope, $http, Confession, Category) {
+appControllers.controller('SubmitController', function ($scope, $http, Confession, Category, vcRecaptchaService) {
 	$scope.confessionData = {};
 	$scope.selectedCategoryIDs = [];
 
@@ -67,6 +67,7 @@ appControllers.controller('SubmitController', function ($scope, $http, Confessio
 	$scope.submitConfession = function () {
 		$scope.loading = true;
 		$scope.confessionData.categories = $scope.selectedCategoryIDs;
+		$scope.confessionData.captcha = vcRecaptchaService.getResponse();
 
 		Confession.submit($scope.confessionData)
 			.success(function (data) {

@@ -15,13 +15,12 @@
     "angular-ui-router": "*",
     "ng-grid": "*",
     "jquery": "*",
-    "modernizr": "*"
+    "modernizr": "*",
+    "angular-recaptcha": "~2.2.0"
   },
   "devDependencies": {
     "angular-mocks": "*",
     "angular-scenario": "*"
   },
-  "overrides": {
-
-  }
+  "overrides": {}
 }

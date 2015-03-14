@@ -1,4 +1,4 @@
-appControllers.controller('SubmitController', function ($scope, $http, Confession, Category) {
+appControllers.controller('SubmitController', function ($scope, $http, Confession, Category, vcRecaptchaService) {
 	$scope.confessionData = {};
 	$scope.selectedCategoryIDs = [];
 
@@ -13,6 +13,7 @@ appControllers.controller('SubmitController', function ($scope, $http, Confessio
 	$scope.submitConfession = function () {
 		$scope.loading = true;
 		$scope.confessionData.categories = $scope.selectedCategoryIDs;
+		$scope.confessionData.captcha = vcRecaptchaService.getResponse();
 
 		Confession.submit($scope.confessionData)
 			.success(function (data) {

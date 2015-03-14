@@ -34,4 +34,9 @@ return [
 		'secret' => '',
 	],
 
+	'reCAPTCHA' => [
+		'key' => '6LcUdQMTAAAAAD_LA9uHt2DQgiJ24zBpN64KBGIh',
+		'verify' => 'https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s',
+	],
+
 ];

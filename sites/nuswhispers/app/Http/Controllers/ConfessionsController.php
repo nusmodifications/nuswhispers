@@ -27,12 +27,21 @@ class ConfessionsController extends Controller {
 		$validationRules = array(
 			'content' => 'required',
 			'image' => 'image',
-			'categories' => 'required|array'
+			'categories' => 'array',
+			'captcha' => 'required'
 		);
 
 		$validator = \Validator::make(\Input::all(), $validationRules);
 
 		if ($validator->fails()) {
+			return \Response::json(array('success' => false));
+		}
+
+		// Check reCAPTCHA
+		$captchaResponseJSON = file_get_contents(sprintf(\Config::get('services.reCAPTCHA.verify'), \Config::get('services.reCAPTCHA.key'), \Input::get('captcha')));
+		$captchaResponse = json_decode($captchaResponseJSON);
+
+		if (!$captchaResponse->success) {
 			return \Response::json(array('success' => false));
 		}
 
@@ -42,12 +51,11 @@ class ConfessionsController extends Controller {
 		$newConfession->images = \Input::get('image');
 		$newConfession->save();
 
-		// get all tags in content
+		// Get all tags in content
 		preg_match_all('/(#\w+)/', $newConfession->content, $matches);
 		$tagNames = array_shift($matches); // get full pattern matches from match result
 		foreach ($tagNames as $tagName) {
-			$confessionTag = \Tag::firstOrNew(array('confession_tag' => $tagName));
-			$confessionTag->save();
+			$confessionTag = \Tag::firstOrCreate(array('confession_tag' => $tagName));
 			$newConfession->tags()->attach($confessionTag->confession_tag_id);
 		}
 

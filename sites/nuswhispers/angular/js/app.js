@@ -8,7 +8,7 @@ filepicker.setKey("AnsmRtYIsR9qh79Hxxrpez");
 
 var appServices = angular.module('nuswhispersApp.services', []);
 
-var appControllers = angular.module('nuswhispersApp.controllers', ['nuswhispersApp.services']);
+var appControllers = angular.module('nuswhispersApp.controllers', ['nuswhispersApp.services', 'vcRecaptcha']);
 
 var app = angular.module('nuswhispersApp', ['nuswhispersApp.controllers', 'ngCookies', 'ngResource', 'ngSanitize', 'ngRoute', 'ngAnimate', 'ui.utils', 'ui.bootstrap', 'ui.router', 'ngGrid']);
 
