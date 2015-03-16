@@ -128,7 +128,7 @@ gulp.task('concat:bower', function () {
                 if (/^data:/.test(url) || /^http(:?s)?:/.test(url)) {
                     return 'url(' + url + ')';
                 }
-                return 'url(' + path.join(path.relative(SETTINGS.build.bower, SETTINGS.build.app), SETTINGS.build.bower, relativePath, url) + ')';
+                return 'url(' + path.join(path.relative(SETTINGS.build.bower, SETTINGS.build.app), 'assets/bower', relativePath, url) + ')';
             });
             file.contents = new Buffer(contents);
 
@@ -228,6 +228,11 @@ gulp.task('copy:images', function () {
 gulp.task('copy:fonts', function () {
 
     console.log('-------------------------------------------------- COPY :fonts');
+
+    // FontAwesome
+    gulp.src(SETTINGS.src.bower + 'fontawesome/fonts/**.*')
+        .pipe(gulp.dest(SETTINGS.build.bower + 'fontawesome/fonts'));
+
     gulp.src([SETTINGS.src.fonts + '*', SETTINGS.src.fonts + '**/*'])
         .pipe(gulp.dest(SETTINGS.build.fonts));
 });

@@ -16,7 +16,9 @@
     "ng-grid": "*",
     "jquery": "*",
     "modernizr": "*",
-    "angular-recaptcha": "~2.2.0"
+    "angular-recaptcha": "~2.2.0",
+    "fontawesome": "~4.3.0",
+    "bootstrap-sass-official": "~3.3.3"
   },
   "devDependencies": {
     "angular-mocks": "*",
