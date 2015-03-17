@@ -3,8 +3,7 @@
 =>                  App = nuswhispersApp
 ==================================================================*/
 /*global angular*/
-
-filepicker.setKey("AnsmRtYIsR9qh79Hxxrpez");
+filepicker.setKey('AnsmRtYIsR9qh79Hxxrpez');
 
 var appServices = angular.module('nuswhispersApp.services', []);
 
@@ -52,7 +51,10 @@ app.run(['$rootScope', function ($rootScope) {
 
 /* ---> Do not delete this comment (Constants) <--- */
 
-appControllers.controller('SubmitController', function ($scope, $http, Confession, Category, vcRecaptchaService) {
+angular.module('nuswhispersApp.controllers', ['nuswhispersApp.services', 'vcRecaptcha'])
+.controller('SubmitController', function ($scope, $http, Confession, Category, vcRecaptchaService) {
+    'use strict';
+
 	$scope.confessionData = {};
 	$scope.selectedCategoryIDs = [];
 
@@ -74,7 +76,7 @@ appControllers.controller('SubmitController', function ($scope, $http, Confessio
 				$scope.loading = false;
 				console.log(data);
 			})
-			. error(function (data) {
+			.error(function (data) {
 				console.log(data);
 			});
 	};
@@ -104,16 +106,22 @@ appControllers.controller('SubmitController', function ($scope, $http, Confessio
 			$scope.selectedCategoryIDs.push(category.confession_category_id);
 		}
 	};
-	
+
 });
-appServices.factory('Category', function ($http) {
+
+angular.module('nuswhispersApp.services', [])
+.factory('Category', function ($http) {
+    'use strict';
 	return {
 		get: function () {
 			return $http.get('/api/categories');
 		}
 	};
 });
-appServices.factory('Confession', function ($http) {
+
+angular.module('nuswhispersApp.services', [])
+.factory('Confession', function ($http) {
+    'use strict';
 	return {
 		submit: function (confessionData) {
 			return $http({

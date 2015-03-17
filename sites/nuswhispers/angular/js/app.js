@@ -3,8 +3,7 @@
 =>                  App = nuswhispersApp
 ==================================================================*/
 /*global angular*/
-
-filepicker.setKey("AnsmRtYIsR9qh79Hxxrpez");
+filepicker.setKey('AnsmRtYIsR9qh79Hxxrpez');
 
 var appServices = angular.module('nuswhispersApp.services', []);
 

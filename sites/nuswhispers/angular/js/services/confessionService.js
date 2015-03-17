@@ -1,4 +1,6 @@
-appServices.factory('Confession', function ($http) {
+angular.module('nuswhispersApp.services', [])
+.factory('Confession', function ($http) {
+    'use strict';
 	return {
 		submit: function (confessionData) {
 			return $http({
