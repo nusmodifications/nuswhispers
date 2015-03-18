@@ -5,9 +5,8 @@
 /*global angular*/
 filepicker.setKey('AnsmRtYIsR9qh79Hxxrpez');
 
-var appServices = angular.module('nuswhispersApp.services', []);
-
-var appControllers = angular.module('nuswhispersApp.controllers', ['nuswhispersApp.services', 'vcRecaptcha']);
+angular.module('nuswhispersApp.services', []);
+angular.module('nuswhispersApp.controllers', ['nuswhispersApp.services', 'vcRecaptcha']);
 
 var app = angular.module('nuswhispersApp', ['nuswhispersApp.controllers', 'ngCookies', 'ngResource', 'ngSanitize', 'ngRoute', 'ngAnimate', 'ui.utils', 'ui.bootstrap', 'ui.router', 'ngGrid']);
 
@@ -109,7 +108,7 @@ angular.module('nuswhispersApp.controllers', ['nuswhispersApp.services', 'vcReca
 
 });
 
-angular.module('nuswhispersApp.services', [])
+angular.module('nuswhispersApp.services')
 .factory('Category', function ($http) {
     'use strict';
 	return {
@@ -119,7 +118,7 @@ angular.module('nuswhispersApp.services', [])
 	};
 });
 
-angular.module('nuswhispersApp.services', [])
+angular.module('nuswhispersApp.services')
 .factory('Confession', function ($http) {
     'use strict';
 	return {
