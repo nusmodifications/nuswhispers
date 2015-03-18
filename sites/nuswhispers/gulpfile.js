@@ -229,9 +229,9 @@ gulp.task('copy:fonts', function () {
 
     console.log('-------------------------------------------------- COPY :fonts');
 
-    // FontAwesome
-    gulp.src(SETTINGS.src.bower + 'fontawesome/fonts/**.*')
-        .pipe(gulp.dest(SETTINGS.build.bower + 'fontawesome/fonts'));
+    // Typicons
+    gulp.src(SETTINGS.src.bower + 'typicons/src/font/**.*')
+        .pipe(gulp.dest(SETTINGS.build.bower + 'typicons/src/font'));
 
     gulp.src([SETTINGS.src.fonts + '*', SETTINGS.src.fonts + '**/*'])
         .pipe(gulp.dest(SETTINGS.build.fonts));
