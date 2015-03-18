@@ -1,4 +1,4 @@
-angular.module('nuswhispersApp.services', [])
+angular.module('nuswhispersApp.services')
 .factory('Category', function ($http) {
     'use strict';
 	return {
