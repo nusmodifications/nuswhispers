@@ -1,0 +1,124 @@
+$primary-text-color: #666666;
+$nav-text-color: #ffffff;
+$nav-section-label-color: #a2414a;
+$primary-color: #f55260;
+$highlight-color: #fff819;
+$sidebar-width: 240px;
+
+body {
+	font-family: 'Montserrat', sans-serif;
+	color: $primary-text-color;
+	background-color: #eeeeee;
+}
+
+.highlight {
+	color: $highlight-color;
+}
+
+#wrapper {
+	padding-left: $sidebar-width;
+	transition: padding-left 0.5s ease;
+}
+
+.whispers-brand {
+	float: none;
+	padding: 10px 10px;
+	margin-top: 10px;
+	display: block;
+}
+
+.whispers-logo {
+	background-image: url('../images/logo.png');
+	background-repeat: no-repeat;
+	background-size: 30px 30px;
+	width: 30px;
+	height: 30px;
+	float: left;
+}
+
+.whispers-logo-text {
+	float: left;
+	line-height: 30px;
+	margin-top: 3px;
+	margin-left: 5px;
+}
+
+#sidebar-wrapper {
+	background-color: $primary-color;
+	height: 100%;
+	position: fixed;
+	transition: all 0.5s ease;
+	width: $sidebar-width;
+	margin-left: -$sidebar-width;
+	hr {
+		margin-top: 10px;
+		margin-bottom: 10px;
+		width: 90%;
+	}
+	.nav-section-label {
+		color: $nav-section-label-color;
+		font-size: 10px;
+		padding: 5px 20px;
+	}
+	a {
+		color: $nav-text-color;
+	}
+	ul.nav {
+		li {
+			a {
+				font-size: 12px;
+				padding: 5px 20px;
+				color: $nav-text-color;
+			}
+			a:hover {
+				color: $highlight-color;
+				background: transparent;
+			}
+			a:focus {
+				color: $highlight-color;
+				background: transparent;
+			}
+			a .typcn {
+				font-size: 20px;
+			}
+			a .typcn:after {
+				content: ' ';
+			}
+		}
+		li.active a {
+			color: $highlight-color;
+		}
+	}
+
+	ul.nav.main-nav {
+		li a {
+			font-size: 14px;
+		}
+	}
+}
+
+#content-wrapper {
+	position: relative;		
+}
+
+@media (max-width: 768px) {
+	#wrapper {
+		padding-left: 0px;
+	}
+	#wrapper.sidebar-opened {
+		padding-left: 250px;
+		#sidebar-wrapper {
+			width: $sidebar-width;
+		}
+		#wrapper.toggled #content-wrapper {
+			margin-right: -$sidebar-width;
+		}
+	}
+	#sidebar-wrapper {
+		width: 0px;
+	}
+	#content-wrapper {
+		width: 100%;
+		position: absolute;
+	}
+}

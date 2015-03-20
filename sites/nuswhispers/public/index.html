@@ -6,15 +6,65 @@
     <meta charset="utf-8">
     <title>NUS Whispers</title>
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1" />
+    <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="assets/bower/_bower.css">
     <link rel="stylesheet" href="assets/css/styles.css">
   </head>
 
   <body ng-app="nuswhispersApp">
-    <h1>Hello World</h1>
-    <p>If you are seeing this, everything is running fine (I hope).</p>
-
-    <div ng-view></div>
+    <div id="wrapper">
+      <nav id="sidebar-wrapper">
+        <a class="whispers-brand navbar-brand" href="/">
+          <div class="whispers-logo"></div>
+          <div class="whispers-logo-text">NUS<span class="highlight">Whispers</span></div>
+        </a>
+        <hr>
+        <ul class="nav main-nav">
+          <li class="active">
+            <a href="/"><span class="typcn typcn-pin"></span>Featured</a>
+          </li>
+          <li>
+            <a href="/"><span class="typcn typcn-chart-line"></span>Trending</a>
+          </li>
+          <li>
+            <a href="/"><span class="typcn typcn-starburst"></span>New</a>
+          </li>
+          <li>
+            <a href="/"><span class="typcn typcn-star-full-outline"></span>Favourites</a>
+          </li>
+        </ul>
+        <hr>
+        <span class="nav-section-label">CATEGORIES</span>
+        <ul class="nav">
+          <li>
+            <a href="/">Lost & Found</a>
+          </li>
+          <li>
+            <a href="/">Rant & Complaint</a>
+          </li>
+          <li>
+            <a href="/">Romance</a>
+          </li>
+        </ul>
+        <hr>
+        <span class="nav-section-label">POPULAR TAGS</span>
+        <ul class="nav">
+          <li>
+            <a href="/">#bored</a>
+          </li>
+          <li>
+            <a href="/">#yolo</a>
+          </li>
+          <li>
+            <a href="/">#nus</a>
+          </li>
+        </ul>
+      </nav>
+      <div id="content-wrapper">
+        <div ng-view></div>
+      </div>
+      
+    </div>
 
     <script src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit" async defer></script>
     <script type="text/javascript" src="assets/bower/_bower.js"></script>
