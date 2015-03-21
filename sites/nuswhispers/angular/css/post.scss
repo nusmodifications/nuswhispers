@@ -1,3 +1,6 @@
+#post-list {
+    padding: 0px;
+}
 .post {
     margin-bottom: 15px;
     background-color: #ffffff;
@@ -38,7 +41,7 @@
                 color: $twitter-color;
             }
             .tweets-count:before {
-                background: url('../images/twitter_speech.png');
+                background: url('../img/twitter_speech.png');
                 content: ' ';
                 display: inline-block;
                 width: 24px;
@@ -51,7 +54,7 @@
                 color: $fb-color;
             }
             .fb-likes:before {
-                background: url('../images/fb_speech.png');
+                background: url('../img/fb_speech.png');
                 content: ' ';
                 display: inline-block;
                 width: 24px;
@@ -64,7 +67,7 @@
                 color: $primary-color;
             }
             .favs-count:before {
-                background: url('../images/fav_speech.png');
+                background: url('../img/fav_speech.png');
                 content: ' ';
                 display: inline-block;
                 width: 24px;

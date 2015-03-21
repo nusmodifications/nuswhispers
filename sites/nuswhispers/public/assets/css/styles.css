@@ -4940,7 +4940,7 @@ a:hover {
   display: block; }
 
 .whispers-logo {
-  background-image: url('../images/logo.png');
+  background-image: url('../img/logo.png');
   background-repeat: no-repeat;
   background-size: 30px 30px;
   width: 30px;
@@ -5105,6 +5105,9 @@ a:hover {
   #content {
     margin-top: 50px; } }
 
+#post-list {
+  padding: 0px; }
+
 .post {
   margin-bottom: 15px;
   background-color: #ffffff;
@@ -5137,7 +5140,7 @@ a:hover {
       .post .post-footer .post-media-summary .tweets-count {
         color: #00b0f3; }
       .post .post-footer .post-media-summary .tweets-count:before {
-        background: url('../images/twitter_speech.png');
+        background: url('../img/twitter_speech.png');
         content: ' ';
         display: inline-block;
         width: 24px;
@@ -5148,7 +5151,7 @@ a:hover {
       .post .post-footer .post-media-summary .fb-likes {
         color: #3b5998; }
       .post .post-footer .post-media-summary .fb-likes:before {
-        background: url('../images/fb_speech.png');
+        background: url('../img/fb_speech.png');
         content: ' ';
         display: inline-block;
         width: 24px;
@@ -5159,7 +5162,7 @@ a:hover {
       .post .post-footer .post-media-summary .favs-count {
         color: #f55260; }
       .post .post-footer .post-media-summary .favs-count:before {
-        background: url('../images/fav_speech.png');
+        background: url('../img/fav_speech.png');
         content: ' ';
         display: inline-block;
         width: 24px;

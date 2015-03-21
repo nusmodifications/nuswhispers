@@ -5,7 +5,12 @@
 /*global angular*/
 filepicker.setKey('AnsmRtYIsR9qh79Hxxrpez');
 
-angular.module('nuswhispersApp.services', []);
+angular.module('nuswhispersApp.services', ['facebook']).config(
+    function (FacebookProvider) {
+        'use strict';
+        FacebookProvider.init('563666707081891');
+    }
+);
 angular.module('nuswhispersApp.controllers', ['nuswhispersApp.services', 'vcRecaptcha']);
 
 var app = angular.module('nuswhispersApp', ['nuswhispersApp.controllers', 'ngCookies', 'ngResource', 'ngSanitize', 'ngRoute', 'ngAnimate', 'ui.utils', 'ui.bootstrap', 'ui.router', 'ngGrid']);
@@ -15,7 +20,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
 
     $routeProvider
         .when('/home', {
-            templateUrl: 'assets/templates/index.html'
+            templateUrl: 'assets/templates/home.html'
         })
         .when('/submit', {
             templateUrl: 'assets/templates/submit.html',

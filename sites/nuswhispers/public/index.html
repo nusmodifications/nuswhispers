@@ -69,7 +69,8 @@
           <div id="topbar-nav">
             <a class="btn btn-social-media" target="_blank"><span class="typcn typcn-social-facebook"></span></a>
             <a class="btn" href="/#!/submit"><span class="typcn typcn-heart-full-outline"></span> New Confession</a>
-            <a class="btn btn-alt-style">Login</a>
+            <a ng-show="!isLoggedIn" ng-click="login()" class="btn btn-alt-style">Login</a>
+            <a ng-show="isLoggedIn" ng-click="logout()" class="btn btn-alt-style">Logout</a>
           </div>
           <form class="search-form" role="search">
             <div class="input-group">

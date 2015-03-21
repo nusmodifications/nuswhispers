@@ -5,7 +5,12 @@
 /*global angular*/
 filepicker.setKey('AnsmRtYIsR9qh79Hxxrpez');
 
-angular.module('nuswhispersApp.services', []);
+angular.module('nuswhispersApp.services', ['facebook']).config(
+    function (FacebookProvider) {
+        'use strict';
+        FacebookProvider.init('563666707081891');
+    }
+);
 angular.module('nuswhispersApp.controllers', ['nuswhispersApp.services', 'vcRecaptcha']);
 
 var app = angular.module('nuswhispersApp', ['nuswhispersApp.controllers', 'ngCookies', 'ngResource', 'ngSanitize', 'ngRoute', 'ngAnimate', 'ui.utils', 'ui.bootstrap', 'ui.router', 'ngGrid']);
@@ -15,7 +20,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
 
     $routeProvider
         .when('/home', {
-            templateUrl: 'assets/templates/index.html'
+            templateUrl: 'assets/templates/home.html'
         })
         .when('/submit', {
             templateUrl: 'assets/templates/submit.html',
@@ -51,10 +56,11 @@ app.run(['$rootScope', function ($rootScope) {
 /* ---> Do not delete this comment (Constants) <--- */
 
 angular.module('nuswhispersApp.controllers')
-.controller('MainController', function ($scope) {
+.controller('MainController', function ($scope, Facebook, FacebookData) {
     'use strict';
 
     $scope.sidebarOpenedClass = '';
+    $scope.isLoggedIn = false;
 
     $scope.toggleSidebar = function () {
         if ($scope.sidebarOpenedClass === '') {
@@ -63,6 +69,31 @@ angular.module('nuswhispersApp.controllers')
             $scope.sidebarOpenedClass = '';
         }
     };
+
+    $scope.login = function () {
+        Facebook.login(function (response) {
+            $scope.getLoginStatus();
+        }, {
+            scope: 'publish_actions'
+        });
+    };
+
+    $scope.logout = function () {
+        Facebook.logout(function (response) {
+            $scope.getLoginStatus();
+        });
+    };
+
+    $scope.getLoginStatus = function () {
+        Facebook.getLoginStatus(function (response) {
+            $scope.isLoggedIn = response.status === 'connected';
+            if ($scope.isLoggedIn) {
+                FacebookData.setAccessToken(response.authResponse.accessToken);
+            }
+        });
+    };
+
+    $scope.getLoginStatus();
 });
 angular.module('nuswhispersApp.controllers')
 .controller('SubmitController', function ($scope, $http, Confession, Category, vcRecaptchaService) {
@@ -147,20 +178,20 @@ angular.module('nuswhispersApp.services')
     };
 });
 
-// angular.module('nuswhispersApp.services')
-// .factory('FacebookData', function () {
-//     'use strict';
+angular.module('nuswhispersApp.services')
+.factory('FacebookData', function () {
+    'use strict';
 
-//     var data = {
-//         accessToken: ''
-//     };
+    var data = {
+        accessToken: ''
+    };
 
-//     return {
-//         setAccessToken: function (accessToken) {
-//             data.accessToken = accessToken;
-//         },
-//         getAccessToken: function () {
-//             return data.accessToken;
-//         }
-//     };
-// });
+    return {
+        setAccessToken: function (accessToken) {
+            data.accessToken = accessToken;
+        },
+        getAccessToken: function () {
+            return data.accessToken;
+        }
+    };
+});
