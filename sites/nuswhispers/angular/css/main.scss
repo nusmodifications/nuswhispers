@@ -1,3 +1,4 @@
+$background-color: #f5f5f5;
 $primary-text-color: #666666;
 $secondary-text-color: #8e8e8e;
 $nav-text-color: #ffffff;
@@ -9,6 +10,10 @@ $primary-color: #f55260;
 $alternate-color: #2e8fc2;
 $highlight-color: #fff819;
 $shadow-color: #e0e0e0;
+
+$twitter-color: #00b0f3;
+$fb-color: #3b5998;
+
 $sidebar-width: 240px;
 
 @mixin border-radius($radius) {
@@ -33,7 +38,16 @@ $sidebar-width: 240px;
 body {
     font-family: 'Montserrat', sans-serif;
     color: $primary-text-color;
-    background-color: #f5f5f5;
+    background-color: $background-color;
+}
+
+a {
+    color: $primary-color;
+}
+
+a:hover {
+    color: $highlight-color;
+    text-decoration: none;
 }
 
 .highlight {
@@ -190,7 +204,11 @@ body {
 }
 
 #content-wrapper {
-    position: relative;     
+    position: relative;  
+}
+
+#content {
+    margin-top: 15px;
 }
 
 @media (max-width: 768px) {
@@ -248,5 +266,8 @@ body {
         .input-group-addon {
             display: none;
         }
+    }
+    #content {
+        margin-top: 50px;
     }
 }
