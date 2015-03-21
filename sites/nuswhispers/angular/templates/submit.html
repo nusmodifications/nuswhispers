@@ -1,11 +1,11 @@
 <h1>Submit Your Confession</h1>
 
 <form ng-submit="submitConfession()">
-	<textarea ng-model="confessionData.content"></textarea><br>
-	<button type="button" ng-click="uploadConfessionImage()">Upload Image</button><br>
-	<label ng-repeat="category in categories">
-		<input type="checkbox" value="{{category.confession_category_id}}" ng-click="toggleCategorySelection(category)">{{category.confession_category}}</input>
-	</label>
-	<div vc-recaptcha key="'6LcUdQMTAAAAAOo_AIrROYc3vi081wEAOBBCHdA-'"></div>
-	<button type="submit">Submit</button>
+    <textarea ng-model="confessionData.content"></textarea><br>
+    <button type="button" ng-click="uploadConfessionImage()">Upload Image</button><br>
+    <label ng-repeat="category in categories">
+        <input type="checkbox" value="{{category.confession_category_id}}" ng-click="toggleCategorySelection(category)">{{category.confession_category}}</input>
+    </label>
+    <div vc-recaptcha key="'6LcUdQMTAAAAAOo_AIrROYc3vi081wEAOBBCHdA-'"></div>
+    <button type="submit">Submit</button>
 </form>

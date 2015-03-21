@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 
 <html lang="en">
-
   <head>
     <meta charset="utf-8">
     <title>NUS Whispers</title>
@@ -11,7 +10,7 @@
     <link rel="stylesheet" href="assets/css/styles.css">
   </head>
 
-  <body ng-app="nuswhispersApp">
+  <body ng-app="nuswhispersApp" ng-controller="MainController" ng-class="sidebarOpenedClass">
     <div id="wrapper">
       <nav id="sidebar-wrapper">
         <a class="whispers-brand navbar-brand" href="/">
@@ -61,6 +60,26 @@
         </ul>
       </nav>
       <div id="content-wrapper">
+        <div id="topbar-wrapper">
+          <button type="button" class="navbar-toggle" ng-click="toggleSidebar()">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <div id="topbar-nav">
+            <a class="btn btn-social-media"><span class="typcn typcn-social-facebook" target="_blank"></span></a>
+            <a class="btn" href="/#!/submit"><span class="typcn typcn-heart-full-outline"></span> New Confession</a>
+            <a class="btn btn-alt-style">Login</a>
+          </div>
+          <form class="search-form" role="search">
+            <div class="input-group">
+              <span id="search-input-addon" class="input-group-addon">
+                <span class="typcn typcn-zoom"></span>
+              </span>
+              <input type="text" class="search-input form-control" aria-describedby="search-input-addon" placeholder="Search" />
+            </div>
+          </form>
+        </div>
         <div ng-view></div>
       </div>
       
