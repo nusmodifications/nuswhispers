@@ -15,7 +15,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
 
     $routeProvider
         .when('/home', {
-            templateUrl: 'assets/templates/home.html'
+            templateUrl: 'assets/templates/index.html'
         })
         .when('/submit', {
             templateUrl: 'assets/templates/submit.html',
@@ -146,3 +146,21 @@ angular.module('nuswhispersApp.services')
         }
     };
 });
+
+// angular.module('nuswhispersApp.services')
+// .factory('FacebookData', function () {
+//     'use strict';
+
+//     var data = {
+//         accessToken: ''
+//     };
+
+//     return {
+//         setAccessToken: function (accessToken) {
+//             data.accessToken = accessToken;
+//         },
+//         getAccessToken: function () {
+//             return data.accessToken;
+//         }
+//     };
+// });
