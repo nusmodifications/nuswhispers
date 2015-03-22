@@ -4914,7 +4914,7 @@ button.close {
     display: none !important; } }
 
 body {
-  font-family: 'Montserrat', sans-serif;
+  font: 1.4em 'Montserrat', sans-serif;
   color: #666666;
   background-color: #f5f5f5; }
 
@@ -4936,8 +4936,9 @@ a:hover {
 
 .whispers-brand {
   float: none;
-  padding: 10px 0px 0px 10px;
-  display: block; }
+  padding: 1em 1em 0.25em;
+  display: inline-block;
+  height: auto; }
 
 .whispers-logo {
   background-image: url('../img/logo.png');
@@ -5015,7 +5016,7 @@ a:hover {
 .btn-social-media {
   background-color: transparent;
   color: #8e8e8e;
-  font-size: 22px;
+  font-size: 185%;
   padding: 0px; }
 
 #sidebar-wrapper {
@@ -5028,33 +5029,41 @@ a:hover {
   width: 240px;
   margin-left: -240px; }
   #sidebar-wrapper hr {
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin: 0.25em auto;
+    opacity: 0.5;
     width: 90%; }
   #sidebar-wrapper .nav-section-label {
     color: #a2414a;
-    font-size: 10px;
-    padding: 5px 20px; }
+    font-size: 80%;
+    padding: 0;
+    margin: 1.65em 1.75em 0.5em;
+    text-transform: uppercase; }
   #sidebar-wrapper a {
     color: #ffffff; }
-  #sidebar-wrapper ul.nav li a {
-    font-size: 12px;
-    padding: 5px 20px;
-    color: #ffffff; }
-  #sidebar-wrapper ul.nav li a:hover {
-    color: #fff819;
-    background: transparent; }
-  #sidebar-wrapper ul.nav li a:focus {
-    color: #fff819;
-    background: transparent; }
-  #sidebar-wrapper ul.nav li a .typcn {
-    font-size: 20px; }
-  #sidebar-wrapper ul.nav li a .typcn:after {
-    content: ' '; }
-  #sidebar-wrapper ul.nav li.active a {
-    color: #fff819; }
-  #sidebar-wrapper ul.nav.main-nav li a {
-    font-size: 14px; }
+  #sidebar-wrapper ul.nav {
+    margin-bottom: 1em; }
+    #sidebar-wrapper ul.nav li a {
+      font-size: 95%;
+      padding: 0.4em 2.05rem;
+      color: #ffffff; }
+    #sidebar-wrapper ul.nav li a:hover {
+      color: #fff819;
+      background: transparent; }
+    #sidebar-wrapper ul.nav li a:focus {
+      color: #fff819;
+      background: transparent; }
+    #sidebar-wrapper ul.nav li a .typcn {
+      font-size: 20px; }
+    #sidebar-wrapper ul.nav li a .typcn:after {
+      content: ' '; }
+    #sidebar-wrapper ul.nav li.active a {
+      color: #fff819; }
+  #sidebar-wrapper ul.nav.main-nav {
+    margin: 0.5em 0 1em; }
+    #sidebar-wrapper ul.nav.main-nav li a {
+      font-size: 115%;
+      padding-top: 0.5em;
+      padding-bottom: 0.5em; }
 
 #content-wrapper {
   position: relative; }
@@ -5124,7 +5133,8 @@ a:hover {
     padding-top: 15px;
     padding-bottom: 15px;
     border-top: 1px solid #f5f5f5;
-    border-bottom: 1px solid #f5f5f5; }
+    border-bottom: 1px solid #f5f5f5;
+    line-height: 1.75em; }
     .post .post-content .post-image {
       width: 100%;
       padding-bottom: 15px; }
