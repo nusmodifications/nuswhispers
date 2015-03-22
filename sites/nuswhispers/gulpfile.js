@@ -163,7 +163,7 @@ gulp.task('convert:scss', function () {
         console.log(errorLog(err));
     };
 
-    var stream = gulp.src(SETTINGS.src.css + 'application.scss')
+    var stream = gulp.src([SETTINGS.src.css + 'application.scss', SETTINGS.src.css + 'admin.scss'])
        .pipe(gulpPlugins.sass({includePaths: [SETTINGS.src.css], onError: showError}))
        .pipe(gulp.dest(SETTINGS.scss))
        .pipe(gulpPlugins.connect.reload());
@@ -175,6 +175,12 @@ gulp.task('concat:css', ['convert:scss'], function () {
     console.log('-------------------------------------------------- CONCAT :css ');
     gulp.src([SETTINGS.src.css + 'fonts.css', SETTINGS.scss + 'application.css', SETTINGS.src.css + '*.css'])
         .pipe(gulpPlugins.concat('styles.css'))
+        .pipe(gulpPlugins.if(isProduction, gulpPlugins.minifyCss({keepSpecialComments: '*'})))
+        .pipe(gulp.dest(SETTINGS.build.css))
+        .pipe(gulpPlugins.connect.reload());
+
+    // Copy over admin.css to public folder (no need for concat)
+    gulp.src([SETTINGS.scss + 'admin.css'])
         .pipe(gulpPlugins.if(isProduction, gulpPlugins.minifyCss({keepSpecialComments: '*'})))
         .pipe(gulp.dest(SETTINGS.build.css))
         .pipe(gulpPlugins.connect.reload());
