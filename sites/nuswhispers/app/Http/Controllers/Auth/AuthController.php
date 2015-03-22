@@ -4,6 +4,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\Registrar;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller {
 
@@ -20,6 +21,12 @@ class AuthController extends Controller {
 
 	use AuthenticatesAndRegistersUsers;
 
+    /**
+     * Redirect to after login.
+     * @var string
+     */
+    protected $redirectTo = '/admin';
+
 	/**
 	 * Create a new authentication controller instance.
 	 *
@@ -34,5 +41,28 @@ class AuthController extends Controller {
 
 		$this->middleware('guest', ['except' => 'getLogout']);
 	}
+
+    /**
+     * Show the application registration form.
+     *
+     * @return Response
+     */
+    public function getRegister()
+    {
+        // Disable global registration by redirecting it to /
+        return redirect('/');
+    }
+
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function postRegister(Request $request)
+    {
+        // Disable global registration by redirecting it to /
+        return redirect('/');
+    }
 
 }

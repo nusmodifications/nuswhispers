@@ -23,9 +23,6 @@ Route::group(array('prefix' => 'api'), function() {
 		['only' => ['index']]);
 });
 
-/*Route::get('home', 'HomeController@index');
-
 Route::controllers([
-	'auth' => 'Auth\AuthController',
-	'password' => 'Auth\PasswordController',
-]);*/
+	'auth' => 'Auth\AuthController'
+]);
