@@ -188,7 +188,7 @@ a:hover {
                 font-size: 95%;
                 padding: .4em 2.05rem;
                 color: $nav-text-color;
-                text-shadow: 2px 2px 0px rgba(0,0,0,0.05);
+                text-shadow: 1px 1px 0px rgba(0,0,0,0.05);
             }
             a:hover {
                 color: $highlight-color;
@@ -213,9 +213,23 @@ a:hover {
     ul.nav.main-nav {
         margin: .5em 0 1em;
         li a {
+            display: inline-block;
             font-size: 115%;
             padding-top: .5em;
             padding-bottom: .5em;
+        }
+        li.active {
+            &:after {
+                position: absolute;
+                content: " ";
+                right: 0;
+                top: 50%;
+                pointer-events: none;
+                border-top: .6em solid transparent;
+                border-bottom: .6em solid transparent;
+                border-right: .6em solid $background-color;
+                margin-top: -.3em;
+            }
         }
     }
 }
