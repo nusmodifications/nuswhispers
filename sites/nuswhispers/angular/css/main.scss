@@ -133,10 +133,15 @@ a:hover {
 .btn {
     color: $nav-text-color;
     background-color: $primary-color;
-}
 
-.btn:hover {
-    color: $highlight-color;
+    &:hover {
+        color: $highlight-color;
+    }
+
+    &:focus {
+        box-shadow: none;
+        color: $highlight-color;
+    }
 }
 
 .btn-alt-style {

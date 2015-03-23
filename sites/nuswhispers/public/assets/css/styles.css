@@ -5006,9 +5006,11 @@ a:hover {
 .btn {
   color: #ffffff;
   background-color: #f70; }
-
-.btn:hover {
-  color: #fff819; }
+  .btn:hover {
+    color: #fff819; }
+  .btn:focus {
+    box-shadow: none;
+    color: #fff819; }
 
 .btn-alt-style {
   background-color: #2e8fc2; }
