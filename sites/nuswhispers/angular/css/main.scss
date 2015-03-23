@@ -2,11 +2,11 @@ $background-color: #f5f5f5;
 $primary-text-color: #666666;
 $secondary-text-color: #8e8e8e;
 $nav-text-color: #ffffff;
-$nav-section-label-color: #a2414a;
+$nav-section-label-color: #b24700;
 $topbar-color: #eeeeee;
 $topbar-height: 55px;
 $topbar-elements-height: 35px;
-$primary-color: #f55260;
+$primary-color: #f70;
 $alternate-color: #2e8fc2;
 $highlight-color: #fff819;
 $shadow-color: #e0e0e0;
@@ -46,7 +46,7 @@ a {
 }
 
 a:hover {
-    color: $highlight-color;
+    color: $alternate-color;
     text-decoration: none;
 }
 
@@ -133,10 +133,15 @@ a:hover {
 .btn {
     color: $nav-text-color;
     background-color: $primary-color;
-}
 
-.btn:hover {
-    color: $highlight-color;
+    &:hover {
+        color: $highlight-color;
+    }
+
+    &:focus {
+        box-shadow: none;
+        color: $highlight-color;
+    }
 }
 
 .btn-alt-style {
@@ -148,6 +153,10 @@ a:hover {
     color: $secondary-text-color;
     font-size: 185%;
     padding: 0px;
+
+    &:hover {
+        color: $alternate-color;
+    }
 }
 
 #sidebar-wrapper {
@@ -179,6 +188,7 @@ a:hover {
                 font-size: 95%;
                 padding: .4em 2.05rem;
                 color: $nav-text-color;
+                text-shadow: 1px 1px 0px rgba(0,0,0,0.05);
             }
             a:hover {
                 color: $highlight-color;
@@ -203,9 +213,23 @@ a:hover {
     ul.nav.main-nav {
         margin: .5em 0 1em;
         li a {
+            display: inline-block;
             font-size: 115%;
             padding-top: .5em;
             padding-bottom: .5em;
+        }
+        li.active {
+            &:after {
+                position: absolute;
+                content: " ";
+                right: 0;
+                top: 50%;
+                pointer-events: none;
+                border-top: .6em solid transparent;
+                border-bottom: .6em solid transparent;
+                border-right: .6em solid $background-color;
+                margin-top: -.3em;
+            }
         }
     }
 }

@@ -4919,10 +4919,10 @@ body {
   background-color: #f5f5f5; }
 
 a {
-  color: #f55260; }
+  color: #f70; }
 
 a:hover {
-  color: #fff819;
+  color: #2e8fc2;
   text-decoration: none; }
 
 .highlight {
@@ -5005,10 +5005,12 @@ a:hover {
 
 .btn {
   color: #ffffff;
-  background-color: #f55260; }
-
-.btn:hover {
-  color: #fff819; }
+  background-color: #f70; }
+  .btn:hover {
+    color: #fff819; }
+  .btn:focus {
+    box-shadow: none;
+    color: #fff819; }
 
 .btn-alt-style {
   background-color: #2e8fc2; }
@@ -5018,9 +5020,11 @@ a:hover {
   color: #8e8e8e;
   font-size: 185%;
   padding: 0px; }
+  .btn-social-media:hover {
+    color: #2e8fc2; }
 
 #sidebar-wrapper {
-  background-color: #f55260;
+  background-color: #f70;
   height: 100%;
   position: fixed;
   -webkit-transition: all 0.5s ease 0s;
@@ -5033,7 +5037,7 @@ a:hover {
     opacity: 0.5;
     width: 90%; }
   #sidebar-wrapper .nav-section-label {
-    color: #a2414a;
+    color: #b24700;
     font-size: 80%;
     padding: 0;
     margin: 1.65em 1.75em 0.5em;
@@ -5045,7 +5049,8 @@ a:hover {
     #sidebar-wrapper ul.nav li a {
       font-size: 95%;
       padding: 0.4em 2.05rem;
-      color: #ffffff; }
+      color: #ffffff;
+      text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.05); }
     #sidebar-wrapper ul.nav li a:hover {
       color: #fff819;
       background: transparent; }
@@ -5061,9 +5066,20 @@ a:hover {
   #sidebar-wrapper ul.nav.main-nav {
     margin: 0.5em 0 1em; }
     #sidebar-wrapper ul.nav.main-nav li a {
+      display: inline-block;
       font-size: 115%;
       padding-top: 0.5em;
       padding-bottom: 0.5em; }
+    #sidebar-wrapper ul.nav.main-nav li.active:after {
+      position: absolute;
+      content: " ";
+      right: 0;
+      top: 50%;
+      pointer-events: none;
+      border-top: 0.6em solid transparent;
+      border-bottom: 0.6em solid transparent;
+      border-right: 0.6em solid #f5f5f5;
+      margin-top: -0.3em; }
 
 #content-wrapper {
   position: relative; }
@@ -5171,7 +5187,7 @@ a:hover {
         margin-right: 8px;
         vertical-align: middle; }
       .post .post-footer .post-media-summary .favs-count {
-        color: #f55260; }
+        color: #f70; }
       .post .post-footer .post-media-summary .favs-count:before {
         background: url('../img/fav_speech.png');
         content: ' ';
