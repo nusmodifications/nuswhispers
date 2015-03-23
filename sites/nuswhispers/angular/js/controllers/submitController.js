@@ -52,4 +52,17 @@ angular.module('nuswhispersApp.controllers')
         }
     };
 
+    $scope.highlightTags = function () {
+        var splitContentTags = $scope.confessionData.content.split(/(#\w+)/);
+        $scope.contentTagHighlights = '';
+        for (var i in splitContentTags) {
+            if (/(#\w+)/.test(splitContentTags[i])) {
+                $scope.contentTagHighlights += '<b>' + splitContentTags[i] + '</b>';
+            } else {
+                $scope.contentTagHighlights += splitContentTags[i];
+            }
+        }
+        $scope.contentTagHighlights = $scope.contentTagHighlights.replace(/(?:\r\n|\r|\n)/g, '<br>');
+    };
+
 });

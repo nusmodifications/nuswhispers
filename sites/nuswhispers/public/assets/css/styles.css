@@ -4923,7 +4923,8 @@ a {
 
 a:hover {
   color: #2e8fc2;
-  text-decoration: none; }
+  text-decoration: none;
+  cursor: pointer; }
 
 .highlight {
   color: #fff819; }
@@ -5231,6 +5232,21 @@ a:hover {
     max-width: 100%; }
 .submit-confession-form .box-opened {
   max-height: 10000px; }
+.submit-confession-form .tag-highlight-wrapper {
+  position: relative; }
+  .submit-confession-form .tag-highlight-wrapper .tag-highlight {
+    position: absolute;
+    background-color: transparent;
+    color: transparent;
+    border: 0px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none; }
+    .submit-confession-form .tag-highlight-wrapper .tag-highlight b {
+      background: #f70;
+      font-weight: normal; }
+  .submit-confession-form .tag-highlight-wrapper textarea {
+    position: relative; }
 .submit-confession-form textarea {
   background-color: transparent;
   border: 0px;

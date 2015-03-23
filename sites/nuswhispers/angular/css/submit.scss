@@ -26,6 +26,27 @@
         max-height: 10000px;
     }
 
+    .tag-highlight-wrapper {
+        position: relative;
+
+        .tag-highlight {
+            position: absolute;
+            background-color: transparent;
+            color: transparent;
+            border: 0px;
+            @include remove-box-shadow();
+
+            b {
+                background: $primary-color;
+                font-weight: normal;
+            }
+        }
+
+        textarea {
+            position: relative;
+        }
+    }
+
     textarea {
         background-color: transparent;
         border: 0px;
