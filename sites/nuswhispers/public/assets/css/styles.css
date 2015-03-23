@@ -4919,10 +4919,10 @@ body {
   background-color: #f5f5f5; }
 
 a {
-  color: #f55260; }
+  color: #f70; }
 
 a:hover {
-  color: #fff819;
+  color: #2e8fc2;
   text-decoration: none; }
 
 .highlight {
@@ -5005,7 +5005,7 @@ a:hover {
 
 .btn {
   color: #ffffff;
-  background-color: #f55260; }
+  background-color: #f70; }
 
 .btn:hover {
   color: #fff819; }
@@ -5018,9 +5018,11 @@ a:hover {
   color: #8e8e8e;
   font-size: 185%;
   padding: 0px; }
+  .btn-social-media:hover {
+    color: #2e8fc2; }
 
 #sidebar-wrapper {
-  background-color: #f55260;
+  background-color: #f70;
   height: 100%;
   position: fixed;
   -webkit-transition: all 0.5s ease 0s;
@@ -5033,7 +5035,7 @@ a:hover {
     opacity: 0.5;
     width: 90%; }
   #sidebar-wrapper .nav-section-label {
-    color: #a2414a;
+    color: #b24700;
     font-size: 80%;
     padding: 0;
     margin: 1.65em 1.75em 0.5em;
@@ -5045,7 +5047,8 @@ a:hover {
     #sidebar-wrapper ul.nav li a {
       font-size: 95%;
       padding: 0.4em 2.05rem;
-      color: #ffffff; }
+      color: #ffffff;
+      text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.05); }
     #sidebar-wrapper ul.nav li a:hover {
       color: #fff819;
       background: transparent; }
@@ -5171,7 +5174,7 @@ a:hover {
         margin-right: 8px;
         vertical-align: middle; }
       .post .post-footer .post-media-summary .favs-count {
-        color: #f55260; }
+        color: #f70; }
       .post .post-footer .post-media-summary .favs-count:before {
         background: url('../img/fav_speech.png');
         content: ' ';
