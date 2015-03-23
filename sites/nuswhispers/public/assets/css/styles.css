@@ -5181,3 +5181,15 @@ a:hover {
         margin-top: 0px;
         margin-right: 8px;
         vertical-align: middle; }
+
+#loading-bar .bar {
+  background: #2e8fc2; }
+
+#loading-bar .peg {
+  -moz-box-shadow: #2e8fc2 1px 0 6px 1px;
+  -ms-box-shadow: #2e8fc2 1px 0 6px 1px;
+  -webkit-box-shadow: #2e8fc2 1px 0 6px 1px;
+  box-shadow: #2e8fc2 1px 0 6px 1px; }
+
+#loading-bar-spinner .spinner-icon {
+  display: none; }
