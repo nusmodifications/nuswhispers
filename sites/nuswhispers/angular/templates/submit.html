@@ -1,11 +1,33 @@
-<h1>Submit Your Confession</h1>
+<form class="submit-confession-form" ng-submit="submitConfession()">
+    <div class="form-group">
+        <div class="form-group-header">
+            <span class="typcn typcn-pencil"></span> Your Story
+        </div>
+        <textarea class="msd-elastic form-control" ng-model="confessionData.content" placeholder="Tell us your story..."></textarea>
+        <button type="button" ng-click="uploadConfessionImage()" class="btn">
+            <span class="typcn typcn-image"></span> {{imageSelected ? 'Choose Another Image' : 'Choose an Image'}}
+        </button>
+        <a ng-click="showImage = !showImage" ng-show="imageSelected">{{showImage ? 'Hide Image' : 'View Image'}}</a>
+        <div class="collapsible-box" ng-class="{'box-opened': showImage}">
+            <img src="{{confessionData.image}}" />
+        </div>
+    </div>
 
-<form ng-submit="submitConfession()">
-    <textarea ng-model="confessionData.content"></textarea><br>
-    <button type="button" ng-click="uploadConfessionImage()">Upload Image</button><br>
-    <label ng-repeat="category in categories">
-        <input type="checkbox" value="{{category.confession_category_id}}" ng-click="toggleCategorySelection(category)">{{category.confession_category}}</input>
-    </label>
-    <div vc-recaptcha key="'6LcUdQMTAAAAAOo_AIrROYc3vi081wEAOBBCHdA-'"></div>
-    <button type="submit">Submit</button>
+    <div class="form-group">
+        <div class="form-group-header">
+            <span class="typcn typcn-folder"></span> File Under
+        </div>
+        <label ng-repeat="category in categories">
+            <input type="checkbox" value="{{category.confession_category_id}}" ng-click="toggleCategorySelection(category)">{{category.confession_category}}</input>
+        </label>
+    </div>
+
+    <div class="form-group">
+        <div class="form-group-header">
+            <span class="typcn typcn-heart-full-outline"></span> Don't Spam
+        </div>
+        <div vc-recaptcha key="'6LcUdQMTAAAAAOo_AIrROYc3vi081wEAOBBCHdA-'"></div>
+    </div>
+
+    <button class="btn" type="submit">Submit</button>
 </form>

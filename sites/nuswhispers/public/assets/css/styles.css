@@ -5193,3 +5193,36 @@ a:hover {
 
 #loading-bar-spinner .spinner-icon {
   display: none; }
+
+.submit-confession-form .form-group {
+  background-color: #ffffff;
+  padding: 1em;
+  -webkit-transition: max-height 0.5s ease 0s;
+  transition: max-height 0.5s ease 0s;
+  -o-transition: max-height 0.5s ease 0s; }
+  .submit-confession-form .form-group .form-group-header {
+    width: 100%;
+    padding-bottom: 1em;
+    border-bottom: 1px solid #f5f5f5;
+    margin-bottom: 1em; }
+.submit-confession-form .collapsible-box {
+  max-height: 0px;
+  overflow: hidden;
+  -webkit-transition: max-height 0.5s ease 0s;
+  transition: max-height 0.5s ease 0s;
+  -o-transition: max-height 0.5s ease 0s; }
+  .submit-confession-form .collapsible-box img {
+    max-width: 100%; }
+.submit-confession-form .box-opened {
+  max-height: 10000px; }
+.submit-confession-form textarea {
+  background-color: transparent;
+  border: 0px;
+  resize: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none; }
+.submit-confession-form textarea:focus {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none; }

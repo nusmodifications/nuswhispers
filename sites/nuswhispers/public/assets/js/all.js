@@ -13,7 +13,7 @@ angular.module('nuswhispersApp.services', ['facebook']).config(
 );
 angular.module('nuswhispersApp.controllers', ['nuswhispersApp.services', 'vcRecaptcha']);
 
-var app = angular.module('nuswhispersApp', ['nuswhispersApp.controllers', 'angular-loading-bar', 'ngCookies', 'ngResource', 'ngSanitize', 'ngRoute', 'ngAnimate', 'ui.utils', 'ui.bootstrap', 'ui.router', 'ngGrid']);
+var app = angular.module('nuswhispersApp', ['nuswhispersApp.controllers', 'angular-loading-bar', 'monospaced.elastic', 'ngCookies', 'ngResource', 'ngSanitize', 'ngRoute', 'ngAnimate', 'ui.utils', 'ui.bootstrap', 'ui.router', 'ngGrid']);
 
 app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($routeProvider, $locationProvider, $httpProvider) {
     'use strict';
@@ -55,6 +55,48 @@ app.run(['$rootScope', function ($rootScope) {
 
 /* ---> Do not delete this comment (Constants) <--- */
 
+angular.module('nuswhispersApp.services')
+.factory('Category', function ($http) {
+    'use strict';
+    return {
+        get: function () {
+            return $http.get('/api/categories');
+        }
+    };
+});
+
+angular.module('nuswhispersApp.services')
+.factory('Confession', function ($http) {
+    'use strict';
+    return {
+        submit: function (confessionData) {
+            return $http({
+                method: 'POST',
+                url: '/api/confessions',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                data: $.param(confessionData)
+            });
+        }
+    };
+});
+
+angular.module('nuswhispersApp.services')
+.factory('FacebookData', function () {
+    'use strict';
+
+    var data = {
+        accessToken: ''
+    };
+
+    return {
+        setAccessToken: function (accessToken) {
+            data.accessToken = accessToken;
+        },
+        getAccessToken: function () {
+            return data.accessToken;
+        }
+    };
+});
 angular.module('nuswhispersApp.controllers')
 .controller('MainController', function ($scope, Facebook, FacebookData) {
     'use strict';
@@ -100,24 +142,20 @@ angular.module('nuswhispersApp.controllers')
     'use strict';
 
     $scope.confessionData = {};
+    $scope.imageSelected = false;
     $scope.selectedCategoryIDs = [];
-
-    $scope.loading = true;
 
     // Load all categories onto form
     Category.get().success(function (data) {
         $scope.categories = data;
-        $scope.loading = false;
     });
 
     $scope.submitConfession = function () {
-        $scope.loading = true;
         $scope.confessionData.categories = $scope.selectedCategoryIDs;
         $scope.confessionData.captcha = vcRecaptchaService.getResponse();
 
         Confession.submit($scope.confessionData)
             .success(function (data) {
-                $scope.loading = false;
                 console.log(data);
             })
             .error(function (data) {
@@ -132,6 +170,8 @@ angular.module('nuswhispersApp.controllers')
         },
         function (fp) {
             $scope.confessionData.image = fp.url;
+            $scope.imageSelected = true;
+            $scope.$apply();
         },
         function (fpError) {
             console.log(fpError.toString());
@@ -151,47 +191,4 @@ angular.module('nuswhispersApp.controllers')
         }
     };
 
-});
-
-angular.module('nuswhispersApp.services')
-.factory('Category', function ($http) {
-    'use strict';
-    return {
-        get: function () {
-            return $http.get('/api/categories');
-        }
-    };
-});
-
-angular.module('nuswhispersApp.services')
-.factory('Confession', function ($http) {
-    'use strict';
-    return {
-        submit: function (confessionData) {
-            return $http({
-                method: 'POST',
-                url: '/api/confessions',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                data: $.param(confessionData)
-            });
-        }
-    };
-});
-
-angular.module('nuswhispersApp.services')
-.factory('FacebookData', function () {
-    'use strict';
-
-    var data = {
-        accessToken: ''
-    };
-
-    return {
-        setAccessToken: function (accessToken) {
-            data.accessToken = accessToken;
-        },
-        getAccessToken: function () {
-            return data.accessToken;
-        }
-    };
 });

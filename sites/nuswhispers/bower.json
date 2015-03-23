@@ -20,7 +20,8 @@
     "bootstrap-sass-official": "~3.3.3",
     "typicons": "~2.0.7",
     "angular-facebook": "~0.2.3",
-    "angular-loading-bar": "~0.7.1"
+    "angular-loading-bar": "~0.7.1",
+    "angular-elastic": "~2.4.2"
   },
   "devDependencies": {
     "angular-mocks": "*",

@@ -3,24 +3,20 @@ angular.module('nuswhispersApp.controllers')
     'use strict';
 
     $scope.confessionData = {};
+    $scope.imageSelected = false;
     $scope.selectedCategoryIDs = [];
-
-    $scope.loading = true;
 
     // Load all categories onto form
     Category.get().success(function (data) {
         $scope.categories = data;
-        $scope.loading = false;
     });
 
     $scope.submitConfession = function () {
-        $scope.loading = true;
         $scope.confessionData.categories = $scope.selectedCategoryIDs;
         $scope.confessionData.captcha = vcRecaptchaService.getResponse();
 
         Confession.submit($scope.confessionData)
             .success(function (data) {
-                $scope.loading = false;
                 console.log(data);
             })
             .error(function (data) {
@@ -35,6 +31,8 @@ angular.module('nuswhispersApp.controllers')
         },
         function (fp) {
             $scope.confessionData.image = fp.url;
+            $scope.imageSelected = true;
+            $scope.$apply();
         },
         function (fpError) {
             console.log(fpError.toString());

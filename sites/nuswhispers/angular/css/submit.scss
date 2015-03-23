@@ -1,0 +1,40 @@
+.submit-confession-form {
+    .form-group {
+        background-color: #ffffff;
+        padding: 1em;
+        @include transition(max-height, 0.5s, ease, 0s);
+
+        .form-group-header {
+            width: 100%;
+            padding-bottom: 1em;
+            border-bottom: 1px solid $background-color;
+            margin-bottom: 1em;
+        }
+    }
+
+    .collapsible-box {
+        max-height: 0px;
+        overflow: hidden;
+        @include transition(max-height, 0.5s, ease, 0s);
+
+        img {
+            max-width: 100%;
+        }
+    }
+
+    .box-opened {
+        max-height: 10000px;
+    }
+
+    textarea {
+        background-color: transparent;
+        border: 0px;
+        resize: none;
+        @include remove-box-shadow();
+    }
+
+    textarea:focus {
+        @include remove-box-shadow();
+    }
+
+}
