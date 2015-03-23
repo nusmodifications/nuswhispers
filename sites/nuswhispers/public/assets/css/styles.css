@@ -5069,7 +5069,8 @@ a:hover {
   position: relative; }
 
 #content {
-  margin-top: 15px; }
+  margin-top: 15px;
+  width: 100%; }
 
 @media (max-width: 768px) {
   #wrapper {
