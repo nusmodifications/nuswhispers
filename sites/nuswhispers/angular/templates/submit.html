@@ -1,5 +1,8 @@
 <form class="submit-confession-form" ng-submit="submitConfession()">
     <div class="form-group">
+        Have an interesting story to share or just need to get something off your chest? Tell us your story here! No spam pls!
+    </div>
+    <div class="form-group">
         <div class="form-group-header">
             <span class="typcn typcn-pencil"></span> Your Story
         </div>
@@ -20,9 +23,14 @@
         <div class="form-group-header">
             <span class="typcn typcn-folder"></span> File Under
         </div>
-        <label ng-repeat="category in categories">
-            <input type="checkbox" value="{{category.confession_category_id}}" ng-click="toggleCategorySelection(category)">{{category.confession_category}}</input>
-        </label>
+        <div class="container-fluid">
+            <div class="checkbox-wrapper col-md-3" ng-repeat="category in categories">
+                <input id="category-checkbox-{{category.confession_category_id}}" type="checkbox" value="{{category.confession_category_id}}" ng-click="toggleCategorySelection(category)"></input>
+                <label for="category-checkbox-{{category.confession_category_id}}">
+                    {{category.confession_category}}
+                </label>
+            </div>
+        </div>
     </div>
 
     <div class="form-group">
