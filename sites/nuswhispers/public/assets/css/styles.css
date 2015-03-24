@@ -5226,6 +5226,9 @@ a:hover {
     padding: 0px; }
     .submit-confession-form .form-group .container-fluid .col-md-3 {
       padding: 0px; }
+.submit-confession-form .alert {
+  margin-top: 10px;
+  margin-bottom: 10px; }
 .submit-confession-form .checkbox-wrapper {
   display: inline-block; }
   .submit-confession-form .checkbox-wrapper input[type=checkbox] {
