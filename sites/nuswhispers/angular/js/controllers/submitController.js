@@ -53,8 +53,11 @@ angular.module('nuswhispersApp.controllers')
     };
 
     $scope.highlightTags = function () {
-        var splitContentTags = $scope.confessionData.content.split(/(#\w+)/);
         $scope.contentTagHighlights = '';
+        if ($scope.confessionData.content === undefined) {
+            return;
+        }
+        var splitContentTags = $scope.confessionData.content.split(/(#\w+)/);
         for (var i in splitContentTags) {
             if (/(#\w+)/.test(splitContentTags[i])) {
                 $scope.contentTagHighlights += '<b>' + splitContentTags[i] + '</b>';
