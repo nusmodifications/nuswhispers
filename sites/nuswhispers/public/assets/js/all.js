@@ -55,48 +55,6 @@ app.run(['$rootScope', function ($rootScope) {
 
 /* ---> Do not delete this comment (Constants) <--- */
 
-angular.module('nuswhispersApp.services')
-.factory('Category', function ($http) {
-    'use strict';
-    return {
-        get: function () {
-            return $http.get('/api/categories');
-        }
-    };
-});
-
-angular.module('nuswhispersApp.services')
-.factory('Confession', function ($http) {
-    'use strict';
-    return {
-        submit: function (confessionData) {
-            return $http({
-                method: 'POST',
-                url: '/api/confessions',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                data: $.param(confessionData)
-            });
-        }
-    };
-});
-
-angular.module('nuswhispersApp.services')
-.factory('FacebookData', function () {
-    'use strict';
-
-    var data = {
-        accessToken: ''
-    };
-
-    return {
-        setAccessToken: function (accessToken) {
-            data.accessToken = accessToken;
-        },
-        getAccessToken: function () {
-            return data.accessToken;
-        }
-    };
-});
 angular.module('nuswhispersApp.controllers')
 .controller('MainController', function ($scope, Facebook, FacebookData) {
     'use strict';
@@ -219,4 +177,47 @@ angular.module('nuswhispersApp.controllers')
         $scope.contentTagHighlights = $scope.contentTagHighlights.replace(/(?:\r\n|\r|\n)/g, '<br>');
     };
 
+});
+
+angular.module('nuswhispersApp.services')
+.factory('Category', function ($http) {
+    'use strict';
+    return {
+        get: function () {
+            return $http.get('/api/categories');
+        }
+    };
+});
+
+angular.module('nuswhispersApp.services')
+.factory('Confession', function ($http) {
+    'use strict';
+    return {
+        submit: function (confessionData) {
+            return $http({
+                method: 'POST',
+                url: '/api/confessions',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                data: $.param(confessionData)
+            });
+        }
+    };
+});
+
+angular.module('nuswhispersApp.services')
+.factory('FacebookData', function () {
+    'use strict';
+
+    var data = {
+        accessToken: ''
+    };
+
+    return {
+        setAccessToken: function (accessToken) {
+            data.accessToken = accessToken;
+        },
+        getAccessToken: function () {
+            return data.accessToken;
+        }
+    };
 });

@@ -16,6 +16,8 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 @import "../../bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 
 // import sass files
+@import "variables.scss";
+@import "mixins.scss";
 @import "main.scss";
 @import "post.scss";
 @import "loading-bar.scss";

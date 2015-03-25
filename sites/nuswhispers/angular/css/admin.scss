@@ -3,3 +3,71 @@
 // import bootstrap-sass-official
 $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/" !default;
 @import "../../bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
+
+// import sass files
+@import "mixins.scss";
+@import "variables.scss";
+
+body {
+    font: 1.4em 'Montserrat', sans-serif;
+    color: $primary-text-color;
+    background-color: $background-color;
+}
+
+a {
+    color: $primary-color;
+}
+
+a:hover {
+    color: $alternate-color;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+label {
+    font-weight: 400;
+    color: lighten($primary-text-color, 10%);
+    margin-bottom: 0.5em;
+}
+
+.highlight {
+    color: $highlight-color;
+}
+
+.btn {
+    color: $nav-text-color;
+    background-color: $alternate-color;
+    border-color: darken($alternate-color, 5%);
+    line-height: 1.75em;
+
+    &:hover, &:focus, &:active {
+        box-shadow: none;
+        background-color: lighten($alternate-color, 5%);
+        border-color: $alternate-color;
+        outline: none;
+    }
+}
+
+.card {
+    background: #fff;
+    padding: 2em;
+    border: 1px solid #eee;
+}
+
+.card-logo {
+    &:before {
+        content: ' ';
+        background: url('../img/card_logo.png') no-repeat;
+        width: 128px;
+        height: 128px;
+        background-size: 128px 128px;
+        margin: 2em auto;
+        display: block;
+    }
+}
+
+.forgot-password {
+    margin: 1.5em 0 0;
+    text-align: center;
+}
+

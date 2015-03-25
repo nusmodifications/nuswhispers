@@ -4903,3 +4903,53 @@ button.close {
 @media print {
   .hidden-print {
     display: none !important; } }
+
+body {
+  font: 1.4em 'Montserrat', sans-serif;
+  color: #666666;
+  background-color: #f5f5f5; }
+
+a {
+  color: #f70; }
+
+a:hover {
+  color: #2e8fc2;
+  text-decoration: none;
+  cursor: pointer; }
+
+label {
+  font-weight: 400;
+  color: #808080;
+  margin-bottom: 0.5em; }
+
+.highlight {
+  color: #fff819; }
+
+.btn {
+  color: #ffffff;
+  background-color: #2e8fc2;
+  border-color: #2981ad;
+  line-height: 1.75em; }
+  .btn:hover, .btn:focus, .btn:active {
+    box-shadow: none;
+    background-color: #399ed0;
+    border-color: #2e8fc2;
+    outline: none; }
+
+.card {
+  background: #fff;
+  padding: 2em;
+  border: 1px solid #eee; }
+
+.card-logo:before {
+  content: ' ';
+  background: url('../img/card_logo.png') no-repeat;
+  width: 128px;
+  height: 128px;
+  background-size: 128px 128px;
+  margin: 2em auto;
+  display: block; }
+
+.forgot-password {
+  margin: 1.5em 0 0;
+  text-align: center; }
