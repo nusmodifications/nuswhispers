@@ -26,7 +26,7 @@ class ConfessionsController extends Controller {
 	{
 		$validationRules = array(
 			'content' => 'required',
-			'image' => 'image',
+			'image' => 'url',
 			'categories' => 'array',
 			'captcha' => 'required'
 		);
@@ -34,7 +34,7 @@ class ConfessionsController extends Controller {
 		$validator = \Validator::make(\Input::all(), $validationRules);
 
 		if ($validator->fails()) {
-			return \Response::json(array('success' => false));
+			return \Response::json(['success' => false, 'errors' => $validator->messages()]);
 		}
 
 		// Check reCAPTCHA
@@ -42,7 +42,7 @@ class ConfessionsController extends Controller {
 		$captchaResponse = json_decode($captchaResponseJSON);
 
 		if (!$captchaResponse->success) {
-			return \Response::json(array('success' => false));
+			return \Response::json(['success' => false, 'errors' => ['The reCAPTCHA was not entered correctly. Please try again.']]);
 		}
 
 		$newConfession = new \Confession;

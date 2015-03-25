@@ -19,15 +19,15 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
     'use strict';
 
     $routeProvider
-        .when('/home', {
+        .when('/home/', {
             templateUrl: 'assets/templates/home.html'
         })
-        .when('/submit', {
+        .when('/submit/', {
             templateUrl: 'assets/templates/submit.html',
             controller: 'SubmitController'
         })
         .otherwise({
-            redirectTo: '/home'
+            redirectTo: '/home/'
         });
 
     $locationProvider.hashPrefix('!');

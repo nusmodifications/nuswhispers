@@ -1,4 +1,12 @@
-<form class="submit-confession-form" ng-submit="submitConfession()">
+<div class="form-group" ng-show="form.submitSuccess" ng-show="">
+    Thanks for telling us your story! We'll read it as soon as we can. In the meantime, you can 
+    <a href="/#!submit">write another confession</a> or
+    <a href="/#!home">read other's confessions</a>
+</div>
+<form class="submit-confession-form" ng-submit="submitConfession()" ng-show="!form.submitSuccess">
+    <div class="form-group">
+        Have an interesting story to share or just need to get something off your chest? Tell us your story here! No one will know it was you.
+    </div>
     <div class="form-group">
         <div class="form-group-header">
             <span class="typcn typcn-pencil"></span> Your Story
@@ -8,9 +16,9 @@
             <textarea class="msd-elastic form-control" ng-required="true" ng-change="highlightTags()" ng-model="confessionData.content" ng-trim="false" placeholder="Tell us your story..."></textarea>
         </div>
         <button type="button" ng-click="uploadConfessionImage()" class="btn">
-            <span class="typcn typcn-image"></span> {{imageSelected ? 'Choose Another Image' : 'Choose an Image'}}
+            <span class="typcn typcn-image"></span> {{form.imageSelected ? 'Choose Another Image' : 'Choose an Image'}}
         </button>
-        <a ng-click="showImage = !showImage" ng-show="imageSelected">{{showImage ? 'Hide Image' : 'View Image'}}</a>
+        <a ng-click="showImage = !showImage" ng-show="form.imageSelected">{{showImage ? 'Hide Image' : 'View Image'}}</a>
         <div class="collapsible-box" ng-class="{'box-opened': showImage}">
             <img src="{{confessionData.image}}" />
         </div>
@@ -20,9 +28,14 @@
         <div class="form-group-header">
             <span class="typcn typcn-folder"></span> File Under
         </div>
-        <label ng-repeat="category in categories">
-            <input type="checkbox" value="{{category.confession_category_id}}" ng-click="toggleCategorySelection(category)">{{category.confession_category}}</input>
-        </label>
+        <div class="container-fluid">
+            <div class="checkbox-wrapper col-md-3" ng-repeat="category in categories">
+                <input id="category-checkbox-{{category.confession_category_id}}" type="checkbox" value="{{category.confession_category_id}}" ng-click="toggleCategorySelection(category)"></input>
+                <label for="category-checkbox-{{category.confession_category_id}}">
+                    {{category.confession_category}}
+                </label>
+            </div>
+        </div>
     </div>
 
     <div class="form-group">
@@ -33,4 +46,10 @@
     </div>
 
     <button class="btn" type="submit">Submit</button>
+    <div class="alert alert-danger" role="alert" ng-show="form.errors.length > 0">
+        Oops! We could not submit your confession. Fix up these errors before trying again:
+        <ul ng-repeat="error in form.errors">
+            <li>{{error}}</li>
+        </ul>
+    </div>
 </form>
