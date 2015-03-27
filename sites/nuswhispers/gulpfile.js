@@ -265,21 +265,21 @@ gulp.task('watch', function () {
 
     var watchedFiles = [];
 
-    watchedFiles.push(gulp.watch([SETTINGS.src.css + '*.css',  SETTINGS.src.css + '**/*.css'],  ['concat:css']));
+    watchedFiles.push(gulp.watch([SETTINGS.src.css + '*.css',  SETTINGS.src.css + '**/*.css'], { interval: 500 }, ['concat:css']));
 
-    watchedFiles.push(gulp.watch([SETTINGS.src.css + '*.scss', SETTINGS.src.css + '**/*.scss'], ['concat:css']));
+    watchedFiles.push(gulp.watch([SETTINGS.src.css + '*.scss', SETTINGS.src.css + '**/*.scss'], { interval: 500 }, ['concat:css']));
 
-    watchedFiles.push(gulp.watch([SETTINGS.src.js + '*.js',    SETTINGS.src.js + '**/*.js'],    ['concat:js']));
+    watchedFiles.push(gulp.watch([SETTINGS.src.js + '*.js',    SETTINGS.src.js + '**/*.js'], { interval: 500 }, ['concat:js']));
 
-    watchedFiles.push(gulp.watch([SETTINGS.src.app + '*.html'], ['copy:html:root']));
+    watchedFiles.push(gulp.watch([SETTINGS.src.app + '*.html'], { interval: 500 }, ['copy:html:root']));
 
-    watchedFiles.push(gulp.watch([SETTINGS.src.images + '*.*', SETTINGS.src.images + '**/*.*'], ['copy:images']));
+    watchedFiles.push(gulp.watch([SETTINGS.src.images + '*.*', SETTINGS.src.images + '**/*.*'], { interval: 500 }, ['copy:images']));
 
-    watchedFiles.push(gulp.watch([SETTINGS.src.fonts + '*.*',  SETTINGS.src.fonts + '**/*.*'],  ['copy:fonts']));
+    watchedFiles.push(gulp.watch([SETTINGS.src.fonts + '*.*',  SETTINGS.src.fonts + '**/*.*'], { interval: 500 }, ['copy:fonts']));
 
-    watchedFiles.push(gulp.watch([SETTINGS.src.bower + '*.js', SETTINGS.src.bower + '**/*.js'], ['concat:bower']));
+    watchedFiles.push(gulp.watch([SETTINGS.src.bower + '*.js', SETTINGS.src.bower + '**/*.js'], { interval: 500 }, ['concat:bower']));
 
-    watchedFiles.push(gulp.watch([SETTINGS.src.templates + '*.html', SETTINGS.src.templates + '**/*.html'], ['copy:html']));
+    watchedFiles.push(gulp.watch([SETTINGS.src.templates + '*.html', SETTINGS.src.templates + '**/*.html'], { interval: 500 }, ['copy:html']));
 
 
     // Just to add log messages on Terminal, in case any file is changed
