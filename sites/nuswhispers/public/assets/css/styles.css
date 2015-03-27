@@ -5006,10 +5006,12 @@ a:hover {
 
 .btn {
   color: #ffffff;
-  background-color: #f70; }
+  background-color: #f70;
+  border: none; }
   .btn:hover {
     color: #fff819; }
   .btn:focus {
+    outline: none;
     box-shadow: none;
     color: #fff819; }
 
@@ -5038,7 +5040,7 @@ a:hover {
     opacity: 0.5;
     width: 90%; }
   #sidebar-wrapper .nav-section-label {
-    color: #b24700;
+    color: #662e00;
     font-size: 80%;
     padding: 0;
     margin: 1.65em 1.75em 0.5em;
@@ -5087,7 +5089,8 @@ a:hover {
 
 #content {
   margin-top: 15px;
-  width: 100%; }
+  width: 100%;
+  display: inline-block; }
 
 @media (max-width: 768px) {
   #wrapper {

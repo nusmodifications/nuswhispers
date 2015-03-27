@@ -23,7 +23,19 @@ Route::group(array('prefix' => 'api'), function() {
 		['only' => ['index']]);
 });
 
+// Auth Routes
 Route::controllers([
 	'auth' => 'Auth\AuthController',
     'password' => 'Auth\PasswordController',
 ]);
+
+// Admin Routes
+Route::controllers([
+    'admin/confessions' => 'Admin\ConfessionsAdminController',
+    'admin/users' => 'Admin\UsersAdminController',
+]);
+
+// Temporarily redirect default admin to confessions dashboard
+Route::get('/admin', function() {
+    return redirect('admin/confessions');
+});

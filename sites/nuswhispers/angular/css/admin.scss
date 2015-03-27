@@ -4,25 +4,17 @@
 $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/" !default;
 @import "../../bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 
+/* typicons */
+@import url("/assets/bower/typicons/src/font/typicons.min.css");
+
 // import sass files
 @import "mixins.scss";
 @import "variables.scss";
 
-body {
-    font: 1.4em 'Montserrat', sans-serif;
-    color: $primary-text-color;
-    background-color: $background-color;
-}
+// revert it back to pink!
+$primary-color: #f55260;
 
-a {
-    color: $primary-color;
-}
-
-a:hover {
-    color: $alternate-color;
-    text-decoration: none;
-    cursor: pointer;
-}
+@import "main.scss";
 
 label {
     font-weight: 400;
@@ -30,22 +22,9 @@ label {
     margin-bottom: 0.5em;
 }
 
-.highlight {
-    color: $highlight-color;
-}
-
-.btn {
-    color: $nav-text-color;
-    background-color: $alternate-color;
-    border-color: darken($alternate-color, 5%);
-    line-height: 1.75em;
-
-    &:hover, &:focus, &:active {
-        box-shadow: none;
-        background-color: lighten($alternate-color, 5%);
-        border-color: $alternate-color;
-        outline: none;
-    }
+.whispers-logo-text {
+    font-size: 85%;
+    margin: .15em .4em;
 }
 
 .card {
@@ -69,5 +48,11 @@ label {
 .forgot-password {
     margin: 1.5em 0 0;
     text-align: center;
+}
+
+#sidebar-wrapper {
+    [class*="typicons-"]:before {
+        font-size: 20px;
+    }
 }
 

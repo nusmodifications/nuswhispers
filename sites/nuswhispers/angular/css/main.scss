@@ -97,12 +97,14 @@ a:hover {
 .btn {
     color: $nav-text-color;
     background-color: $primary-color;
+    border: none;
 
     &:hover {
         color: $highlight-color;
     }
 
     &:focus {
+        outline: none;
         box-shadow: none;
         color: $highlight-color;
     }
@@ -136,7 +138,7 @@ a:hover {
         width: 90%;
     }
     .nav-section-label {
-        color: $nav-section-label-color;
+        color: darken($primary-color, 30%);
         font-size: 80%;
         padding: 0;
         margin: 1.65em 1.75em .5em;
@@ -205,6 +207,7 @@ a:hover {
 #content {
     margin-top: 15px;
     width: 100%;
+    display: inline-block; // clearfix
 }
 
 @media (max-width: 768px) {

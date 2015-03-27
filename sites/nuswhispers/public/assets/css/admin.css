@@ -1,3 +1,4 @@
+@import url("/assets/bower/typicons/src/font/typicons.min.css");
 /** NUSWhispers Admin CSS */
 /*! normalize.css v3.0.2 | MIT License | git.io/normalize */
 html {
@@ -4904,37 +4905,237 @@ button.close {
   .hidden-print {
     display: none !important; } }
 
+/* typicons */
 body {
   font: 1.4em 'Montserrat', sans-serif;
   color: #666666;
   background-color: #f5f5f5; }
 
 a {
-  color: #f70; }
+  color: #f55260; }
 
 a:hover {
   color: #2e8fc2;
   text-decoration: none;
   cursor: pointer; }
 
+.highlight {
+  color: #fff819; }
+
+#wrapper {
+  padding-left: 240px;
+  -webkit-transition: padding-left 0.5s ease 0s;
+  transition: padding-left 0.5s ease 0s;
+  -o-transition: padding-left 0.5s ease 0s; }
+
+.whispers-brand {
+  float: none;
+  padding: 1em 1em 0.25em;
+  display: inline-block;
+  height: auto; }
+
+.whispers-logo {
+  background-image: url('../img/logo.png');
+  background-repeat: no-repeat;
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px;
+  float: left; }
+
+.whispers-logo-text {
+  float: left;
+  line-height: 30px;
+  margin-top: 3px;
+  margin-left: 5px; }
+
+#topbar-wrapper {
+  background-color: #eeeeee;
+  width: 100%;
+  height: 55px; }
+  #topbar-wrapper #topbar-nav {
+    float: right;
+    padding-top: 10px;
+    margin-right: 15px; }
+    #topbar-wrapper #topbar-nav .btn {
+      font-size: 14px;
+      height: 35px; }
+    #topbar-wrapper #topbar-nav .btn-social-media {
+      font-size: 24px;
+      height: 35px;
+      padding-left: 5px;
+      padding-right: 5px; }
+  #topbar-wrapper .search-form {
+    float: left;
+    width: 0px;
+    margin-left: 15px;
+    padding-top: 10px; }
+    #topbar-wrapper .search-form .input-group-addon {
+      -webkit-border-radius: 0px;
+      -moz-border-radius: 0px;
+      -ms-border-radius: 0px;
+      border-radius: 0px;
+      padding: 0px;
+      padding-left: 5px;
+      height: 35px;
+      background-color: #e0e0e0;
+      color: #8e8e8e;
+      border: 0px;
+      font-size: 22px; }
+    #topbar-wrapper .search-form .search-input {
+      -webkit-border-radius: 0px;
+      -moz-border-radius: 0px;
+      -ms-border-radius: 0px;
+      border-radius: 0px;
+      -webkit-box-shadow: none;
+      -moz-box-shadow: none;
+      box-shadow: none;
+      width: 300px;
+      height: 35px;
+      font-size: 14px;
+      border: 0px;
+      background-color: #e0e0e0;
+      color: #8e8e8e;
+      padding-left: 5px; }
+
+.btn {
+  color: #ffffff;
+  background-color: #f55260;
+  border: none; }
+  .btn:hover {
+    color: #fff819; }
+  .btn:focus {
+    outline: none;
+    box-shadow: none;
+    color: #fff819; }
+
+.btn-alt-style {
+  background-color: #2e8fc2; }
+
+.btn-social-media {
+  background-color: transparent;
+  color: #8e8e8e;
+  font-size: 185%;
+  padding: 0px; }
+  .btn-social-media:hover {
+    color: #2e8fc2; }
+
+#sidebar-wrapper {
+  background-color: #f55260;
+  height: 100%;
+  position: fixed;
+  -webkit-transition: all 0.5s ease 0s;
+  transition: all 0.5s ease 0s;
+  -o-transition: all 0.5s ease 0s;
+  width: 240px;
+  margin-left: -240px; }
+  #sidebar-wrapper hr {
+    margin: 0.25em auto;
+    opacity: 0.5;
+    width: 90%; }
+  #sidebar-wrapper .nav-section-label {
+    color: #a40a19;
+    font-size: 80%;
+    padding: 0;
+    margin: 1.65em 1.75em 0.5em;
+    text-transform: uppercase; }
+  #sidebar-wrapper a {
+    color: #ffffff; }
+  #sidebar-wrapper ul.nav {
+    margin-bottom: 1em; }
+    #sidebar-wrapper ul.nav li a {
+      font-size: 95%;
+      padding: 0.4em 2.05rem;
+      color: #ffffff;
+      text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.05); }
+    #sidebar-wrapper ul.nav li a:hover {
+      color: #fff819;
+      background: transparent; }
+    #sidebar-wrapper ul.nav li a:focus {
+      color: #fff819;
+      background: transparent; }
+    #sidebar-wrapper ul.nav li a .typcn {
+      font-size: 20px; }
+    #sidebar-wrapper ul.nav li a .typcn:after {
+      content: ' '; }
+    #sidebar-wrapper ul.nav li.active a {
+      color: #fff819; }
+  #sidebar-wrapper ul.nav.main-nav {
+    margin: 0.5em 0 1em; }
+    #sidebar-wrapper ul.nav.main-nav li a {
+      display: inline-block;
+      font-size: 115%;
+      padding-top: 0.5em;
+      padding-bottom: 0.5em; }
+    #sidebar-wrapper ul.nav.main-nav li.active:after {
+      position: absolute;
+      content: " ";
+      right: 0;
+      top: 50%;
+      pointer-events: none;
+      border-top: 0.6em solid transparent;
+      border-bottom: 0.6em solid transparent;
+      border-right: 0.6em solid #f5f5f5;
+      margin-top: -0.3em; }
+
+#content-wrapper {
+  position: relative; }
+
+#content {
+  margin-top: 15px;
+  width: 100%;
+  display: inline-block; }
+
+@media (max-width: 768px) {
+  #wrapper {
+    padding-left: 0px; }
+  body.sidebar-opened {
+    overflow: hidden; }
+  .sidebar-opened #wrapper {
+    padding-left: 240px; }
+    .sidebar-opened #wrapper #sidebar-wrapper {
+      width: 240px; }
+    .sidebar-opened #wrapper #content-wrapper {
+      margin-right: -240px; }
+  #sidebar-wrapper {
+    width: 0px; }
+  #content-wrapper {
+    width: 100%;
+    position: absolute; }
+  .navbar-toggle {
+    display: block;
+    float: left;
+    margin-left: 15px;
+    margin-right: 0px;
+    margin-top: 10px;
+    height: 35px;
+    background-color: #8e8e8e; }
+    .navbar-toggle .icon-bar {
+      background-color: #eeeeee; }
+  .navbar-toggle:hover .icon-bar {
+    background-color: #fff819; }
+  #topbar-wrapper .search-form {
+    width: 100%;
+    margin-left: 0px; }
+    #topbar-wrapper .search-form .input-group {
+      width: 100%;
+      padding-left: 15px;
+      padding-right: 15px; }
+    #topbar-wrapper .search-form .search-input {
+      width: 100%;
+      padding-left: 10px; }
+    #topbar-wrapper .search-form .input-group-addon {
+      display: none; }
+  #content {
+    margin-top: 50px; } }
+
 label {
   font-weight: 400;
   color: #808080;
   margin-bottom: 0.5em; }
 
-.highlight {
-  color: #fff819; }
-
-.btn {
-  color: #ffffff;
-  background-color: #2e8fc2;
-  border-color: #2981ad;
-  line-height: 1.75em; }
-  .btn:hover, .btn:focus, .btn:active {
-    box-shadow: none;
-    background-color: #399ed0;
-    border-color: #2e8fc2;
-    outline: none; }
+.whispers-logo-text {
+  font-size: 85%;
+  margin: 0.15em 0.4em; }
 
 .card {
   background: #fff;
@@ -4953,3 +5154,6 @@ label {
 .forgot-password {
   margin: 1.5em 0 0;
   text-align: center; }
+
+#sidebar-wrapper [class*="typicons-"]:before {
+  font-size: 20px; }
