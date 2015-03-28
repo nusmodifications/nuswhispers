@@ -1,6 +1,6 @@
 <?php
 
-class Confession extends Eloquent {
+class Confession extends Model {
 
     /**
      * The database table used by the model.

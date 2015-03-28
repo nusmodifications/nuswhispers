@@ -1,6 +1,6 @@
 <?php
 
-class Tag extends Eloquent {
+class Tag extends Model {
 	protected $table = 'tags';
 	protected $fillable = array('confession_tag');
 	public $timestamps = false;
