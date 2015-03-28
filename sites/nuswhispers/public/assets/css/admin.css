@@ -5033,7 +5033,7 @@ a:hover {
     opacity: 0.5;
     width: 90%; }
   #sidebar-wrapper .nav-section-label {
-    color: #a40a19;
+    color: #d50c20;
     font-size: 80%;
     padding: 0;
     margin: 1.65em 1.75em 0.5em;
@@ -5133,6 +5133,25 @@ label {
   color: #808080;
   margin-bottom: 0.5em; }
 
+.btn {
+  background: #ddd;
+  color: #666666; }
+  .btn:hover {
+    color: #333333; }
+
+.btn-primary {
+  background: #f55260;
+  color: #fff; }
+  .btn-primary:hover, .btn-primary:focus {
+    color: #fff819;
+    background: #f66a78; }
+
+.btn-danger {
+  color: #c92e2c; }
+  .btn-danger:hover {
+    color: #9f2323;
+    background: #ddd; }
+
 .whispers-logo-text {
   font-size: 85%;
   margin: 0.15em 0.4em; }
@@ -5155,5 +5174,73 @@ label {
   margin: 1.5em 0 0;
   text-align: center; }
 
-#sidebar-wrapper [class*="typicons-"]:before {
-  font-size: 20px; }
+h1 {
+  font-size: 130%;
+  margin: 6px 0 14px;
+  font-weight: 400; }
+
+.page-header {
+  margin-top: 0;
+  padding-bottom: 6px;
+  border-color: #ddd; }
+  .page-header .typcn {
+    font-size: 125%;
+    margin-right: 0.25em; }
+
+#sidebar-wrapper .main-nav li a {
+  width: 99%; }
+  #sidebar-wrapper .main-nav li a:hover .badge {
+    background: #fff819; }
+#sidebar-wrapper .badge {
+  float: right;
+  margin-top: 0.5em;
+  background: #fff;
+  color: #f55260;
+  border-radius: 8px; }
+#sidebar-wrapper .active .badge {
+  background: #fff819; }
+
+.page-header {
+  width: 100%;
+  display: inline-block; }
+  .page-header .page-title {
+    float: left; }
+  .page-header .search-bar {
+    margin-top: 0.5em;
+    float: right; }
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover {
+  background: #f5f5f5; }
+
+.search-filters {
+  margin: 1em 0; }
+  .search-filters .pagination {
+    float: right;
+    margin: 0.1em 0; }
+    .search-filters .pagination > li a {
+      color: #f55260; }
+    .search-filters .pagination > .active span {
+      background: #f55260;
+      border-color: #f55260; }
+
+.btn-filter {
+  margin-left: 1em; }
+
+.post-list .post-header {
+  margin: 1em;
+  border-bottom: 1px solid #eaeaea;
+  padding: 1em 0; }
+.post-list .post-meta {
+  display: inline-block;
+  color: #b3b3b3;
+  font-size: 95%; }
+.post-list .post-actions {
+  display: inline-block;
+  float: right; }
+.post-list .post {
+  background: #fff;
+  line-height: 1.6em;
+  margin: 1em 0;
+  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1); }
+.post-list .post-content {
+  padding: 0 1em 1em; }

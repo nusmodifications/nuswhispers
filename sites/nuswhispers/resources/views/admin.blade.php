@@ -18,8 +18,22 @@
         <div class="whispers-logo-text">NUS<span class="highlight">Whispers</span>Admin</div>
       </a>
       <hr>
+      <h2 class="nav-section-label">Confessions Management</h2>
       <ul class="nav main-nav">
-        <li class="{{ Request::is('admin/confessions') ? 'active' : '' }}"><a href="/admin/confessions"><span class="typcn typcn-pin"></span>Confessions</a></li>
+        <li class="{{ Request::is('admin/confessions/index/pending') || Request::is('admin/confessions') ? 'active' : '' }}">
+          <a href="/admin/confessions">
+            <span class="typcn typcn-warning"></span>Pending
+            <span class="badge">{{ \App\Models\Confession::pending()->count() }}</span>
+          </a>
+        </li>
+        <li class="{{ Request::is('admin/confessions/index/approved') ? 'active' : '' }}">
+          <a href="/admin/confessions/index/approved">
+              <span class="typcn typcn-tick"></span>Approved
+          </a>
+        </li>
+      </ul>
+      <hr>
+      <ul class="nav main-nav">
         <li class="{{ Request::is('admin/users') ? 'active' : '' }}"><a href="/admin/users"><span class="typcn typcn-user"></span>User Management</a></li>
         <li><a href="/auth/logout"><span class="typcn typcn-eject"></span>Logout</a></li>
       </ul>

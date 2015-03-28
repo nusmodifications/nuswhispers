@@ -22,6 +22,31 @@ label {
     margin-bottom: 0.5em;
 }
 
+.btn {
+    background: #ddd;
+    color: $primary-text-color;
+    &:hover {
+        color: darken($primary-text-color, 20%);
+    }
+}
+.btn-primary {
+    background: $primary-color;
+    color: #fff;
+
+    &:hover, &:focus {
+        color: $highlight-color;
+        background: lighten($primary-color, 5%);
+    }
+}
+.btn-danger {
+    color: #c92e2c;
+
+    &:hover {
+        color: darken(#c92e2c, 10%);
+        background: #ddd;
+    }
+}
+
 .whispers-logo-text {
     font-size: 85%;
     margin: .15em .4em;
@@ -50,9 +75,103 @@ label {
     text-align: center;
 }
 
-#sidebar-wrapper {
-    [class*="typicons-"]:before {
-        font-size: 20px;
+h1 {
+    font-size: 130%;
+    margin: 6px 0 14px;
+    font-weight: 400;
+}
+
+.page-header {
+    margin-top: 0;
+    padding-bottom: 6px;
+    border-color: #ddd;
+
+    .typcn {
+        font-size: 125%;
+        margin-right: .25em;
     }
 }
 
+#sidebar-wrapper {
+    .main-nav li a {
+        width: 99%;
+
+        &:hover .badge {
+            background: $highlight-color;
+        }
+    }
+    .badge {
+        float: right;
+        margin-top: .5em;
+        background: #fff;
+        color: $primary-color;
+        border-radius: 8px;
+    }
+    .active .badge {
+        background: $highlight-color;
+    }
+}
+
+.page-header {
+    width: 100%;
+    display: inline-block;
+    .page-title {
+        float: left;
+    }
+    .search-bar {
+        margin-top: .5em;
+        float: right;
+    }
+}
+
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover {
+    background: $background-color;
+}
+
+.search-filters {
+    margin: 1em 0;
+    .pagination {
+        float: right;
+        margin: .1em 0;
+
+        >li a {
+            color: $primary-color;
+        }
+
+        >.active span {
+            background: $primary-color;
+            border-color: $primary-color;
+        }
+    }
+}
+
+.btn-filter {
+    margin-left: 1em;
+}
+
+.post-list {
+    .post-header {
+        margin: 1em;
+        border-bottom: 1px solid #eaeaea;
+        padding: 1em 0;
+    }
+    .post-meta {
+        display: inline-block;
+        color: lighten($primary-text-color, 30%);
+        font-size: 95%;
+    }
+    .post-actions {
+        display: inline-block;
+        float: right;
+    }
+    .post {
+        background: #fff;
+        line-height: 1.6em;
+        margin: 1em 0;
+        box-shadow: 0 0 1px 0 rgba(0,0,0,0.1);
+    }
+    .post-content {
+        padding: 0 1em 1em;
+    }
+}
