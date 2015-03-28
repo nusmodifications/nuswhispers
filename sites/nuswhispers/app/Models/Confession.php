@@ -1,8 +1,20 @@
 <?php
 
 class Confession extends Eloquent {
+
+    /**
+     * The database table used by the model.
+     *
+     * @var string
+     */
 	protected $table = 'confessions';
-	public $timestamps = false;
+
+    /**
+     * Primary key of the model.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'confession_id';
 
 	public function categories()
 	{
@@ -13,4 +25,5 @@ class Confession extends Eloquent {
 	{
 		return $this->belongsToMany('Tag', 'confession_tags', 'confession_id', 'confession_tag_id');
 	}
+
 }
