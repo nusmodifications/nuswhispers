@@ -39,10 +39,9 @@ class RevampUsersTable extends Migration {
             $table->dropColumn(['name', 'email', 'password', 'created_at', 'updated_at', 'remember_token']);
         });
 
-        Schema::create('users', function(Blueprint $table) {
+        Schema::table('users', function(Blueprint $table) {
             $table->string('username', 255)->unique();
             $table->string('password', 255);
-            $table->enum('role', array('Moderator', 'Administrator'))->default('Moderator');
         });
     }
 
