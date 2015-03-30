@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\Models\Category as Category;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -14,7 +15,7 @@ class CategoriesController extends Controller {
 	 */
 	public function index()
 	{
-		return \Response::json(\Category::categoryAsc()->get());
+		return \Response::json(Category::categoryAsc()->get());
 	}
 
 	/**

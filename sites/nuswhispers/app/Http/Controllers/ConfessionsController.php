@@ -1,5 +1,7 @@
 <?php namespace App\Http\Controllers;
 
+use App\Models\Tag as Tag;
+use App\Models\Confession as Confession;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -14,7 +16,7 @@ class ConfessionsController extends Controller {
 	 */
 	public function index()
 	{
-		return \Response::json(\Confession::get());
+		return \Response::json(Confession::get());
 	}
 
 	/**
@@ -45,7 +47,7 @@ class ConfessionsController extends Controller {
 			return \Response::json(['success' => false, 'errors' => ['The reCAPTCHA was not entered correctly. Please try again.']]);
 		}
 
-		$newConfession = new \Confession;
+		$newConfession = new Confession;
 
 		$newConfession->content = \Input::get('content');
 		$newConfession->images = \Input::get('image');
@@ -55,7 +57,7 @@ class ConfessionsController extends Controller {
 		preg_match_all('/(#\w+)/', $newConfession->content, $matches);
 		$tagNames = array_shift($matches); // get full pattern matches from match result
 		foreach ($tagNames as $tagName) {
-			$confessionTag = \Tag::firstOrCreate(array('confession_tag' => $tagName));
+			$confessionTag = Tag::firstOrCreate(array('confession_tag' => $tagName));
 			$newConfession->tags()->attach($confessionTag->confession_tag_id);
 		}
 

@@ -4919,10 +4919,10 @@ body {
   background-color: #f5f5f5; }
 
 a {
-  color: #f70; }
+  color: #2e8fc2; }
 
 a:hover {
-  color: #2e8fc2;
+  color: #f70;
   text-decoration: none;
   cursor: pointer; }
 
@@ -5006,7 +5006,7 @@ a:hover {
 
 .btn {
   color: #ffffff;
-  background-color: #f70;
+  background-color: #2e8fc2;
   border: none; }
   .btn:hover {
     color: #fff819; }
@@ -5016,7 +5016,7 @@ a:hover {
     color: #fff819; }
 
 .btn-alt-style {
-  background-color: #2e8fc2; }
+  background-color: #f70; }
 
 .btn-social-media {
   background-color: transparent;
@@ -5024,10 +5024,10 @@ a:hover {
   font-size: 185%;
   padding: 0px; }
   .btn-social-media:hover {
-    color: #2e8fc2; }
+    color: #f70; }
 
 #sidebar-wrapper {
-  background-color: #f70;
+  background-color: #2e8fc2;
   height: 100%;
   position: fixed;
   -webkit-transition: all 0.5s ease 0s;
@@ -5040,7 +5040,7 @@ a:hover {
     opacity: 0.5;
     width: 90%; }
   #sidebar-wrapper .nav-section-label {
-    color: #994500;
+    color: #1a5370;
     font-size: 80%;
     padding: 0;
     margin: 1.65em 1.75em 0.5em;
@@ -5191,7 +5191,7 @@ a:hover {
         margin-right: 8px;
         vertical-align: middle; }
       .post .post-footer .post-media-summary .favs-count {
-        color: #f70; }
+        color: #2e8fc2; }
       .post .post-footer .post-media-summary .favs-count:before {
         background: url('../img/fav_speech.png');
         content: ' ';
@@ -5203,13 +5203,13 @@ a:hover {
         vertical-align: middle; }
 
 #loading-bar .bar {
-  background: #2e8fc2; }
+  background: #f70; }
 
 #loading-bar .peg {
-  -moz-box-shadow: #2e8fc2 1px 0 6px 1px;
-  -ms-box-shadow: #2e8fc2 1px 0 6px 1px;
-  -webkit-box-shadow: #2e8fc2 1px 0 6px 1px;
-  box-shadow: #2e8fc2 1px 0 6px 1px; }
+  -moz-box-shadow: #f70 1px 0 6px 1px;
+  -ms-box-shadow: #f70 1px 0 6px 1px;
+  -webkit-box-shadow: #f70 1px 0 6px 1px;
+  box-shadow: #f70 1px 0 6px 1px; }
 
 #loading-bar-spinner .spinner-icon {
   display: none; }
@@ -5257,7 +5257,7 @@ a:hover {
     content: '\e11e';
     position: absolute;
     background-color: transparent;
-    color: #2e8fc2;
+    color: #f70;
     font-family: 'typicons';
     font-size: 1.4em;
     top: 0;

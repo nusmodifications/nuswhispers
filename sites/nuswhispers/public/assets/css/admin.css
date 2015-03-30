@@ -4915,7 +4915,7 @@ a {
   color: #f55260; }
 
 a:hover {
-  color: #2e8fc2;
+  color: #f70;
   text-decoration: none;
   cursor: pointer; }
 
@@ -5009,7 +5009,7 @@ a:hover {
     color: #fff819; }
 
 .btn-alt-style {
-  background-color: #2e8fc2; }
+  background-color: #f70; }
 
 .btn-social-media {
   background-color: transparent;
@@ -5017,7 +5017,7 @@ a:hover {
   font-size: 185%;
   padding: 0px; }
   .btn-social-media:hover {
-    color: #2e8fc2; }
+    color: #f70; }
 
 #sidebar-wrapper {
   background-color: #f55260;

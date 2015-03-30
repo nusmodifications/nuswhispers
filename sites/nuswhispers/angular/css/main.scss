@@ -15,7 +15,7 @@ a:hover {
 }
 
 .highlight {
-    color: $highlight-color;
+    color: $highlight-nav-color;
 }
 
 #wrapper {
@@ -100,13 +100,13 @@ a:hover {
     border: none;
 
     &:hover {
-        color: $highlight-color;
+        color: $highlight-nav-color;
     }
 
     &:focus {
         outline: none;
         box-shadow: none;
-        color: $highlight-color;
+        color: $highlight-nav-color;
     }
 }
 
@@ -157,11 +157,11 @@ a:hover {
                 text-shadow: 1px 1px 0px rgba(0,0,0,0.05);
             }
             a:hover {
-                color: $highlight-color;
+                color: $highlight-nav-color;
                 background: transparent;
             }
             a:focus {
-                color: $highlight-color;
+                color: $highlight-nav-color;
                 background: transparent;
             }
             a .typcn {
@@ -172,7 +172,7 @@ a:hover {
             }
         }
         li.active a {
-            color: $highlight-color;
+            color: $highlight-nav-color;
         }
     }
 
@@ -247,7 +247,7 @@ a:hover {
     }
     .navbar-toggle:hover {
         .icon-bar {
-            background-color: $highlight-color;
+            background-color: $highlight-nav-color;
         }
     }
     #topbar-wrapper .search-form {
