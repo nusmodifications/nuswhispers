@@ -1,9 +1,14 @@
 angular.module('nuswhispersApp.controllers')
-.controller('MainController', function ($scope, Facebook, FacebookData) {
+.controller('MainController', function ($scope, Facebook, FacebookData, Category) {
     'use strict';
 
     $scope.sidebarOpenedClass = '';
     $scope.isLoggedIn = false;
+
+    // Load all categories onto sidebar
+    Category.get().success(function (response) {
+        $scope.categories = response.data.categories;
+    });
 
     $scope.toggleSidebar = function () {
         if ($scope.sidebarOpenedClass === '') {

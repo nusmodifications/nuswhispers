@@ -16,7 +16,7 @@ class ConfessionsController extends Controller {
 	 */
 	public function index()
 	{
-		$query = Confession::orderBy('created_at', 'DESC');
+		$query = Confession::with('categories')->orderBy('created_at', 'DESC');
 		// TODO: change to order by status_updated_at and filter by featured when approval is ready
 		// $query = Confession::orderBy('status_updated_at', 'DESC');
 		// $query->featured();

@@ -9,6 +9,13 @@ angular.module('nuswhispersApp.services')
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                 data: $.param(confessionData)
             });
+        },
+        getFeatured: function (timestamp, offset, count) {
+            return $http({
+                method: 'GET',
+                url: '/api/confessions',
+                params: {timestamp: timestamp, offset: offset, count: count}
+            });
         }
     };
 });

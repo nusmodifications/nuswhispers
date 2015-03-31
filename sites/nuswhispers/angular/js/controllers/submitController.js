@@ -3,8 +3,8 @@ angular.module('nuswhispersApp.controllers')
     'use strict';
 
     // Load all categories onto form
-    Category.get().success(function (data) {
-        $scope.categories = data;
+    Category.get().success(function (response) {
+        $scope.categories = response.data.categories;
     });
 
     $scope.confessionData = {};

@@ -13,13 +13,33 @@ angular.module('nuswhispersApp.services', ['facebook']).config(
 );
 angular.module('nuswhispersApp.controllers', ['nuswhispersApp.services', 'vcRecaptcha']);
 
-var app = angular.module('nuswhispersApp', ['nuswhispersApp.controllers', 'angular-loading-bar', 'monospaced.elastic', 'ngCookies', 'ngResource', 'ngSanitize', 'ngRoute', 'ngAnimate', 'ui.utils', 'ui.bootstrap', 'ui.router', 'ngGrid']);
+var app = angular.module('nuswhispersApp', ['nuswhispersApp.controllers', 'angular-loading-bar', 'monospaced.elastic', 'angularMoment', 'ngCookies', 'ngResource', 'ngSanitize', 'ngRoute', 'ngAnimate', 'ui.utils', 'ui.bootstrap', 'ui.router', 'ngGrid']);
 
 app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($routeProvider, $locationProvider, $httpProvider) {
     'use strict';
 
     $routeProvider
         .when('/home/', {
+            templateUrl: 'assets/templates/home.html',
+            controller: 'ConfessionsController',
+            resolve: {
+                controllerOptions: function () {
+                    return {
+                        view: 'featured',
+                    };
+                }
+            }
+        })
+        .when('/trending/', {
+            templateUrl: 'assets/templates/home.html'
+        })
+        .when('/new/', {
+            templateUrl: 'assets/templates/home.html'
+        })
+        .when('/category/:category', {
+            templateUrl: 'assets/templates/home.html'
+        })
+        .when('/tag/:tag', {
             templateUrl: 'assets/templates/home.html'
         })
         .when('/submit/', {
@@ -56,11 +76,57 @@ app.run(['$rootScope', function ($rootScope) {
 /* ---> Do not delete this comment (Constants) <--- */
 
 angular.module('nuswhispersApp.controllers')
-.controller('MainController', function ($scope, Facebook, FacebookData) {
+.controller('ConfessionsController', function ($scope, Confession, controllerOptions) {
+    'use strict';
+
+    $scope.getFeatured = function () {
+        Confession.getFeatured($scope.timestamp, $scope.offset, $scope.count)
+            .success(function (response) {
+                console.log(JSON.stringify(response.data.confessions));
+                $scope.confessions.push.apply($scope.confessions, response.data.confessions);
+                // set up next featured offset
+                $scope.offset += $scope.count;
+            })
+            .error(function (response) {
+                console.log(response);
+            });
+    };
+
+    $scope.timestamp = Math.floor(Date.now() / 1000);
+    $scope.offset = 0;
+    $scope.count = 10;
+    $scope.confessions = [];
+
+    switch (controllerOptions.view) {
+        default:
+            $scope.getFeatured();
+    }
+
+    $scope.processConfessionContent = function (content) {
+        var splitContentTags = content.split(/(#\w+)/);
+        var processedContent = '';
+        for (var i in splitContentTags) {
+            if (/(#\w+)/.test(splitContentTags[i])) {
+                processedContent += '<a href="/#!home">' + splitContentTags[i] + '</a>';
+            } else {
+                processedContent += splitContentTags[i];
+            }
+        }
+        return processedContent;
+    };
+});
+
+angular.module('nuswhispersApp.controllers')
+.controller('MainController', function ($scope, Facebook, FacebookData, Category) {
     'use strict';
 
     $scope.sidebarOpenedClass = '';
     $scope.isLoggedIn = false;
+
+    // Load all categories onto sidebar
+    Category.get().success(function (response) {
+        $scope.categories = response.data.categories;
+    });
 
     $scope.toggleSidebar = function () {
         if ($scope.sidebarOpenedClass === '') {
@@ -100,8 +166,8 @@ angular.module('nuswhispersApp.controllers')
     'use strict';
 
     // Load all categories onto form
-    Category.get().success(function (data) {
-        $scope.categories = data;
+    Category.get().success(function (response) {
+        $scope.categories = response.data.categories;
     });
 
     $scope.confessionData = {};
@@ -202,6 +268,13 @@ angular.module('nuswhispersApp.services')
                 url: '/api/confessions',
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                 data: $.param(confessionData)
+            });
+        },
+        getFeatured: function (timestamp, offset, count) {
+            return $http({
+                method: 'GET',
+                url: '/api/confessions',
+                params: {timestamp: timestamp, offset: offset, count: count}
             });
         }
     };
