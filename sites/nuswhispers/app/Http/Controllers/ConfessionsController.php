@@ -16,7 +16,7 @@ class ConfessionsController extends Controller {
 	 */
 	public function index()
 	{
-		return \Response::json(Confession::get());
+		return \Response::json(Confession::paginate(1));
 	}
 
 	/**
@@ -26,12 +26,12 @@ class ConfessionsController extends Controller {
 	 */
 	public function store()
 	{
-		$validationRules = array(
+		$validationRules = [
 			'content' => 'required',
 			'image' => 'url',
 			'categories' => 'array',
 			'captcha' => 'required'
-		);
+		];
 
 		$validator = \Validator::make(\Input::all(), $validationRules);
 
@@ -57,14 +57,14 @@ class ConfessionsController extends Controller {
 		preg_match_all('/(#\w+)/', $newConfession->content, $matches);
 		$tagNames = array_shift($matches); // get full pattern matches from match result
 		foreach ($tagNames as $tagName) {
-			$confessionTag = Tag::firstOrCreate(array('confession_tag' => $tagName));
+			$confessionTag = Tag::firstOrCreate(['confession_tag' => $tagName]);
 			$newConfession->tags()->attach($confessionTag->confession_tag_id);
 		}
 
 		$newConfession->categories()->attach(\Input::get('categories'));
 		$newConfession->save();
 
-		return \Response::json(array('success' => true));
+		return \Response::json(['success' => true]);
 	}
 
 	/**

@@ -112,9 +112,12 @@ angular.module('nuswhispersApp.controllers')
         submitSuccess: false
     };
 
+    $scope.setRecaptchaResponse = function (response) {
+        $scope.confessionData.captcha = response;
+    };
+
     $scope.submitConfession = function () {
         $scope.confessionData.categories = $scope.form.selectedCategoryIDs;
-        $scope.confessionData.captcha = vcRecaptchaService.getResponse();
 
         Confession.submit($scope.confessionData)
             .success(function (response) {
