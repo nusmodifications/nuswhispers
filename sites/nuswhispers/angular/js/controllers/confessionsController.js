@@ -1,28 +1,33 @@
 angular.module('nuswhispersApp.controllers')
-.controller('ConfessionsController', function ($scope, Confession, Facebook, FacebookData, controllerOptions) {
+.controller('ConfessionsController', function ($scope, Confession, controllerOptions) {
     'use strict';
 
-    $scope.getFeatured = function () {
-        Confession.getFeatured($scope.timestamp, $scope.offset, $scope.count)
-            .success(function (response) {
-                $scope.confessions.push.apply($scope.confessions, response.data.confessions);
-                // set up next featured offset
-                $scope.offset += $scope.count;
-            })
-            .error(function (response) {
-                console.log(response);
-            });
-    };
+    $scope.getConfessions = function () {
+        $scope.loadingConfessions = true;
+        switch (controllerOptions.view) {
+            default:
+                Confession.getFeatured($scope.timestamp, $scope.offset, $scope.count)
+                    .success(function (response) {
+                        if (response.data.confessions.length === 0) {
+                            $scope.doLoadMoreConfessions = false;
+                        } else {
+                            $scope.confessions.push.apply($scope.confessions, response.data.confessions);
+                            // set up next featured offset
+                            $scope.offset += $scope.count;
+                        }
+                        $scope.loadingConfessions = false;
+                    });
+        }
+    }
 
     $scope.timestamp = Math.floor(Date.now() / 1000);
     $scope.offset = 0;
     $scope.count = 5;
+    $scope.loadingConfessions = false;
+    $scope.doLoadMoreConfessions = true;
     $scope.confessions = [];
 
-    switch (controllerOptions.view) {
-        default:
-            $scope.getFeatured();
-    }
+    $scope.getConfessions();
 
     $scope.processConfessionContent = function (content) {
         var splitContentTags = content.split(/(#\w+)/);

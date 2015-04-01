@@ -1,5 +1,5 @@
 angular.module('nuswhispersApp.controllers')
-.controller('MainController', function ($scope, Facebook, FacebookData, FbUser, Category) {
+.controller('MainController', function ($scope, Facebook, FbUser, Category) {
     'use strict';
 
     $scope.sidebarOpenedClass = '';
@@ -34,10 +34,7 @@ angular.module('nuswhispersApp.controllers')
 
     $scope.getLoginStatus = function () {
         Facebook.getLoginStatus(function (response) {
-            FacebookData.setAccessToken('');
             if (response.status === 'connected') {
-                FacebookData.setAccessToken(response.authResponse.accessToken);
-                FacebookData.setUserID(response.authResponse.userID);
                 FbUser.login(response.authResponse.accessToken)
                     .success(function (response) {
                         $scope.isLoggedIn = true;

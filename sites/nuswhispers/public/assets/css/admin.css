@@ -5095,6 +5095,12 @@ a:hover {
   width: 100%;
   display: inline-block; }
 
+.loading {
+  background: url('../img/pac_man_loading.gif');
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 24px; }
+
 @media (max-width: 768px) {
   #wrapper {
     padding-left: 0px; }

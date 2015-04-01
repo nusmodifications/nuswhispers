@@ -1,4 +1,4 @@
-<div id="post-list" class="col-md-8 col-sm-7">
+<div id="post-list" class="col-md-8 col-sm-7" infinite-scroll="getConfessions()" infinite-scroll-disabled="loadingConfessions || !doLoadMoreConfessions" infinite-scroll-distance="1">
   <div class="post" ng-repeat="confession in confessions">
     <div class="post-header">
       <span ng-repeat="category in confession.categories">
@@ -28,6 +28,7 @@
       </div>
     </div>
   </div>
+  <div ng-show="loadingConfessions" class="loading"></div>
 </div>
 <div class="col-md-4 col-sm-5">
   <!-- extra content or ads -->
