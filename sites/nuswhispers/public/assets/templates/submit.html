@@ -18,10 +18,7 @@
         <button type="button" ng-click="uploadConfessionImage()" class="btn">
             <span class="typcn typcn-image"></span> {{form.imageSelected ? 'Choose Another Image' : 'Choose an Image'}}
         </button>
-        <a ng-click="showImage = !showImage" ng-show="form.imageSelected">{{showImage ? 'Hide Image' : 'View Image'}}</a>
-        <div class="collapsible-box" ng-class="{'box-opened': showImage}">
-            <img src="{{confessionData.image}}" />
-        </div>
+        <a ng-show="form.imageSelected"><img src="{{confessionData.image}}" class="thumbnail"/></a>
     </div>
 
     <div class="form-group">

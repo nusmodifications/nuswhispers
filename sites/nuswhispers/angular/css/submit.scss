@@ -1,4 +1,6 @@
 .submit-confession-form {
+    padding-bottom: 15px;
+
     .form-group {
         background-color: #ffffff;
         padding: 1em;
@@ -68,20 +70,6 @@
         }
     }
 
-    .collapsible-box {
-        max-height: 0px;
-        overflow: hidden;
-        @include transition(max-height, 0.5s, ease, 0s);
-
-        img {
-            max-width: 100%;
-        }
-    }
-
-    .box-opened {
-        max-height: 10000px;
-    }
-
     .tag-highlight-wrapper {
         position: relative;
 
@@ -101,6 +89,13 @@
         textarea {
             position: relative;
         }
+    }
+
+    img.thumbnail {
+        width: 100px;
+        border: 0px;
+        margin-top: 10px;
+        margin-bottom: 0px;
     }
 
     textarea {
