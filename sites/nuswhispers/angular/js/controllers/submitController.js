@@ -3,8 +3,8 @@ angular.module('nuswhispersApp.controllers')
     'use strict';
 
     // Load all categories onto form
-    Category.get().success(function (data) {
-        $scope.categories = data;
+    Category.get().success(function (response) {
+        $scope.categories = response.data.categories;
     });
 
     $scope.confessionData = {};
@@ -15,9 +15,12 @@ angular.module('nuswhispersApp.controllers')
         submitSuccess: false
     };
 
+    $scope.setRecaptchaResponse = function (response) {
+        $scope.confessionData.captcha = response;
+    };
+
     $scope.submitConfession = function () {
         $scope.confessionData.categories = $scope.form.selectedCategoryIDs;
-        $scope.confessionData.captcha = vcRecaptchaService.getResponse();
 
         Confession.submit($scope.confessionData)
             .success(function (response) {

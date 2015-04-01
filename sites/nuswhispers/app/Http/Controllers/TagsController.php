@@ -16,7 +16,7 @@ class TagsController extends Controller {
 	 */
 	public function index()
 	{
-		return \Response::json(array("data" => array("tags" => Tag::tagAsc()->get())));
+		return \Response::json(array("data" => array("tags" => Tag::get())));
 	}
 
 	/**
@@ -46,16 +46,16 @@ class TagsController extends Controller {
 	 * @param int $num
 	 * @return json {"data": {"tags": [tag1, tag2, ...]}}
 	 */
-	function get_top_n_tags($num){
-		$tags = Tag::tagAsc()->get();
-		if ($num < count($tags)){
-			$top_n = array_slice($tags, 0, $num, true);
-			return \Response::json(array("data" => array("tags" => $top_n)));
-		}
-		else{
-			return \Response::json(array("data" => array("tags" => $tags)));
-		}
-	}
+	// function get_top_n_tags($num){
+	// 	// $tags = Tag::get();
+	// 	// if ($num < count($tags)){
+	// 	// 	$top_n = array_slice($tags, 0, $num, true);
+	// 	// 	return \Response::json(array("data" => array("tags" => $top_n)));
+	// 	// }
+	// 	// else{
+	// 	// 	return \Response::json(array("data" => array("tags" => $tags)));
+	// 	// }
+	// }
 
 	/**
 	 * Get a tag JSON by a given tag_id

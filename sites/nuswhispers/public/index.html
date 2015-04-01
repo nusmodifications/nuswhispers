@@ -37,14 +37,8 @@
         <hr>
         <h2 class="nav-section-label">Categories</h2>
         <ul class="nav">
-          <li>
-            <a href="/#!home">Lost &amp; Found</a>
-          </li>
-          <li>
-            <a href="/#!home">Rant &amp; Complaint</a>
-          </li>
-          <li>
-            <a href="/#!home">Romance</a>
+          <li ng-repeat="category in categories">
+            <a href="/#!home">{{category.confession_category}}</a>
           </li>
         </ul>
         <hr>

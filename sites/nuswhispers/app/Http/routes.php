@@ -18,11 +18,14 @@ Route::get('/', function() {
 // API Routes
 Route::group(array('prefix' => 'api'), function() {
 	Route::resource('confessions', 'ConfessionsController',
-		['only' => ['index', 'store']]);
+		['only' => ['index', 'store', 'show']]);
+
 	Route::resource('categories', 'CategoriesController',
 		['only' => ['index', 'show']]);
+
 	Route::resource('tags', 'TagsController',
 		['only' => ['index', 'show']]);
+
 });
 
 // Auth Routes

@@ -16,7 +16,24 @@ class ConfessionsController extends Controller {
 	 */
 	public function index()
 	{
-		return \Response::json(Confession::get());
+		$query = Confession::with('categories')->orderBy('created_at', 'DESC');
+		// TODO: change to order by status_updated_at and filter by featured when approval is ready
+		// $query = Confession::orderBy('status_updated_at', 'DESC');
+		// $query->featured();
+		if (\Input::get('timestamp')) {
+			$query = $query->where('status_updated_at', '<=', \Input::get('timestamp'));
+		}
+		if (\Input::get('count') > 0 && \Input::get('offset')) {
+			$query->take(\Input::get('count'));
+			$query->skip(\Input::get('offset'));
+		}
+
+		$confessions = $query->get();
+		foreach ($confessions as $confession) {
+			$confession->getFacebookInformation();
+		}
+
+		return \Response::json(["data" => ["confessions" => $confessions]]);
 	}
 
 	/**
@@ -26,12 +43,12 @@ class ConfessionsController extends Controller {
 	 */
 	public function store()
 	{
-		$validationRules = array(
+		$validationRules = [
 			'content' => 'required',
 			'image' => 'url',
 			'categories' => 'array',
 			'captcha' => 'required'
-		);
+		];
 
 		$validator = \Validator::make(\Input::all(), $validationRules);
 
@@ -57,14 +74,14 @@ class ConfessionsController extends Controller {
 		preg_match_all('/(#\w+)/', $newConfession->content, $matches);
 		$tagNames = array_shift($matches); // get full pattern matches from match result
 		foreach ($tagNames as $tagName) {
-			$confessionTag = Tag::firstOrCreate(array('confession_tag' => $tagName));
+			$confessionTag = Tag::firstOrCreate(['confession_tag' => $tagName]);
 			$newConfession->tags()->attach($confessionTag->confession_tag_id);
 		}
 
 		$newConfession->categories()->attach(\Input::get('categories'));
 		$newConfession->save();
 
-		return \Response::json(array('success' => true));
+		return \Response::json(['success' => true]);
 	}
 
 	/**
@@ -74,39 +91,6 @@ class ConfessionsController extends Controller {
 	 * @return Response
 	 */
 	public function show($id)
-	{
-		//
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
 	{
 		//
 	}
