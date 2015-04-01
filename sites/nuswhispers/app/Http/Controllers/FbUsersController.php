@@ -21,7 +21,6 @@ class FbUsersController extends Controller {
 
                 if ($fbUser->save()) {
                     \Session::put('fb_user_id', $fbUserId);
-                    \Log::info($fbUserId);
                     return \Response::json(['success' => true]);
                 }
             } catch (\Facebook\Exceptions\FacebookSDKException $e) {
@@ -36,6 +35,8 @@ class FbUsersController extends Controller {
     {
         $fbUserId = \Session::get('fb_user_id');
         $confessionId = \Input::get('confession_id');
+
+        \Log::info('sup' . $confessionId);
 
         if ($fbUserId && $confessionId) {
             $fbUser = FbUser::find($fbUserId);

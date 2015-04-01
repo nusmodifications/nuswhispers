@@ -80,19 +80,27 @@ angular.module('nuswhispersApp.controllers')
     'use strict';
 
     $scope.getConfessions = function () {
+        function processConfessionResponse(confessions) {
+            if (confessions.length === 0) {
+                $scope.doLoadMoreConfessions = false;
+            } else {
+                var confessionModels = [];
+                for (var i in confessions) {
+                    confessionModels.push(new Confession(confessions[i]));
+                }
+                $scope.confessions.push.apply($scope.confessions, confessionModels);
+                // set up next featured offset
+                $scope.offset += $scope.count;
+            }
+            $scope.loadingConfessions = false;
+        }
+
         $scope.loadingConfessions = true;
         switch (controllerOptions.view) {
             default:
                 Confession.getFeatured($scope.timestamp, $scope.offset, $scope.count)
                     .success(function (response) {
-                        if (response.data.confessions.length === 0) {
-                            $scope.doLoadMoreConfessions = false;
-                        } else {
-                            $scope.confessions.push.apply($scope.confessions, response.data.confessions);
-                            // set up next featured offset
-                            $scope.offset += $scope.count;
-                        }
-                        $scope.loadingConfessions = false;
+                        processConfessionResponse(response.data.confessions);
                     });
         }
     };
@@ -119,6 +127,14 @@ angular.module('nuswhispersApp.controllers')
         }
         return processedContent;
     };
+
+    $scope.favouriteConfession = function (confession) {
+        if (FacebookUser.getAccessToken() !== '') {
+            confession.favourite().success(function (response) {
+                confession.isFavourited = true;
+            });
+        }
+    }
     
 });
 
@@ -277,23 +293,45 @@ angular.module('nuswhispersApp.services')
 angular.module('nuswhispersApp.services')
 .factory('Confession', function ($http) {
     'use strict';
-    return {
-        submit: function (confessionData) {
+
+    function Confession(confessionData) {
+        if (confessionData) {
+            this.setData(confessionData);
+        }
+    }
+
+    Confession.submit = function (confessionData) {
+        return $http({
+            method: 'POST',
+            url: '/api/confessions',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            data: $.param(confessionData)
+        });
+    };
+
+    Confession.getFeatured = function (timestamp, offset, count) {
+        return $http({
+            method: 'GET',
+            url: '/api/confessions',
+            params: {timestamp: timestamp, offset: offset, count: count}
+        });
+    };
+
+    Confession.prototype = {
+        setData: function (confessionData) {
+            angular.extend(this, confessionData);
+        },
+        favourite: function () {
             return $http({
                 method: 'POST',
-                url: '/api/confessions',
+                url: '/api/fbuser/favourite',
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                data: $.param(confessionData)
-            });
-        },
-        getFeatured: function (timestamp, offset, count) {
-            return $http({
-                method: 'GET',
-                url: '/api/confessions',
-                params: {timestamp: timestamp, offset: offset, count: count}
+                data: $.param({'confession_id': this.confession_id})
             });
         }
     };
+
+    return Confession;
 });
 
 angular.module('nuswhispersApp.services')
