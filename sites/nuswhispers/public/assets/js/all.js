@@ -76,7 +76,7 @@ app.run(['$rootScope', function ($rootScope) {
 /* ---> Do not delete this comment (Constants) <--- */
 
 angular.module('nuswhispersApp.controllers')
-.controller('ConfessionsController', function ($scope, Confession, controllerOptions) {
+.controller('ConfessionsController', function ($scope, Confession, FacebookUser, controllerOptions) {
     'use strict';
 
     $scope.getConfessions = function () {
@@ -95,7 +95,7 @@ angular.module('nuswhispersApp.controllers')
                         $scope.loadingConfessions = false;
                     });
         }
-    }
+    };
 
     $scope.timestamp = Math.floor(Date.now() / 1000);
     $scope.offset = 0;
@@ -103,6 +103,7 @@ angular.module('nuswhispersApp.controllers')
     $scope.loadingConfessions = false;
     $scope.doLoadMoreConfessions = true;
     $scope.confessions = [];
+    $scope.fbUser = FacebookUser;
 
     $scope.getConfessions();
 
@@ -122,7 +123,7 @@ angular.module('nuswhispersApp.controllers')
 });
 
 angular.module('nuswhispersApp.controllers')
-.controller('MainController', function ($scope, Facebook, FbUser, Category) {
+.controller('MainController', function ($scope, Facebook, FacebookUser, Category) {
     'use strict';
 
     $scope.sidebarOpenedClass = '';
@@ -157,14 +158,19 @@ angular.module('nuswhispersApp.controllers')
 
     $scope.getLoginStatus = function () {
         Facebook.getLoginStatus(function (response) {
+            FacebookUser.setAccessToken('');
             if (response.status === 'connected') {
-                FbUser.login(response.authResponse.accessToken)
+                FacebookUser.setAccessToken(response.authResponse.accessToken);
+                FacebookUser.setUserID(response.authResponse.userID);
+                FacebookUser.login()
                     .success(function (response) {
                         $scope.isLoggedIn = true;
                     })
                     .error(function (response) {
                         $scope.isLoggedIn = false;
                     });
+            } else {
+                $scope.isLoggedIn = false;
             }
         });
     };
@@ -291,16 +297,34 @@ angular.module('nuswhispersApp.services')
 });
 
 angular.module('nuswhispersApp.services')
-.factory('FbUser', function ($http) {
+.factory('FacebookUser', function ($http) {
     'use strict';
+
+    var data = {
+        accessToken: '',
+        userID: ''
+    };
+
     return {
-        login: function (accessToken) {
+        login: function () {
             return $http({
                 method: 'POST',
                 url: '/api/fbuser/login/',
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                data: $.param({'fb_access_token': accessToken})
+                data: $.param({'fb_access_token': data.accessToken})
             });
+        },
+        setAccessToken: function (accessToken) {
+            data.accessToken = accessToken;
+        },
+        getAccessToken: function () {
+            return data.accessToken;
+        },
+        setUserID: function (userID) {
+            data.userID = userID;
+        },
+        getUserID: function () {
+            return data.userID;
         }
     };
 });

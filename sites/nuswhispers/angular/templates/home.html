@@ -23,8 +23,8 @@
       <span class="typcn typcn-watch"></span><span am-time-ago="confession.created_at_timestamp" am-preprocess="unix" class="post-time"></span>
       <div class="post-media-summary">
         <a href="/#!home" class="tweets-count liked" target="_blank">8</a>
-        <a href="/#!home" class="fb-likes" target="_blank" tooltip-placement="bottom" tooltip="Like on Facebook">{{confession.facebook_information.likes.summary.total_count}}</a>
-        <a href="/#!home" class="favs-count" target="_blank" tooltip-placement="bottom" tooltip="Favourite">18</a>
+        <a href="/#!home" class="fb-likes" target="_blank" tooltip-placement="bottom" tooltip="{{fbUser.getAccessToken() == '' ? 'Login to Like on Facebook' : 'Like on Facebook'}}">{{confession.facebook_information.likes.summary.total_count}}</a>
+        <a href="/#!home" class="favs-count" target="_blank" tooltip-placement="bottom" tooltip="{{fbUser.getAccessToken() == '' ? 'Login to Favourite' : 'Favourite'}}">18</a>
       </div>
     </div>
   </div>

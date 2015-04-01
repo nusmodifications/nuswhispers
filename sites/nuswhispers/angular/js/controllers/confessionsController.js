@@ -1,5 +1,5 @@
 angular.module('nuswhispersApp.controllers')
-.controller('ConfessionsController', function ($scope, Confession, controllerOptions) {
+.controller('ConfessionsController', function ($scope, Confession, FacebookUser, controllerOptions) {
     'use strict';
 
     $scope.getConfessions = function () {
@@ -18,7 +18,7 @@ angular.module('nuswhispersApp.controllers')
                         $scope.loadingConfessions = false;
                     });
         }
-    }
+    };
 
     $scope.timestamp = Math.floor(Date.now() / 1000);
     $scope.offset = 0;
@@ -26,6 +26,7 @@ angular.module('nuswhispersApp.controllers')
     $scope.loadingConfessions = false;
     $scope.doLoadMoreConfessions = true;
     $scope.confessions = [];
+    $scope.fbUser = FacebookUser;
 
     $scope.getConfessions();
 
