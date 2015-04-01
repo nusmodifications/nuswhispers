@@ -46,10 +46,13 @@ class TagsController extends Controller {
 	 * @param int $num
 	 * @return json {"data": {"tags": [tag1, tag2, ...]}}
 	 */
-	public function getTopNTags($num){
+	public function TopNTags($num){
 		$tags = Tag::get();
-		if ($num < count($tags)){
-			$top_n = array_slice($tags, 0, $num, true);
+		if ($num  < count($tags)){
+			$top_n = array();
+			for ($i = 0; $i < $num; $i++){
+				$top_n[$i] = $tags[$i];
+			}
 			return \Response::json(array("data" => array("tags" => $top_n)));
 		}
 		else{
