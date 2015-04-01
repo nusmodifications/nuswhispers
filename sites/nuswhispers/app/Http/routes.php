@@ -21,6 +21,8 @@ Route::group(array('prefix' => 'api'), function() {
 		['only' => ['index', 'store']]);
 	Route::resource('categories', 'CategoriesController',
 		['only' => ['index']]);
+	Route::resource('tags', 'TagsController',
+		['only' => ['index']]);
 });
 
 // Auth Routes
