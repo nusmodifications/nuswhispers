@@ -75,63 +75,13 @@ app.run(['$rootScope', function ($rootScope) {
 
 /* ---> Do not delete this comment (Constants) <--- */
 
-angular.module('nuswhispersApp.services')
-.factory('Category', function ($http) {
-    'use strict';
-    return {
-        get: function () {
-            return $http.get('/api/categories');
-        }
-    };
-});
-
-angular.module('nuswhispersApp.services')
-.factory('Confession', function ($http) {
-    'use strict';
-    return {
-        submit: function (confessionData) {
-            return $http({
-                method: 'POST',
-                url: '/api/confessions',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                data: $.param(confessionData)
-            });
-        },
-        getFeatured: function (timestamp, offset, count) {
-            return $http({
-                method: 'GET',
-                url: '/api/confessions',
-                params: {timestamp: timestamp, offset: offset, count: count}
-            });
-        }
-    };
-});
-
-angular.module('nuswhispersApp.services')
-.factory('FacebookData', function () {
-    'use strict';
-
-    var data = {
-        accessToken: ''
-    };
-
-    return {
-        setAccessToken: function (accessToken) {
-            data.accessToken = accessToken;
-        },
-        getAccessToken: function () {
-            return data.accessToken;
-        }
-    };
-});
 angular.module('nuswhispersApp.controllers')
-.controller('ConfessionsController', function ($scope, Confession, controllerOptions) {
+.controller('ConfessionsController', function ($scope, Confession, Facebook, FacebookData, controllerOptions) {
     'use strict';
 
     $scope.getFeatured = function () {
         Confession.getFeatured($scope.timestamp, $scope.offset, $scope.count)
             .success(function (response) {
-                console.log(JSON.stringify(response.data.confessions));
                 $scope.confessions.push.apply($scope.confessions, response.data.confessions);
                 // set up next featured offset
                 $scope.offset += $scope.count;
@@ -143,7 +93,7 @@ angular.module('nuswhispersApp.controllers')
 
     $scope.timestamp = Math.floor(Date.now() / 1000);
     $scope.offset = 0;
-    $scope.count = 10;
+    $scope.count = 5;
     $scope.confessions = [];
 
     switch (controllerOptions.view) {
@@ -163,10 +113,11 @@ angular.module('nuswhispersApp.controllers')
         }
         return processedContent;
     };
+    
 });
 
 angular.module('nuswhispersApp.controllers')
-.controller('MainController', function ($scope, Facebook, FacebookData, Category) {
+.controller('MainController', function ($scope, Facebook, FacebookData, FbUser, Category) {
     'use strict';
 
     $scope.sidebarOpenedClass = '';
@@ -189,7 +140,7 @@ angular.module('nuswhispersApp.controllers')
         Facebook.login(function (response) {
             $scope.getLoginStatus();
         }, {
-            scope: 'publish_actions'
+            // scope: 'publish_actions'
         });
     };
 
@@ -201,9 +152,17 @@ angular.module('nuswhispersApp.controllers')
 
     $scope.getLoginStatus = function () {
         Facebook.getLoginStatus(function (response) {
-            $scope.isLoggedIn = response.status === 'connected';
-            if ($scope.isLoggedIn) {
+            FacebookData.setAccessToken('');
+            if (response.status === 'connected') {
                 FacebookData.setAccessToken(response.authResponse.accessToken);
+                FacebookData.setUserID(response.authResponse.userID);
+                FbUser.login(response.authResponse.accessToken)
+                    .success(function (response) {
+                        $scope.isLoggedIn = true;
+                    })
+                    .error(function (response) {
+                        $scope.isLoggedIn = false;
+                    });
             }
         });
     };
@@ -295,4 +254,75 @@ angular.module('nuswhispersApp.controllers')
         $scope.contentTagHighlights = $scope.contentTagHighlights.replace(/(?:\r\n|\r|\n)/g, '<br>');
     };
 
+});
+
+angular.module('nuswhispersApp.services')
+.factory('Category', function ($http) {
+    'use strict';
+    return {
+        get: function () {
+            return $http.get('/api/categories');
+        }
+    };
+});
+
+angular.module('nuswhispersApp.services')
+.factory('Confession', function ($http) {
+    'use strict';
+    return {
+        submit: function (confessionData) {
+            return $http({
+                method: 'POST',
+                url: '/api/confessions',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                data: $.param(confessionData)
+            });
+        },
+        getFeatured: function (timestamp, offset, count) {
+            return $http({
+                method: 'GET',
+                url: '/api/confessions',
+                params: {timestamp: timestamp, offset: offset, count: count}
+            });
+        }
+    };
+});
+
+angular.module('nuswhispersApp.services')
+.factory('FacebookData', function () {
+    'use strict';
+
+    var data = {
+        accessToken: '',
+        userID: ''
+    };
+
+    return {
+        setAccessToken: function (accessToken) {
+            data.accessToken = accessToken;
+        },
+        getAccessToken: function () {
+            return data.accessToken;
+        },
+        setUserID: function (userID) {
+            data.userID = userID;
+        },
+        getUserID: function () {
+            return data.userID;
+        }
+    };
+});
+angular.module('nuswhispersApp.services')
+.factory('FbUser', function ($http) {
+    'use strict';
+    return {
+        login: function (accessToken) {
+            return $http({
+                method: 'POST',
+                url: '/api/fbuser/login/',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                data: $.param({'fb_access_token': accessToken})
+            });
+        }
+    };
 });

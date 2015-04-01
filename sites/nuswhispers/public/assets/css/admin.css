@@ -4948,6 +4948,14 @@ a:hover {
   margin-top: 3px;
   margin-left: 5px; }
 
+.tooltip.bottom .tooltip-arrow {
+  border-bottom-color: #8e8e8e; }
+
+.tooltip > .tooltip-inner {
+  background-color: #8e8e8e;
+  color: #ffffff;
+  opacity: 1; }
+
 #topbar-wrapper {
   background-color: #eeeeee;
   width: 100%;
@@ -4958,8 +4966,10 @@ a:hover {
     margin-right: 15px; }
     #topbar-wrapper #topbar-nav .btn {
       font-size: 14px;
+      line-height: 20px;
       height: 35px; }
     #topbar-wrapper #topbar-nav .btn-social-media {
+      line-height: normal;
       font-size: 24px;
       height: 35px;
       padding-left: 5px;

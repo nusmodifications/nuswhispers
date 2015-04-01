@@ -4955,6 +4955,14 @@ a:hover {
   margin-top: 3px;
   margin-left: 5px; }
 
+.tooltip.bottom .tooltip-arrow {
+  border-bottom-color: #8e8e8e; }
+
+.tooltip > .tooltip-inner {
+  background-color: #8e8e8e;
+  color: #ffffff;
+  opacity: 1; }
+
 #topbar-wrapper {
   background-color: #eeeeee;
   width: 100%;
@@ -4965,8 +4973,10 @@ a:hover {
     margin-right: 15px; }
     #topbar-wrapper #topbar-nav .btn {
       font-size: 14px;
+      line-height: 20px;
       height: 35px; }
     #topbar-wrapper #topbar-nav .btn-social-media {
+      line-height: normal;
       font-size: 24px;
       height: 35px;
       padding-left: 5px;
@@ -5169,7 +5179,8 @@ a:hover {
       .post .post-footer .post-media-summary a {
         margin-left: 5px; }
       .post .post-footer .post-media-summary .tweets-count {
-        color: #00b0f3; }
+        color: #00b0f3;
+        display: none; }
       .post .post-footer .post-media-summary .tweets-count:before {
         background: url('../img/twitter_speech.png');
         content: ' ';
@@ -5180,9 +5191,13 @@ a:hover {
         margin-right: 8px;
         vertical-align: middle; }
       .post .post-footer .post-media-summary .fb-likes {
+        color: #8e8e8e; }
+      .post .post-footer .post-media-summary .fb-likes.liked {
         color: #3b5998; }
+      .post .post-footer .post-media-summary .fb-likes.liked:before {
+        background: url('../img/fb_speech.png'); }
       .post .post-footer .post-media-summary .fb-likes:before {
-        background: url('../img/fb_speech.png');
+        background: url('../img/fb_speech_grey.png');
         content: ' ';
         display: inline-block;
         width: 24px;
@@ -5191,9 +5206,13 @@ a:hover {
         margin-right: 8px;
         vertical-align: middle; }
       .post .post-footer .post-media-summary .favs-count {
-        color: #2e8fc2; }
+        color: #8e8e8e; }
+      .post .post-footer .post-media-summary .favs-count.liked {
+        color: #f70; }
+      .post .post-footer .post-media-summary .favs-count.liked:before {
+        background: url('../img/fav_speech.png'); }
       .post .post-footer .post-media-summary .favs-count:before {
-        background: url('../img/fav_speech.png');
+        background: url('../img/fav_speech_grey.png');
         content: ' ';
         display: inline-block;
         width: 24px;

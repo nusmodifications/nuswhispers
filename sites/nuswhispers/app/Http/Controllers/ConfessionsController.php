@@ -23,17 +23,18 @@ class ConfessionsController extends Controller {
 		if (\Input::get('timestamp')) {
 			$query = $query->where('status_updated_at', '<=', \Input::get('timestamp'));
 		}
-		if (\Input::get('count') > 0 && \Input::get('offset')) {
+		if (\Input::get('count') > 0) {
 			$query->take(\Input::get('count'));
 			$query->skip(\Input::get('offset'));
 		}
 
 		$confessions = $query->get();
 		foreach ($confessions as $confession) {
+			$confession->created_at_timestamp = $confession->created_at->timestamp;
 			$confession->getFacebookInformation();
 		}
 
-		return \Response::json(["data" => ["confessions" => $confessions]]);
+		return \Response::json(['data' => ['confessions' => $confessions]]);
 	}
 
 	/**

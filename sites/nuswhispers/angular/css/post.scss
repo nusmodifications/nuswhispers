@@ -40,6 +40,7 @@
             }
             .tweets-count {
                 color: $twitter-color;
+                display: none;
             }
             .tweets-count:before {
                 background: url('../img/twitter_speech.png');
@@ -52,10 +53,16 @@
                 vertical-align: middle;
             }
             .fb-likes {
+                color: $secondary-text-color;
+            }
+            .fb-likes.liked {
                 color: $fb-color;
             }
-            .fb-likes:before {
+            .fb-likes.liked:before {
                 background: url('../img/fb_speech.png');
+            }
+            .fb-likes:before {
+                background: url('../img/fb_speech_grey.png');
                 content: ' ';
                 display: inline-block;
                 width: 24px;
@@ -65,10 +72,16 @@
                 vertical-align: middle;
             }
             .favs-count {
-                color: $primary-color;
+                color: $secondary-text-color;
+            }
+            .favs-count.liked {
+                color: $alternate-color;
+            }
+            .favs-count.liked:before {
+                background: url('../img/fav_speech.png');
             }
             .favs-count:before {
-                background: url('../img/fav_speech.png');
+                background: url('../img/fav_speech_grey.png');
                 content: ' ';
                 display: inline-block;
                 width: 24px;

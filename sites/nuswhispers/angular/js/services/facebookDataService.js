@@ -3,7 +3,8 @@ angular.module('nuswhispersApp.services')
     'use strict';
 
     var data = {
-        accessToken: ''
+        accessToken: '',
+        userID: ''
     };
 
     return {
@@ -12,6 +13,12 @@ angular.module('nuswhispersApp.services')
         },
         getAccessToken: function () {
             return data.accessToken;
+        },
+        setUserID: function (userID) {
+            data.userID = userID;
+        },
+        getUserID: function () {
+            return data.userID;
         }
     };
 });

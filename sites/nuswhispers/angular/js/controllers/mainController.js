@@ -1,5 +1,5 @@
 angular.module('nuswhispersApp.controllers')
-.controller('MainController', function ($scope, Facebook, FacebookData, Category) {
+.controller('MainController', function ($scope, Facebook, FacebookData, FbUser, Category) {
     'use strict';
 
     $scope.sidebarOpenedClass = '';
@@ -22,7 +22,7 @@ angular.module('nuswhispersApp.controllers')
         Facebook.login(function (response) {
             $scope.getLoginStatus();
         }, {
-            scope: 'publish_actions'
+            // scope: 'publish_actions'
         });
     };
 
@@ -34,9 +34,17 @@ angular.module('nuswhispersApp.controllers')
 
     $scope.getLoginStatus = function () {
         Facebook.getLoginStatus(function (response) {
-            $scope.isLoggedIn = response.status === 'connected';
-            if ($scope.isLoggedIn) {
+            FacebookData.setAccessToken('');
+            if (response.status === 'connected') {
                 FacebookData.setAccessToken(response.authResponse.accessToken);
+                FacebookData.setUserID(response.authResponse.userID);
+                FbUser.login(response.authResponse.accessToken)
+                    .success(function (response) {
+                        $scope.isLoggedIn = true;
+                    })
+                    .error(function (response) {
+                        $scope.isLoggedIn = false;
+                    });
             }
         });
     };

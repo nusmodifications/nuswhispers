@@ -46,6 +46,16 @@ a:hover {
     margin-left: 5px;
 }
 
+// bootstrap tooltips
+.tooltip.bottom .tooltip-arrow {
+    border-bottom-color: $secondary-text-color;
+}
+.tooltip > .tooltip-inner {
+    background-color: $secondary-text-color;
+    color: #ffffff;
+    opacity: 1;
+}
+
 #topbar-wrapper {
     background-color: $topbar-color;
     width: 100%;
@@ -56,9 +66,11 @@ a:hover {
         margin-right: 15px;
         .btn {
             font-size: 14px;
+            line-height: 20px;
             height: $topbar-elements-height;
         }
         .btn-social-media {
+            line-height: normal;
             font-size: 24px;
             height: $topbar-elements-height;
             padding-left: 5px;

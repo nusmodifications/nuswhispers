@@ -1,11 +1,10 @@
 angular.module('nuswhispersApp.controllers')
-.controller('ConfessionsController', function ($scope, Confession, controllerOptions) {
+.controller('ConfessionsController', function ($scope, Confession, Facebook, FacebookData, controllerOptions) {
     'use strict';
 
     $scope.getFeatured = function () {
         Confession.getFeatured($scope.timestamp, $scope.offset, $scope.count)
             .success(function (response) {
-                console.log(JSON.stringify(response.data.confessions));
                 $scope.confessions.push.apply($scope.confessions, response.data.confessions);
                 // set up next featured offset
                 $scope.offset += $scope.count;
@@ -17,7 +16,7 @@ angular.module('nuswhispersApp.controllers')
 
     $scope.timestamp = Math.floor(Date.now() / 1000);
     $scope.offset = 0;
-    $scope.count = 10;
+    $scope.count = 5;
     $scope.confessions = [];
 
     switch (controllerOptions.view) {
@@ -37,4 +36,5 @@ angular.module('nuswhispersApp.controllers')
         }
         return processedContent;
     };
+    
 });

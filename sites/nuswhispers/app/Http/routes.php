@@ -19,9 +19,11 @@ Route::get('/', function() {
 Route::group(array('prefix' => 'api'), function() {
 	Route::resource('confessions', 'ConfessionsController',
 		['only' => ['index', 'store', 'show']]);
-
 	Route::resource('categories', 'CategoriesController',
 		['only' => ['index', 'show']]);
+    Route::controllers([
+        'fbuser' => 'FbUsersController',
+    ]);
 });
 
 // Auth Routes
