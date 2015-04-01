@@ -1,7 +1,9 @@
 <div id="post-list" class="col-md-8 col-sm-7">
-  <div class="post">
+  <div class="post" ng-repeat="confession in confessions">
     <div class="post-header">
-      <a href="/#!home" target="_blank">Romance</a>
+      <span ng-repeat="category in confession.categories">
+        <a href="/#!home" target="_blank">{{category.confession_category}}</a>{{$last ? '' : ', '}}
+      </span>
       <div class="share-social-media">
         SHARE:
         <a href="/#!home" target="_blank" class="btn btn-social-media">
@@ -13,13 +15,12 @@
       </div>
     </div>
     <div class="post-content">
-      <img class="post-image" src="http://i1.kym-cdn.com/photos/images/facebook/000/336/370/361.jpg"/>
-      <div class="post-text">
-        Dear freshmen, here's some advice from a senior; when I joined NUS, there wasn't an S/U option for the modules I took in year 1 so grades were really important. But I learnt that freshman this year have to S/U there modules. I think that's fantastic. So I advice you to not worry so much about your grades and live a little before the road gets rough; believe me it will in the coming years and you will wish you had spent more time exploring uni life and doing new things when you had the chance to. So cheer up! smile emoticon Take up a new CCA, join NOC, take part in competitions, live a little and most importantly have fun! The road is long and in coming years, you might not have as much freedom as you do now to fully explore all the opportunities NUS provides you with. So just do it! <a href="/#!home">#JKN00BS</a> <a href="/#!home">#GETREKT</a>
+      <img class="post-image" ng-hide="confession.images == null" ng-src="{{confession.images}}"/>
+      <div class="post-text" ng-bind-html="processConfessionContent(confession.content)">
       </div>
     </div>
     <div class="post-footer">
-      <span class="typcn typcn-watch"></span><span class="post-time">23 days ago</spam>
+      <span class="typcn typcn-watch"></span><span am-time-ago="confession.created_at" class="post-time"></span>
       <div class="post-media-summary">
         <a href="/#!home" class="tweets-count" target="_blank">8</a>
         <a href="/#!home" class="fb-likes" target="_blank">10</a>

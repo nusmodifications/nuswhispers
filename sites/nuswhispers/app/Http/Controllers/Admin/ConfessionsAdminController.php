@@ -29,7 +29,6 @@ class ConfessionsAdminController extends AdminController {
 
         $confessions = $query->paginate(10);
 
-
         return view('admin.confessions.index', array(
             'confessions' => $confessions,
             'categoryOptions' => array_merge(array('All Categories' => 0), Category::orderBy('confession_category', 'asc')->lists('confession_category_id', 'confession_category'))
