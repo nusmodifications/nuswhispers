@@ -24,7 +24,7 @@ Route::group(array('prefix' => 'api'), function() {
 		['only' => ['index', 'show']]);
 
 	Route::resource('tags', 'TagsController',
-		['only' => ['index', 'show']]);
+		['only' => ['index', 'show', 'getTopNTags']]);
 
 });
 
