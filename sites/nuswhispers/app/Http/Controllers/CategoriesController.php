@@ -15,18 +15,23 @@ class CategoriesController extends Controller {
 	 */
 	public function index()
 	{
-		return \Response::json(["data" => ["categories" => Category::categoryAsc()->get()]]);
+		return \Response::json(array("data" => array("categories" => Category::categoryAsc()->get())));
 	}
 
+
 	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
+	 * Get the category JSON by a given category_id
+	 * route: api/categories/<category_id>
+	 * @param  int $category_id
+	 * @return json {"success": true or false, "data": {"category": category}};
 	 */
-	public function show($id)
+	public function show($category_id)
 	{
-		//
+		$category = Category::find($category_id);
+		if ($category == NULL) {
+			return \Response::json(array("success" => false));
+		}
+		return \Response::json(["success" => true, "data" => array("category" => $category)]);
 	}
 
 }
