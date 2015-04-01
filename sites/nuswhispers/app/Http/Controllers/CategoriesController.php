@@ -40,9 +40,9 @@ class CategoriesController extends Controller {
 
 	/**
 	 * Get the category JSON by a given category_id
-	 *
- * @param  int $category_id
- * @return json {"success": true or false, "data": {"category": category}};
+	 * route: api/categories/<category_id>
+	 * @param  int $category_id
+	 * @return json {"success": true or false, "data": {"category": category}};
 	 */
 	public function show($category_id)
 	{

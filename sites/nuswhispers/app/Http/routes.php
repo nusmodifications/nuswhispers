@@ -20,9 +20,9 @@ Route::group(array('prefix' => 'api'), function() {
 	Route::resource('confessions', 'ConfessionsController',
 		['only' => ['index', 'store']]);
 	Route::resource('categories', 'CategoriesController',
-		['only' => ['index']]);
+		['only' => ['index', 'show']]);
 	Route::resource('tags', 'TagsController',
-		['only' => ['index']]);
+		['only' => ['index', 'show']]);
 });
 
 // Auth Routes
