@@ -25,6 +25,14 @@ angular.module('nuswhispersApp.services')
         });
     };
 
+    Confession.getPopular = function (timestamp, offset, count) {
+        return $http({
+            method: 'GET',
+            url: '/api/confessions/popular',
+            params: {timestamp: timestamp, offset: offset, count: count}
+        });
+    };
+
     Confession.prototype = {
         setData: function (confessionData) {
             angular.extend(this, confessionData);

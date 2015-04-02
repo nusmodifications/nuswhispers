@@ -5059,7 +5059,8 @@ a:hover {
       text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.05); }
     #sidebar-wrapper ul.nav li a:hover {
       color: #fff819;
-      background: transparent; }
+      background: transparent;
+      cursor: pointer; }
     #sidebar-wrapper ul.nav li a:focus {
       color: #fff819;
       background: transparent; }

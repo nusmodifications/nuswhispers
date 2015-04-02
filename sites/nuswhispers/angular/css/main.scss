@@ -171,6 +171,7 @@ a:hover {
             a:hover {
                 color: $highlight-nav-color;
                 background: transparent;
+                cursor: pointer;
             }
             a:focus {
                 color: $highlight-nav-color;

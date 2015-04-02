@@ -30,13 +30,13 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
                 }
             }
         })
-        .when('/trending/', {
+        .when('/popular/', {
             templateUrl: 'assets/templates/home.html',
             controller: 'ConfessionsController',
             resolve: {
                 controllerOptions: function () {
                     return {
-                        view: 'trending',
+                        view: 'popular',
                     };
                 }
             }

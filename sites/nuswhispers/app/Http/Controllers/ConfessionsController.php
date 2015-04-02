@@ -37,6 +37,34 @@ class ConfessionsController extends Controller {
 		return \Response::json(['data' => ['confessions' => $confessions]]);
 	}
 
+	public function popular()
+	{
+		$query = Confession::select(\DB::raw('confessions.*'))
+			->join('favourites', 'confessions.confession_id' , '=', 'favourites.confession_id')
+			->groupBy('favourites.fb_user_id')
+			->orderByRaw('COUNT(favourites.fb_user_id) DESC')
+			->with('favourites')
+			->with('categories');
+		// TODO: change to order by status_updated_at and filter by approved when approval is ready
+		// $query = Confession::orderBy('status_updated_at', 'DESC');
+		// $query->approved();
+
+		if (\Input::get('timestamp')) {
+			$query = $query->where('status_updated_at', '<=', \Input::get('timestamp'));
+		}
+		if (\Input::get('count') > 0) {
+			$query->take(\Input::get('count'));
+			$query->skip(\Input::get('offset'));
+		}
+
+		$confessions = $query->get();
+		foreach ($confessions as $confession) {
+			$confession->created_at_timestamp = $confession->created_at->timestamp;
+			$confession->getFacebookInformation();
+		}
+		return \Response::json(['data' => ['confessions' => $confessions]]);
+	}
+
 	/**
 	 * Store a newly created resource in storage.
 	 *

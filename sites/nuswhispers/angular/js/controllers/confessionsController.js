@@ -20,6 +20,12 @@ angular.module('nuswhispersApp.controllers')
 
         $scope.loadingConfessions = true;
         switch (controllerOptions.view) {
+            case 'popular':
+                Confession.getPopular($scope.timestamp, $scope.offset, $scope.count)
+                    .success(function (response) {
+                        processConfessionResponse(response.data.confessions);
+                    });
+                break;
             default:
                 Confession.getFeatured($scope.timestamp, $scope.offset, $scope.count)
                     .success(function (response) {

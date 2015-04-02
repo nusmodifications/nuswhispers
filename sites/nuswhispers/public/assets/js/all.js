@@ -30,13 +30,13 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
                 }
             }
         })
-        .when('/trending/', {
+        .when('/popular/', {
             templateUrl: 'assets/templates/home.html',
             controller: 'ConfessionsController',
             resolve: {
                 controllerOptions: function () {
                     return {
-                        view: 'trending',
+                        view: 'popular',
                     };
                 }
             }
@@ -113,6 +113,12 @@ angular.module('nuswhispersApp.controllers')
 
         $scope.loadingConfessions = true;
         switch (controllerOptions.view) {
+            case 'popular':
+                Confession.getPopular($scope.timestamp, $scope.offset, $scope.count)
+                    .success(function (response) {
+                        processConfessionResponse(response.data.confessions);
+                    });
+                break;
             default:
                 Confession.getFeatured($scope.timestamp, $scope.offset, $scope.count)
                     .success(function (response) {
@@ -360,6 +366,14 @@ angular.module('nuswhispersApp.services')
         return $http({
             method: 'GET',
             url: '/api/confessions',
+            params: {timestamp: timestamp, offset: offset, count: count}
+        });
+    };
+
+    Confession.getPopular = function (timestamp, offset, count) {
+        return $http({
+            method: 'GET',
+            url: '/api/confessions/popular',
             params: {timestamp: timestamp, offset: offset, count: count}
         });
     };
