@@ -18,6 +18,8 @@ Route::get('/', function() {
 // API Routes
 Route::group(array('prefix' => 'api'), function() {
     Route::get('confessions/popular', 'ConfessionsController@popular');
+    Route::get('confessions/recent', 'ConfessionsController@recent');
+    Route::get('confessions/category/{category_id}', 'ConfessionsController@category');
 	Route::resource('confessions', 'ConfessionsController',
 		['only' => ['index', 'store', 'show']]);
 

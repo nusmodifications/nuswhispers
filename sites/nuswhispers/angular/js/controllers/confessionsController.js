@@ -1,5 +1,5 @@
 angular.module('nuswhispersApp.controllers')
-.controller('ConfessionsController', function ($scope, Confession, FacebookUser, controllerOptions) {
+.controller('ConfessionsController', function ($scope, $routeParams, Confession, FacebookUser, controllerOptions) {
     'use strict';
 
     $scope.getConfessions = function () {
@@ -20,8 +20,20 @@ angular.module('nuswhispersApp.controllers')
 
         $scope.loadingConfessions = true;
         switch (controllerOptions.view) {
+            case 'recent':
+                Confession.getRecent($scope.timestamp, $scope.offset, $scope.count)
+                    .success(function (response) {
+                        processConfessionResponse(response.data.confessions);
+                    });
+                break;
             case 'popular':
                 Confession.getPopular($scope.timestamp, $scope.offset, $scope.count)
+                    .success(function (response) {
+                        processConfessionResponse(response.data.confessions);
+                    });
+                break;
+            case 'category':
+                Confession.getCategory($routeParams.category, $scope.timestamp, $scope.offset, $scope.count)
                     .success(function (response) {
                         processConfessionResponse(response.data.confessions);
                     });

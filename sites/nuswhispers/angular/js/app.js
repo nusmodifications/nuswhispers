@@ -47,13 +47,21 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
             resolve: {
                 controllerOptions: function () {
                     return {
-                        view: 'new',
+                        view: 'recent',
                     };
                 }
             }
         })
         .when('/category/:category', {
-            templateUrl: 'assets/templates/home.html'
+            templateUrl: 'assets/templates/home.html',
+            controller: 'ConfessionsController',
+            resolve: {
+                controllerOptions: function () {
+                    return {
+                        view: 'category'
+                    };
+                }
+            }
         })
         .when('/tag/:tag', {
             templateUrl: 'assets/templates/home.html'

@@ -2,7 +2,7 @@
   <div class="post" ng-repeat="confession in confessions">
     <div class="post-header">
       <span ng-repeat="category in confession.categories">
-        <a href="/#!home" target="_blank">{{category.confession_category}}</a>{{$last ? '' : ', '}}
+        <a href="/#!category/{{category.confession_category_id}}">{{category.confession_category}}</a>{{$last ? '' : ', '}}
       </span>
       <div class="share-social-media">
         SHARE:

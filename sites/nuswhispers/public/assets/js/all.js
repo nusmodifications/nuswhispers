@@ -47,13 +47,21 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
             resolve: {
                 controllerOptions: function () {
                     return {
-                        view: 'new',
+                        view: 'recent',
                     };
                 }
             }
         })
         .when('/category/:category', {
-            templateUrl: 'assets/templates/home.html'
+            templateUrl: 'assets/templates/home.html',
+            controller: 'ConfessionsController',
+            resolve: {
+                controllerOptions: function () {
+                    return {
+                        view: 'category'
+                    };
+                }
+            }
         })
         .when('/tag/:tag', {
             templateUrl: 'assets/templates/home.html'
@@ -92,7 +100,7 @@ app.run(['$rootScope', function ($rootScope) {
 /* ---> Do not delete this comment (Constants) <--- */
 
 angular.module('nuswhispersApp.controllers')
-.controller('ConfessionsController', function ($scope, Confession, FacebookUser, controllerOptions) {
+.controller('ConfessionsController', function ($scope, $routeParams, Confession, FacebookUser, controllerOptions) {
     'use strict';
 
     $scope.getConfessions = function () {
@@ -113,8 +121,20 @@ angular.module('nuswhispersApp.controllers')
 
         $scope.loadingConfessions = true;
         switch (controllerOptions.view) {
+            case 'recent':
+                Confession.getRecent($scope.timestamp, $scope.offset, $scope.count)
+                    .success(function (response) {
+                        processConfessionResponse(response.data.confessions);
+                    });
+                break;
             case 'popular':
                 Confession.getPopular($scope.timestamp, $scope.offset, $scope.count)
+                    .success(function (response) {
+                        processConfessionResponse(response.data.confessions);
+                    });
+                break;
+            case 'category':
+                Confession.getCategory($routeParams.category, $scope.timestamp, $scope.offset, $scope.count)
                     .success(function (response) {
                         processConfessionResponse(response.data.confessions);
                     });
@@ -374,6 +394,22 @@ angular.module('nuswhispersApp.services')
         return $http({
             method: 'GET',
             url: '/api/confessions/popular',
+            params: {timestamp: timestamp, offset: offset, count: count}
+        });
+    };
+
+    Confession.getRecent = function (timestamp, offset, count) {
+        return $http({
+            method: 'GET',
+            url: '/api/confessions/recent',
+            params: {timestamp: timestamp, offset: offset, count: count}
+        });
+    };
+
+    Confession.getCategory = function (categoryID, timestamp, offset, count) {
+        return $http({
+            method: 'GET',
+            url: '/api/confessions/category/' + categoryID,
             params: {timestamp: timestamp, offset: offset, count: count}
         });
     };
