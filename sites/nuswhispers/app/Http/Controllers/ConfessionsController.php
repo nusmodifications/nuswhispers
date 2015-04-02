@@ -74,6 +74,7 @@ class ConfessionsController extends Controller {
 		// Get all tags in content
 		preg_match_all('/(#\w+)/', $newConfession->content, $matches);
 		$tagNames = array_shift($matches); // get full pattern matches from match result
+		$tagNames = array_unique($tagNames); // get all unique tags from match result
 		foreach ($tagNames as $tagName) {
 			$confessionTag = Tag::firstOrCreate(['confession_tag' => $tagName]);
 			$newConfession->tags()->attach($confessionTag->confession_tag_id);
