@@ -20,6 +20,7 @@ Route::group(array('prefix' => 'api'), function() {
     Route::get('confessions/popular', 'ConfessionsController@popular');
     Route::get('confessions/recent', 'ConfessionsController@recent');
     Route::get('confessions/category/{category_id}', 'ConfessionsController@category');
+    Route::get('confessions/tag/{tag}', 'ConfessionsController@tag');
 	Route::resource('confessions', 'ConfessionsController',
 		['only' => ['index', 'store', 'show']]);
 

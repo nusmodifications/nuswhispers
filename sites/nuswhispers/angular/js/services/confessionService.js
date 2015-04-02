@@ -49,6 +49,14 @@ angular.module('nuswhispersApp.services')
         });
     };
 
+    Confession.getTag = function (tag, timestamp, offset, count) {
+        return $http({
+            method: 'GET',
+            url: '/api/confessions/tag/' + tag,
+            params: {timestamp: timestamp, offset: offset, count: count}
+        });
+    };
+
     Confession.prototype = {
         setData: function (confessionData) {
             angular.extend(this, confessionData);

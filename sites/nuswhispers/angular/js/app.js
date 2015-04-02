@@ -64,7 +64,15 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
             }
         })
         .when('/tag/:tag', {
-            templateUrl: 'assets/templates/home.html'
+            templateUrl: 'assets/templates/home.html',
+            controller: 'ConfessionsController',
+            resolve: {
+                controllerOptions: function () {
+                    return {
+                        view: 'tag'
+                    };
+                }
+            }
         })
         .when('/submit/', {
             templateUrl: 'assets/templates/submit.html',

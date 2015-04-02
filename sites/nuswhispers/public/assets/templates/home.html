@@ -1,4 +1,7 @@
 <div id="post-list" class="col-md-8 col-sm-7" infinite-scroll="getConfessions()" infinite-scroll-disabled="loadingConfessions || !doLoadMoreConfessions" infinite-scroll-distance="1">
+  <div class="alert" ng-show="(confessions.length === 0) && !loadingConfessions">
+    No confessions to display. <a href="/#!submit">How about submitting your own?</a>
+  </div>
   <div class="post" ng-repeat="confession in confessions">
     <div class="post-header">
       <span ng-repeat="category in confession.categories">

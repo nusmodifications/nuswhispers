@@ -38,6 +38,12 @@ angular.module('nuswhispersApp.controllers')
                         processConfessionResponse(response.data.confessions);
                     });
                 break;
+            case 'tag':
+                Confession.getTag($routeParams.tag, $scope.timestamp, $scope.offset, $scope.count)
+                    .success(function (response) {
+                        processConfessionResponse(response.data.confessions);
+                    });
+                break;
             default:
                 Confession.getFeatured($scope.timestamp, $scope.offset, $scope.count)
                     .success(function (response) {
@@ -61,7 +67,7 @@ angular.module('nuswhispersApp.controllers')
         var processedContent = '';
         for (var i in splitContentTags) {
             if (/(#\w+)/.test(splitContentTags[i])) {
-                processedContent += '<a href="/#!home">' + splitContentTags[i] + '</a>';
+                processedContent += '<a href="/#!tag/' + splitContentTags[i].substring(1) + '">' + splitContentTags[i] + '</a>';
             } else {
                 processedContent += splitContentTags[i];
             }

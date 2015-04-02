@@ -45,7 +45,7 @@
         <h2 class="nav-section-label">Popular Tags</h2>
         <ul class="nav">
           <li ng-repeat="tag in tags">
-            <a href="/#!home">{{tag.confession_tag}}</a>
+            <a href="/#!tag/{{tag.confession_tag.substring(1)}}">{{tag.confession_tag}}</a>
           </li>
         </ul>
       </nav>

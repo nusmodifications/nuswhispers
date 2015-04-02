@@ -64,7 +64,15 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
             }
         })
         .when('/tag/:tag', {
-            templateUrl: 'assets/templates/home.html'
+            templateUrl: 'assets/templates/home.html',
+            controller: 'ConfessionsController',
+            resolve: {
+                controllerOptions: function () {
+                    return {
+                        view: 'tag'
+                    };
+                }
+            }
         })
         .when('/submit/', {
             templateUrl: 'assets/templates/submit.html',
@@ -139,6 +147,12 @@ angular.module('nuswhispersApp.controllers')
                         processConfessionResponse(response.data.confessions);
                     });
                 break;
+            case 'tag':
+                Confession.getTag($routeParams.tag, $scope.timestamp, $scope.offset, $scope.count)
+                    .success(function (response) {
+                        processConfessionResponse(response.data.confessions);
+                    });
+                break;
             default:
                 Confession.getFeatured($scope.timestamp, $scope.offset, $scope.count)
                     .success(function (response) {
@@ -162,7 +176,7 @@ angular.module('nuswhispersApp.controllers')
         var processedContent = '';
         for (var i in splitContentTags) {
             if (/(#\w+)/.test(splitContentTags[i])) {
-                processedContent += '<a href="/#!home">' + splitContentTags[i] + '</a>';
+                processedContent += '<a href="/#!tag/' + splitContentTags[i].substring(1) + '">' + splitContentTags[i] + '</a>';
             } else {
                 processedContent += splitContentTags[i];
             }
@@ -410,6 +424,14 @@ angular.module('nuswhispersApp.services')
         return $http({
             method: 'GET',
             url: '/api/confessions/category/' + categoryID,
+            params: {timestamp: timestamp, offset: offset, count: count}
+        });
+    };
+
+    Confession.getTag = function (tag, timestamp, offset, count) {
+        return $http({
+            method: 'GET',
+            url: '/api/confessions/tag/' + tag,
             params: {timestamp: timestamp, offset: offset, count: count}
         });
     };

@@ -22,7 +22,7 @@ class ConfessionsController extends Controller {
 
 		// TODO: change to order by status_updated_at and filter by featured when approval is ready
 		// $query = Confession::orderBy('status_updated_at', 'DESC');
-		// $query->featured();
+		$query->featured();
 		if (\Input::get('timestamp')) {
 			$query->where('status_updated_at', '<=', \Input::get('timestamp'));
 		}
@@ -96,6 +96,34 @@ class ConfessionsController extends Controller {
 		$query = Confession::select(\DB::raw('confessions.*'))
 			->join('confession_categories', 'confessions.confession_id' , '=', 'confession_categories.confession_id')
 			->where('confession_categories.confession_category_id', '=', $categoryId)
+			->with('favourites')
+			->with('categories');
+		// TODO: change to order by status_updated_at and filter by approved when approval is ready
+		// $query = Confession::orderBy('status_updated_at', 'DESC');
+		// $query->approved();
+
+		if (\Input::get('timestamp')) {
+			$query->where('status_updated_at', '<=', \Input::get('timestamp'));
+		}
+		if (\Input::get('count') > 0) {
+			$query->take(\Input::get('count'));
+			$query->skip(\Input::get('offset'));
+		}
+
+		$confessions = $query->get();
+		foreach ($confessions as $confession) {
+			$confession->created_at_timestamp = $confession->created_at->timestamp;
+			$confession->getFacebookInformation();
+		}
+		return \Response::json(['data' => ['confessions' => $confessions]]);
+	}
+
+	public function tag($tagName)
+	{
+		$query = Confession::select(\DB::raw('confessions.*'))
+			->join('confession_tags', 'confessions.confession_id' , '=', 'confession_tags.confession_id')
+			->join('tags', 'confession_tags.confession_tag_id' , '=', 'tags.confession_tag_id')
+			->where('tags.confession_tag', '=', "#$tagName")
 			->with('favourites')
 			->with('categories');
 		// TODO: change to order by status_updated_at and filter by approved when approval is ready
