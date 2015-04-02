@@ -20,7 +20,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
 
     $routeProvider
         .when('/home/', {
-            templateUrl: 'assets/templates/home.html',
+            templateUrl: 'assets/templates/confessions.html',
             controller: 'ConfessionsController',
             resolve: {
                 controllerOptions: function () {
@@ -31,7 +31,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
             }
         })
         .when('/popular/', {
-            templateUrl: 'assets/templates/home.html',
+            templateUrl: 'assets/templates/confessions.html',
             controller: 'ConfessionsController',
             resolve: {
                 controllerOptions: function () {
@@ -42,7 +42,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
             }
         })
         .when('/new/', {
-            templateUrl: 'assets/templates/home.html',
+            templateUrl: 'assets/templates/confessions.html',
             controller: 'ConfessionsController',
             resolve: {
                 controllerOptions: function () {
@@ -53,7 +53,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
             }
         })
         .when('/category/:category', {
-            templateUrl: 'assets/templates/home.html',
+            templateUrl: 'assets/templates/confessions.html',
             controller: 'ConfessionsController',
             resolve: {
                 controllerOptions: function () {
@@ -64,12 +64,23 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
             }
         })
         .when('/tag/:tag', {
-            templateUrl: 'assets/templates/home.html',
+            templateUrl: 'assets/templates/confessions.html',
             controller: 'ConfessionsController',
             resolve: {
                 controllerOptions: function () {
                     return {
                         view: 'tag'
+                    };
+                }
+            }
+        })
+        .when('/confession/:confession', {
+            templateUrl: 'assets/templates/confessions.html',
+            controller: 'ConfessionsController',
+            resolve: {
+                controllerOptions: function () {
+                    return {
+                        view: 'single'
                     };
                 }
             }
@@ -108,7 +119,7 @@ app.run(['$rootScope', function ($rootScope) {
 /* ---> Do not delete this comment (Constants) <--- */
 
 angular.module('nuswhispersApp.controllers')
-.controller('ConfessionsController', function ($scope, $routeParams, Confession, FacebookUser, controllerOptions) {
+.controller('ConfessionsController', function ($scope, $routeParams, Confession, Facebook, FacebookUser, controllerOptions) {
     'use strict';
 
     $scope.getConfessions = function () {
@@ -129,6 +140,16 @@ angular.module('nuswhispersApp.controllers')
 
         $scope.loadingConfessions = true;
         switch (controllerOptions.view) {
+            case 'single':
+                Confession.getConfessionById($routeParams.confession)
+                    .success(function (response) {
+                        if (response.success) {
+                            processConfessionResponse([response.data.confession]);
+                        }
+                        $scope.doLoadMoreConfessions = false;
+                        $scope.loadingConfessions = false;
+                    });
+                break;
             case 'recent':
                 Confession.getRecent($scope.timestamp, $scope.offset, $scope.count)
                     .success(function (response) {
@@ -198,7 +219,7 @@ angular.module('nuswhispersApp.controllers')
 
     $scope.toggleFavouriteConfession = function (confession) {
         if (FacebookUser.getAccessToken() !== '') {
-            if (confession.isFavourited || $scope.confessionIsFavourited(confession)) {
+            if ($scope.confessionIsFavourited(confession)) {
                 confession.unfavourite().success(function (response) {
                     if (response.success) {
                         confession.load();
@@ -212,6 +233,26 @@ angular.module('nuswhispersApp.controllers')
                 });
             }
         }
+    };
+
+    $scope.confessionIsLiked = function (confession) {
+        if (FacebookUser.getAccessToken() !== '') {
+            var fbUserID = FacebookUser.getUserID();
+            var fbConfessionLikes = confession.facebook_information.likes.data;
+            for (var i in fbConfessionLikes) {
+                if (fbConfessionLikes[i].id === fbUserID) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+
+    $scope.shareConfessionFB = function (confessionID) {
+        Facebook.ui({
+            method: 'share',
+            href: 'http://nuswhispers.com/#!/confession/' + confessionID,
+        });
     };
     
 });
@@ -396,6 +437,13 @@ angular.module('nuswhispersApp.services')
         });
     };
 
+    Confession.getConfessionById = function (confessionID) {
+        return $http({
+            method: 'GET',
+            url: '/api/confessions/' + confessionID
+        });
+    };
+
     Confession.getFeatured = function (timestamp, offset, count) {
         return $http({
             method: 'GET',
@@ -475,7 +523,8 @@ angular.module('nuswhispersApp.services')
 
     var data = {
         accessToken: '',
-        userID: ''
+        userID: '',
+        pageID: '1448006645491039'
     };
 
     return {

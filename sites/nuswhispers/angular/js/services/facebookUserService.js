@@ -4,7 +4,8 @@ angular.module('nuswhispersApp.services')
 
     var data = {
         accessToken: '',
-        userID: ''
+        userID: '',
+        pageID: '1448006645491039'
     };
 
     return {

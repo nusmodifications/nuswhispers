@@ -20,7 +20,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
 
     $routeProvider
         .when('/home/', {
-            templateUrl: 'assets/templates/home.html',
+            templateUrl: 'assets/templates/confessions.html',
             controller: 'ConfessionsController',
             resolve: {
                 controllerOptions: function () {
@@ -31,7 +31,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
             }
         })
         .when('/popular/', {
-            templateUrl: 'assets/templates/home.html',
+            templateUrl: 'assets/templates/confessions.html',
             controller: 'ConfessionsController',
             resolve: {
                 controllerOptions: function () {
@@ -42,7 +42,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
             }
         })
         .when('/new/', {
-            templateUrl: 'assets/templates/home.html',
+            templateUrl: 'assets/templates/confessions.html',
             controller: 'ConfessionsController',
             resolve: {
                 controllerOptions: function () {
@@ -53,7 +53,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
             }
         })
         .when('/category/:category', {
-            templateUrl: 'assets/templates/home.html',
+            templateUrl: 'assets/templates/confessions.html',
             controller: 'ConfessionsController',
             resolve: {
                 controllerOptions: function () {
@@ -64,12 +64,23 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
             }
         })
         .when('/tag/:tag', {
-            templateUrl: 'assets/templates/home.html',
+            templateUrl: 'assets/templates/confessions.html',
             controller: 'ConfessionsController',
             resolve: {
                 controllerOptions: function () {
                     return {
                         view: 'tag'
+                    };
+                }
+            }
+        })
+        .when('/confession/:confession', {
+            templateUrl: 'assets/templates/confessions.html',
+            controller: 'ConfessionsController',
+            resolve: {
+                controllerOptions: function () {
+                    return {
+                        view: 'single'
                     };
                 }
             }

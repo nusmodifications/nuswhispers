@@ -17,6 +17,13 @@ angular.module('nuswhispersApp.services')
         });
     };
 
+    Confession.getConfessionById = function (confessionID) {
+        return $http({
+            method: 'GET',
+            url: '/api/confessions/' + confessionID
+        });
+    };
+
     Confession.getFeatured = function (timestamp, offset, count) {
         return $http({
             method: 'GET',

@@ -23,9 +23,11 @@ class Confession extends Model {
 
     public function getFacebookInformation()
     {
-        $facebookRequest = sprintf('/%s?oauth_token=%s&fields=comments.summary(true),likes.summary(true)', '1448006645491039_1453009484990755', \Config::get('laravel-facebook-sdk.facebook_config.app_access_token'));
-        $facebookResponse = \Facebook::get($facebookRequest)->getDecodedBody();
-        $this->facebook_information = $facebookResponse;
+        if ($this->fb_post_id) {
+            $facebookRequest = sprintf('/1448006645491039_%s?oauth_token=%s&fields=comments.summary(true),likes.summary(true)', $this->fb_post_id, \Config::get('laravel-facebook-sdk.facebook_config.app_access_token'));
+            $facebookResponse = \Facebook::get($facebookRequest)->getDecodedBody();
+            $this->facebook_information = $facebookResponse;
+        }
     }
 
     /**

@@ -14,6 +14,10 @@ a:hover {
     cursor: pointer;
 }
 
+a:focus {
+    text-decoration: none;
+}
+
 .highlight {
     color: $highlight-nav-color;
 }

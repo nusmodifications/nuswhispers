@@ -9,10 +9,10 @@
       </span>
       <div class="share-social-media">
         SHARE:
-        <a href="/#!home" target="_blank" class="btn btn-social-media">
+        <a href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fnuswhispers.com%2Fconfessions%2F{{confession.confession_id}}" target="_blank" class="btn btn-social-media">
           <span class="typcn typcn-social-twitter"></span>
         </a>
-        <a href="/#!home" target="_blank" class="btn btn-social-media">
+        <a ng-click="shareConfessionFB(confession.confession_id)" target="_blank" class="btn btn-social-media">
           <span class="typcn typcn-social-facebook"></span>
         </a>
       </div>
@@ -26,7 +26,7 @@
       <span class="typcn typcn-watch"></span><span am-time-ago="confession.created_at_timestamp" am-preprocess="unix" class="post-time"></span>
       <div class="post-media-summary">
         <a href="/#!home" class="tweets-count liked" target="_blank">8</a>
-        <a href="/#!home" class="fb-likes" target="_blank" tooltip-placement="bottom" tooltip="{{fbUser.getAccessToken() == '' ? 'Login to Like on Facebook' : ''}}">{{confession.facebook_information.likes.summary.total_count}}</a>
+        <a href="https://www.facebook.com/permalink.php?story_fbid={{confession.fb_post_id}}&id=1448006645491039" ng-class="{liked: confessionIsLiked(confession)}" class="fb-likes" target="_blank" tooltip-placement="bottom" tooltip="Like this on Facebook">{{confession.facebook_information.likes.summary.total_count}}</a>
         <a ng-click="toggleFavouriteConfession(confession)" ng-class="{liked: confessionIsFavourited(confession)}" class="favs-count" target="_blank" tooltip-placement="bottom" tooltip="{{fbUser.getAccessToken() === '' ? 'Login to Favourite' : ''}}">{{confession.favourites.length}}</a>
       </div>
     </div>

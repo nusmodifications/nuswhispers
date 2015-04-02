@@ -4926,6 +4926,9 @@ a:hover {
   text-decoration: none;
   cursor: pointer; }
 
+a:focus {
+  text-decoration: none; }
+
 .highlight {
   color: #fff819; }
 
@@ -5202,31 +5205,32 @@ a:hover {
       .post .post-footer .post-media-summary .fb-likes.liked {
         color: #3b5998; }
       .post .post-footer .post-media-summary .fb-likes.liked:before {
-        background: url('../img/fb_speech.png'); }
+        color: #3b5998; }
       .post .post-footer .post-media-summary .fb-likes:before {
-        background: url('../img/fb_speech_grey.png');
-        content: ' ';
-        display: inline-block;
-        width: 24px;
-        height: 24px;
-        margin-top: 0px;
+        content: '\e11c';
         margin-right: 8px;
-        vertical-align: middle; }
+        margin-left: 8px;
+        color: #8e8e8e;
+        font-family: 'typicons';
+        font-size: 1.6em;
+        position: relative;
+        top: 0.1em; }
       .post .post-footer .post-media-summary .favs-count {
         color: #8e8e8e; }
       .post .post-footer .post-media-summary .favs-count.liked {
         color: #f70; }
       .post .post-footer .post-media-summary .favs-count.liked:before {
-        background: url('../img/fav_speech.png'); }
+        content: '\e105';
+        color: #f70; }
       .post .post-footer .post-media-summary .favs-count:before {
-        background: url('../img/fav_speech_grey.png');
-        content: ' ';
-        display: inline-block;
-        width: 24px;
-        height: 24px;
-        margin-top: 0px;
+        content: '\e108';
         margin-right: 8px;
-        vertical-align: middle; }
+        margin-left: 8px;
+        color: #8e8e8e;
+        font-family: 'typicons';
+        font-size: 1.6em;
+        position: relative;
+        top: 0.1em; }
 
 #loading-bar .bar {
   background: #f70; }

@@ -4919,6 +4919,9 @@ a:hover {
   text-decoration: none;
   cursor: pointer; }
 
+a:focus {
+  text-decoration: none; }
+
 .highlight {
   color: #fff819; }
 
