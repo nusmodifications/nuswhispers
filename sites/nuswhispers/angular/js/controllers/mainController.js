@@ -1,13 +1,18 @@
 angular.module('nuswhispersApp.controllers')
-.controller('MainController', function ($scope, Facebook, FacebookUser, Category) {
+.controller('MainController', function ($scope, $location, Facebook, FacebookUser, Tag, Category) {
     'use strict';
 
     $scope.sidebarOpenedClass = '';
     $scope.isLoggedIn = false;
 
     // Load all categories onto sidebar
-    Category.get().success(function (response) {
+    Category.getAll().success(function (response) {
         $scope.categories = response.data.categories;
+    });
+
+    // Load all tags onto sidebar
+    Tag.getTop(5).success(function (response) {
+        $scope.tags = response.data.tags;
     });
 
     $scope.toggleSidebar = function () {
@@ -16,6 +21,10 @@ angular.module('nuswhispersApp.controllers')
         } else {
             $scope.sidebarOpenedClass = '';
         }
+    };
+
+    $scope.isActivePage = function (pageName) {
+        return (pageName === $location.path());
     };
 
     $scope.login = function () {

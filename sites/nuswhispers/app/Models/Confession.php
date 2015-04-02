@@ -47,6 +47,15 @@ class Confession extends Model {
 	}
 
     /**
+     * Defines confession favourites relationship to model.
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function favourites()
+    {
+        return $this->belongsToMany('App\Models\FbUser', 'favourites', 'confession_id', 'fb_user_id');
+    }
+
+    /**
      * Query scope for pending confessions
      * @param  \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder

@@ -29,10 +29,26 @@ angular.module('nuswhispersApp.services')
         setData: function (confessionData) {
             angular.extend(this, confessionData);
         },
+        load: function () {
+            var confession = this;
+            $http.get('/api/confessions/' + confession.confession_id).success(function (response) {
+                if (response.success) {
+                    confession.setData(response.data.confession);
+                }
+            });
+        },
         favourite: function () {
             return $http({
                 method: 'POST',
                 url: '/api/fbuser/favourite',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                data: $.param({'confession_id': this.confession_id})
+            });
+        },
+        unfavourite: function () {
+            return $http({
+                method: 'POST',
+                url: '/api/fbuser/unfavourite',
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                 data: $.param({'confession_id': this.confession_id})
             });

@@ -10,13 +10,13 @@ use Illuminate\Http\Request;
 class ConfessionsController extends Controller {
 
 	/**
-	 * Display a listing of the resource.
+	 * Display a listing of the resource. Get featured confessions.
 	 *
 	 * @return Response
 	 */
 	public function index()
 	{
-		$query = Confession::with('categories')->orderBy('created_at', 'DESC');
+		$query = Confession::with('categories')->with('favourites')->orderBy('created_at', 'DESC');
 		// TODO: change to order by status_updated_at and filter by featured when approval is ready
 		// $query = Confession::orderBy('status_updated_at', 'DESC');
 		// $query->featured();
@@ -93,7 +93,13 @@ class ConfessionsController extends Controller {
 	 */
 	public function show($id)
 	{
-		//
+		$confession = Confession::with('categories')->with('favourites')->find($id);
+		if ($confession) {
+			$confession->created_at_timestamp = $confession->created_at->timestamp;
+			$confession->getFacebookInformation();
+			return \Response::json(['success' => true, 'data' => ['confession' => $confession]]);
+		}
+		return \Response::json(['success' => false]);
 	}
 
 }

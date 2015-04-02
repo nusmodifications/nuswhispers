@@ -31,10 +31,26 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
             }
         })
         .when('/trending/', {
-            templateUrl: 'assets/templates/home.html'
+            templateUrl: 'assets/templates/home.html',
+            controller: 'ConfessionsController',
+            resolve: {
+                controllerOptions: function () {
+                    return {
+                        view: 'trending',
+                    };
+                }
+            }
         })
         .when('/new/', {
-            templateUrl: 'assets/templates/home.html'
+            templateUrl: 'assets/templates/home.html',
+            controller: 'ConfessionsController',
+            resolve: {
+                controllerOptions: function () {
+                    return {
+                        view: 'new',
+                    };
+                }
+            }
         })
         .when('/category/:category', {
             templateUrl: 'assets/templates/home.html'

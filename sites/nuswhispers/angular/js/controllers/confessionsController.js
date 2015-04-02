@@ -51,12 +51,34 @@ angular.module('nuswhispersApp.controllers')
         return processedContent;
     };
 
-    $scope.favouriteConfession = function (confession) {
+    $scope.confessionIsFavourited = function (confession) {
         if (FacebookUser.getAccessToken() !== '') {
-            confession.favourite().success(function (response) {
-                confession.isFavourited = true;
-            });
+            var fbUserID = parseInt(FacebookUser.getUserID());
+            for (var i in confession.favourites) {
+                if (confession.favourites[i].fb_user_id === fbUserID) {
+                    return true;
+                }
+            }
         }
-    }
+        return false;
+    };
+
+    $scope.toggleFavouriteConfession = function (confession) {
+        if (FacebookUser.getAccessToken() !== '') {
+            if (confession.isFavourited || $scope.confessionIsFavourited(confession)) {
+                confession.unfavourite().success(function (response) {
+                    if (response.success) {
+                        confession.load();
+                    }
+                });
+            } else {
+                confession.favourite().success(function (response) {
+                    if (response.success) {
+                        confession.load();
+                    }
+                });
+            }
+        }
+    };
     
 });

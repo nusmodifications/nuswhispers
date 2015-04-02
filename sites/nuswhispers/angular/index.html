@@ -21,14 +21,14 @@
         </a>
         <hr>
         <ul class="nav main-nav">
-          <li class="active">
+          <li ng-class="{active: isActivePage('/home/')}">
             <a href="/#!home"><span class="typcn typcn-pin"></span>Featured</a>
           </li>
-          <li>
-            <a href="/#!home"><span class="typcn typcn-chart-line"></span>Trending</a>
+          <li ng-class="{active: isActivePage('/trending/')}">
+            <a href="/#!trending"><span class="typcn typcn-chart-line"></span>Trending</a>
           </li>
           <li>
-            <a href="/#!home"><span class="typcn typcn-starburst"></span>New</a>
+            <a href="/#!new"><span class="typcn typcn-starburst"></span>New</a>
           </li>
           <li>
             <a href="/#!home"><span class="typcn typcn-star-full-outline"></span>Favourites</a>
@@ -44,14 +44,8 @@
         <hr>
         <h2 class="nav-section-label">Popular Tags</h2>
         <ul class="nav">
-          <li>
-            <a href="/#!home">#bored</a>
-          </li>
-          <li>
-            <a href="/#!home">#yolo</a>
-          </li>
-          <li>
-            <a href="/#!home">#nus</a>
+          <li ng-repeat="tag in tags">
+            <a href="/#!home">{{tag.confession_tag}}</a>
           </li>
         </ul>
       </nav>

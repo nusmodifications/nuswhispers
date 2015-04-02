@@ -36,8 +36,6 @@ class FbUsersController extends Controller {
         $fbUserId = \Session::get('fb_user_id');
         $confessionId = \Input::get('confession_id');
 
-        \Log::info('sup' . $confessionId);
-
         if ($fbUserId && $confessionId) {
             $fbUser = FbUser::find($fbUserId);
             if (!Confession::find($confessionId)) {
@@ -48,6 +46,20 @@ class FbUsersController extends Controller {
             }
 
             $fbUser->favourites()->attach($confessionId);
+            return \Response::json(['success' => true]);
+        }
+        return \Response::json(['success' => false, 'errors' =>['User not logged in.']]);
+    }
+
+    public function postUnfavourite()
+    {
+        $fbUserId = \Session::get('fb_user_id');
+        $confessionId = \Input::get('confession_id');
+
+        if ($fbUserId && $confessionId) {
+            $fbUser = FbUser::find($fbUserId);
+
+            $fbUser->favourites()->detach($confessionId);
             return \Response::json(['success' => true]);
         }
         return \Response::json(['success' => false, 'errors' =>['User not logged in.']]);
