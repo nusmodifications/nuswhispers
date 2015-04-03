@@ -14,7 +14,7 @@ class TagsController extends Controller {
 	 */
 	private function getSortedTags()
 	{
-		$tags = Tag::get()->sortBy(function($tag)
+		$tags = Tag::get()->sortBy(function ($tag)
 		{
 		    return -$tag->confessions()->count();
 		});

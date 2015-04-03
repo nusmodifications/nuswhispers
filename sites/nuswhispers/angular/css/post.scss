@@ -26,10 +26,16 @@
             width: 100%;
             padding-bottom: 15px;
         }
+        .post-facebook-link {
+            text-align: right;
+        }
+    }
+    .post-time {
+        color: $faded-text-color;
     }
     .post-footer {
         line-height: 50px;
-        color: #bbbbbb;
+        color: $faded-text-color;
         .typcn-watch {
             font-size: 18px;
         }
@@ -52,6 +58,20 @@
                 margin-right: 8px;
                 vertical-align: middle;
             }
+            .show-confession-btn {
+                color: $secondary-text-color;
+            }
+            .show-confession-btn.shown {
+                color: $primary-color;
+            }
+            .show-confession-btn:before {
+                content: '\e0b8';
+                margin-left: 4px;
+                font-family: 'typicons';
+                font-size: 1.6em;
+                position: relative;
+                top: 0.1em;
+            }
             .fb-likes {
                 color: $secondary-text-color;
             }
@@ -64,7 +84,7 @@
             .fb-likes:before {
                 content: '\e11c';
                 margin-right: 8px;
-                margin-left: 8px;
+                margin-left: 4px;
                 color: $secondary-text-color;
                 font-family: 'typicons';
                 font-size: 1.6em;
@@ -84,13 +104,18 @@
             .favs-count:before {
                 content: '\e108';
                 margin-right: 8px;
-                margin-left: 8px;
+                margin-left: 4px;
                 color: $secondary-text-color;
                 font-family: 'typicons';
                 font-size: 1.6em;
                 position: relative;
                 top: 0.1em;
             }
+        }
+    }
+    .post-comment-list {
+        .post-comment {
+            padding-bottom: 15px;
         }
     }
 }

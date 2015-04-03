@@ -5179,6 +5179,10 @@ a:focus {
     .post .post-content .post-image {
       width: 100%;
       padding-bottom: 15px; }
+    .post .post-content .post-facebook-link {
+      text-align: right; }
+  .post .post-time {
+    color: #bbbbbb; }
   .post .post-footer {
     line-height: 50px;
     color: #bbbbbb; }
@@ -5200,6 +5204,17 @@ a:focus {
         margin-top: 0px;
         margin-right: 8px;
         vertical-align: middle; }
+      .post .post-footer .post-media-summary .show-confession-btn {
+        color: #8e8e8e; }
+      .post .post-footer .post-media-summary .show-confession-btn.shown {
+        color: #2e8fc2; }
+      .post .post-footer .post-media-summary .show-confession-btn:before {
+        content: '\e0b8';
+        margin-left: 4px;
+        font-family: 'typicons';
+        font-size: 1.6em;
+        position: relative;
+        top: 0.1em; }
       .post .post-footer .post-media-summary .fb-likes {
         color: #8e8e8e; }
       .post .post-footer .post-media-summary .fb-likes.liked {
@@ -5209,7 +5224,7 @@ a:focus {
       .post .post-footer .post-media-summary .fb-likes:before {
         content: '\e11c';
         margin-right: 8px;
-        margin-left: 8px;
+        margin-left: 4px;
         color: #8e8e8e;
         font-family: 'typicons';
         font-size: 1.6em;
@@ -5225,12 +5240,14 @@ a:focus {
       .post .post-footer .post-media-summary .favs-count:before {
         content: '\e108';
         margin-right: 8px;
-        margin-left: 8px;
+        margin-left: 4px;
         color: #8e8e8e;
         font-family: 'typicons';
         font-size: 1.6em;
         position: relative;
         top: 0.1em; }
+  .post .post-comment-list .post-comment {
+    padding-bottom: 15px; }
 
 #loading-bar .bar {
   background: #f70; }
