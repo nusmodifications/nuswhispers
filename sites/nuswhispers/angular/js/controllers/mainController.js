@@ -1,13 +1,18 @@
 angular.module('nuswhispersApp.controllers')
-.controller('MainController', function ($scope, Facebook, FacebookData, Category) {
+.controller('MainController', function ($scope, $location, Facebook, FacebookUser, Tag, Category) {
     'use strict';
 
     $scope.sidebarOpenedClass = '';
     $scope.isLoggedIn = false;
 
     // Load all categories onto sidebar
-    Category.get().success(function (response) {
+    Category.getAll().success(function (response) {
         $scope.categories = response.data.categories;
+    });
+
+    // Load all tags onto sidebar
+    Tag.getTop(5).success(function (response) {
+        $scope.tags = response.data.tags;
     });
 
     $scope.toggleSidebar = function () {
@@ -18,11 +23,15 @@ angular.module('nuswhispersApp.controllers')
         }
     };
 
+    $scope.isActivePage = function (pageName) {
+        return (pageName === $location.path());
+    };
+
     $scope.login = function () {
         Facebook.login(function (response) {
             $scope.getLoginStatus();
         }, {
-            scope: 'publish_actions'
+            // scope: 'publish_actions'
         });
     };
 
@@ -34,9 +43,19 @@ angular.module('nuswhispersApp.controllers')
 
     $scope.getLoginStatus = function () {
         Facebook.getLoginStatus(function (response) {
-            $scope.isLoggedIn = response.status === 'connected';
-            if ($scope.isLoggedIn) {
-                FacebookData.setAccessToken(response.authResponse.accessToken);
+            FacebookUser.setAccessToken('');
+            if (response.status === 'connected') {
+                FacebookUser.setAccessToken(response.authResponse.accessToken);
+                FacebookUser.setUserID(response.authResponse.userID);
+                FacebookUser.login()
+                    .success(function (response) {
+                        $scope.isLoggedIn = true;
+                    })
+                    .error(function (response) {
+                        $scope.isLoggedIn = false;
+                    });
+            } else {
+                $scope.isLoggedIn = false;
             }
         });
     };

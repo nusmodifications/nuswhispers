@@ -4919,6 +4919,9 @@ a:hover {
   text-decoration: none;
   cursor: pointer; }
 
+a:focus {
+  text-decoration: none; }
+
 .highlight {
   color: #fff819; }
 
@@ -4948,6 +4951,14 @@ a:hover {
   margin-top: 3px;
   margin-left: 5px; }
 
+.tooltip.bottom .tooltip-arrow {
+  border-bottom-color: #8e8e8e; }
+
+.tooltip > .tooltip-inner {
+  background-color: #8e8e8e;
+  color: #ffffff;
+  opacity: 1; }
+
 #topbar-wrapper {
   background-color: #eeeeee;
   width: 100%;
@@ -4958,8 +4969,10 @@ a:hover {
     margin-right: 15px; }
     #topbar-wrapper #topbar-nav .btn {
       font-size: 14px;
+      line-height: 20px;
       height: 35px; }
     #topbar-wrapper #topbar-nav .btn-social-media {
+      line-height: normal;
       font-size: 24px;
       height: 35px;
       padding-left: 5px;
@@ -5049,7 +5062,8 @@ a:hover {
       text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.05); }
     #sidebar-wrapper ul.nav li a:hover {
       color: #fff819;
-      background: transparent; }
+      background: transparent;
+      cursor: pointer; }
     #sidebar-wrapper ul.nav li a:focus {
       color: #fff819;
       background: transparent; }
@@ -5084,6 +5098,12 @@ a:hover {
   margin-top: 15px;
   width: 100%;
   display: inline-block; }
+
+.loading {
+  background: url('../img/pac_man_loading.gif');
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 24px; }
 
 @media (max-width: 768px) {
   #wrapper {

@@ -13,14 +13,14 @@ angular.module('nuswhispersApp.services', ['facebook']).config(
 );
 angular.module('nuswhispersApp.controllers', ['nuswhispersApp.services', 'vcRecaptcha']);
 
-var app = angular.module('nuswhispersApp', ['nuswhispersApp.controllers', 'angular-loading-bar', 'monospaced.elastic', 'angularMoment', 'ngCookies', 'ngResource', 'ngSanitize', 'ngRoute', 'ngAnimate', 'ui.utils', 'ui.bootstrap', 'ui.router', 'ngGrid']);
+var app = angular.module('nuswhispersApp', ['nuswhispersApp.controllers', 'angular-loading-bar', 'monospaced.elastic', 'angularMoment', 'infinite-scroll', 'ngCookies', 'ngResource', 'ngSanitize', 'ngRoute', 'ngAnimate', 'ui.utils', 'ui.bootstrap', 'ui.router', 'ngGrid']);
 
 app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($routeProvider, $locationProvider, $httpProvider) {
     'use strict';
 
     $routeProvider
         .when('/home/', {
-            templateUrl: 'assets/templates/home.html',
+            templateUrl: 'assets/templates/confessions.html',
             controller: 'ConfessionsController',
             resolve: {
                 controllerOptions: function () {
@@ -30,17 +30,60 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
                 }
             }
         })
-        .when('/trending/', {
-            templateUrl: 'assets/templates/home.html'
+        .when('/popular/', {
+            templateUrl: 'assets/templates/confessions.html',
+            controller: 'ConfessionsController',
+            resolve: {
+                controllerOptions: function () {
+                    return {
+                        view: 'popular',
+                    };
+                }
+            }
         })
         .when('/new/', {
-            templateUrl: 'assets/templates/home.html'
+            templateUrl: 'assets/templates/confessions.html',
+            controller: 'ConfessionsController',
+            resolve: {
+                controllerOptions: function () {
+                    return {
+                        view: 'recent',
+                    };
+                }
+            }
         })
         .when('/category/:category', {
-            templateUrl: 'assets/templates/home.html'
+            templateUrl: 'assets/templates/confessions.html',
+            controller: 'ConfessionsController',
+            resolve: {
+                controllerOptions: function () {
+                    return {
+                        view: 'category'
+                    };
+                }
+            }
         })
         .when('/tag/:tag', {
-            templateUrl: 'assets/templates/home.html'
+            templateUrl: 'assets/templates/confessions.html',
+            controller: 'ConfessionsController',
+            resolve: {
+                controllerOptions: function () {
+                    return {
+                        view: 'tag'
+                    };
+                }
+            }
+        })
+        .when('/confession/:confession', {
+            templateUrl: 'assets/templates/confessions.html',
+            controller: 'ConfessionsController',
+            resolve: {
+                controllerOptions: function () {
+                    return {
+                        view: 'single'
+                    };
+                }
+            }
         })
         .when('/submit/', {
             templateUrl: 'assets/templates/submit.html',

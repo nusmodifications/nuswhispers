@@ -18,25 +18,6 @@ class CategoriesController extends Controller {
 		return \Response::json(array("data" => array("categories" => Category::categoryAsc()->get())));
 	}
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-		//
-	}
-
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
-	{
-		//
-	}
 
 	/**
 	 * Get the category JSON by a given category_id
@@ -47,7 +28,7 @@ class CategoriesController extends Controller {
 	public function show($category_id)
 	{
 		$category = Category::find($category_id);
-		if ($category == NULL){
+		if ($category == NULL) {
 			return \Response::json(array("success" => false));
 		}
 		return \Response::json(["success" => true, "data" => array("category" => $category)]);

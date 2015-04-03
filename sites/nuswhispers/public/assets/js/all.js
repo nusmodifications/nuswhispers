@@ -13,14 +13,14 @@ angular.module('nuswhispersApp.services', ['facebook']).config(
 );
 angular.module('nuswhispersApp.controllers', ['nuswhispersApp.services', 'vcRecaptcha']);
 
-var app = angular.module('nuswhispersApp', ['nuswhispersApp.controllers', 'angular-loading-bar', 'monospaced.elastic', 'angularMoment', 'ngCookies', 'ngResource', 'ngSanitize', 'ngRoute', 'ngAnimate', 'ui.utils', 'ui.bootstrap', 'ui.router', 'ngGrid']);
+var app = angular.module('nuswhispersApp', ['nuswhispersApp.controllers', 'angular-loading-bar', 'monospaced.elastic', 'angularMoment', 'infinite-scroll', 'ngCookies', 'ngResource', 'ngSanitize', 'ngRoute', 'ngAnimate', 'ui.utils', 'ui.bootstrap', 'ui.router', 'ngGrid']);
 
 app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($routeProvider, $locationProvider, $httpProvider) {
     'use strict';
 
     $routeProvider
         .when('/home/', {
-            templateUrl: 'assets/templates/home.html',
+            templateUrl: 'assets/templates/confessions.html',
             controller: 'ConfessionsController',
             resolve: {
                 controllerOptions: function () {
@@ -30,17 +30,60 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
                 }
             }
         })
-        .when('/trending/', {
-            templateUrl: 'assets/templates/home.html'
+        .when('/popular/', {
+            templateUrl: 'assets/templates/confessions.html',
+            controller: 'ConfessionsController',
+            resolve: {
+                controllerOptions: function () {
+                    return {
+                        view: 'popular',
+                    };
+                }
+            }
         })
         .when('/new/', {
-            templateUrl: 'assets/templates/home.html'
+            templateUrl: 'assets/templates/confessions.html',
+            controller: 'ConfessionsController',
+            resolve: {
+                controllerOptions: function () {
+                    return {
+                        view: 'recent',
+                    };
+                }
+            }
         })
         .when('/category/:category', {
-            templateUrl: 'assets/templates/home.html'
+            templateUrl: 'assets/templates/confessions.html',
+            controller: 'ConfessionsController',
+            resolve: {
+                controllerOptions: function () {
+                    return {
+                        view: 'category'
+                    };
+                }
+            }
         })
         .when('/tag/:tag', {
-            templateUrl: 'assets/templates/home.html'
+            templateUrl: 'assets/templates/confessions.html',
+            controller: 'ConfessionsController',
+            resolve: {
+                controllerOptions: function () {
+                    return {
+                        view: 'tag'
+                    };
+                }
+            }
+        })
+        .when('/confession/:confession', {
+            templateUrl: 'assets/templates/confessions.html',
+            controller: 'ConfessionsController',
+            resolve: {
+                controllerOptions: function () {
+                    return {
+                        view: 'single'
+                    };
+                }
+            }
         })
         .when('/submit/', {
             templateUrl: 'assets/templates/submit.html',
@@ -75,106 +118,160 @@ app.run(['$rootScope', function ($rootScope) {
 
 /* ---> Do not delete this comment (Constants) <--- */
 
-angular.module('nuswhispersApp.services')
-.factory('Category', function ($http) {
-    'use strict';
-    return {
-        get: function () {
-            return $http.get('/api/categories');
-        }
-    };
-});
-
-angular.module('nuswhispersApp.services')
-.factory('Confession', function ($http) {
-    'use strict';
-    return {
-        submit: function (confessionData) {
-            return $http({
-                method: 'POST',
-                url: '/api/confessions',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                data: $.param(confessionData)
-            });
-        },
-        getFeatured: function (timestamp, offset, count) {
-            return $http({
-                method: 'GET',
-                url: '/api/confessions',
-                params: {timestamp: timestamp, offset: offset, count: count}
-            });
-        }
-    };
-});
-
-angular.module('nuswhispersApp.services')
-.factory('FacebookData', function () {
-    'use strict';
-
-    var data = {
-        accessToken: ''
-    };
-
-    return {
-        setAccessToken: function (accessToken) {
-            data.accessToken = accessToken;
-        },
-        getAccessToken: function () {
-            return data.accessToken;
-        }
-    };
-});
 angular.module('nuswhispersApp.controllers')
-.controller('ConfessionsController', function ($scope, Confession, controllerOptions) {
+.controller('ConfessionsController', function ($scope, $routeParams, Confession, Facebook, FacebookUser, controllerOptions) {
     'use strict';
 
-    $scope.getFeatured = function () {
-        Confession.getFeatured($scope.timestamp, $scope.offset, $scope.count)
-            .success(function (response) {
-                console.log(JSON.stringify(response.data.confessions));
-                $scope.confessions.push.apply($scope.confessions, response.data.confessions);
+    $scope.getConfessions = function () {
+        function processConfessionResponse(confessions) {
+            if (confessions.length === 0) {
+                $scope.doLoadMoreConfessions = false;
+            } else {
+                var confessionModels = [];
+                for (var i in confessions) {
+                    confessionModels.push(new Confession(confessions[i]));
+                }
+                $scope.confessions.push.apply($scope.confessions, confessionModels);
                 // set up next featured offset
                 $scope.offset += $scope.count;
-            })
-            .error(function (response) {
-                console.log(response);
-            });
+            }
+            $scope.loadingConfessions = false;
+        }
+
+        $scope.loadingConfessions = true;
+        switch (controllerOptions.view) {
+            case 'single':
+                Confession.getConfessionById($routeParams.confession)
+                    .success(function (response) {
+                        if (response.success) {
+                            processConfessionResponse([response.data.confession]);
+                        }
+                        $scope.doLoadMoreConfessions = false;
+                        $scope.loadingConfessions = false;
+                    });
+                break;
+            case 'recent':
+                Confession.getRecent($scope.timestamp, $scope.offset, $scope.count)
+                    .success(function (response) {
+                        processConfessionResponse(response.data.confessions);
+                    });
+                break;
+            case 'popular':
+                Confession.getPopular($scope.timestamp, $scope.offset, $scope.count)
+                    .success(function (response) {
+                        processConfessionResponse(response.data.confessions);
+                    });
+                break;
+            case 'category':
+                Confession.getCategory($routeParams.category, $scope.timestamp, $scope.offset, $scope.count)
+                    .success(function (response) {
+                        processConfessionResponse(response.data.confessions);
+                    });
+                break;
+            case 'tag':
+                Confession.getTag($routeParams.tag, $scope.timestamp, $scope.offset, $scope.count)
+                    .success(function (response) {
+                        processConfessionResponse(response.data.confessions);
+                    });
+                break;
+            default:
+                Confession.getFeatured($scope.timestamp, $scope.offset, $scope.count)
+                    .success(function (response) {
+                        processConfessionResponse(response.data.confessions);
+                    });
+        }
     };
 
     $scope.timestamp = Math.floor(Date.now() / 1000);
     $scope.offset = 0;
-    $scope.count = 10;
+    $scope.count = 5;
+    $scope.loadingConfessions = false;
+    $scope.doLoadMoreConfessions = true;
     $scope.confessions = [];
+    $scope.fbUser = FacebookUser;
 
-    switch (controllerOptions.view) {
-        default:
-            $scope.getFeatured();
-    }
+    $scope.getConfessions();
 
     $scope.processConfessionContent = function (content) {
         var splitContentTags = content.split(/(#\w+)/);
         var processedContent = '';
         for (var i in splitContentTags) {
             if (/(#\w+)/.test(splitContentTags[i])) {
-                processedContent += '<a href="/#!home">' + splitContentTags[i] + '</a>';
+                processedContent += '<a href="/#!tag/' + splitContentTags[i].substring(1) + '">' + splitContentTags[i] + '</a>';
             } else {
                 processedContent += splitContentTags[i];
             }
         }
         return processedContent;
     };
+
+    $scope.confessionIsFavourited = function (confession) {
+        if (FacebookUser.getAccessToken() !== '') {
+            var fbUserID = parseInt(FacebookUser.getUserID());
+            for (var i in confession.favourites) {
+                if (confession.favourites[i].fb_user_id === fbUserID) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+
+    $scope.toggleFavouriteConfession = function (confession) {
+        if (FacebookUser.getAccessToken() !== '') {
+            if ($scope.confessionIsFavourited(confession)) {
+                confession.unfavourite().success(function (response) {
+                    if (response.success) {
+                        confession.load();
+                    }
+                });
+            } else {
+                confession.favourite().success(function (response) {
+                    if (response.success) {
+                        confession.load();
+                    }
+                });
+            }
+        }
+    };
+
+    $scope.confessionIsLiked = function (confession) {
+        if (FacebookUser.getAccessToken() !== '') {
+            var fbUserID = FacebookUser.getUserID();
+            var fbConfessionLikes = confession.facebook_information.likes.data;
+            for (var i in fbConfessionLikes) {
+                if (fbConfessionLikes[i].id === fbUserID) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+
+    $scope.shareConfessionFB = function (confessionID) {
+        Facebook.ui({
+            method: 'share',
+            href: 'http://nuswhispers.com/#!/confession/' + confessionID,
+        });
+    };
+    
 });
 
 angular.module('nuswhispersApp.controllers')
-.controller('MainController', function ($scope, Facebook, FacebookData, Category) {
+.controller('MainController', function ($scope, $location, Facebook, FacebookUser, Tag, Category) {
     'use strict';
 
     $scope.sidebarOpenedClass = '';
     $scope.isLoggedIn = false;
 
     // Load all categories onto sidebar
-    Category.get().success(function (response) {
+    Category.getAll().success(function (response) {
         $scope.categories = response.data.categories;
+    });
+
+    // Load all tags onto sidebar
+    Tag.getTop(5).success(function (response) {
+        $scope.tags = response.data.tags;
     });
 
     $scope.toggleSidebar = function () {
@@ -185,11 +282,15 @@ angular.module('nuswhispersApp.controllers')
         }
     };
 
+    $scope.isActivePage = function (pageName) {
+        return (pageName === $location.path());
+    };
+
     $scope.login = function () {
         Facebook.login(function (response) {
             $scope.getLoginStatus();
         }, {
-            scope: 'publish_actions'
+            // scope: 'publish_actions'
         });
     };
 
@@ -201,9 +302,19 @@ angular.module('nuswhispersApp.controllers')
 
     $scope.getLoginStatus = function () {
         Facebook.getLoginStatus(function (response) {
-            $scope.isLoggedIn = response.status === 'connected';
-            if ($scope.isLoggedIn) {
-                FacebookData.setAccessToken(response.authResponse.accessToken);
+            FacebookUser.setAccessToken('');
+            if (response.status === 'connected') {
+                FacebookUser.setAccessToken(response.authResponse.accessToken);
+                FacebookUser.setUserID(response.authResponse.userID);
+                FacebookUser.login()
+                    .success(function (response) {
+                        $scope.isLoggedIn = true;
+                    })
+                    .error(function (response) {
+                        $scope.isLoggedIn = false;
+                    });
+            } else {
+                $scope.isLoggedIn = false;
             }
         });
     };
@@ -215,7 +326,7 @@ angular.module('nuswhispersApp.controllers')
     'use strict';
 
     // Load all categories onto form
-    Category.get().success(function (response) {
+    Category.getAll().success(function (response) {
         $scope.categories = response.data.categories;
     });
 
@@ -295,4 +406,157 @@ angular.module('nuswhispersApp.controllers')
         $scope.contentTagHighlights = $scope.contentTagHighlights.replace(/(?:\r\n|\r|\n)/g, '<br>');
     };
 
+});
+
+angular.module('nuswhispersApp.services')
+.factory('Category', function ($http) {
+    'use strict';
+    return {
+        getAll: function () {
+            return $http.get('/api/categories');
+        }
+    };
+});
+
+angular.module('nuswhispersApp.services')
+.factory('Confession', function ($http) {
+    'use strict';
+
+    function Confession(confessionData) {
+        if (confessionData) {
+            this.setData(confessionData);
+        }
+    }
+
+    Confession.submit = function (confessionData) {
+        return $http({
+            method: 'POST',
+            url: '/api/confessions',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            data: $.param(confessionData)
+        });
+    };
+
+    Confession.getConfessionById = function (confessionID) {
+        return $http({
+            method: 'GET',
+            url: '/api/confessions/' + confessionID
+        });
+    };
+
+    Confession.getFeatured = function (timestamp, offset, count) {
+        return $http({
+            method: 'GET',
+            url: '/api/confessions',
+            params: {timestamp: timestamp, offset: offset, count: count}
+        });
+    };
+
+    Confession.getPopular = function (timestamp, offset, count) {
+        return $http({
+            method: 'GET',
+            url: '/api/confessions/popular',
+            params: {timestamp: timestamp, offset: offset, count: count}
+        });
+    };
+
+    Confession.getRecent = function (timestamp, offset, count) {
+        return $http({
+            method: 'GET',
+            url: '/api/confessions/recent',
+            params: {timestamp: timestamp, offset: offset, count: count}
+        });
+    };
+
+    Confession.getCategory = function (categoryID, timestamp, offset, count) {
+        return $http({
+            method: 'GET',
+            url: '/api/confessions/category/' + categoryID,
+            params: {timestamp: timestamp, offset: offset, count: count}
+        });
+    };
+
+    Confession.getTag = function (tag, timestamp, offset, count) {
+        return $http({
+            method: 'GET',
+            url: '/api/confessions/tag/' + tag,
+            params: {timestamp: timestamp, offset: offset, count: count}
+        });
+    };
+
+    Confession.prototype = {
+        setData: function (confessionData) {
+            angular.extend(this, confessionData);
+        },
+        load: function () {
+            var confession = this;
+            $http.get('/api/confessions/' + confession.confession_id).success(function (response) {
+                if (response.success) {
+                    confession.setData(response.data.confession);
+                }
+            });
+        },
+        favourite: function () {
+            return $http({
+                method: 'POST',
+                url: '/api/fbuser/favourite',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                data: $.param({'confession_id': this.confession_id})
+            });
+        },
+        unfavourite: function () {
+            return $http({
+                method: 'POST',
+                url: '/api/fbuser/unfavourite',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                data: $.param({'confession_id': this.confession_id})
+            });
+        }
+    };
+
+    return Confession;
+});
+
+angular.module('nuswhispersApp.services')
+.factory('FacebookUser', function ($http) {
+    'use strict';
+
+    var data = {
+        accessToken: '',
+        userID: '',
+        pageID: '1448006645491039'
+    };
+
+    return {
+        login: function () {
+            return $http({
+                method: 'POST',
+                url: '/api/fbuser/login/',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                data: $.param({'fb_access_token': data.accessToken})
+            });
+        },
+        setAccessToken: function (accessToken) {
+            data.accessToken = accessToken;
+        },
+        getAccessToken: function () {
+            return data.accessToken;
+        },
+        setUserID: function (userID) {
+            data.userID = userID;
+        },
+        getUserID: function () {
+            return data.userID;
+        }
+    };
+});
+
+angular.module('nuswhispersApp.services')
+.factory('Tag', function ($http) {
+    'use strict';
+    return {
+        getTop: function (n) {
+            return $http.get('/api/tags/top/' + n);
+        }
+    };
 });

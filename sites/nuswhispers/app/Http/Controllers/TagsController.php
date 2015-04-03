@@ -20,42 +20,22 @@ class TagsController extends Controller {
 	}
 
 	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-		//
-	}
-
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
-	{
-		//
-	}
-
-	/**
 	 * Get the top n tags JSON sorted by number of associated posts 
 	 * method: get
 	 * route: api/tags/top/<num> (if not clashes with api below)
 	 * @param int $num
 	 * @return json {"data": {"tags": [tag1, tag2, ...]}}
 	 */
-	public function TopNTags($num){
+	public function topNTags($num)
+	{
 		$tags = Tag::get();
-		if ($num  < count($tags)){
+		if ($num  < count($tags)) {
 			$top_n = array();
-			for ($i = 0; $i < $num; $i++){
+			for ($i = 0; $i < $num; $i++) {
 				$top_n[$i] = $tags[$i];
 			}
 			return \Response::json(array("data" => array("tags" => $top_n)));
-		}
-		else{
+		} else {
 			return \Response::json(array("data" => array("tags" => $tags)));
 		}
 	}
@@ -70,7 +50,7 @@ class TagsController extends Controller {
 	public function show($tag_id)
 	{
 		$tag = Tag::find($tag_id);
-		if ($tag == NULL){
+		if ($tag == NULL) {
 			return \Response::json(array("success" => false));
 		}
 		return \Response::json(["success" => true, "data" => array("tag" => $tag)]);

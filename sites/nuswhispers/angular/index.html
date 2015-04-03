@@ -21,14 +21,14 @@
         </a>
         <hr>
         <ul class="nav main-nav">
-          <li class="active">
+          <li ng-class="{active: isActivePage('/home/')}">
             <a href="/#!home"><span class="typcn typcn-pin"></span>Featured</a>
           </li>
-          <li>
-            <a href="/#!home"><span class="typcn typcn-chart-line"></span>Trending</a>
+          <li ng-class="{active: isActivePage('/popular/')}">
+            <a href="/#!popular"><span class="typcn typcn-chart-line"></span>Popular</a>
           </li>
-          <li>
-            <a href="/#!home"><span class="typcn typcn-starburst"></span>New</a>
+          <li ng-class="{active: isActivePage('/new/')}">
+            <a href="/#!new"><span class="typcn typcn-starburst"></span>New</a>
           </li>
           <li>
             <a href="/#!home"><span class="typcn typcn-star-full-outline"></span>Favourites</a>
@@ -38,20 +38,14 @@
         <h2 class="nav-section-label">Categories</h2>
         <ul class="nav">
           <li ng-repeat="category in categories">
-            <a href="/#!home">{{category.confession_category}}</a>
+            <a href="/#!category/{{category.confession_category_id}}">{{category.confession_category}}</a>
           </li>
         </ul>
         <hr>
         <h2 class="nav-section-label">Popular Tags</h2>
         <ul class="nav">
-          <li>
-            <a href="/#!home">#bored</a>
-          </li>
-          <li>
-            <a href="/#!home">#yolo</a>
-          </li>
-          <li>
-            <a href="/#!home">#nus</a>
+          <li ng-repeat="tag in tags">
+            <a href="/#!tag/{{tag.confession_tag.substring(1)}}">{{tag.confession_tag}}</a>
           </li>
         </ul>
       </nav>
@@ -63,7 +57,7 @@
             <span class="icon-bar"></span>
           </button>
           <div id="topbar-nav">
-            <a class="btn btn-social-media" target="_blank"><span class="typcn typcn-social-facebook"></span></a>
+            <a class="btn btn-social-media" href="https://www.facebook.com/nuswhispers" target="_blank" tooltip-placement="bottom" tooltip="Check us out on Facebook!"><span class="typcn typcn-social-facebook"></span></a>
             <a class="btn btn-alt-style" href="/#!/submit"><span class="typcn typcn-heart-full-outline"></span> New Confession</a>
             <a ng-show="!isLoggedIn" ng-click="login()" class="btn">Login</a>
             <a ng-show="isLoggedIn" ng-click="logout()" class="btn">Logout</a>
@@ -85,6 +79,7 @@
     <script src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&amp;render=explicit" async defer></script>
     <script type="text/javascript" src="assets/bower/_bower.js"></script>
     <script type="text/javascript" src="//api.filepicker.io/v1/filepicker.js"></script>
+    <script type="text/javascript" async src="//platform.twitter.com/widgets.js"></script>
     <script type="text/javascript" src="assets/js/all.js"></script>
     <!-- endbuild -->
   </body>

@@ -40,6 +40,7 @@
             }
             .tweets-count {
                 color: $twitter-color;
+                display: none;
             }
             .tweets-count:before {
                 background: url('../img/twitter_speech.png');
@@ -52,30 +53,43 @@
                 vertical-align: middle;
             }
             .fb-likes {
+                color: $secondary-text-color;
+            }
+            .fb-likes.liked {
+                color: $fb-color;
+            }
+            .fb-likes.liked:before {
                 color: $fb-color;
             }
             .fb-likes:before {
-                background: url('../img/fb_speech.png');
-                content: ' ';
-                display: inline-block;
-                width: 24px;
-                height: 24px;
-                margin-top: 0px;
+                content: '\e11c';
                 margin-right: 8px;
-                vertical-align: middle;
+                margin-left: 8px;
+                color: $secondary-text-color;
+                font-family: 'typicons';
+                font-size: 1.6em;
+                position: relative;
+                top: 0.1em;
             }
             .favs-count {
-                color: $primary-color;
+                color: $secondary-text-color;
+            }
+            .favs-count.liked {
+                color: $alternate-color;
+            }
+            .favs-count.liked:before {
+                content: '\e105';
+                color: $alternate-color;
             }
             .favs-count:before {
-                background: url('../img/fav_speech.png');
-                content: ' ';
-                display: inline-block;
-                width: 24px;
-                height: 24px;
-                margin-top: 0px;
+                content: '\e108';
                 margin-right: 8px;
-                vertical-align: middle;
+                margin-left: 8px;
+                color: $secondary-text-color;
+                font-family: 'typicons';
+                font-size: 1.6em;
+                position: relative;
+                top: 0.1em;
             }
         }
     }
