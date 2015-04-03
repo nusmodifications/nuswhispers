@@ -220,10 +220,13 @@ class ConfessionsController extends Controller {
 	 * @return json {"data": {"confessions": [Confession1, confession2, ...]}}
 	 *                           an array of confession json
 	 */
-	public function search($searchString){
+	public function search($searchString)
+	{
 		// Naive search ...
 		$query = Confession::orderBy('status_updated_at', 'DESC')
-			->where('content', 'LIKE', '%'.$searchString.'%');
+			->where('content', 'LIKE', '%'.$searchString.'%')
+			->with('favourites')
+			->with('categories');
 
 		// TODO: change to filter by approved when approval is ready
 		// $query->approved();

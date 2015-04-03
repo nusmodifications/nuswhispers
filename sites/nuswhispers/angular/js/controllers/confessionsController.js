@@ -54,6 +54,12 @@ angular.module('nuswhispersApp.controllers')
                         processConfessionResponse(response.data.confessions);
                     });
                 break;
+            case 'search':
+                Confession.search($routeParams.query, $scope.timestamp, $scope.offset, $scope.count)
+                    .success(function (response) {
+                        processConfessionResponse(response.data.confessions);
+                    });
+                break;
             default:
                 Confession.getFeatured($scope.timestamp, $scope.offset, $scope.count)
                     .success(function (response) {

@@ -85,6 +85,17 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
                 }
             }
         })
+        .when('/search/:query', {
+            templateUrl: 'assets/templates/confessions.html',
+            controller: 'ConfessionsController',
+            resolve: {
+                controllerOptions: function () {
+                    return {
+                        view: 'search'
+                    };
+                }
+            }
+        })
         .when('/submit/', {
             templateUrl: 'assets/templates/submit.html',
             controller: 'SubmitController'

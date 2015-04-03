@@ -85,6 +85,17 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
                 }
             }
         })
+        .when('/search/:query', {
+            templateUrl: 'assets/templates/confessions.html',
+            controller: 'ConfessionsController',
+            resolve: {
+                controllerOptions: function () {
+                    return {
+                        view: 'search'
+                    };
+                }
+            }
+        })
         .when('/submit/', {
             templateUrl: 'assets/templates/submit.html',
             controller: 'SubmitController'
@@ -170,6 +181,12 @@ angular.module('nuswhispersApp.controllers')
                 break;
             case 'tag':
                 Confession.getTag($routeParams.tag, $scope.timestamp, $scope.offset, $scope.count)
+                    .success(function (response) {
+                        processConfessionResponse(response.data.confessions);
+                    });
+                break;
+            case 'search':
+                Confession.search($routeParams.query, $scope.timestamp, $scope.offset, $scope.count)
                     .success(function (response) {
                         processConfessionResponse(response.data.confessions);
                     });
@@ -317,6 +334,11 @@ angular.module('nuswhispersApp.controllers')
                 $scope.isLoggedIn = false;
             }
         });
+    };
+
+    $scope.searchConfessions = function (query) {
+        console.log('/search/' + query);
+        $location.path('/search/' + query);
     };
 
     $scope.getLoginStatus();
@@ -480,6 +502,14 @@ angular.module('nuswhispersApp.services')
         return $http({
             method: 'GET',
             url: '/api/confessions/tag/' + tag,
+            params: {timestamp: timestamp, offset: offset, count: count}
+        });
+    };
+
+    Confession.search = function (query, timestamp, offset, count) {
+        return $http({
+            method: 'GET',
+            url: '/api/confessions/search/' + escape(query),
             params: {timestamp: timestamp, offset: offset, count: count}
         });
     };
