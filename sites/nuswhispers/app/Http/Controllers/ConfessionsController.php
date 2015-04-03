@@ -221,12 +221,6 @@ class ConfessionsController extends Controller {
 	 *                           an array of confession json
 	 */
 	public function search($searchString){
-		// The following part is copied from other methods
-		// TODO: change to order by status_updated_at and filter by approved when approval is ready
-		// $confessions = Confession::orderBy('status_updated_at', 'DESC')
-		// 	->approved()
-		// 	->where('content', 'LIKE', '%'.$searchString.'%')->get();
-
 		// Naive search ...
 		$query = Confession::orderBy('status_updated_at', 'DESC')
 			->where('content', 'LIKE', '%'.$searchString.'%');
@@ -249,5 +243,4 @@ class ConfessionsController extends Controller {
 		}
 		return \Response::json(['data' => ['confessions' => $confessions]]);
 	}
-
 }
