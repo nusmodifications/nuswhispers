@@ -58,6 +58,20 @@
                 margin-right: 8px;
                 vertical-align: middle;
             }
+            .show-confession-btn {
+                color: $secondary-text-color;
+            }
+            .show-confession-btn.shown {
+                color: $primary-color;
+            }
+            .show-confession-btn:before {
+                content: '\e0b8';
+                margin-left: 4px;
+                font-family: 'typicons';
+                font-size: 1.6em;
+                position: relative;
+                top: 0.1em;
+            }
             .fb-likes {
                 color: $secondary-text-color;
             }

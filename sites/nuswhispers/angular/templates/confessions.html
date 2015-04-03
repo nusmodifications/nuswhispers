@@ -22,18 +22,19 @@
       <div class="post-text" ng-bind-html="processConfessionContent(confession.content)">
       </div>
       <div class="post-facebook-link">
-        <a href="">View on Facebook</a>
+        <a href="https://www.facebook.com/permalink.php?story_fbid={{confession.fb_post_id}}&id=1448006645491039" target="_blank">View on Facebook</a>
       </div>
     </div>
     <div class="post-footer">
       <span class="typcn typcn-watch"></span><span am-time-ago="confession.created_at_timestamp" am-preprocess="unix" class="post-time"></span>
       <div class="post-media-summary">
         <a href="/#!home" class="tweets-count liked" target="_blank">8</a>
+        <a ng-click="confession.show_comments = !confession.show_comments" ng-class="{shown: confession.show_comments}" class="show-confession-btn" tooltip-placement="bottom" tooltip="{{confession.show_comments ? 'Hide Comments' : 'Show Comments'}}"></a>
         <a href="https://www.facebook.com/permalink.php?story_fbid={{confession.fb_post_id}}&id=1448006645491039" ng-class="{liked: confessionIsLiked(confession)}" class="fb-likes" target="_blank" tooltip-placement="bottom" tooltip="View on Facebook to like">{{confession.facebook_information.likes.summary.total_count}}</a>
         <a ng-click="toggleFavouriteConfession(confession)" ng-class="{liked: confessionIsFavourited(confession)}" class="favs-count" target="_blank" tooltip-placement="bottom" tooltip="{{fbUser.getAccessToken() === '' ? 'Login to Favourite' : ''}}">{{confession.favourites.length}}</a>
       </div>
     </div>
-    <div class="post-comment-list">
+    <div class="post-comment-list" collapse="!confession.show_comments">
       <div ng-repeat="comment in confession.facebook_information.comments.data" class="post-comment">
         <a class="media-left" href="https://www.facebook.com/{{comment.from.id}}" target="_blank">
           <img ng-src="http://graph.facebook.com/{{comment.from.id}}/picture" />
@@ -43,6 +44,9 @@
           <span class="post-time" am-time-ago="comment.created_time"></span>
           <p>{{comment.message}}</p>
         </div>
+      </div>
+      <div class="post-comment">
+        <a href="https://www.facebook.com/permalink.php?story_fbid={{confession.fb_post_id}}&id=1448006645491039" target="_blank">Post a comment on Facebook</a>
       </div>
     </div>
   </div>
