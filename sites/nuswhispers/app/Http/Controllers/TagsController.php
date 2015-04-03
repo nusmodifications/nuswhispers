@@ -12,7 +12,8 @@ class TagsController extends Controller {
 	 * Get all tags in sorted order according to number of posts a tag belongs to.
 	 * @return array [tag1, tag2, ...]
 	 */
-	private function getSortedTags(){
+	private function getSortedTags()
+	{
 		$tags = Tag::get()->sortBy(function($tag)
 		{
 		    return -$tag->confessions()->count();
