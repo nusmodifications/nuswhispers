@@ -24,7 +24,7 @@ class Category extends Model {
 
 	public function confessions()
 	{
-		return $this->belongsToMany('Confession', 'confession_categories', 'confession_category_id', 'confession_id');
+		return $this->belongsToMany('App\Models\Confession', 'confession_categories', 'confession_category_id', 'confession_id');
 	}
 
 	public function scopeCategoryAsc($query)
