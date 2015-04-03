@@ -9,6 +9,18 @@ use Illuminate\Http\Request;
 class TagsController extends Controller {
 
 	/**
+	 * Get all tags in sorted order according to number of posts a tag belongs to.
+	 * @return array [tag1, tag2, ...]
+	 */
+	private function getSortedTags(){
+		$tags = Tag::get()->sortBy(function($tag)
+		{
+		    return -$tag->confessions()->count();
+		});
+		return array_values($tags->toArray());
+	}
+
+	/**
 	 * Get all the existing tags JSON in sorted order
 	 * method: get
 	 * route: api/tags
@@ -16,7 +28,8 @@ class TagsController extends Controller {
 	 */
 	public function index()
 	{
-		return \Response::json(array("data" => array("tags" => Tag::get())));
+		$tags = $this->getSortedTags();
+		return \Response::json(array("data" => array("tags" => $tags)));
 	}
 
 	/**
@@ -28,12 +41,9 @@ class TagsController extends Controller {
 	 */
 	public function topNTags($num)
 	{
-		$tags = Tag::get();
+		$tags = $this->getSortedTags();
 		if ($num  < count($tags)) {
-			$top_n = array();
-			for ($i = 0; $i < $num; $i++) {
-				$top_n[$i] = $tags[$i];
-			}
+			$top_n = array_slice($tags, 0, $num);
 			return \Response::json(array("data" => array("tags" => $top_n)));
 		} else {
 			return \Response::json(array("data" => array("tags" => $tags)));
