@@ -212,4 +212,42 @@ class ConfessionsController extends Controller {
 		return \Response::json(['success' => false]);
 	}
 
+	/**
+	 * Search for confessions which contains the search string
+	 * method: get
+	 * route: api/confessions/search/<searchString>?timestamp=<time>&offset=<offset>&count=<count>
+	 * @param  string $searchString - non-empty string (of length at least 5? - maybe at least 1)
+	 * @return json {"data": {"confessions": [Confession1, confession2, ...]}}
+	 *                           an array of confession json
+	 */
+	public function search($searchString){
+		// The following part is copied from other methods
+		// TODO: change to order by status_updated_at and filter by approved when approval is ready
+		// $confessions = Confession::orderBy('status_updated_at', 'DESC')
+		// 	->approved()
+		// 	->where('content', 'LIKE', '%'.$searchString.'%')->get();
+
+		// Naive search ...
+		$query = Confession::orderBy('status_updated_at', 'DESC')
+			->where('content', 'LIKE', '%'.$searchString.'%');
+
+		// TODO: change to filter by approved when approval is ready
+		// $query->approved();
+
+		if (\Input::get('timestamp')) {
+			$query->where('status_updated_at', '<=', \Input::get('timestamp'));
+		}
+		if (\Input::get('count') > 0) {
+			$query->take(\Input::get('count'));
+			$query->skip(\Input::get('offset'));
+		}
+
+		$confessions = $query->get();
+		foreach ($confessions as $confession) {
+			$confession->created_at_timestamp = $confession->created_at->timestamp;
+			$confession->getFacebookInformation();
+		}
+		return \Response::json(['data' => ['confessions' => $confessions]]);
+	}
+
 }
