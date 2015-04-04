@@ -26,7 +26,7 @@ return [
 	|
 	*/
 
-	'url' => 'http://localhost',
+	'url' => env('APP_URL', 'http://www.nuswhispers.com'),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -146,6 +146,7 @@ return [
 		'App\Providers\EventServiceProvider',
 		'App\Providers\RouteServiceProvider',
 
+        'Laravel\Socialite\SocialiteServiceProvider',
         'SammyK\LaravelFacebookSdk\LaravelFacebookSdkServiceProvider',
 
 	],
@@ -192,6 +193,7 @@ return [
 		'Route'     => 'Illuminate\Support\Facades\Route',
 		'Schema'    => 'Illuminate\Support\Facades\Schema',
 		'Session'   => 'Illuminate\Support\Facades\Session',
+        'Socialize' => 'Laravel\Socialite\Facades\Socialite',
 		'Storage'   => 'Illuminate\Support\Facades\Storage',
 		'URL'       => 'Illuminate\Support\Facades\URL',
 		'Validator' => 'Illuminate\Support\Facades\Validator',

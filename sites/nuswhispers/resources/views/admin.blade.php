@@ -18,6 +18,10 @@
         <div class="whispers-logo-text">NUS<span class="highlight">Whispers</span>Admin</div>
       </a>
       <hr>
+      <ul class="nav main-nav">
+        <li class="{{ Request::is('admin/profile') ? 'active' : '' }}"><a href="/admin/profile"><span class="typcn typcn-user"></span>My Profile</a></li>
+      </ul>
+      <hr>
       <h2 class="nav-section-label">Confessions Management</h2>
       <ul class="nav main-nav">
         <li class="{{ Request::is('admin/confessions/index/pending') || Request::is('admin/confessions') ? 'active' : '' }}">
@@ -34,7 +38,7 @@
       </ul>
       <hr>
       <ul class="nav main-nav">
-        <li class="{{ Request::is('admin/users') ? 'active' : '' }}"><a href="/admin/users"><span class="typcn typcn-user"></span>User Management</a></li>
+        <li class="{{ Request::is('admin/users') ? 'active' : '' }}"><a href="/admin/users"><span class="typcn typcn-group"></span>User Management</a></li>
         <li><a href="/auth/logout"><span class="typcn typcn-eject"></span>Logout</a></li>
       </ul>
     </nav><!-- #sidebar-wrapper -->

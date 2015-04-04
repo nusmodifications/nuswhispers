@@ -16,4 +16,10 @@ abstract class AdminController extends Controller {
         $this->middleware('auth');
     }
 
+    protected function flashMessage($message, $class = 'alert-success')
+    {
+        \Session::flash('message', $message);
+        \Session::flash('alert-class', $class);
+    }
+
 }

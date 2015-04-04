@@ -81,6 +81,13 @@ h1 {
     font-weight: 400;
 }
 
+h2 {
+    font-size: 140%;
+    font-weight: 400;
+    color: $primary-color;
+    margin: 0 0 1em;
+}
+
 .page-header {
     margin-top: 0;
     padding-bottom: 6px;
@@ -173,5 +180,26 @@ h1 {
     }
     .post-content {
         padding: 0 1em 1em;
+    }
+}
+
+.admin-content-wrapper {
+    padding: 0 1em;
+    line-height: 1.5em;
+}
+
+.user-profiles-list {
+
+    margin: 1.5em 0;
+
+    tbody > tr > td {
+        vertical-align: middle;
+    }
+
+    .typcn {
+        font-size: 120%;
+    }
+    .actions {
+        text-align: right;
     }
 }

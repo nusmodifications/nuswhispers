@@ -44,6 +44,7 @@ Route::controllers([
 
 // Admin Routes
 Route::controllers([
+    'admin/profile' => 'Admin\ProfileController',
     'admin/confessions' => 'Admin\ConfessionsAdminController',
     'admin/users' => 'Admin\UsersAdminController',
 ]);
