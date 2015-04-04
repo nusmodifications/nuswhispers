@@ -30,8 +30,8 @@
           <li ng-class="{active: isActivePage('/new/')}">
             <a href="/#!new"><span class="typcn typcn-starburst"></span>New</a>
           </li>
-          <li>
-            <a href="/#!home"><span class="typcn typcn-star-full-outline"></span>Favourites</a>
+          <li ng-show="isLoggedIn" ng-class="{active: isActivePage('/favourites/')}">
+            <a href="/#!favourites"><span class="typcn typcn-star-full-outline"></span>Favourites</a>
           </li>
         </ul>
         <hr>
@@ -60,7 +60,9 @@
             <a class="btn btn-social-media" href="https://www.facebook.com/nuswhispers" target="_blank" tooltip-placement="bottom" tooltip="Check us out on Facebook!"><span class="typcn typcn-social-facebook"></span></a>
             <a class="btn btn-alt-style" href="/#!/submit"><span class="typcn typcn-heart-full-outline"></span> New Confession</a>
             <a ng-show="!isLoggedIn" ng-click="login()" class="btn">Login</a>
-            <a ng-show="isLoggedIn" ng-click="logout()" class="btn">Logout</a>
+            <a ng-show="isLoggedIn" ng-click="logout()" class="btn">
+              Logout<img src="http://graph.facebook.com/{{fbUser.getUserID()}}/picture" />
+            </a>
           </div>
           <form class="search-form" role="search" ng-submit="searchConfessions(searchQuery)">
             <div class="input-group">

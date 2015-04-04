@@ -96,6 +96,17 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
                 }
             }
         })
+        .when('/favourites/', {
+            templateUrl: 'assets/templates/confessions.html',
+            controller: 'ConfessionsController',
+            resolve: {
+                controllerOptions: function () {
+                    return {
+                        view: 'favourites'
+                    };
+                }
+            }
+        })
         .when('/submit/', {
             templateUrl: 'assets/templates/submit.html',
             controller: 'SubmitController'
@@ -129,167 +140,6 @@ app.run(['$rootScope', function ($rootScope) {
 
 /* ---> Do not delete this comment (Constants) <--- */
 
-angular.module('nuswhispersApp.services')
-.factory('Category', function ($http) {
-    'use strict';
-    return {
-        getAll: function () {
-            return $http.get('/api/categories');
-        }
-    };
-});
-
-angular.module('nuswhispersApp.services')
-.factory('Confession', function ($http) {
-    'use strict';
-
-    function Confession(confessionData) {
-        if (confessionData) {
-            this.setData(confessionData);
-        }
-    }
-
-    Confession.submit = function (confessionData) {
-        return $http({
-            method: 'POST',
-            url: '/api/confessions',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            data: $.param(confessionData)
-        });
-    };
-
-    Confession.getConfessionById = function (confessionID) {
-        return $http({
-            method: 'GET',
-            url: '/api/confessions/' + confessionID
-        });
-    };
-
-    Confession.getFeatured = function (timestamp, offset, count) {
-        return $http({
-            method: 'GET',
-            url: '/api/confessions',
-            params: {timestamp: timestamp, offset: offset, count: count}
-        });
-    };
-
-    Confession.getPopular = function (timestamp, offset, count) {
-        return $http({
-            method: 'GET',
-            url: '/api/confessions/popular',
-            params: {timestamp: timestamp, offset: offset, count: count}
-        });
-    };
-
-    Confession.getRecent = function (timestamp, offset, count) {
-        return $http({
-            method: 'GET',
-            url: '/api/confessions/recent',
-            params: {timestamp: timestamp, offset: offset, count: count}
-        });
-    };
-
-    Confession.getCategory = function (categoryID, timestamp, offset, count) {
-        return $http({
-            method: 'GET',
-            url: '/api/confessions/category/' + categoryID,
-            params: {timestamp: timestamp, offset: offset, count: count}
-        });
-    };
-
-    Confession.getTag = function (tag, timestamp, offset, count) {
-        return $http({
-            method: 'GET',
-            url: '/api/confessions/tag/' + tag,
-            params: {timestamp: timestamp, offset: offset, count: count}
-        });
-    };
-
-    Confession.search = function (query, timestamp, offset, count) {
-        return $http({
-            method: 'GET',
-            url: '/api/confessions/search/' + escape(query),
-            params: {timestamp: timestamp, offset: offset, count: count}
-        });
-    };
-
-    Confession.prototype = {
-        setData: function (confessionData) {
-            angular.extend(this, confessionData);
-        },
-        load: function () {
-            var confession = this;
-            $http.get('/api/confessions/' + confession.confession_id).success(function (response) {
-                if (response.success) {
-                    confession.setData(response.data.confession);
-                }
-            });
-        },
-        favourite: function () {
-            return $http({
-                method: 'POST',
-                url: '/api/fbuser/favourite',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                data: $.param({'confession_id': this.confession_id})
-            });
-        },
-        unfavourite: function () {
-            return $http({
-                method: 'POST',
-                url: '/api/fbuser/unfavourite',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                data: $.param({'confession_id': this.confession_id})
-            });
-        }
-    };
-
-    return Confession;
-});
-
-angular.module('nuswhispersApp.services')
-.factory('FacebookUser', function ($http) {
-    'use strict';
-
-    var data = {
-        accessToken: '',
-        userID: '',
-        pageID: '1448006645491039'
-    };
-
-    return {
-        login: function () {
-            return $http({
-                method: 'POST',
-                url: '/api/fbuser/login/',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                data: $.param({'fb_access_token': data.accessToken})
-            });
-        },
-        setAccessToken: function (accessToken) {
-            data.accessToken = accessToken;
-        },
-        getAccessToken: function () {
-            return data.accessToken;
-        },
-        setUserID: function (userID) {
-            data.userID = userID;
-        },
-        getUserID: function () {
-            return data.userID;
-        }
-    };
-});
-
-angular.module('nuswhispersApp.services')
-.factory('Tag', function ($http) {
-    'use strict';
-    return {
-        getTop: function (n) {
-            return $http.get('/api/tags/top/' + n);
-        }
-    };
-});
-
 angular.module('nuswhispersApp.controllers')
 .controller('ConfessionsController', function ($scope, $routeParams, Confession, Facebook, FacebookUser, controllerOptions) {
     'use strict';
@@ -311,6 +161,7 @@ angular.module('nuswhispersApp.controllers')
         }
 
         $scope.loadingConfessions = true;
+        $scope.view = controllerOptions.view;
         switch (controllerOptions.view) {
             case 'single':
                 Confession.getConfessionById($routeParams.confession)
@@ -351,6 +202,17 @@ angular.module('nuswhispersApp.controllers')
                     .success(function (response) {
                         processConfessionResponse(response.data.confessions);
                     });
+                break;
+            case 'favourites':
+                Confession.getFavourites($scope.timestamp, $scope.offset, $scope.count)
+                .success(function (response) {
+                    if (response.success) {
+                        processConfessionResponse(response.data.confessions);
+                    } else {
+                        $scope.doLoadMoreConfessions = false;
+                        $scope.loadingConfessions = false;
+                    }
+                });
                 break;
             default:
                 Confession.getFeatured($scope.timestamp, $scope.offset, $scope.count)
@@ -436,11 +298,12 @@ angular.module('nuswhispersApp.controllers')
 });
 
 angular.module('nuswhispersApp.controllers')
-.controller('MainController', function ($scope, $location, Facebook, FacebookUser, Tag, Category) {
+.controller('MainController', function ($scope, $location, $route, Facebook, FacebookUser, Tag, Category) {
     'use strict';
 
     $scope.sidebarOpenedClass = '';
     $scope.isLoggedIn = false;
+    $scope.fbUser = FacebookUser;
 
     // Load all categories onto sidebar
     Category.getAll().success(function (response) {
@@ -474,6 +337,7 @@ angular.module('nuswhispersApp.controllers')
 
     $scope.logout = function () {
         Facebook.logout(function (response) {
+            FacebookUser.logout();
             $scope.getLoginStatus();
         });
     };
@@ -589,4 +453,180 @@ angular.module('nuswhispersApp.controllers')
         $scope.contentTagHighlights = $scope.contentTagHighlights.replace(/(?:\r\n|\r|\n)/g, '<br>');
     };
 
+});
+
+angular.module('nuswhispersApp.services')
+.factory('Category', function ($http) {
+    'use strict';
+    return {
+        getAll: function () {
+            return $http.get('/api/categories');
+        }
+    };
+});
+
+angular.module('nuswhispersApp.services')
+.factory('Confession', function ($http) {
+    'use strict';
+
+    function Confession(confessionData) {
+        if (confessionData) {
+            this.setData(confessionData);
+        }
+    }
+
+    Confession.submit = function (confessionData) {
+        return $http({
+            method: 'POST',
+            url: '/api/confessions',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            data: $.param(confessionData)
+        });
+    };
+
+    Confession.getConfessionById = function (confessionID) {
+        return $http({
+            method: 'GET',
+            url: '/api/confessions/' + confessionID
+        });
+    };
+
+    Confession.getFeatured = function (timestamp, offset, count) {
+        return $http({
+            method: 'GET',
+            url: '/api/confessions',
+            params: {timestamp: timestamp, offset: offset, count: count}
+        });
+    };
+
+    Confession.getPopular = function (timestamp, offset, count) {
+        return $http({
+            method: 'GET',
+            url: '/api/confessions/popular',
+            params: {timestamp: timestamp, offset: offset, count: count}
+        });
+    };
+
+    Confession.getRecent = function (timestamp, offset, count) {
+        return $http({
+            method: 'GET',
+            url: '/api/confessions/recent',
+            params: {timestamp: timestamp, offset: offset, count: count}
+        });
+    };
+
+    Confession.getCategory = function (categoryID, timestamp, offset, count) {
+        return $http({
+            method: 'GET',
+            url: '/api/confessions/category/' + categoryID,
+            params: {timestamp: timestamp, offset: offset, count: count}
+        });
+    };
+
+    Confession.getTag = function (tag, timestamp, offset, count) {
+        return $http({
+            method: 'GET',
+            url: '/api/confessions/tag/' + tag,
+            params: {timestamp: timestamp, offset: offset, count: count}
+        });
+    };
+
+    Confession.search = function (query, timestamp, offset, count) {
+        return $http({
+            method: 'GET',
+            url: '/api/confessions/search/' + escape(query),
+            params: {timestamp: timestamp, offset: offset, count: count}
+        });
+    };
+
+    Confession.getFavourites = function (timestamp, offset, count) {
+        return $http({
+            method: 'GET',
+            url: '/api/confessions/favourites/',
+            params: {timestamp: timestamp, offset: offset, count: count}
+        });
+    };
+
+    Confession.prototype = {
+        setData: function (confessionData) {
+            angular.extend(this, confessionData);
+        },
+        load: function () {
+            var confession = this;
+            $http.get('/api/confessions/' + confession.confession_id).success(function (response) {
+                if (response.success) {
+                    confession.setData(response.data.confession);
+                }
+            });
+        },
+        favourite: function () {
+            return $http({
+                method: 'POST',
+                url: '/api/fbuser/favourite',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                data: $.param({'confession_id': this.confession_id})
+            });
+        },
+        unfavourite: function () {
+            return $http({
+                method: 'POST',
+                url: '/api/fbuser/unfavourite',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                data: $.param({'confession_id': this.confession_id})
+            });
+        }
+    };
+
+    return Confession;
+});
+
+angular.module('nuswhispersApp.services')
+.factory('FacebookUser', function ($http) {
+    'use strict';
+
+    var data = {
+        accessToken: '',
+        userID: '',
+        pageID: '1448006645491039'
+    };
+
+    return {
+        login: function () {
+            return $http({
+                method: 'POST',
+                url: '/api/fbuser/login/',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                data: $.param({'fb_access_token': data.accessToken})
+            });
+        },
+        logout: function () {
+            return $http({
+                method: 'POST',
+                url: '/api/fbuser/logout/',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            });
+        },
+        setAccessToken: function (accessToken) {
+            data.accessToken = accessToken;
+        },
+        getAccessToken: function () {
+            return data.accessToken;
+        },
+        setUserID: function (userID) {
+            data.userID = userID;
+        },
+        getUserID: function () {
+            return data.userID;
+        }
+    };
+});
+
+angular.module('nuswhispersApp.services')
+.factory('Tag', function ($http) {
+    'use strict';
+    return {
+        getTop: function (n) {
+            return $http.get('/api/tags/top/' + n);
+        }
+    };
 });

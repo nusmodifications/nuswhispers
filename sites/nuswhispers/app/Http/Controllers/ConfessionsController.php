@@ -2,6 +2,7 @@
 
 use App\Models\Tag as Tag;
 use App\Models\Confession as Confession;
+use App\Models\FbUser as FbUser;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -144,6 +145,37 @@ class ConfessionsController extends Controller {
 			$confession->getFacebookInformation();
 		}
 		return \Response::json(['data' => ['confessions' => $confessions]]);
+	}
+
+	public function favourites()
+	{
+		$fbUserId = \Session::get('fb_user_id');
+		if ($fbUserId) {
+			$query = Confession::select(\DB::raw('confessions.*'))
+			->join('favourites', 'confessions.confession_id' , '=', 'favourites.confession_id')
+			->where('favourites.fb_user_id', '=', $fbUserId)
+			->with('favourites')
+			->with('categories');
+			// TODO: change to order by status_updated_at and filter by approved when approval is ready
+			// $query = Confession::orderBy('status_updated_at', 'DESC');
+			// $query->approved();
+
+			if (\Input::get('timestamp')) {
+				$query->where('status_updated_at', '<=', \Input::get('timestamp'));
+			}
+			if (\Input::get('count') > 0) {
+				$query->take(\Input::get('count'));
+				$query->skip(\Input::get('offset'));
+			}
+
+			$confessions = $query->get();
+			foreach ($confessions as $confession) {
+				$confession->created_at_timestamp = $confession->created_at->timestamp;
+				$confession->getFacebookInformation();
+			}
+			return \Response::json(['success' => true, 'data' => ['confessions' => $confessions]]);
+		}
+		return \Response::json(['success' => false, 'errors' =>['User not logged in.']]);
 	}
 
 	/**

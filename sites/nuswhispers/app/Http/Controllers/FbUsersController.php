@@ -30,6 +30,12 @@ class FbUsersController extends Controller {
         return \Response::json(['success' => false]);
     }
 
+    public function postLogout()
+    {
+        \Session::forget('fb_user_id');
+        return \Response::json(['success' => true]);
+    }
+
     // add a confession to user's favourites
     public function postFavourite()
     {

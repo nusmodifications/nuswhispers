@@ -1,9 +1,10 @@
 angular.module('nuswhispersApp.controllers')
-.controller('MainController', function ($scope, $location, Facebook, FacebookUser, Tag, Category) {
+.controller('MainController', function ($scope, $location, $route, Facebook, FacebookUser, Tag, Category) {
     'use strict';
 
     $scope.sidebarOpenedClass = '';
     $scope.isLoggedIn = false;
+    $scope.fbUser = FacebookUser;
 
     // Load all categories onto sidebar
     Category.getAll().success(function (response) {
@@ -37,6 +38,7 @@ angular.module('nuswhispersApp.controllers')
 
     $scope.logout = function () {
         Facebook.logout(function (response) {
+            FacebookUser.logout();
             $scope.getLoginStatus();
         });
     };

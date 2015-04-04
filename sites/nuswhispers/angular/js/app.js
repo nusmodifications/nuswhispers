@@ -96,6 +96,17 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
                 }
             }
         })
+        .when('/favourites/', {
+            templateUrl: 'assets/templates/confessions.html',
+            controller: 'ConfessionsController',
+            resolve: {
+                controllerOptions: function () {
+                    return {
+                        view: 'favourites'
+                    };
+                }
+            }
+        })
         .when('/submit/', {
             templateUrl: 'assets/templates/submit.html',
             controller: 'SubmitController'

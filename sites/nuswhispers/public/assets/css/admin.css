@@ -4971,6 +4971,9 @@ a:focus {
       font-size: 14px;
       line-height: 20px;
       height: 35px; }
+    #topbar-wrapper #topbar-nav .btn img {
+      height: 1.6em;
+      margin-left: 0.4em; }
     #topbar-wrapper #topbar-nav .btn-social-media {
       line-height: normal;
       font-size: 24px;
