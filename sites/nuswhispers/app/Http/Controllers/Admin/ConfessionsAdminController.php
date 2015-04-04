@@ -58,13 +58,13 @@ class ConfessionsAdminController extends AdminController {
                     'url'  => $confession->images,
                 ], $this->getPageToken())->getGraphObject();
 
-                $confession->fb_post_id = $response['post_id'];
+                $confession->fb_post_id = explode('_', $response['post_id'])[1];
             } else {
                 $response = \Facebook::post('/' . env('FACEBOOK_PAGE_ID', '') . '/feed', [
                     'message' => $confession->content,
                 ], $this->getPageToken())->getGraphObject();
 
-                $confession->fb_post_id = $response['id'];
+                $confession->fb_post_id = explode('_', $response['id'])[1];
             }
 
             // @TODO: Log the approval
@@ -74,7 +74,6 @@ class ConfessionsAdminController extends AdminController {
 
             $this->flashMessage('Confession successfully approved and posted.');
         } catch (\Exception $e) {
-            var_dump($e);
             $this->flashMessage('Error approving confession: ' . $e->getMessage(), 'alert-danger');
         }
 
@@ -89,7 +88,7 @@ class ConfessionsAdminController extends AdminController {
 
         try {
             if ($confession->fb_post_id) {
-                \Facebook::delete('/' . $confession->fb_post_id, [], $this->getPageToken());
+                \Facebook::delete('/' . env('FACEBOOK_PAGE_ID', '') . '_' . $confession->fb_post_id, [], $this->getPageToken());
             }
 
             // @TODO: Log the approval
@@ -100,7 +99,6 @@ class ConfessionsAdminController extends AdminController {
 
             $this->flashMessage('Confession(s) successfully rejected.');
         } catch (\Exception $e) {
-            var_dump($e);
             $this->flashMessage('Error rejecting confession: ' . $e->getMessage(), 'alert-danger');
         }
 
@@ -125,7 +123,7 @@ class ConfessionsAdminController extends AdminController {
 
         try {
             if ($confession->fb_post_id) {
-                \Facebook::delete('/' . $confession->fb_post_id, [], $this->getPageToken());
+                \Facebook::delete('/' . env('FACEBOOK_PAGE_ID', '') . '_' . $confession->fb_post_id, [], $this->getPageToken());
             }
 
             // @TODO: Log the approval
@@ -134,7 +132,6 @@ class ConfessionsAdminController extends AdminController {
 
             $this->flashMessage('Confession(s) successfully deleted.');
         } catch (\Exception $e) {
-            var_dump($e);
             $this->flashMessage('Error approving confession: ' . $e->getMessage(), 'alert-danger');
         }
 
