@@ -35,16 +35,29 @@
         <div class="post-meta">
           <span class="typcn typcn-watch"></span>
           Posted {{ $confession->created_at->diffForHumans() }}
+          @if ($confession->status == 'Featured')
+          <span class="label label-success">Featured</span>
+          @endif
+          @if ($confession->status == 'Approved')
+          <span class="label label-primary">Approved</span>
+          @endif
+          @if ($confession->status == 'Rejected')
+          <span class="label label-danger">Rejected</span>
+          @endif
         </div>
         <div class="post-actions">
+          @if ($confession->status != 'Approved')
           <a class="btn btn-sm btn-primary" href="/admin/confessions/approve/{{ $confession->confession_id }}">
             Approve
           </a>
+          @endif
+          @if ($confession->status != 'Rejected')
+          <a class="btn btn-sm btn-primary" href="/admin/confessions/reject/{{ $confession->confession_id }}">
+            Reject
+          </a>
+          @endif
           <a class="btn btn-sm" href="/admin/confessions/edit/{{ $confession->confession_id }}">
             Edit
-          </a>
-          <a class="btn btn-sm" href="/admin/confessions/reject/{{ $confession->confession_id }}">
-            Reject
           </a>
           <a class="btn btn-sm btn-danger" href="/admin/confessions/delete/{{ $confession->confession_id }}">
             Delete
@@ -52,6 +65,7 @@
         </div>
       </div>
       <div class="post-content">{{ $confession->content }}</div>
+      <div class="post-image">{{ $confession->images }}</div>
     </div>
     @endforeach
   </div>
