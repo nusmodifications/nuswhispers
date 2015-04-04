@@ -24,11 +24,11 @@ class ProfileController extends AdminController {
                 $this->addProfile($provider, \Auth::user(), \Socialize::with($provider)->user());
                 $this->flashMessage('Sucessfully connected to ' . ucfirst($provider) . '.');
             } catch (\Exception $e) {
-                $this->flashMessage('Error connecting to provider: ' . $e->getMessage(), 'alert-error');
+                $this->flashMessage('Error connecting to provider: ' . $e->getMessage(), 'alert-danger');
             }
             return redirect('/admin/profile');
         } else {
-            $scopes = $provider == 'facebook' ? ['manage_pages', 'publish_pages'] : [];
+            $scopes = $provider == 'facebook' ? ['manage_pages', 'publish_pages', 'publish_actions'] : [];
             return \Socialize::with($provider)->scopes($scopes)->redirect();
         }
     }

@@ -40,19 +40,106 @@ class ConfessionsAdminController extends AdminController {
 
     }
 
-    public function postApprove()
-    {
-
-    }
-
     public function postEdit()
     {
 
     }
 
-    public function postDelete()
+    public function getApprove($id)
     {
+        // @TODO: Move this to a repository
+        $confession = Confession::findOrFail($id);
 
+        try {
+            // Post confession to Facebook
+            if ($confession->images) {
+                $response = \Facebook::post('/' . env('FACEBOOK_PAGE_ID', '') . '/photos', [
+                    'message' => $confession->content,
+                    'url'  => $confession->images,
+                ], $this->getPageToken())->getGraphObject();
+
+                $confession->fb_post_id = $response['post_id'];
+            } else {
+                $response = \Facebook::post('/' . env('FACEBOOK_PAGE_ID', '') . '/feed', [
+                    'message' => $confession->content,
+                ], $this->getPageToken())->getGraphObject();
+
+                $confession->fb_post_id = $response['id'];
+            }
+
+            // @TODO: Log the approval
+
+            $confession->status = 'Approved';
+            $confession->save();
+
+            $this->flashMessage('Confession successfully approved and posted.');
+        } catch (\Exception $e) {
+            var_dump($e);
+            $this->flashMessage('Error approving confession: ' . $e->getMessage(), 'alert-danger');
+        }
+
+        // @TODO: Redirect to last visited page
+        return redirect('/admin/confessions');
+    }
+
+    public function getReject($id)
+    {
+        // @TODO: Move this to a repository
+        $confession = Confession::findOrFail($id);
+
+        try {
+            if ($confession->fb_post_id) {
+                \Facebook::delete('/' . $confession->fb_post_id, [], $this->getPageToken());
+            }
+
+            // @TODO: Log the approval
+
+            $confession->fb_post_id = '';
+            $confession->status = 'Rejected';
+            $confession->save();
+
+            $this->flashMessage('Confession(s) successfully rejected.');
+        } catch (\Exception $e) {
+            var_dump($e);
+            $this->flashMessage('Error rejecting confession: ' . $e->getMessage(), 'alert-danger');
+        }
+
+        $this->flashMessage('Confession(s) successfully rejected.');
+
+        // @TODO: Redirect to last visited page
+        return redirect('/admin/confessions');
+    }
+
+    protected function getPageToken()
+    {
+        $profile = \Auth::user()->profiles()->where('provider_name', '=', 'facebook')->get();
+        if (count($profile) !== 1) {
+            return false;
+        }
+        return $profile[0]->page_token;
+    }
+
+    public function getDelete($id)
+    {
+        $confession = Confession::findOrFail($id);
+
+        try {
+            if ($confession->fb_post_id) {
+                \Facebook::delete('/' . $confession->fb_post_id, [], $this->getPageToken());
+            }
+
+            // @TODO: Log the approval
+
+            $confession->delete();
+
+            $this->flashMessage('Confession(s) successfully deleted.');
+        } catch (\Exception $e) {
+            var_dump($e);
+            $this->flashMessage('Error approving confession: ' . $e->getMessage(), 'alert-danger');
+        }
+
+        // @TODO: Redirect to last visited page
+        return redirect('/admin/confessions');
     }
 
 }

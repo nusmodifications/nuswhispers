@@ -11,6 +11,8 @@
     </div>
   </div>
 
+  @include('message')
+
   <ul class="nav nav-tabs">
     <li class="{{ Request::is('admin/confessions/index/all') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/all">All</a></li>
     <li class="{{ Request::is('admin/confessions') || Request::is('admin/confessions/index/pending') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/pending">Pending ({{ \App\Models\Confession::pending()->count() }})</a></li>
@@ -35,16 +37,16 @@
           Posted {{ $confession->created_at->diffForHumans() }}
         </div>
         <div class="post-actions">
-          <a class="btn btn-sm btn-primary" href="#">
+          <a class="btn btn-sm btn-primary" href="/admin/confessions/approve/{{ $confession->confession_id }}">
             Approve
           </a>
           <a class="btn btn-sm" href="/admin/confessions/edit/{{ $confession->confession_id }}">
             Edit
           </a>
-          <a class="btn btn-sm" href="#">
+          <a class="btn btn-sm" href="/admin/confessions/reject/{{ $confession->confession_id }}">
             Reject
           </a>
-          <a class="btn btn-sm btn-danger" href="#">
+          <a class="btn btn-sm btn-danger" href="/admin/confessions/delete/{{ $confession->confession_id }}">
             Delete
           </a>
         </div>
