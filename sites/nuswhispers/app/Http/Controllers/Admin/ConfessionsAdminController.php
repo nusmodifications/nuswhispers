@@ -72,13 +72,10 @@ class ConfessionsAdminController extends AdminController {
             $confession->status = 'Approved';
             $confession->save();
 
-            $this->flashMessage('Confession successfully approved and posted.');
+            return \Redirect::back()->withMessage('Confession successfully approved and posted.')->with('alert-class', 'alert-success');
         } catch (\Exception $e) {
-            $this->flashMessage('Error approving confession: ' . $e->getMessage(), 'alert-danger');
+            return \Redirect::back()->withMessage('Error approving confession: ' . $e->getMessage())->with('alert-class', 'alert-danger');
         }
-
-        // @TODO: Redirect to last visited page
-        return redirect('/admin/confessions');
     }
 
     public function getReject($id)
@@ -97,15 +94,10 @@ class ConfessionsAdminController extends AdminController {
             $confession->status = 'Rejected';
             $confession->save();
 
-            $this->flashMessage('Confession(s) successfully rejected.');
+            return \Redirect::back()->withMessage('Confession successfully rejected.')->with('alert-class', 'alert-success');
         } catch (\Exception $e) {
-            $this->flashMessage('Error rejecting confession: ' . $e->getMessage(), 'alert-danger');
+            return \Redirect::back()->withMessage('Error rejecting confession: ' . $e->getMessage())->with('alert-class', 'alert-danger');
         }
-
-        $this->flashMessage('Confession(s) successfully rejected.');
-
-        // @TODO: Redirect to last visited page
-        return redirect('/admin/confessions');
     }
 
     protected function getPageToken()
@@ -130,13 +122,10 @@ class ConfessionsAdminController extends AdminController {
 
             $confession->delete();
 
-            $this->flashMessage('Confession(s) successfully deleted.');
+            return \Redirect::back()->withMessage('Confession successfully deleted.')->with('alert-class', 'alert-success');
         } catch (\Exception $e) {
-            $this->flashMessage('Error approving confession: ' . $e->getMessage(), 'alert-danger');
+            return \Redirect::back()->withMessage('Error deleting confession: ' . $e->getMessage())->with('alert-class', 'alert-danger');
         }
-
-        // @TODO: Redirect to last visited page
-        return redirect('/admin/confessions');
     }
 
 }
