@@ -25,9 +25,9 @@ class CategoriesController extends Controller {
 	 * @param  int $category_id
 	 * @return json {"success": true or false, "data": {"category": category}};
 	 */
-	public function show($category_id)
+	public function show($categoryd)
 	{
-		$category = Category::find($category_id);
+		$category = Category::find($categoryId);
 		if ($category == NULL) {
 			return \Response::json(array("success" => false));
 		}

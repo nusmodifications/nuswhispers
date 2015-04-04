@@ -2,6 +2,7 @@
 
 use App\Models\Tag as Tag;
 use App\Models\Confession as Confession;
+use App\Models\FbUser as FbUser;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -67,7 +68,7 @@ class ConfessionsController extends Controller {
 	{
 		$query = Confession::select(\DB::raw('confessions.*'))
 			->join('favourites', 'confessions.confession_id' , '=', 'favourites.confession_id')
-			->groupBy('favourites.fb_user_id')
+			->groupBy('confessions.confession_id')
 			->orderByRaw('COUNT(favourites.fb_user_id) DESC')
 			->with('favourites')
 			->with('categories');
@@ -146,6 +147,37 @@ class ConfessionsController extends Controller {
 		return \Response::json(['data' => ['confessions' => $confessions]]);
 	}
 
+	public function favourites()
+	{
+		$fbUserId = \Session::get('fb_user_id');
+		if ($fbUserId) {
+			$query = Confession::select(\DB::raw('confessions.*'))
+			->join('favourites', 'confessions.confession_id' , '=', 'favourites.confession_id')
+			->where('favourites.fb_user_id', '=', $fbUserId)
+			->with('favourites')
+			->with('categories');
+			// TODO: change to order by status_updated_at and filter by approved when approval is ready
+			// $query = Confession::orderBy('status_updated_at', 'DESC');
+			// $query->approved();
+
+			if (\Input::get('timestamp')) {
+				$query->where('status_updated_at', '<=', \Input::get('timestamp'));
+			}
+			if (\Input::get('count') > 0) {
+				$query->take(\Input::get('count'));
+				$query->skip(\Input::get('offset'));
+			}
+
+			$confessions = $query->get();
+			foreach ($confessions as $confession) {
+				$confession->created_at_timestamp = $confession->created_at->timestamp;
+				$confession->getFacebookInformation();
+			}
+			return \Response::json(['success' => true, 'data' => ['confessions' => $confessions]]);
+		}
+		return \Response::json(['success' => false, 'errors' =>['User not logged in.']]);
+	}
+
 	/**
 	 * Store a newly created resource in storage.
 	 *
@@ -212,4 +244,38 @@ class ConfessionsController extends Controller {
 		return \Response::json(['success' => false]);
 	}
 
+	/**
+	 * Search for confessions which contains the search string
+	 * method: get
+	 * route: api/confessions/search/<searchString>?timestamp=<time>&offset=<offset>&count=<count>
+	 * @param  string $searchString - non-empty string (of length at least 5? - maybe at least 1)
+	 * @return json {"data": {"confessions": [Confession1, confession2, ...]}}
+	 *                           an array of confession json
+	 */
+	public function search($searchString)
+	{
+		// Naive search ...
+		$query = Confession::orderBy('status_updated_at', 'DESC')
+			->where('content', 'LIKE', '%'.$searchString.'%')
+			->with('favourites')
+			->with('categories');
+
+		// TODO: change to filter by approved when approval is ready
+		// $query->approved();
+
+		if (\Input::get('timestamp')) {
+			$query->where('status_updated_at', '<=', \Input::get('timestamp'));
+		}
+		if (\Input::get('count') > 0) {
+			$query->take(\Input::get('count'));
+			$query->skip(\Input::get('offset'));
+		}
+
+		$confessions = $query->get();
+		foreach ($confessions as $confession) {
+			$confession->created_at_timestamp = $confession->created_at->timestamp;
+			$confession->getFacebookInformation();
+		}
+		return \Response::json(['data' => ['confessions' => $confessions]]);
+	}
 }

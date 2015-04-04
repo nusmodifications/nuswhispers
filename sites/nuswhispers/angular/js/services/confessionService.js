@@ -64,6 +64,22 @@ angular.module('nuswhispersApp.services')
         });
     };
 
+    Confession.search = function (query, timestamp, offset, count) {
+        return $http({
+            method: 'GET',
+            url: '/api/confessions/search/' + escape(query),
+            params: {timestamp: timestamp, offset: offset, count: count}
+        });
+    };
+
+    Confession.getFavourites = function (timestamp, offset, count) {
+        return $http({
+            method: 'GET',
+            url: '/api/confessions/favourites/',
+            params: {timestamp: timestamp, offset: offset, count: count}
+        });
+    };
+
     Confession.prototype = {
         setData: function (confessionData) {
             angular.extend(this, confessionData);

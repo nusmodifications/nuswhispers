@@ -17,6 +17,13 @@ angular.module('nuswhispersApp.services')
                 data: $.param({'fb_access_token': data.accessToken})
             });
         },
+        logout: function () {
+            return $http({
+                method: 'POST',
+                url: '/api/fbuser/logout/',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            });
+        },
         setAccessToken: function (accessToken) {
             data.accessToken = accessToken;
         },

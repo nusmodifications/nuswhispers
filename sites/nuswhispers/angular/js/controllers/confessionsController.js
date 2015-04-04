@@ -19,6 +19,7 @@ angular.module('nuswhispersApp.controllers')
         }
 
         $scope.loadingConfessions = true;
+        $scope.view = controllerOptions.view;
         switch (controllerOptions.view) {
             case 'single':
                 Confession.getConfessionById($routeParams.confession)
@@ -53,6 +54,23 @@ angular.module('nuswhispersApp.controllers')
                     .success(function (response) {
                         processConfessionResponse(response.data.confessions);
                     });
+                break;
+            case 'search':
+                Confession.search($routeParams.query, $scope.timestamp, $scope.offset, $scope.count)
+                    .success(function (response) {
+                        processConfessionResponse(response.data.confessions);
+                    });
+                break;
+            case 'favourites':
+                Confession.getFavourites($scope.timestamp, $scope.offset, $scope.count)
+                .success(function (response) {
+                    if (response.success) {
+                        processConfessionResponse(response.data.confessions);
+                    } else {
+                        $scope.doLoadMoreConfessions = false;
+                        $scope.loadingConfessions = false;
+                    }
+                });
                 break;
             default:
                 Confession.getFeatured($scope.timestamp, $scope.offset, $scope.count)
