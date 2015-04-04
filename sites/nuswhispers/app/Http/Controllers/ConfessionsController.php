@@ -67,7 +67,7 @@ class ConfessionsController extends Controller {
 	{
 		$query = Confession::select(\DB::raw('confessions.*'))
 			->join('favourites', 'confessions.confession_id' , '=', 'favourites.confession_id')
-			->groupBy('favourites.fb_user_id')
+			->groupBy('confessions.confession_id')
 			->orderByRaw('COUNT(favourites.fb_user_id) DESC')
 			->with('favourites')
 			->with('categories');
