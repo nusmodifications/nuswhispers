@@ -149,7 +149,7 @@ gulp.task('concat:js', ['js:hint'], function () {
     console.log('-------------------------------------------------- CONCAT :js');
     gulp.src([SETTINGS.src.js + 'plugins/*.js', SETTINGS.src.js + 'app.js', SETTINGS.src.js + '*.js', SETTINGS.src.js + '**/*.js'])
         .pipe(gulpPlugins.concat('all.js'))
-        .pipe(gulpPlugins.if(isProduction, gulpPlugins.uglify()))
+        .pipe(gulpPlugins.if(isProduction, gulpPlugins.uglify({ mangle: false })))
         .pipe(gulp.dest(SETTINGS.build.js))
         .pipe(gulpPlugins.connect.reload());
 
