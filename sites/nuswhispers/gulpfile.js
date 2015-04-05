@@ -135,9 +135,11 @@ gulp.task('concat:bower', function () {
             callback(null, file);
         }))
         .pipe(gulpPlugins.concat('_bower.css'))
+        .pipe(gulpPlugins.if(isProduction, gulpPlugins.minifyCss({keepSpecialComments: '*'})))
         .pipe(gulp.dest(SETTINGS.build.bower))
         .pipe(cssFilter.restore())
         .pipe(assetsFilter)
+        .pipe(gulpPlugins.if(isProduction, gulpPlugins.minifyCss({keepSpecialComments: '*'})))
         .pipe(gulp.dest(SETTINGS.build.bower))
         .pipe(assetsFilter.restore())
         .pipe(gulpPlugins.connect.reload());
