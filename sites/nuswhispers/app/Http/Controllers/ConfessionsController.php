@@ -19,13 +19,11 @@ class ConfessionsController extends Controller {
 	{
 		$query = Confession::with('categories')
 			->with('favourites')
-			->orderBy('created_at', 'DESC');
+			->featured()
+			->orderBy('updated_at', 'DESC');
 
-		// TODO: change to order by status_updated_at and filter by featured when approval is ready
-		// $query = Confession::orderBy('status_updated_at', 'DESC');
-		$query->featured();
 		if (\Input::get('timestamp')) {
-			$query->where('status_updated_at', '<=', \Input::get('timestamp'));
+			$query->whereRaw('UNIX_TIMESTAMP(updated_at) <=' . \Input::get('timestamp'));
 		}
 		if (\Input::get('count') > 0) {
 			$query->take(\Input::get('count'));
@@ -34,7 +32,7 @@ class ConfessionsController extends Controller {
 
 		$confessions = $query->get();
 		foreach ($confessions as $confession) {
-			$confession->created_at_timestamp = $confession->created_at->timestamp;
+			$confession->updated_at_timestamp = $confession->updated_at->timestamp;
 			$confession->getFacebookInformation();
 		}
 
@@ -43,12 +41,13 @@ class ConfessionsController extends Controller {
 
 	public function recent()
 	{
-		$query = Confession::with('categories')->with('favourites')->orderBy('created_at', 'DESC');
-		// TODO: change to order by status_updated_at and filter by approved when approval is ready
-		// $query = Confession::orderBy('status_updated_at', 'DESC');
-		// $query->approved();
+		$query = Confession::with('categories')
+			->with('favourites')
+			->approved()
+			->orderBy('updated_at', 'DESC');
+
 		if (\Input::get('timestamp')) {
-			$query->where('status_updated_at', '<=', \Input::get('timestamp'));
+			$query->whereRaw('UNIX_TIMESTAMP(updated_at) <=' . \Input::get('timestamp'));
 		}
 		if (\Input::get('count') > 0) {
 			$query->take(\Input::get('count'));
@@ -57,7 +56,7 @@ class ConfessionsController extends Controller {
 
 		$confessions = $query->get();
 		foreach ($confessions as $confession) {
-			$confession->created_at_timestamp = $confession->created_at->timestamp;
+			$confession->updated_at_timestamp = $confession->updated_at->timestamp;
 			$confession->getFacebookInformation();
 		}
 
@@ -70,14 +69,13 @@ class ConfessionsController extends Controller {
 			->join('favourites', 'confessions.confession_id' , '=', 'favourites.confession_id')
 			->groupBy('confessions.confession_id')
 			->orderByRaw('COUNT(favourites.fb_user_id) DESC')
+			->orderBy('updated_at', 'DESC')
+			->approved()
 			->with('favourites')
 			->with('categories');
-		// TODO: change to order by status_updated_at and filter by approved when approval is ready
-		// $query = Confession::orderBy('status_updated_at', 'DESC');
-		// $query->approved();
 
 		if (\Input::get('timestamp')) {
-			$query->where('status_updated_at', '<=', \Input::get('timestamp'));
+			$query->whereRaw('UNIX_TIMESTAMP(updated_at) <=' . \Input::get('timestamp'));
 		}
 		if (\Input::get('count') > 0) {
 			$query->take(\Input::get('count'));
@@ -86,7 +84,7 @@ class ConfessionsController extends Controller {
 
 		$confessions = $query->get();
 		foreach ($confessions as $confession) {
-			$confession->created_at_timestamp = $confession->created_at->timestamp;
+			$confession->updated_at_timestamp = $confession->updated_at->timestamp;
 			$confession->getFacebookInformation();
 		}
 		return \Response::json(['data' => ['confessions' => $confessions]]);
@@ -97,14 +95,13 @@ class ConfessionsController extends Controller {
 		$query = Confession::select(\DB::raw('confessions.*'))
 			->join('confession_categories', 'confessions.confession_id' , '=', 'confession_categories.confession_id')
 			->where('confession_categories.confession_category_id', '=', $categoryId)
+			->approved()
+			->orderBy('updated_at', 'DESC')
 			->with('favourites')
 			->with('categories');
-		// TODO: change to order by status_updated_at and filter by approved when approval is ready
-		// $query = Confession::orderBy('status_updated_at', 'DESC');
-		// $query->approved();
 
 		if (\Input::get('timestamp')) {
-			$query->where('status_updated_at', '<=', \Input::get('timestamp'));
+			$query->whereRaw('UNIX_TIMESTAMP(updated_at) <=' . \Input::get('timestamp'));
 		}
 		if (\Input::get('count') > 0) {
 			$query->take(\Input::get('count'));
@@ -113,7 +110,7 @@ class ConfessionsController extends Controller {
 
 		$confessions = $query->get();
 		foreach ($confessions as $confession) {
-			$confession->created_at_timestamp = $confession->created_at->timestamp;
+			$confession->updated_at_timestamp = $confession->updated_at->timestamp;
 			$confession->getFacebookInformation();
 		}
 		return \Response::json(['data' => ['confessions' => $confessions]]);
@@ -125,14 +122,13 @@ class ConfessionsController extends Controller {
 			->join('confession_tags', 'confessions.confession_id' , '=', 'confession_tags.confession_id')
 			->join('tags', 'confession_tags.confession_tag_id' , '=', 'tags.confession_tag_id')
 			->where('tags.confession_tag', '=', "#$tagName")
+			->orderBy('updated_at', 'DESC')
+			->approved()
 			->with('favourites')
 			->with('categories');
-		// TODO: change to order by status_updated_at and filter by approved when approval is ready
-		// $query = Confession::orderBy('status_updated_at', 'DESC');
-		// $query->approved();
 
 		if (\Input::get('timestamp')) {
-			$query->where('status_updated_at', '<=', \Input::get('timestamp'));
+			$query->whereRaw('UNIX_TIMESTAMP(updated_at) <=' . \Input::get('timestamp'));
 		}
 		if (\Input::get('count') > 0) {
 			$query->take(\Input::get('count'));
@@ -141,7 +137,7 @@ class ConfessionsController extends Controller {
 
 		$confessions = $query->get();
 		foreach ($confessions as $confession) {
-			$confession->created_at_timestamp = $confession->created_at->timestamp;
+			$confession->updated_at_timestamp = $confession->updated_at->timestamp;
 			$confession->getFacebookInformation();
 		}
 		return \Response::json(['data' => ['confessions' => $confessions]]);
@@ -154,14 +150,13 @@ class ConfessionsController extends Controller {
 			$query = Confession::select(\DB::raw('confessions.*'))
 			->join('favourites', 'confessions.confession_id' , '=', 'favourites.confession_id')
 			->where('favourites.fb_user_id', '=', $fbUserId)
+			->orderBy('updated_at', 'DESC')
+			->approved()
 			->with('favourites')
 			->with('categories');
-			// TODO: change to order by status_updated_at and filter by approved when approval is ready
-			// $query = Confession::orderBy('status_updated_at', 'DESC');
-			// $query->approved();
 
 			if (\Input::get('timestamp')) {
-				$query->where('status_updated_at', '<=', \Input::get('timestamp'));
+				$query->whereRaw('UNIX_TIMESTAMP(updated_at) <=' . \Input::get('timestamp'));
 			}
 			if (\Input::get('count') > 0) {
 				$query->take(\Input::get('count'));
@@ -170,7 +165,7 @@ class ConfessionsController extends Controller {
 
 			$confessions = $query->get();
 			foreach ($confessions as $confession) {
-				$confession->created_at_timestamp = $confession->created_at->timestamp;
+				$confession->updated_at_timestamp = $confession->updated_at->timestamp;
 				$confession->getFacebookInformation();
 			}
 			return \Response::json(['success' => true, 'data' => ['confessions' => $confessions]]);
@@ -237,7 +232,7 @@ class ConfessionsController extends Controller {
 	{
 		$confession = Confession::with('categories')->with('favourites')->find($id);
 		if ($confession) {
-			$confession->created_at_timestamp = $confession->created_at->timestamp;
+			$confession->updated_at_timestamp = $confession->updated_at->timestamp;
 			$confession->getFacebookInformation();
 			return \Response::json(['success' => true, 'data' => ['confession' => $confession]]);
 		}
@@ -255,7 +250,7 @@ class ConfessionsController extends Controller {
 	public function search($searchString)
 	{
 		// Naive search ...
-		$query = Confession::orderBy('status_updated_at', 'DESC')
+		$query = Confession::orderBy('updated_at', 'DESC')
 			->where('content', 'LIKE', '%'.$searchString.'%')
 			->with('favourites')
 			->with('categories');
@@ -264,7 +259,7 @@ class ConfessionsController extends Controller {
 		// $query->approved();
 
 		if (\Input::get('timestamp')) {
-			$query->where('status_updated_at', '<=', \Input::get('timestamp'));
+			$query->whereRaw('UNIX_TIMESTAMP(updated_at) <=' . \Input::get('timestamp'));
 		}
 		if (\Input::get('count') > 0) {
 			$query->take(\Input::get('count'));
@@ -273,7 +268,7 @@ class ConfessionsController extends Controller {
 
 		$confessions = $query->get();
 		foreach ($confessions as $confession) {
-			$confession->created_at_timestamp = $confession->created_at->timestamp;
+			$confession->updated_at_timestamp = $confession->updated_at->timestamp;
 			$confession->getFacebookInformation();
 		}
 		return \Response::json(['data' => ['confessions' => $confessions]]);

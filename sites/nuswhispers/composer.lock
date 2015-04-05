@@ -1457,12 +1457,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/SammyK/LaravelFacebookSdk.git",
-                "reference": "a76ccfcda679f75e8635b113d2b25cd05a697c5c"
+                "reference": "aa943c324042631112a1a9a7f05e0a7a9497f69b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SammyK/LaravelFacebookSdk/zipball/a76ccfcda679f75e8635b113d2b25cd05a697c5c",
-                "reference": "a76ccfcda679f75e8635b113d2b25cd05a697c5c",
+                "url": "https://api.github.com/repos/SammyK/LaravelFacebookSdk/zipball/aa943c324042631112a1a9a7f05e0a7a9497f69b",
+                "reference": "aa943c324042631112a1a9a7f05e0a7a9497f69b",
                 "shasum": ""
             },
             "require": {
@@ -1507,7 +1507,7 @@
                 "laravel",
                 "sdk"
             ],
-            "time": "2015-03-05 05:08:49"
+            "time": "2015-04-05 02:41:15"
         },
         {
             "name": "swiftmailer/swiftmailer",

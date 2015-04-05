@@ -61,7 +61,7 @@
             <a class="btn btn-alt-style" href="/#!/submit"><span class="typcn typcn-heart-full-outline"></span> New Confession</a>
             <a ng-show="!isLoggedIn" ng-click="login()" class="btn">Login</a>
             <a ng-show="isLoggedIn" ng-click="logout()" class="btn">
-              Logout<img src="http://graph.facebook.com/{{fbUser.getUserID()}}/picture" />
+              Logout<img ng-src="http://graph.facebook.com/{{fbUser.getUserID()}}/picture" />
             </a>
           </div>
           <form class="search-form" role="search" ng-submit="searchConfessions(searchQuery)">
