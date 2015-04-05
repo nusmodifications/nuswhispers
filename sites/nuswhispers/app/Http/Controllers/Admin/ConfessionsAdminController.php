@@ -52,20 +52,7 @@ class ConfessionsAdminController extends AdminController {
 
         try {
             // Post confession to Facebook
-            if ($confession->images) {
-                $response = \Facebook::post('/' . env('FACEBOOK_PAGE_ID', '') . '/photos', [
-                    'message' => $confession->content,
-                    'url'  => $confession->images,
-                ], $this->getPageToken())->getGraphObject();
-
-                $confession->fb_post_id = explode('_', $response['post_id'])[1];
-            } else {
-                $response = \Facebook::post('/' . env('FACEBOOK_PAGE_ID', '') . '/feed', [
-                    'message' => $confession->content,
-                ], $this->getPageToken())->getGraphObject();
-
-                $confession->fb_post_id = explode('_', $response['id'])[1];
-            }
+            $confession->fb_post_id = $this->postToFacebook($confession);
 
             // @TODO: Log the approval
 
@@ -78,6 +65,45 @@ class ConfessionsAdminController extends AdminController {
         }
     }
 
+    public function getFeature($id)
+    {
+        // @TODO: Move this to a repository
+        $confession = Confession::findOrFail($id);
+
+        try {
+            // Post confession to Facebook
+            if (!$confession->fb_post_id) {
+                $confession->fb_post_id = $this->postToFacebook($confession);
+            }
+
+            // @TODO: Log the approval
+
+            $confession->status = 'Featured';
+            $confession->save();
+
+            return \Redirect::back()->withMessage('Confession successfully featured.')->with('alert-class', 'alert-success');
+        } catch (\Exception $e) {
+            return \Redirect::back()->withMessage('Error featuring confession: ' . $e->getMessage())->with('alert-class', 'alert-danger');
+        }
+    }
+
+    public function getUnfeature($id)
+    {
+        // @TODO: Move this to a repository
+        $confession = Confession::findOrFail($id);
+
+        try {
+            // @TODO: Log the approval
+
+            $confession->status = 'Approved';
+            $confession->save();
+
+            return \Redirect::back()->withMessage('Confession successfully removed from featured.')->with('alert-class', 'alert-success');
+        } catch (\Exception $e) {
+            return \Redirect::back()->withMessage('Error removing confession from featured: ' . $e->getMessage())->with('alert-class', 'alert-danger');
+        }
+    }
+
     public function getReject($id)
     {
         // @TODO: Move this to a repository
@@ -85,7 +111,7 @@ class ConfessionsAdminController extends AdminController {
 
         try {
             if ($confession->fb_post_id) {
-                \Facebook::delete('/' . env('FACEBOOK_PAGE_ID', '') . '_' . $confession->fb_post_id, [], $this->getPageToken());
+                $this->deleteFromFacebook($confession->fb_post_id);
             }
 
             // @TODO: Log the approval
@@ -100,22 +126,13 @@ class ConfessionsAdminController extends AdminController {
         }
     }
 
-    protected function getPageToken()
-    {
-        $profile = \Auth::user()->profiles()->where('provider_name', '=', 'facebook')->get();
-        if (count($profile) !== 1) {
-            return false;
-        }
-        return $profile[0]->page_token;
-    }
-
     public function getDelete($id)
     {
         $confession = Confession::findOrFail($id);
 
         try {
             if ($confession->fb_post_id) {
-                \Facebook::delete('/' . env('FACEBOOK_PAGE_ID', '') . '_' . $confession->fb_post_id, [], $this->getPageToken());
+                $this->deleteFromFacebook($confession->fb_post_id);
             }
 
             // @TODO: Log the approval
@@ -126,6 +143,38 @@ class ConfessionsAdminController extends AdminController {
         } catch (\Exception $e) {
             return \Redirect::back()->withMessage('Error deleting confession: ' . $e->getMessage())->with('alert-class', 'alert-danger');
         }
+    }
+
+    protected function getPageToken()
+    {
+        $profile = \Auth::user()->profiles()->where('provider_name', '=', 'facebook')->get();
+        if (count($profile) !== 1) {
+            return false;
+        }
+        return $profile[0]->page_token;
+    }
+
+    protected function postToFacebook($confession)
+    {
+        if ($confession->images) {
+            $response = \Facebook::post('/' . env('FACEBOOK_PAGE_ID', '') . '/photos', [
+                'message' => $confession->content,
+                'url'  => $confession->images,
+            ], $this->getPageToken())->getGraphObject();
+
+            return explode('_', $response['post_id'])[1];
+        } else {
+            $response = \Facebook::post('/' . env('FACEBOOK_PAGE_ID', '') . '/feed', [
+                'message' => $confession->content,
+            ], $this->getPageToken())->getGraphObject();
+
+            return explode('_', $response['id'])[1];
+        }
+    }
+
+    protected function deleteFromFacebook($id)
+    {
+        \Facebook::delete('/' . env('FACEBOOK_PAGE_ID', '') . '_' . $id , [], $this->getPageToken());
     }
 
 }

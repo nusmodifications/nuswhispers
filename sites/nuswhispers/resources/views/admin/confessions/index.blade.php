@@ -15,6 +15,7 @@
 
   <ul class="nav nav-tabs">
     <li class="{{ Request::is('admin/confessions/index/all') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/all">All</a></li>
+    <li class="{{ Request::is('admin/confessions/index/featured') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/featured">Featured</a></li>
     <li class="{{ Request::is('admin/confessions') || Request::is('admin/confessions/index/pending') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/pending">Pending ({{ \App\Models\Confession::pending()->count() }})</a></li>
     <li class="{{ Request::is('admin/confessions/index/approved') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/approved">Approved</a></li>
     <li class="{{ Request::is('admin/confessions/index/rejected') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/rejected">Rejected</a></li>
@@ -46,13 +47,22 @@
           @endif
         </div>
         <div class="post-actions">
-          @if ($confession->status != 'Approved')
+          @if ($confession->status != 'Featured')
+          <a class="btn btn-sm btn-primary" href="/admin/confessions/feature/{{ $confession->confession_id }}">
+            Feature
+          </a>
+          @else
+          <a class="btn btn-sm" href="/admin/confessions/unfeature/{{ $confession->confession_id }}">
+            Remove from Featured
+          </a>
+          @endif
+          @if ($confession->status != 'Approved' && $confession->status != 'Featured')
           <a class="btn btn-sm btn-primary" href="/admin/confessions/approve/{{ $confession->confession_id }}">
             Approve
           </a>
           @endif
           @if ($confession->status != 'Rejected')
-          <a class="btn btn-sm btn-primary" href="/admin/confessions/reject/{{ $confession->confession_id }}">
+          <a class="btn btn-sm" href="/admin/confessions/reject/{{ $confession->confession_id }}">
             Reject
           </a>
           @endif
