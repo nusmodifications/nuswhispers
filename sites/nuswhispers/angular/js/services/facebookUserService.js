@@ -3,9 +3,14 @@ angular.module('nuswhispersApp.services')
     'use strict';
 
     var data = {
+        // @if NODE_ENV = 'development'
+        pageID: '1448006645491039',
+        // @endif
+        // @if NODE_ENV = 'production'
+        pageID: '695707917166339',
+        // @endif
         accessToken: '',
-        userID: '',
-        pageID: '1448006645491039'
+        userID: ''
     };
 
     return {
@@ -35,6 +40,9 @@ angular.module('nuswhispersApp.services')
         },
         getUserID: function () {
             return data.userID;
-        }
+        },
+        getPageID: function () {
+            return data.pageID;
+        },
     };
 });

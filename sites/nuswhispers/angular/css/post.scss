@@ -22,7 +22,9 @@
         border-top: 1px solid $background-color;
         border-bottom: 1px solid $background-color;
         line-height: 1.75em;
-        white-space: pre-wrap;
+        .post-text {
+            white-space: pre-wrap;
+        }
         .post-image {
             max-width: 100%;
             padding-bottom: 15px;
