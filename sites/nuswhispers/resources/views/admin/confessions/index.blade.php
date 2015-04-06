@@ -75,7 +75,9 @@
         </div>
       </div>
       <div class="post-content">{{ $confession->content }}</div>
+      @if ($confession->images)
       <div class="post-image"><img src="{{ $confession->images }}"></div>
+      @endif
     </div>
     @endforeach
   </div>
