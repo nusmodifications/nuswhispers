@@ -29,6 +29,7 @@ angular.module('nuswhispersApp.controllers')
                     $scope.form.errors = [];
                     for (var error in response.errors) {
                         for (var msg in response.errors[error]) {
+                            console.log(response.errors[error][msg]);
                             $scope.form.errors.push(response.errors[error][msg]);
                         }
                     }

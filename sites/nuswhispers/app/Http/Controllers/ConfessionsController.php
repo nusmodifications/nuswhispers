@@ -198,7 +198,7 @@ class ConfessionsController extends Controller {
 		$captchaResponse = json_decode($captchaResponseJSON);
 
 		if (!$captchaResponse->success) {
-			return \Response::json(['success' => false, 'errors' => ['The reCAPTCHA was not entered correctly. Please try again.']]);
+			return \Response::json(['success' => false, 'errors' => ['reCAPTCHA' => ['The reCAPTCHA was not entered correctly. Please try again.']]]);
 		}
 
 		$newConfession = new Confession;
