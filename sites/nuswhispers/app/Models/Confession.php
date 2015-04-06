@@ -25,7 +25,6 @@ class Confession extends Model {
     {
         if ($this->fb_post_id) {
             $facebookRequest = sprintf('/%s?oauth_token=%s&fields=comments.summary(true),likes.summary(true)', $this->fb_post_id, \Config::get('laravel-facebook-sdk.facebook_config.page_access_token'));
-            \Log::info($facebookRequest);
             $facebookResponse = \Facebook::get($facebookRequest)->getDecodedBody();
             $this->facebook_information = $facebookResponse;
         }
