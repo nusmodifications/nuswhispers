@@ -22,6 +22,11 @@ class UsersSeeder extends Seeder {
                 'email' => 'a0088278@nus.edu.sg',
                 'password' => Hash::make('genius'),
                 'role' => 'Administrator'
+            ],
+            [
+                'email' => 'zhouyichen123@gmail.com',
+                'password' => Hash::make('seriouspassword'),
+                'role' => 'Administrator'
             ]
         ]);
     }
