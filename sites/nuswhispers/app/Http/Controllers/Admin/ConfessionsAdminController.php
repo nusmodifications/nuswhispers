@@ -130,7 +130,7 @@ class ConfessionsAdminController extends AdminController {
 
         try {
             if ($confession->fb_post_id) {
-                $this->deleteFromFacebook($confession->fb_post_id);
+                $this->deleteFromFacebook($confession->fb_post_id, (bool)$confession->images);
             }
 
             // @TODO: Log the approval
@@ -151,7 +151,7 @@ class ConfessionsAdminController extends AdminController {
 
         try {
             if ($confession->fb_post_id) {
-                $this->deleteFromFacebook($confession->fb_post_id);
+                $this->deleteFromFacebook($confession->fb_post_id, (bool)$confession->images);
             }
 
             // @TODO: Log the approval
@@ -194,9 +194,13 @@ class ConfessionsAdminController extends AdminController {
         }
     }
 
-    protected function deleteFromFacebook($id)
+    protected function deleteFromFacebook($id, $hasImage = false)
     {
-        \Facebook::delete('/' . $id , [], $this->getPageToken());
+        if ($hasImage) {
+            \Facebook::delete('/' . $id, [], $this->getPageToken());
+        } else {
+            \Facebook::delete('/' . env('FACEBOOK_PAGE_ID', '') . '_' . $id, [], $this->getPageToken());
+        }
     }
 
 }
