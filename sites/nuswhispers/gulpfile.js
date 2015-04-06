@@ -150,6 +150,8 @@ gulp.task('concat:js', ['js:hint'], function () {
 
     console.log('-------------------------------------------------- CONCAT :js');
     gulp.src([SETTINGS.src.js + 'plugins/*.js', SETTINGS.src.js + 'app.js', SETTINGS.src.js + '*.js', SETTINGS.src.js + '**/*.js'])
+        .pipe(gulpPlugins.if(isProduction, gulpPlugins.preprocess({ context: { NODE_ENV: 'production', DEBUG: false }})))
+        .pipe(gulpPlugins.if(!isProduction, gulpPlugins.preprocess({ context: { NODE_ENV: 'development', DEBUG: true }})))
         .pipe(gulpPlugins.concat('all.js'))
         .pipe(gulpPlugins.if(isProduction, gulpPlugins.uglify({ mangle: false })))
         .pipe(gulp.dest(SETTINGS.build.js))
@@ -218,6 +220,8 @@ gulp.task('copy:html', function () {
 
     console.log('-------------------------------------------------- COPY :html');
     gulp.src([SETTINGS.src.templates + '*.html', SETTINGS.src.templates + '**/*.html'])
+        .pipe(gulpPlugins.if(isProduction, gulpPlugins.preprocess({ context: { NODE_ENV: 'production', DEBUG: false }})))
+        .pipe(gulpPlugins.if(!isProduction, gulpPlugins.preprocess({ context: { NODE_ENV: 'development', DEBUG: true }})))
         .pipe(gulpPlugins.if(isProduction, gulpPlugins.minifyHtml({comments: false, quotes: true, spare: true, empty: true, cdata: true})))
         .pipe(gulp.dest(SETTINGS.build.templates))
         .pipe(gulpPlugins.connect.reload());
@@ -227,6 +231,8 @@ gulp.task('copy:html:root', function () {
 
     console.log('-------------------------------------------------- COPY :html:root');
     gulp.src(SETTINGS.src.app + '*.html')
+        .pipe(gulpPlugins.if(isProduction, gulpPlugins.preprocess({ context: { NODE_ENV: 'production', DEBUG: false }})))
+        .pipe(gulpPlugins.if(!isProduction, gulpPlugins.preprocess({ context: { NODE_ENV: 'development', DEBUG: true }})))
         .pipe(gulpPlugins.if(isProduction, gulpPlugins.minifyHtml({comments: false, quotes: true, spare: true, empty: true, cdata: true})))
         .pipe(gulp.dest(SETTINGS.build.app))
         .pipe(gulpPlugins.connect.reload());

@@ -8,7 +8,12 @@ filepicker.setKey('AnsmRtYIsR9qh79Hxxrpez');
 angular.module('nuswhispersApp.services', ['facebook']).config(
     function (FacebookProvider) {
         'use strict';
+        // @if NODE_ENV = 'development'
         FacebookProvider.init('563666707081891');
+        // @endif
+        // @if NODE_ENV = 'production'
+        FacebookProvider.init('1577825682475577');
+        // @endif
     }
 );
 angular.module('nuswhispersApp.controllers', ['nuswhispersApp.services', 'vcRecaptcha']);
