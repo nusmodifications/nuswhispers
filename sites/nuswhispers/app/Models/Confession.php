@@ -57,6 +57,11 @@ class Confession extends Model {
         return $this->belongsToMany('App\Models\FbUser', 'favourites', 'confession_id', 'fb_user_id');
     }
 
+    public function isApproved()
+    {
+        return $this->status === 'Featured' || $this->status === 'Approved';
+    }
+
     /**
      * Query scope for pending confessions
      * @param  \Illuminate\Database\Eloquent\Builder $query

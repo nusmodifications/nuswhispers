@@ -231,7 +231,7 @@ class ConfessionsController extends Controller {
 	public function show($id)
 	{
 		$confession = Confession::with('categories')->with('favourites')->find($id);
-		if ($confession) {
+		if ($confession && $confession->isApproved())  {
 			$confession->updated_at_timestamp = $confession->updated_at->timestamp;
 			$confession->getFacebookInformation();
 			return \Response::json(['success' => true, 'data' => ['confession' => $confession]]);
