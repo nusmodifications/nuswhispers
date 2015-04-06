@@ -7,6 +7,9 @@
   </div>
   <div ng-hide="view === 'favourites' && fbUser.getAccessToken() === ''" class="post" ng-repeat="confession in confessions">
     <div class="post-header">
+      <span ng-show="confession.categories.length === 0">
+        No Category
+      </span>
       <span ng-repeat="category in confession.categories">
         <a href="/#!category/{{category.confession_category_id}}">{{category.confession_category}}</a>{{$last ? '' : ', '}}
       </span>

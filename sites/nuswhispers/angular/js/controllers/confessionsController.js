@@ -101,7 +101,7 @@ angular.module('nuswhispersApp.controllers')
                     case '"':
                         return '&quot;';
                     default:
-                        return '&#039;';
+                        return m;
                 }
             });
         }
