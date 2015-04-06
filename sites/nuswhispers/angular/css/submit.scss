@@ -72,12 +72,17 @@
 
     .tag-highlight-wrapper {
         position: relative;
+        padding: 0 1em 1em 1em;
+        margin-bottom: 1em;
 
         .tag-highlight {
             position: absolute;
             background-color: transparent;
             color: transparent;
             border: 0px;
+            line-height: 25px;
+            font-size: 110%;
+            padding: 0;
             @include remove-box-shadow();
 
             b {
@@ -99,9 +104,12 @@
     }
 
     textarea {
-        background-color: transparent;
+        background: url('../img/underline.png') transparent;
         border: 0px;
         resize: none;
+        line-height: 25px;
+        font-size: 110%;
+        padding: 0;
         @include remove-box-shadow();
     }
 
