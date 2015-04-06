@@ -161,8 +161,7 @@ class ConfessionsAdminController extends AdminController {
                 'message' => $confession->content,
                 'url'  => $confession->images,
             ], $this->getPageToken())->getGraphObject();
-
-            return explode('_', $response['post_id'])[1];
+            return $response['id'];
         } else {
             $response = \Facebook::post('/' . env('FACEBOOK_PAGE_ID', '') . '/feed', [
                 'message' => $confession->content,
