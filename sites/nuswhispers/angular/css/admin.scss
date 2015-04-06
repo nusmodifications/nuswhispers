@@ -181,6 +181,14 @@ h2 {
     .post-content {
         padding: 0 1em 1em;
     }
+
+    .post-image {
+        padding: 0 1em 1em;
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    }
 }
 
 .admin-content-wrapper {

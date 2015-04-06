@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 class ConfessionsAdminController extends AdminController {
 
+    private $_pageToken = '';
+
     public function getIndex($status = 'Pending')
     {
         $query = Confession::orderBy('created_at', 'desc');
@@ -31,7 +33,8 @@ class ConfessionsAdminController extends AdminController {
 
         return view('admin.confessions.index', array(
             'confessions' => $confessions,
-            'categoryOptions' => array_merge(array('All Categories' => 0), Category::orderBy('confession_category', 'asc')->lists('confession_category_id', 'confession_category'))
+            'categoryOptions' => array_merge(array('All Categories' => 0), Category::orderBy('confession_category', 'asc')->lists('confession_category_id', 'confession_category')),
+            'hasPageToken' => (bool)$this->getPageToken(),
         ));
     }
 
@@ -49,6 +52,10 @@ class ConfessionsAdminController extends AdminController {
     {
         // @TODO: Move this to a repository
         $confession = Confession::findOrFail($id);
+
+        if (!$this->getPageToken()) {
+            return \Redirect::back()->withMessage('You have not connected your account with Facebook.')->with('alert-class', 'alert-danger');
+        }
 
         try {
             // Post confession to Facebook
@@ -69,6 +76,10 @@ class ConfessionsAdminController extends AdminController {
     {
         // @TODO: Move this to a repository
         $confession = Confession::findOrFail($id);
+
+        if (!$this->getPageToken()) {
+            return \Redirect::back()->withMessage('You have not connected your account with Facebook.')->with('alert-class', 'alert-danger');
+        }
 
         try {
             // Post confession to Facebook
@@ -92,6 +103,10 @@ class ConfessionsAdminController extends AdminController {
         // @TODO: Move this to a repository
         $confession = Confession::findOrFail($id);
 
+        if (!$this->getPageToken()) {
+            return \Redirect::back()->withMessage('You have not connected your account with Facebook.')->with('alert-class', 'alert-danger');
+        }
+
         try {
             // @TODO: Log the approval
 
@@ -109,9 +124,13 @@ class ConfessionsAdminController extends AdminController {
         // @TODO: Move this to a repository
         $confession = Confession::findOrFail($id);
 
+        if (!$this->getPageToken()) {
+            return \Redirect::back()->withMessage('You have not connected your account with Facebook.')->with('alert-class', 'alert-danger');
+        }
+
         try {
             if ($confession->fb_post_id) {
-                $this->deleteFromFacebook($confession->fb_post_id);
+                $this->deleteFromFacebook($confession->fb_post_id, (bool)$confession->images);
             }
 
             // @TODO: Log the approval
@@ -132,7 +151,7 @@ class ConfessionsAdminController extends AdminController {
 
         try {
             if ($confession->fb_post_id) {
-                $this->deleteFromFacebook($confession->fb_post_id);
+                $this->deleteFromFacebook($confession->fb_post_id, (bool)$confession->images);
             }
 
             // @TODO: Log the approval
@@ -147,33 +166,47 @@ class ConfessionsAdminController extends AdminController {
 
     protected function getPageToken()
     {
-        $profile = \Auth::user()->profiles()->where('provider_name', '=', 'facebook')->get();
-        if (count($profile) !== 1) {
-            return false;
+        if (!$this->_pageToken) {
+            $profile = \Auth::user()->profiles()->where('provider_name', '=', 'facebook')->get();
+            if (count($profile) !== 1) {
+                return false;
+            }
+            $this->_pageToken = $profile[0]->page_token;
         }
-        return $profile[0]->page_token;
+        return $this->_pageToken;
     }
 
     protected function postToFacebook($confession)
     {
         if ($confession->images) {
             $response = \Facebook::post('/' . env('FACEBOOK_PAGE_ID', '') . '/photos', [
-                'message' => $confession->content,
+                'message' => $confession->content . "\n\n" . url('/#!/confession/' . $confession->confession_id),
                 'url'  => $confession->images,
             ], $this->getPageToken())->getGraphObject();
             return $response['id'];
         } else {
+            if ($confession->confession_id % 5 == 0) { // yup, random
+                $message = $confession->content . "\n\n" . 'Submit your own confessions at: ' . url('/');
+            } else {
+                $message = $confession->content;
+            }
+
             $response = \Facebook::post('/' . env('FACEBOOK_PAGE_ID', '') . '/feed', [
-                'message' => $confession->content,
+                'message' => $message,
+                // 'link' => url('/#!/confession/' . $confession->confession_id)
             ], $this->getPageToken())->getGraphObject();
 
             return explode('_', $response['id'])[1];
         }
     }
 
-    protected function deleteFromFacebook($id)
+    protected function deleteFromFacebook($id, $hasImage = false)
     {
-        \Facebook::delete('/' . env('FACEBOOK_PAGE_ID', '') . '_' . $id , [], $this->getPageToken());
+        if ($hasImage) {
+            \Facebook::delete('/' . $id, [], $this->getPageToken());
+        } else {
+            \Facebook::delete('/' . env('FACEBOOK_PAGE_ID', '') . '_' . $id, [], $this->getPageToken());
+        }
     }
 
 }
