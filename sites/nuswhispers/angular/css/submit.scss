@@ -11,6 +11,7 @@
             padding-bottom: 1em;
             border-bottom: 1px solid $background-color;
             margin-bottom: 1em;
+            color: $primary-color;
         }
 
         .container-fluid {
@@ -72,12 +73,17 @@
 
     .tag-highlight-wrapper {
         position: relative;
+        padding: 0 1em 1em 1em;
+        margin-bottom: 1em;
 
         .tag-highlight {
             position: absolute;
             background-color: transparent;
             color: transparent;
             border: 0px;
+            line-height: 25px;
+            font-size: 150%;
+            padding: 0;
             @include remove-box-shadow();
 
             b {
@@ -99,9 +105,13 @@
     }
 
     textarea {
-        background-color: transparent;
+        background: url('../img/underline.png') transparent;
         border: 0px;
         resize: none;
+        line-height: 25px;
+        font-size: 150%;
+        padding: 0;
+        height: 4em;
         @include remove-box-shadow();
     }
 

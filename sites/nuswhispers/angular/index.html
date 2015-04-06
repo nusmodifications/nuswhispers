@@ -38,14 +38,14 @@
         <h2 class="nav-section-label">Categories</h2>
         <ul class="nav">
           <li ng-repeat="category in categories">
-            <a href="/#!category/{{category.confession_category_id}}">{{category.confession_category}}</a>
+            <a ng-href="/#!category/{{category.confession_category_id}}" ng-bind="category.confession_category"></a>
           </li>
         </ul>
         <hr>
         <h2 class="nav-section-label">Popular Tags</h2>
         <ul class="nav">
           <li ng-repeat="tag in tags">
-            <a href="/#!tag/{{tag.confession_tag.substring(1)}}">{{tag.confession_tag}}</a>
+            <a ng-href="/#!tag/{{tag.confession_tag.substring(1)}}" ng-bind="tag.confession_tag"></a>
           </li>
         </ul>
       </nav>
