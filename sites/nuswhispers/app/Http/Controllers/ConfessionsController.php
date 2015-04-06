@@ -252,11 +252,9 @@ class ConfessionsController extends Controller {
 		// Naive search ...
 		$query = Confession::orderBy('updated_at', 'DESC')
 			->where('content', 'LIKE', '%'.$searchString.'%')
+			->approved()
 			->with('favourites')
 			->with('categories');
-
-		// TODO: change to filter by approved when approval is ready
-		// $query->approved();
 
 		if (\Input::get('timestamp')) {
 			$query->whereRaw('UNIX_TIMESTAMP(updated_at) <=' . \Input::get('timestamp'));
