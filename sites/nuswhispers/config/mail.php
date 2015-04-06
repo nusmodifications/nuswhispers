@@ -15,7 +15,7 @@ return [
 	|
 	*/
 
-	'driver' => 'log',
+	'driver' => 'mailgun',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -54,7 +54,7 @@ return [
 	|
 	*/
 
-	'from' => ['address' => 'noreply@nuswhispers.com', 'name' => 'NUS Whispers Team'],
+	'from' => ['address' => 'noreply@nuswhispers.com', 'name' => 'NUSWhispers Team'],
 
 	/*
 	|--------------------------------------------------------------------------
