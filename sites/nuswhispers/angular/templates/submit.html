@@ -12,7 +12,7 @@
             <span class="typcn typcn-pencil"></span> Your Story
         </div>
         <div class="tag-highlight-wrapper">
-            <div class="tag-highlight form-control" ng-bind-html="contentTagHighlights"></div>
+            <div class="tag-highlight form-control" ng-bind-html="contentTagHighlights" ng-trim="false"></div>
             <textarea class="msd-elastic form-control" ng-required="true" ng-change="highlightTags()" ng-model="confessionData.content" ng-trim="false" placeholder="Tell us your story..."></textarea>
         </div>
         <button type="button" ng-click="uploadConfessionImage()" class="btn">

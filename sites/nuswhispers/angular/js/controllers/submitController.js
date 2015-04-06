@@ -69,11 +69,26 @@ angular.module('nuswhispersApp.controllers')
     };
 
     $scope.highlightTags = function () {
+        // TODO: repeated code :(
+        function escapeHTML(content) {
+            return content.replace(/[&<"']/g, function (m) {
+                switch (m) {
+                    case '&':
+                        return '&amp;';
+                    case '<':
+                        return '&lt;';
+                    case '"':
+                        return '&quot;';
+                    default:
+                        return m;
+                }
+            });
+        }
         $scope.contentTagHighlights = '';
         if ($scope.confessionData.content === undefined) {
             return;
         }
-        var splitContentTags = $scope.confessionData.content.split(/(#\w+)/);
+        var splitContentTags = escapeHTML($scope.confessionData.content).split(/(#\w+)/);
         for (var i in splitContentTags) {
             if (/(#\w+)/.test(splitContentTags[i])) {
                 $scope.contentTagHighlights += '<b>' + splitContentTags[i] + '</b>';
