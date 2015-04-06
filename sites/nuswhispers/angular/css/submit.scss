@@ -85,6 +85,8 @@
             font-size: 150%;
             padding: 0;
             padding-right: 1.4em;
+            white-space: pre-wrap;
+            word-wrap: break-word;
             @include remove-box-shadow();
 
             b {
