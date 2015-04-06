@@ -16,6 +16,11 @@ $primary-color: #f55260;
 
 @import "main.scss";
 
+#content {
+    width: 100%;
+    padding: 0 1em;
+}
+
 label {
     font-weight: 400;
     color: lighten($primary-text-color, 10%);

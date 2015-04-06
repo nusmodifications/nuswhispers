@@ -5155,6 +5155,10 @@ a:focus {
   #content-wrapper {
     margin-top: 50px; } }
 
+#content {
+  width: 100%;
+  padding: 0 1em; }
+
 label {
   font-weight: 400;
   color: #808080;
