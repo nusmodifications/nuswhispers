@@ -5094,13 +5094,17 @@ a:focus {
       border-right: 0.6em solid #f5f5f5;
       margin-top: -0.3em; }
 
-#content-wrapper {
+#main-wrapper {
   position: relative; }
 
-#content {
+#content-wrapper {
   margin-top: 15px;
   width: 100%;
-  display: inline-block; }
+  display: inline-block;
+  padding: 0; }
+
+#content {
+  padding: 0; }
 
 .loading {
   background: url('../img/pac_man_loading.gif');
@@ -5117,11 +5121,11 @@ a:focus {
     padding-left: 240px; }
     .sidebar-opened #wrapper #sidebar-wrapper {
       width: 240px; }
-    .sidebar-opened #wrapper #content-wrapper {
+    .sidebar-opened #wrapper #main-wrapper {
       margin-right: -240px; }
   #sidebar-wrapper {
     width: 0px; }
-  #content-wrapper {
+  #main-wrapper {
     width: 100%;
     position: absolute; }
   .navbar-toggle {
@@ -5148,7 +5152,7 @@ a:focus {
       padding-left: 10px; }
     #topbar-wrapper .search-form .input-group-addon {
       display: none; }
-  #content {
+  #content-wrapper {
     margin-top: 50px; } }
 
 label {

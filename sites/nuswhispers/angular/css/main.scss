@@ -221,14 +221,19 @@ a:focus {
     }
 }
 
-#content-wrapper {
+#main-wrapper {
     position: relative;
 }
 
-#content {
+#content-wrapper {
     margin-top: 15px;
     width: 100%;
     display: inline-block; // clearfix
+    padding: 0;
+}
+
+#content {
+    padding: 0;
 }
 
 .loading {
@@ -250,14 +255,14 @@ a:focus {
         #sidebar-wrapper {
             width: $sidebar-width;
         }
-        #content-wrapper {
+        #main-wrapper {
             margin-right: -$sidebar-width;
         }
     }
     #sidebar-wrapper {
         width: 0px;
     }
-    #content-wrapper {
+    #main-wrapper {
         width: 100%;
         position: absolute;
     }
@@ -294,7 +299,7 @@ a:focus {
             display: none;
         }
     }
-    #content {
+    #content-wrapper {
         margin-top: 50px;
     }
 }
