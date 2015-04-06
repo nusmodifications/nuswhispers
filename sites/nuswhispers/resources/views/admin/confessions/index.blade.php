@@ -13,6 +13,12 @@
 
   @include('message')
 
+  @if (!$hasPageToken)
+  <div class="alert alert-danger">
+  <strong>Warning:</strong> You have not <a href="/admin/profile">connected your Facebook account</a>. You will not be able to approve any confessions until you do so.
+  </div>
+  @endif
+
   <ul class="nav nav-tabs">
     <li class="{{ Request::is('admin/confessions/index/all') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/all">All</a></li>
     <li class="{{ Request::is('admin/confessions/index/featured') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/featured">Featured</a></li>
@@ -47,6 +53,7 @@
           @endif
         </div>
         <div class="post-actions">
+          @if ($hasPageToken)
           @if ($confession->status != 'Featured')
           <a class="btn btn-sm btn-primary" href="/admin/confessions/feature/{{ $confession->confession_id }}">
             Feature
@@ -65,6 +72,7 @@
           <a class="btn btn-sm" href="/admin/confessions/reject/{{ $confession->confession_id }}">
             Reject
           </a>
+          @endif
           @endif
           <a class="btn btn-sm" href="/admin/confessions/edit/{{ $confession->confession_id }}">
             Edit
