@@ -191,7 +191,7 @@ gulp.task('concat:css', ['convert:scss'], function () {
 
     // Copy over admin.css to public folder (no need for concat)
     gulp.src([SETTINGS.scss + 'admin.css'])
-        .pipe(gulpPlugins.if(isProduction, gulpPlugins.minifyCss({keepSpecialComments: '*'})))
+    //    .pipe(gulpPlugins.if(isProduction, gulpPlugins.minifyCss({keepSpecialComments: '*'})))
         .pipe(gulp.dest(SETTINGS.build.css))
         .pipe(gulpPlugins.connect.reload());
 });
