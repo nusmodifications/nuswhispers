@@ -158,13 +158,14 @@ class ConfessionsAdminController extends AdminController {
     {
         if ($confession->images) {
             $response = \Facebook::post('/' . env('FACEBOOK_PAGE_ID', '') . '/photos', [
-                'message' => $confession->content,
+                'message' => $confession->content . "\n\n" . url('/#!/confession/' . $confession->confession_id),
                 'url'  => $confession->images,
             ], $this->getPageToken())->getGraphObject();
             return $response['id'];
         } else {
             $response = \Facebook::post('/' . env('FACEBOOK_PAGE_ID', '') . '/feed', [
                 'message' => $confession->content,
+                'link' => url('/#!/confession/' . $confession->confession_id)
             ], $this->getPageToken())->getGraphObject();
 
             return explode('_', $response['id'])[1];
@@ -173,7 +174,7 @@ class ConfessionsAdminController extends AdminController {
 
     protected function deleteFromFacebook($id)
     {
-        \Facebook::delete('/' . env('FACEBOOK_PAGE_ID', '') . '_' . $id , [], $this->getPageToken());
+        \Facebook::delete('/' . $id , [], $this->getPageToken());
     }
 
 }
