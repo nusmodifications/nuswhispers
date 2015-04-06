@@ -57,7 +57,12 @@ class ProfileController extends AdminController {
             $token = $response->getDecodedBody()['access_token'];
 
             // Get page token (never expires)
-            $response = \Facebook::get('/' . env('FACEBOOK_PAGE_ID', '') .'?fields=access_token', $token)->getGraphObject();
+            try {
+                $response = \Facebook::get('/' . env('FACEBOOK_PAGE_ID', '') .'?fields=access_token', $token)->getGraphObject();
+            } catch (\Facebook\Exceptions\FacebookResponseException $e) {
+                throw new \Exception('User is not a page admin of Facebook page #' . env('FACEBOOK_PAGE_ID', '') . '.');
+            }
+
             $pageToken = $response['access_token'];
         }
 
