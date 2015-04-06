@@ -91,6 +91,21 @@ angular.module('nuswhispersApp.controllers')
     $scope.getConfessions();
 
     $scope.processConfessionContent = function (content) {
+        function escapeHTML(content) {
+            return content.replace(/[&<"']/g, function (m) {
+                switch (m) {
+                    case '&':
+                        return '&amp;';
+                    case '<':
+                        return '&lt;';
+                    case '"':
+                        return '&quot;';
+                    default:
+                        return '&#039;';
+                }
+            });
+        }
+        content = escapeHTML(content);
         var splitContentTags = content.split(/(#\w+)/);
         var processedContent = '';
         for (var i in splitContentTags) {
