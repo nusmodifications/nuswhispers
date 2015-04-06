@@ -11,6 +11,7 @@
             padding-bottom: 1em;
             border-bottom: 1px solid $background-color;
             margin-bottom: 1em;
+            color: $primary-color;
         }
 
         .container-fluid {
@@ -81,7 +82,7 @@
             color: transparent;
             border: 0px;
             line-height: 25px;
-            font-size: 110%;
+            font-size: 150%;
             padding: 0;
             @include remove-box-shadow();
 
@@ -108,8 +109,9 @@
         border: 0px;
         resize: none;
         line-height: 25px;
-        font-size: 110%;
+        font-size: 150%;
         padding: 0;
+        height: 4em;
         @include remove-box-shadow();
     }
 
