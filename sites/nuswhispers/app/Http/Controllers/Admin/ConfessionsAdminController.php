@@ -185,9 +185,15 @@ class ConfessionsAdminController extends AdminController {
             ], $this->getPageToken())->getGraphObject();
             return $response['id'];
         } else {
+            if ($confession->confession_id % 5 == 0) { // yup, random
+                $message = $confession->content . "\n\n" . 'Submit your own confessions at: ' . url('/');
+            } else {
+                $message = $confession->content;
+            }
+
             $response = \Facebook::post('/' . env('FACEBOOK_PAGE_ID', '') . '/feed', [
-                'message' => $confession->content,
-                'link' => url('/#!/confession/' . $confession->confession_id)
+                'message' => $message,
+                // 'link' => url('/#!/confession/' . $confession->confession_id)
             ], $this->getPageToken())->getGraphObject();
 
             return explode('_', $response['id'])[1];
