@@ -1,4 +1,4 @@
-<div id="post-list" class="col-md-8 col-sm-7" infinite-scroll="getConfessions()" infinite-scroll-disabled="loadingConfessions || !doLoadMoreConfessions" infinite-scroll-distance="1">
+<div id="post-list" infinite-scroll="getConfessions()" infinite-scroll-disabled="loadingConfessions || !doLoadMoreConfessions" infinite-scroll-distance="1">
   <div class="alert" ng-show="view === 'favourites' && fbUser.getAccessToken() === '' && !loadingConfessions">
     Please log in to view your favourites or <a href="/#!home">go back to the main page</a>.
   </div>
@@ -57,7 +57,4 @@
     </div>
   </div>
   <div ng-show="loadingConfessions" class="loading"></div>
-</div>
-<div class="col-md-4 col-sm-5">
-  <!-- extra content or ads -->
 </div>
