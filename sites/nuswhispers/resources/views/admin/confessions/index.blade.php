@@ -86,6 +86,19 @@
       @if ($confession->images)
       <div class="post-image"><img src="{{ $confession->images }}"></div>
       @endif
+      <div class="post-footer">
+        @if ($confession->categories()->count() > 0)
+        <strong>Categorie(s):</strong>
+        <?php
+        $categories = $confession->categories()->get();
+        $formattedCategories = [];
+        foreach ($categories as $cat)
+          $formattedCategories[] = '<a href="/admin/confessions?category=' . $cat->confession_category_id . '">' . $cat->confession_category . '</a>';
+
+        echo implode(', ', $formattedCategories);
+        ?>
+        @endif
+      </div>
     </div>
     @endforeach
   </div>

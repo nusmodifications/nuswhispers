@@ -4951,6 +4951,9 @@ a:focus {
   margin-top: 3px;
   margin-left: 5px; }
 
+.typcn:before {
+  line-height: 1em; }
+
 .tooltip.bottom .tooltip-arrow {
   border-bottom-color: #8e8e8e; }
 
@@ -5286,6 +5289,10 @@ h2 {
   .post-list .post-image img {
     max-width: 100%;
     height: auto; }
+.post-list .post-footer {
+  margin: 1em;
+  border-top: 1px solid #eaeaea;
+  padding: 1em 0; }
 
 .admin-content-wrapper {
   padding: 0 1em;
