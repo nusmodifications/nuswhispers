@@ -18,7 +18,9 @@ class CategoriesSeeder extends Seeder {
 			array('confession_category' => 'Funny'),
 			array('confession_category' => 'Lost and Found'),
 			array('confession_category' => 'Romance'),
-			array('confession_category' => 'Rant')
+			array('confession_category' => 'Rant'),
+			array('confession_category' => 'Nostalgia'),
+			array('confession_category' => 'Advice')
 		));
 	}
 
