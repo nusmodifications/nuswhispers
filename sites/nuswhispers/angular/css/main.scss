@@ -50,6 +50,11 @@ a:focus {
     margin-left: 5px;
 }
 
+// fix safari bug
+.typcn::before {
+    line-height: 1em;
+}
+
 // bootstrap tooltips
 .tooltip.bottom .tooltip-arrow {
     border-bottom-color: $secondary-text-color;
