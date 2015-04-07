@@ -95,8 +95,8 @@ class ConfessionsController extends Controller {
 		$query = Confession::select(\DB::raw('confessions.*'))
 			->join('confession_categories', 'confessions.confession_id' , '=', 'confession_categories.confession_id')
 			->where('confession_categories.confession_category_id', '=', $categoryId)
-			->approved()
 			->orderBy('updated_at', 'DESC')
+			->approved()
 			->with('favourites')
 			->with('categories');
 

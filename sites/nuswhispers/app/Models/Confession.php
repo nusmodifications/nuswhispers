@@ -89,8 +89,11 @@ class Confession extends Model {
      */
     public function scopeApproved($query)
     {
-        return $query->where('status', '=', 'Approved')
-            ->orWhere('status', '=', 'Featured');
+        return $query->where(function ($query)
+            {
+                $query->where('status', '=', 'Approved')
+                    ->orWhere('status', '=', 'Featured');
+            });
     }
 
     /**
