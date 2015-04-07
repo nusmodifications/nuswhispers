@@ -58,14 +58,15 @@
                 margin-right: 8px;
                 vertical-align: middle;
             }
-            .show-confession-btn {
+            .show-comments-btn {
                 color: $secondary-text-color;
             }
-            .show-confession-btn.shown {
+            .show-comments-btn.shown {
                 color: $primary-color;
             }
-            .show-confession-btn:before {
+            .show-comments-btn:before {
                 content: '\e0b8';
+                margin-right: 8px;
                 margin-left: 4px;
                 font-family: 'typicons';
                 font-size: 1.6em;
