@@ -46,7 +46,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
                 }
             }
         })
-        .when('/new/', {
+        .when('/latest/', {
             templateUrl: 'assets/templates/confessions.html',
             controller: 'ConfessionsController',
             resolve: {

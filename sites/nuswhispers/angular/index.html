@@ -3,7 +3,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>NUSWhispers</title>
+    <title>NUS Whispers</title>
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1" />
     <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="assets/bower/_bower.css">
@@ -27,11 +27,14 @@
           <li ng-class="{active: isActivePage('/popular/')}">
             <a href="/#!popular"><span class="typcn typcn-chart-line"></span>Popular</a>
           </li>
-          <li ng-class="{active: isActivePage('/new/')}">
-            <a href="/#!new"><span class="typcn typcn-starburst"></span>New</a>
+          <li ng-class="{active: isActivePage('/latest/')}">
+            <a href="/#!latest"><span class="typcn typcn-starburst"></span>Latest</a>
           </li>
           <li ng-show="isLoggedIn" ng-class="{active: isActivePage('/favourites/')}">
             <a href="/#!favourites"><span class="typcn typcn-star-full-outline"></span>Favourites</a>
+          </li>
+          <li ng-class="{active: isActivePage('/submit/')}">
+            <a href="/#!submit"><span class="typcn typcn-heart-full-outline"></span>New Confession</a>
           </li>
         </ul>
         <hr>
@@ -93,7 +96,7 @@
       var js, fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) return;
       js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=1577825682475577&version=v2.3";
+      js.src = "//connect.facebook.net/en_US/sdk.js";
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
     </script>
