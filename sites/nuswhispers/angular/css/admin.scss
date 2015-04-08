@@ -221,3 +221,45 @@ h2 {
         text-align: right;
     }
 }
+
+.edit-confessions-col {
+    padding-right: 0;
+}
+
+.panel-photo img {
+    max-width: 100%;
+    height: auto;
+}
+
+.panel-status .label {
+    font-size: 100%;
+}
+
+.panel-body .alert {
+    margin: .5em 0 0;
+}
+
+.panel-body .checkbox:first-child {
+    margin-top: 0;
+}
+
+.status-history-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 95%;
+
+    li {
+        padding: 1em 0;
+        border-bottom: 1px solid #efefef;
+
+        &:first-child {
+            padding-top: 0;
+        }
+    }
+
+    .status-meta {
+        display: block;
+        color: lighten($primary-text-color, 30%);
+    }
+}

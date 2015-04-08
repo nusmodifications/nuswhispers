@@ -57,6 +57,15 @@ class Confession extends Model {
         return $this->belongsToMany('App\Models\FbUser', 'favourites', 'confession_id', 'fb_user_id');
     }
 
+    /**
+     * Defines confession logs relationship to model.
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function logs()
+    {
+        return $this->hasMany('App\Models\ConfessionLog');
+    }
+
     public function isApproved()
     {
         return $this->status === 'Featured' || $this->status === 'Approved';
@@ -104,6 +113,11 @@ class Confession extends Model {
     public function scopeRejected($query)
     {
         return $query->whereStatus('Rejected');
+    }
+
+    public function statuses()
+    {
+        return ['Featured', 'Pending', 'Approved', 'Rejected'];
     }
 
 }

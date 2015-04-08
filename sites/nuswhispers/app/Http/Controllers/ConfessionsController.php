@@ -5,10 +5,18 @@ use App\Models\Confession as Confession;
 use App\Models\FbUser as FbUser;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Repositories\ConfessionsRepository;
 
 use Illuminate\Http\Request;
 
 class ConfessionsController extends Controller {
+
+    protected $confessionsRepo;
+
+    public function __construct(ConfessionsRepository $confessionsRepo)
+    {
+        $this->confessionsRepo = $confessionsRepo;
+    }
 
 	/**
 	 * Display a listing of the resource. Get featured confessions.
@@ -201,25 +209,12 @@ class ConfessionsController extends Controller {
 			return \Response::json(['success' => false, 'errors' => ['reCAPTCHA' => ['The reCAPTCHA was not entered correctly. Please try again.']]]);
 		}
 
-		$newConfession = new Confession;
+        $res = $this->confessionsRepo->create([
+            'content' => \Input::get('content'),
+            'images'  => \Input::get('image'),
+        ], \Input::get('categories'));
 
-		$newConfession->content = \Input::get('content');
-		$newConfession->images = \Input::get('image');
-		$newConfession->save();
-
-		// Get all tags in content
-		preg_match_all('/(#\w+)/', $newConfession->content, $matches);
-		$tagNames = array_shift($matches); // get full pattern matches from match result
-		$tagNames = array_unique($tagNames); // get all unique tags from match result
-		foreach ($tagNames as $tagName) {
-			$confessionTag = Tag::firstOrCreate(['confession_tag' => $tagName]);
-			$newConfession->tags()->attach($confessionTag->confession_tag_id);
-		}
-
-		$newConfession->categories()->attach(\Input::get('categories'));
-		$newConfession->save();
-
-		return \Response::json(['success' => true]);
+        return \Response::json(['success' => $res]);
 	}
 
 	/**

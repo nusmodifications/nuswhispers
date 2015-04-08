@@ -88,7 +88,7 @@
       @endif
       <div class="post-footer">
         @if ($confession->categories()->count() > 0)
-        <strong>Categorie(s):</strong>
+        <strong>Categories:</strong>
         <?php
         $categories = $confession->categories()->get();
         $formattedCategories = [];

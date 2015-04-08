@@ -43,8 +43,11 @@ Route::controllers([
 // Admin Routes
 Route::controllers([
     'admin/profile' => 'Admin\ProfileController',
-    'admin/confessions' => 'Admin\ConfessionsAdminController',
     'admin/users' => 'Admin\UsersAdminController',
+]);
+
+Route::controller('admin/confessions', 'Admin\ConfessionsAdminController', [
+    'postEdit' => 'admin.confessions.edit'
 ]);
 
 // Temporarily redirect default admin to confessions dashboard

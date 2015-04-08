@@ -5310,3 +5310,33 @@ h2 {
     font-size: 120%; }
   .user-profiles-list .actions {
     text-align: right; }
+
+.edit-confessions-col {
+  padding-right: 0; }
+
+.panel-photo img {
+  max-width: 100%;
+  height: auto; }
+
+.panel-status .label {
+  font-size: 100%; }
+
+.panel-body .alert {
+  margin: 0.5em 0 0; }
+
+.panel-body .checkbox:first-child {
+  margin-top: 0; }
+
+.status-history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 95%; }
+  .status-history-list li {
+    padding: 1em 0;
+    border-bottom: 1px solid #efefef; }
+    .status-history-list li:first-child {
+      padding-top: 0; }
+  .status-history-list .status-meta {
+    display: block;
+    color: #b3b3b3; }
