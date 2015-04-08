@@ -11,7 +11,14 @@ class ConfessionsAdminController extends AdminController {
 
     public function getIndex($status = 'Pending')
     {
-        $query = Confession::orderBy('created_at', 'desc');
+        if ($status != 'Pending')
+        {
+            $query = Confession::orderBy('created_at', 'desc');
+        } 
+        else
+        {
+            $query = Confession::orderBy('created_at', 'asc');
+        }
 
         if (\Input::get('category'))
         {
