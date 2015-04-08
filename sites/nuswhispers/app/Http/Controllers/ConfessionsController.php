@@ -232,6 +232,10 @@ class ConfessionsController extends Controller {
 	{
 		$confession = Confession::with('categories')->with('favourites')->find($id);
 		if ($confession && $confession->isApproved())  {
+			// increment number of views
+			$confession->views++;
+			$confession->save();
+
 			$confession->updated_at_timestamp = $confession->updated_at->timestamp;
 			$confession->getFacebookInformation();
 			return \Response::json(['success' => true, 'data' => ['confession' => $confession]]);
