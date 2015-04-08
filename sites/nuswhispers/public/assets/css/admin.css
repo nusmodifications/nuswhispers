@@ -4931,6 +4931,9 @@ a:focus {
   transition: padding-left 0.5s ease 0s;
   -o-transition: padding-left 0.5s ease 0s; }
 
+.likebox-wrapper {
+  text-align: center; }
+
 .whispers-brand {
   float: none;
   padding: 1em 1em 0.25em;
@@ -5113,7 +5116,8 @@ a:focus {
   background: url('../img/pac_man_loading.gif');
   background-repeat: no-repeat;
   background-position: center;
-  height: 24px; }
+  height: 24px;
+  margin-bottom: 1em; }
 
 @media (max-width: 768px) {
   #wrapper {

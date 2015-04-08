@@ -18,7 +18,7 @@ angular.module('nuswhispersApp.services', ['facebook']).config(
 );
 angular.module('nuswhispersApp.controllers', ['nuswhispersApp.services', 'vcRecaptcha']);
 
-var app = angular.module('nuswhispersApp', ['nuswhispersApp.controllers', 'angular-loading-bar', 'monospaced.elastic', 'angularMoment', 'infinite-scroll', 'ngCookies', 'ngResource', 'ngSanitize', 'ngRoute', 'ngAnimate', 'ui.utils', 'ui.bootstrap', 'ui.router', 'ngGrid']);
+var app = angular.module('nuswhispersApp', ['nuswhispersApp.controllers', 'filters', 'angular-loading-bar', 'monospaced.elastic', 'angularMoment', 'infinite-scroll', 'ngCookies', 'ngResource', 'ngSanitize', 'ngRoute', 'ngAnimate', 'ui.utils', 'ui.bootstrap', 'ui.router', 'ngGrid']);
 
 app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($routeProvider, $locationProvider, $httpProvider) {
     'use strict';
@@ -138,7 +138,21 @@ app.run(['$rootScope', function ($rootScope) {
     console.log('Angular.js run() function...');
 }]);
 
-
+function escapeHTML(content) {
+    'use strict';
+    return content.replace(/[&<"']/g, function (m) {
+        switch (m) {
+            case '&':
+                return '&amp;';
+            case '<':
+                return '&lt;';
+            case '"':
+                return '&quot;';
+            default:
+                return m;
+        }
+    });
+}
 
 
 /* ---> Do not delete this comment (Values) <--- */

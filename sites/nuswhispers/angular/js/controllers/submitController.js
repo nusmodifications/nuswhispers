@@ -69,21 +69,6 @@ angular.module('nuswhispersApp.controllers')
     };
 
     $scope.highlightTags = function () {
-        // TODO: repeated code :(
-        function escapeHTML(content) {
-            return content.replace(/[&<"']/g, function (m) {
-                switch (m) {
-                    case '&':
-                        return '&amp;';
-                    case '<':
-                        return '&lt;';
-                    case '"':
-                        return '&quot;';
-                    default:
-                        return m;
-                }
-            });
-        }
         $scope.contentTagHighlights = '';
         if ($scope.confessionData.content === undefined) {
             return;

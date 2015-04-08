@@ -27,6 +27,10 @@ a:focus {
     @include transition(padding-left, 0.5s, ease, 0s);
 }
 
+.likebox-wrapper {
+    text-align: center;
+}
+
 .whispers-brand {
     float: none;
     padding: 1em 1em .25em;
@@ -246,6 +250,7 @@ a:focus {
     background-repeat: no-repeat;
     background-position: center;
     height: 24px;
+    margin-bottom: 1em;
 }
 
 @media (max-width: 768px) {

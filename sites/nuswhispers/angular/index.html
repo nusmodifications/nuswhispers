@@ -48,7 +48,7 @@
         <h2 class="nav-section-label">Popular Tags</h2>
         <ul class="nav">
           <li ng-repeat="tag in tags">
-            <a ng-href="/#!tag/{{tag.confession_tag.substring(1)}}" ng-bind="tag.confession_tag"></a>
+            <a ng-href="/#!tag/{{tag.confession_tag.substring(1)}}" ng-bind="tag.confession_tag | truncate: 20" title="{{tag.confession_tag}}"></a>
           </li>
         </ul>
       </nav>
