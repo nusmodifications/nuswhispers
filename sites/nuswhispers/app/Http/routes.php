@@ -11,10 +11,6 @@
 |
 */
 
-Route::get('/', function() {
-    return File::get(public_path() . '/index.html');
-});
-
 // API Routes
 Route::group(array('prefix' => 'api'), function() {
     Route::get('confessions/popular', 'ConfessionsController@popular');
@@ -54,4 +50,13 @@ Route::controllers([
 // Temporarily redirect default admin to confessions dashboard
 Route::get('/admin', function() {
     return redirect('admin/confessions');
+});
+
+// reroute to angular
+Route::get('/{getEverything}', function() {
+    return File::get(public_path() . '/index.html');
+});
+
+Route::get('/{getEverything}/{all}', function() {
+    return File::get(public_path() . '/index.html');
 });
