@@ -56,10 +56,6 @@ Route::get('/admin', function() {
 });
 
 // reroute to angular
-Route::get('/{getEverything}', function() {
-    return File::get(public_path() . '/index.html');
-});
-
-Route::get('/{getEverything}/{all}', function() {
-    return File::get(public_path() . '/index.html');
+Route::get('/{getEverything?}/{all?}', function() {
+    return File::get(public_path() . '/app.html');
 });
