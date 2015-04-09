@@ -35,8 +35,8 @@
       <div class="post-media-summary">
         <a href="/#!home" class="tweets-count liked" target="_blank">8</a>
         <a ng-click="confession.show_comments = !confession.show_comments" ng-class="{shown: confession.show_comments}" class="show-comments-btn" tooltip-placement="bottom" tooltip="{{confession.show_comments ? 'Hide Comments' : 'Show Comments'}}">{{confession.facebook_information.comments.summary.total_count}}</a>
-        <a ng-click="likeConfessionFB(confession)" ng-class="{liked: confessionIsLiked(confession)}" class="fb-likes" target="_blank" tooltip-placement="bottom" tooltip="Like">{{confession.facebook_information.likes.summary.total_count}}</a>
-        <a ng-click="toggleFavouriteConfession(confession)" ng-class="{liked: confessionIsFavourited(confession)}" class="favs-count" target="_blank" tooltip-placement="bottom" tooltip="{{fbUser.getAccessToken() === '' ? 'Login to Favourite' : ''}}">{{confession.favourites.length}}</a>
+        <a ng-click="likeConfessionFB(confession)" ng-class="{liked: confessionIsLiked(confession)}" class="fb-likes" target="_blank" tooltip-placement="bottom" tooltip="{{fbUser.getAccessToken() === '' ? 'Login to Like' : (confessionIsLiked(confession) ? 'Unlike' : 'Like')}}">{{confession.facebook_information.likes.summary.total_count}}</a>
+        <a ng-click="toggleFavouriteConfession(confession)" ng-class="{liked: confessionIsFavourited(confession)}" class="favs-count" target="_blank" tooltip-placement="bottom" tooltip="{{fbUser.getAccessToken() === '' ? 'Login to Favourite' : (confessionIsFavourited(confession) ? 'Unfavourite' : 'Favourite')}}">{{confession.favourites.length}}</a>
       </div>
     </div>
     <div class="post-comment-list" collapse="!confession.show_comments">
