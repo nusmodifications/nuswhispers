@@ -16,6 +16,7 @@ class ConfessionsController extends Controller {
     public function __construct(ConfessionsRepository $confessionsRepo)
     {
         $this->confessionsRepo = $confessionsRepo;
+        return parent::__construct();
     }
 
 	/**

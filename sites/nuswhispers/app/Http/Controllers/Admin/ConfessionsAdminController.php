@@ -13,6 +13,7 @@ class ConfessionsAdminController extends AdminController {
     public function __construct(ConfessionsRepository $confessionsRepo)
     {
         $this->confessionsRepo = $confessionsRepo;
+        return parent::__construct();
     }
 
     public function getIndex($status = 'Pending')
