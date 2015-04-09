@@ -85,6 +85,7 @@ class ConfessionsRepository extends BaseRepository {
         }
         $old = $confession->status;
         $confession->status = $new;
+        $confession->status_updated_at = new \DateTime();
 
         if (\Auth::check()) {
             $user = \Auth::user()->getAuthIdentifier();
@@ -161,10 +162,13 @@ class ConfessionsRepository extends BaseRepository {
 
     protected function deleteFromFacebook($confession)
     {
-        if ($confession->images) {
-            \Facebook::delete('/' . $confession->fb_post_id, [], $this->getPageToken());
-        } else {
-            \Facebook::delete('/' . env('FACEBOOK_PAGE_ID', '') . '_' . $confession->fb_post_id, [], $this->getPageToken());
+        try {
+            if ($confession->images) {
+                \Facebook::delete('/' . $confession->fb_post_id, [], $this->getPageToken());
+            } else {
+                \Facebook::delete('/' . env('FACEBOOK_PAGE_ID', '') . '_' . $confession->fb_post_id, [], $this->getPageToken());
+            }
+        } catch (\Exception $e) {
         }
         $confession->fb_post_id = '';
     }

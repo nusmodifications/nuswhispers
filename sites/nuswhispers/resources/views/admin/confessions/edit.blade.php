@@ -41,9 +41,9 @@
     <div class="panel panel-default panel-status">
       <div class="panel-heading">Status</div>
       <div class="panel-body">
-        <p class="help-block">Updating the status here will have the similar effect of changing the status in the index page.</p>
-
-        <p><?php echo \Form::select('status', array_combine($confession->statuses(), $confession->statuses()), null, ['class' => 'form-control']) ?></p>
+        <p><?php echo \Form::select('status', array_combine($confession->statuses(), $confession->statuses()), null, ['class' => 'form-control']) ?>
+        </p>
+        <p style="text-align:center; color: #999">Latest status updated {{$confession->status_updated_at->diffForHumans()}}.</p>
         @if ($confession->fb_post_id)
         <hr>
         <p>
