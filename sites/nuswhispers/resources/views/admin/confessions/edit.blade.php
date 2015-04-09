@@ -63,7 +63,7 @@
           <li>
             Changed from <strong>{{$log->status_before}}</strong> to <strong>{{$log->status_after}}</strong>
             <span class="status-meta">
-              <?php echo \Carbon\Carbon::createFromFormat('Y-m-d G:i:s', $log->created_on)->diffForHumans() ?> by {{!empty($log->user->name) ? $log->user->name : $log->user->email}}
+              {{$log->created_on->diffForHumans()}} by {{!empty($log->user->name) ? $log->user->name : $log->user->email}}
             </span>
           </li>
           @endforeach

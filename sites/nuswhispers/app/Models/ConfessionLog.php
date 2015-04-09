@@ -36,4 +36,13 @@ class ConfessionLog extends Model {
         return $this->belongsTo('App\Models\User', 'changed_by_user');
     }
 
+    /**
+     * Automatically mutate the date fields
+     * @return array
+     */
+    public function getDates()
+    {
+        return ['created_on'];
+    }
+
 }
