@@ -154,11 +154,32 @@ angular.module('nuswhispersApp.controllers')
         });
     };
 
-    $scope.LikeConfessionFB = function (facebookID) {
-        Facebook.api(
-            '/'+facebookID+'/likes',
-            'post'
-        );
+    $scope.likeConfessionFB = function (confession) {
+        var facebookID = confession.fb_post_id;
+        if (!$scope.confessionIsLiked(confession))
+        {
+            Facebook.api(
+                '/' + facebookID + '/likes',
+                'post',
+                function (response) {
+                    if (response.success) {
+                        confession.load();
+                    }
+                }
+            );
+        }
+        else
+        {
+            Facebook.api(
+                '/' + facebookID + '/likes',
+                'delete',
+                function (response) {
+                    if (response.success) {
+                        confession.load();
+                    }
+                }
+            );
+        }
     };
     
 });
