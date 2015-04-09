@@ -13,6 +13,7 @@ class ConfessionsAdminController extends AdminController {
     public function __construct(ConfessionsRepository $confessionsRepo)
     {
         $this->confessionsRepo = $confessionsRepo;
+        return parent::__construct();
     }
 
     public function getIndex($status = 'Pending')
@@ -82,8 +83,8 @@ class ConfessionsAdminController extends AdminController {
             return \Redirect::back()->withMessage('Confession successfully updated.')
                 ->with('alert-class', 'alert-success');
         } catch (\Exception $e) {
-            // return \Redirect::back()->withMessage('Failed updating confession: ' . $e->getMessage())
-            //     ->with('alert-class', 'alert-danger');
+            return \Redirect::back()->withMessage('Failed updating confession: ' . $e->getMessage())
+                ->with('alert-class', 'alert-danger');
         }
 
     }

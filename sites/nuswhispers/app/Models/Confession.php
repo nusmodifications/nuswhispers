@@ -106,6 +106,15 @@ class Confession extends Model {
     }
 
     /**
+     * Automatically mutate the date fields
+     * @return array
+     */
+    public function getDates()
+    {
+        return ['created_at', 'updated_at', 'status_updated_at'];
+    }
+
+    /**
      * Query scope for rejected confessions
      * @param  \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
