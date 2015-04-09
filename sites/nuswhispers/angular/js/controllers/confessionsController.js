@@ -153,5 +153,12 @@ angular.module('nuswhispersApp.controllers')
             href: 'http://nuswhispers.com/#!/confession/' + confessionID,
         });
     };
+
+    $scope.LikeConfessionFB = function (facebookID) {
+        Facebook.api(
+            '/'+facebookID+'/likes',
+            'post'
+        );
+    };
     
 });
