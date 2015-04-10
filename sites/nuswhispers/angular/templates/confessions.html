@@ -40,14 +40,26 @@
       </div>
     </div>
     <div class="post-comment-list" collapse="!confession.show_comments">
-      <div ng-repeat="comment in confession.facebook_information.comments.data" class="post-comment">
-        <a class="media-left" href="https://www.facebook.com/{{comment.from.id}}" target="_blank">
-          <img class="post-user-thumbnail" ng-src="http://graph.facebook.com/{{comment.from.id}}/picture?width=256&height=256" />
-        </a>
-        <div class="media-body">
-          <a href="https://www.facebook.com/{{comment.from.id}}" target="_blank">{{comment.from.name}}</a> - 
-          <span class="post-time" am-time-ago="comment.created_time"></span>
-          <p>{{comment.message}}</p>
+      <div ng-repeat="comment in confession.facebook_information.comments.data">
+        <div class="post-comment">
+          <a class="media-left" href="https://www.facebook.com/{{comment.from.id}}" target="_blank">
+            <img class="post-user-thumbnail" ng-src="http://graph.facebook.com/{{comment.from.id}}/picture?width=256&height=256" />
+          </a>
+          <div class="media-body">
+            <a href="https://www.facebook.com/{{comment.from.id}}" target="_blank">{{comment.from.name}}</a> - 
+            <span class="post-time" am-time-ago="comment.created_time"></span>
+            <p>{{comment.message}}</p>
+          </div>
+        </div>
+        <div ng-repeat="reply in comment.comments.data" class="post-comment post-comment-reply">
+          <a class="media-left" href="https://www.facebook.com/{{reply.from.id}}" target="_blank">
+            <img class="post-user-thumbnail" ng-src="http://graph.facebook.com/{{reply.from.id}}/picture?width=256&height=256" />
+          </a>
+          <div class="media-body">
+            <a href="https://www.facebook.com/{{reply.from.id}}" target="_blank">{{reply.from.name}}</a> - 
+            <span class="post-time" am-time-ago="reply.created_time"></span>
+            <p>{{reply.message}}</p>
+          </div>
         </div>
       </div>
       <div class="post-comment">
