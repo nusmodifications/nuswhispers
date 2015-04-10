@@ -42,7 +42,7 @@
     <div class="post-comment-list" collapse="!confession.show_comments">
       <div ng-repeat="comment in confession.facebook_information.comments.data" class="post-comment">
         <a class="media-left" href="https://www.facebook.com/{{comment.from.id}}" target="_blank">
-          <img ng-src="http://graph.facebook.com/{{comment.from.id}}/picture" />
+          <img class="post-user-thumbnail" ng-src="http://graph.facebook.com/{{comment.from.id}}/picture?width=256&height=256" />
         </a>
         <div class="media-body">
           <a href="https://www.facebook.com/{{comment.from.id}}" target="_blank">{{comment.from.name}}</a> - 
