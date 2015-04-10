@@ -59,59 +59,53 @@
                 margin-right: 8px;
                 vertical-align: middle;
             }
+
+            .post-media-action-btn {
+                color: $secondary-text-color;
+                &:before {
+                    margin-right: 8px;
+                    margin-left: 4px;
+                    font-family: 'typicons';
+                    font-size: 1.6em;
+                    position: relative;
+                    top: 0.1em;
+                }
+            }
+
             .show-comments-btn {
-                color: $secondary-text-color;
+                &.shown {
+                    color: $primary-color;
+                }
+                &:before {
+                    content: '\e0b8';
+                }
             }
-            .show-comments-btn.shown {
-                color: $primary-color;
-            }
-            .show-comments-btn:before {
-                content: '\e0b8';
-                margin-right: 8px;
-                margin-left: 4px;
-                font-family: 'typicons';
-                font-size: 1.6em;
-                position: relative;
-                top: 0.1em;
-            }
+
             .fb-likes {
-                color: $secondary-text-color;
+                &.liked {
+                    color: $fb-color;
+                    &:before {
+                        color: $fb-color;
+                    }
+                }
+                &:before {
+                    content: '\e11c';
+                    color: $secondary-text-color;
+                }
             }
-            .fb-likes.liked {
-                color: $fb-color;
-            }
-            .fb-likes.liked:before {
-                color: $fb-color;
-            }
-            .fb-likes:before {
-                content: '\e11c';
-                margin-right: 8px;
-                margin-left: 4px;
-                color: $secondary-text-color;
-                font-family: 'typicons';
-                font-size: 1.6em;
-                position: relative;
-                top: 0.1em;
-            }
+            
             .favs-count {
-                color: $secondary-text-color;
-            }
-            .favs-count.liked {
-                color: $alternate-color;
-            }
-            .favs-count.liked:before {
-                content: '\e105';
-                color: $alternate-color;
-            }
-            .favs-count:before {
-                content: '\e108';
-                margin-right: 8px;
-                margin-left: 4px;
-                color: $secondary-text-color;
-                font-family: 'typicons';
-                font-size: 1.6em;
-                position: relative;
-                top: 0.1em;
+                &.liked {
+                    color: $alternate-color;
+                    &:before {
+                        color: $alternate-color;
+                        content: '\e105';
+                    }
+                }
+                &:before {
+                    content: '\e108';
+                    color: $secondary-text-color;
+                }
             }
         }
     }
