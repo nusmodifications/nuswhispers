@@ -112,6 +112,10 @@
     .post-comment-list {
         .post-comment {
             padding-bottom: 15px;
+            .post-user-thumbnail {
+                height: 50px;
+                width: 50px;
+            }
         }
     }
 }
