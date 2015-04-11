@@ -5221,10 +5221,10 @@ h2 {
   font-size: 140%;
   font-weight: 400;
   color: #f55260;
-  margin: 0 0 1em; }
+  margin: 1em 0; }
 
 .page-header {
-  margin-top: 0;
+  margin: 0 auto;
   padding-bottom: 6px;
   border-color: #ddd; }
   .page-header .typcn {
@@ -5321,8 +5321,9 @@ h2 {
 .panel-status .label {
   font-size: 100%; }
 
-.panel-body .alert {
-  margin: 0.5em 0 0; }
+.panel-body .alert, .form .alert {
+  margin: 0.5em 0 0;
+  padding: 0.5em 0.75em; }
 
 .panel-body .checkbox:first-child {
   margin-top: 0; }
@@ -5340,3 +5341,6 @@ h2 {
   .status-history-list .status-meta {
     display: block;
     color: #b3b3b3; }
+
+.profile-form {
+  margin: 0 0 1em; }

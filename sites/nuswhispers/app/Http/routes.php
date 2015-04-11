@@ -42,8 +42,11 @@ Route::controllers([
 
 // Admin Routes
 Route::controllers([
-    'admin/profile' => 'Admin\ProfileController',
     'admin/users' => 'Admin\UsersAdminController',
+]);
+
+Route::controller('admin/profile', 'Admin\ProfileController', [
+    'postEdit' => 'admin.profile.edit',
 ]);
 
 Route::controller('admin/confessions', 'Admin\ConfessionsAdminController', [

@@ -28,5 +28,48 @@
       @endforeach
     </tbody>
   </table>
+
+  <h2>Edit My Profile</h2>
+  <?php echo \Form::model($user, ['route' => 'admin.profile.edit', 'class' => 'profile-form form']) ?>
+
+  <div class="form-group {{$errors->first('email') ? 'has-error' : ''}}">
+    <label for="email">E-mail Address <span class="text-danger">*</span></label>
+    <?php echo \Form::text('email', null, ['class' => 'form-control']) ?>
+    @if ($errors->first('email'))
+    <p class="alert alert-danger">{{$errors->first('email')}}</p>
+    @endif
+  </div>
+
+  <div class="form-group {{$errors->first('name') ? 'has-error' : ''}}">
+    <label for="name">Display Name <span class="text-danger">*</span></label>
+    <?php echo \Form::text('name', null, ['class' => 'form-control']) ?>
+    @if ($errors->first('name'))
+    <p class="alert alert-danger">{{$errors->first('name')}}</p>
+    @endif
+  </div>
+
+  <h2>Change Password</h2>
+
+  <div class="form-group {{$errors->first('new_password') ? 'has-error' : ''}}">
+    <label for="new_password">New Password</label>
+    <?php echo \Form::password('new_password', ['class' => 'form-control', 'autocomplete' => 'off']) ?>
+    @if ($errors->first('new_password'))
+    <p class="alert alert-danger">{{$errors->first('new_password')}}</p>
+    @endif
+  </div>
+
+  <div class="form-group {{$errors->first('repeat_password') ? 'has-error' : ''}}">
+    <label for="repeat_password">Repeat Password</label>
+    <?php echo \Form::password('repeat_password', ['class' => 'form-control', 'autocomplete' => 'off']) ?>
+    @if ($errors->first('repeat_password'))
+    <p class="alert alert-danger">{{$errors->first('repeat_password')}}</p>
+    @endif
+  </div>
+
+  <p class="form-actions">
+  <?php echo \Form::submit('Update Profile', ['class' => 'btn btn-primary']) ?>
+  </p>
+
+  <?php echo \Form::close() ?>
 </div>
 @endsection

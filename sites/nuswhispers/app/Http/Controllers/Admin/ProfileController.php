@@ -13,8 +13,38 @@ class ProfileController extends AdminController {
 
         return view('admin.profile.index', [
             'providers' => $allowedProviders,
+            'user'      => \Auth::user(),
             'profiles'  => \Auth::user()->profiles()->get()->keyBy('provider_name'),
         ]);
+    }
+
+    public function postEdit()
+    {
+        $validationRules = [
+            'email' => 'required|email',
+            'name' => 'required|string',
+            'new_password' => 'min:6|max:32|string',
+            'repeat_password' => 'same:new_password',
+        ];
+
+        $validator = \Validator::make(\Input::all(), $validationRules);
+        if ($validator->fails()) {
+            return \Redirect::back()->withErrors($validator);
+        }
+
+        try {
+            $res = \Auth::user()->update([
+                'email' => \Input::get('email'),
+                'name' => \Input::get('name'),
+                'password' => \Input::get('new_password') ? \Hash::make(\Input::get('new_password')) : \Auth::user()->password,
+            ]);
+
+            return \Redirect::back()->withMessage('Profile successfully updated.')
+                ->with('alert-class', 'alert-success');
+        } catch (\Exception $e) {
+            return \Redirect::back()->withMessage('Failed updating profile: ' . $e->getMessage())
+                ->with('alert-class', 'alert-danger');
+        }
     }
 
     public function getConnect($provider = 'facebook')

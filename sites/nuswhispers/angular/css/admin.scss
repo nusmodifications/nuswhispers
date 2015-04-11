@@ -90,11 +90,11 @@ h2 {
     font-size: 140%;
     font-weight: 400;
     color: $primary-color;
-    margin: 0 0 1em;
+    margin: 1em 0;
 }
 
 .page-header {
-    margin-top: 0;
+    margin: 0 auto;
     padding-bottom: 6px;
     border-color: #ddd;
 
@@ -235,8 +235,9 @@ h2 {
     font-size: 100%;
 }
 
-.panel-body .alert {
+.panel-body .alert, .form .alert {
     margin: .5em 0 0;
+    padding: .5em .75em;
 }
 
 .panel-body .checkbox:first-child {
@@ -262,4 +263,8 @@ h2 {
         display: block;
         color: lighten($primary-text-color, 30%);
     }
+}
+
+.profile-form {
+    margin: 0 0 1em;
 }
