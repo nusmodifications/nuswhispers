@@ -147,14 +147,7 @@ angular.module('nuswhispersApp.controllers')
         return false;
     };
 
-    $scope.shareConfessionFB = function (confessionID) {
-        Facebook.ui({
-            method: 'share',
-            href: 'http://nuswhispers.com/#!/confession/' + confessionID,
-        });
-    };
-
-    $scope.likeConfessionFB = function (confession) {
+    $scope.toggleLikeConfession = function (confession) {
         var facebookID = confession.fb_post_id;
         if (!$scope.confessionIsLiked(confession)) {
             Facebook.api(
@@ -177,6 +170,29 @@ angular.module('nuswhispersApp.controllers')
                 }
             );
         }
+    };
+
+    $scope.commentConfession = function (confession, commentText) {
+        var facebookID = confession.fb_post_id;
+        Facebook.api(
+            '/' + facebookID + '/comments',
+            'POST',
+            {'message': commentText},
+            function (response) {
+                if (response.id) {
+                    $scope.highlightNewCommentID = response.id;
+                    confession.new_comment = '';
+                    confession.load();
+                }
+            }
+        );
+    };
+
+    $scope.shareConfessionFB = function (confessionID) {
+        Facebook.ui({
+            method: 'share',
+            href: 'http://nuswhispers.com/#!/confession/' + confessionID,
+        });
     };
     
 });

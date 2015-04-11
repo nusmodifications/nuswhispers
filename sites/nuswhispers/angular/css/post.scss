@@ -111,14 +111,40 @@
     }
     .post-comment-list {
         .post-comment {
-            padding-bottom: 15px;
+            margin-bottom: 15px;
             .post-user-thumbnail {
                 height: 50px;
                 width: 50px;
             }
+            &.comment-highlight {
+                border-left: 0.4em solid $alternate-color;
+            }
         }
         .post-comment-reply {
             margin-left: 15px;
+        }
+        .post-new-comment {
+            form {
+                textarea {
+                    width: 100%;
+                    border: 1px solid $faded-text-color;
+                    resize: none;
+                    padding: 0.4em;
+                    height: 50px;
+                    @include remove-box-shadow();
+                    @include border-radius(0);
+                }
+                textarea:focus {
+                    @include remove-box-shadow();
+                }
+                .comment-btn {
+                    float: right;
+                    margin-top: 0.5em;
+                }
+            }
+        }
+        .post-comment-fb-link {
+            padding-bottom: 15px;
         }
     }
 }
