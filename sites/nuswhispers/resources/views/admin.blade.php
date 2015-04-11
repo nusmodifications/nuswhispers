@@ -38,7 +38,9 @@
       </ul>
       <hr>
       <ul class="nav main-nav">
+        @if (\Auth::user()->role == 'Administrator')
         <li class="{{ Request::is('admin/users') ? 'active' : '' }}"><a href="/admin/users"><span class="typcn typcn-group"></span>User Management</a></li>
+        @endif
         <li><a href="/auth/logout"><span class="typcn typcn-eject"></span>Logout</a></li>
       </ul>
     </nav><!-- #sidebar-wrapper -->
