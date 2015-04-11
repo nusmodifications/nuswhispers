@@ -41,8 +41,9 @@ Route::controllers([
 ]);
 
 // Admin Routes
-Route::controllers([
-    'admin/users' => 'Admin\UsersAdminController',
+Route::controller('admin/users', 'Admin\UsersAdminController', [
+    'postEdit' => 'admin.users.edit',
+    'postAdd' => 'admin.users.add',
 ]);
 
 Route::controller('admin/profile', 'Admin\ProfileController', [
