@@ -16,6 +16,7 @@ class ConfessionsRepository extends BaseRepository {
     public function create(array $data, $categories = [])
     {
         $confession = $this->model->create($data);
+        $confession->status_updated_at = new \DateTime();
 
         $this->syncTags($confession);
         $this->syncCategories($confession, $categories);
