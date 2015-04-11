@@ -41,7 +41,7 @@ class UsersAdminController extends AdminController {
 
         $validator = \Validator::make(\Input::all(), $validationRules);
         if ($validator->fails()) {
-            return \Redirect::back()->withErrors($validator);
+            return \Redirect::back()->withInput()->withErrors($validator);
         }
 
         try {
@@ -86,7 +86,7 @@ class UsersAdminController extends AdminController {
 
         $validator = \Validator::make(\Input::all(), $validationRules);
         if ($validator->fails()) {
-            return \Redirect::back()->withErrors($validator);
+            return \Redirect::back()->withInput()->withErrors($validator);
         }
 
         try {
