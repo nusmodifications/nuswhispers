@@ -106,9 +106,9 @@ angular.module('nuswhispersApp.controllers')
 
     $scope.confessionIsFavourited = function (confession) {
         if (FacebookUser.getAccessToken() !== '') {
-            var fbUserID = FacebookUser.getUserID();
+            var fbUserID = parseInt(FacebookUser.getUserID());
             for (var i in confession.favourites) {
-                if (confession.favourites[i].fb_user_id === fbUserID) {
+                if (parseInt(confession.favourites[i].fb_user_id) === fbUserID) {
                     return true;
                 }
             }
