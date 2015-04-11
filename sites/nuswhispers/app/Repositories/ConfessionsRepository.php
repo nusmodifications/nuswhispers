@@ -93,6 +93,7 @@ class ConfessionsRepository extends BaseRepository {
                 'status_before' => $old,
                 'status_after' => $new,
                 'changed_by_user' => $user,
+                'created_on' => new \DateTime(),
             ]);
             $confession->logs()->save($log);
         }

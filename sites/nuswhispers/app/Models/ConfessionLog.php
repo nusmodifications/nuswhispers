@@ -25,7 +25,7 @@ class ConfessionLog extends Model {
     /**
      * Attributes should be mass-assignable.
      */
-    protected $fillable = ['status_before', 'status_after', 'changed_by_user'];
+    protected $fillable = ['status_before', 'status_after', 'changed_by_user', 'created_on'];
 
     /**
      * Defines user relationship from model.
