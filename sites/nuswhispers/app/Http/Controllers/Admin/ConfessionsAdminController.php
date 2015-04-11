@@ -18,6 +18,7 @@ class ConfessionsAdminController extends AdminController {
 
     public function getIndex($status = 'Pending')
     {
+        $status = ucfirst($status);
         if ($status != 'Pending')
         {
             $query = Confession::orderBy('created_at', 'desc');
