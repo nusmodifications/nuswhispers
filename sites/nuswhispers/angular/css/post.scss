@@ -112,6 +112,9 @@
     .post-comment-list {
         .post-comment {
             margin-bottom: 15px;
+            p {
+                white-space: pre-wrap;
+            }
             .post-user-thumbnail {
                 height: 50px;
                 width: 50px;
