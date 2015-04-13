@@ -12,7 +12,8 @@ angular.module('nuswhispersApp.controllers')
         imageSelected: false,
         selectedCategoryIDs: [],
         errors: [],
-        submitSuccess: false
+        submitSuccess: false,
+        clicked: false
     };
 
     $scope.setRecaptchaResponse = function (response) {
@@ -20,12 +21,14 @@ angular.module('nuswhispersApp.controllers')
     };
 
     $scope.submitConfession = function () {
+        $scope.form.clicked = true;
         $scope.confessionData.categories = $scope.form.selectedCategoryIDs;
 
         Confession.submit($scope.confessionData)
             .success(function (response) {
                 $scope.form.submitSuccess = response.success;
                 if (!response.success) {
+                    $scope.form.clicked = false;
                     $scope.form.errors = [];
                     for (var error in response.errors) {
                         for (var msg in response.errors[error]) {
@@ -36,6 +39,7 @@ angular.module('nuswhispersApp.controllers')
                 }
             })
             .error(function (response) {
+                $scope.form.clicked = false;
                 console.log(response);
             });
     };

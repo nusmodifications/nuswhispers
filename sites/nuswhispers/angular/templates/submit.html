@@ -51,7 +51,7 @@
         <!-- @endif -->
     </div>
 
-    <button class="btn" type="submit">Submit</button><span class="side-note">Your submission is totally anonymous.</span>
+    <button class="btn" type="submit" ng-disabled="form.clicked">Submit</button><span class="side-note">Your submission is totally anonymous.</span>
     <div class="alert alert-danger" role="alert" ng-show="form.errors.length > 0">
         Oops! We could not submit your confession. Fix up these errors before trying again:
         <ul ng-repeat="error in form.errors">
