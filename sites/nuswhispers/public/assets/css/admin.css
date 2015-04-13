@@ -5287,7 +5287,9 @@ h2 {
   margin: 1em 0;
   box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1); }
 .post-list .post-content {
-  padding: 0 1em 1em; }
+  padding: 0 1em 1em;
+  white-space: pre-wrap;
+  word-break: break-word; }
 .post-list .post-image {
   padding: 0 1em 1em; }
   .post-list .post-image img {
