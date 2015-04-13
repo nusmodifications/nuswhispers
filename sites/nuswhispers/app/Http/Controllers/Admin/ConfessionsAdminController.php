@@ -39,7 +39,7 @@ class ConfessionsAdminController extends AdminController {
             $query = $query->where('content', 'LIKE', "%$search%");
         }
 
-        if ($status != 'all')
+        if ($status != 'All')
         {
             $query = $query->where('status', '=', ucfirst($status));
         }
