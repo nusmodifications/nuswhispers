@@ -36,7 +36,7 @@ class RobotsController extends Controller {
     protected function isCrawler()
     {
         $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : null;
-        $botTypes = 'bot|crawl|slurp|spider';
+        $botTypes = 'bot|crawl|slurp|spider|facebookexternalhit';
 
         return !empty($userAgent) ? preg_match("/{$botTypes}/", $userAgent) > 0 : false;
     }
