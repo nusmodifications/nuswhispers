@@ -34,6 +34,11 @@ Route::group(array('prefix' => 'api'), function() {
     ]);
 });
 
+// Search Engine Robot Routes
+Route::controllers([
+    'robots' => 'RobotsController',
+]);
+
 // Auth Routes
 Route::controllers([
 	'auth' => 'Auth\AuthController',
