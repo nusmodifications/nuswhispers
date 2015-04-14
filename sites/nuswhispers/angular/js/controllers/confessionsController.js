@@ -191,8 +191,8 @@ angular.module('nuswhispersApp.controllers')
     $scope.shareConfessionFB = function (confessionID) {
         Facebook.ui({
             method: 'share',
-            href: 'http://nuswhispers.com/#!/confession/' + confessionID,
+            href: 'http://nuswhispers.com/confession/' + confessionID,
         });
     };
-    
+
 });
