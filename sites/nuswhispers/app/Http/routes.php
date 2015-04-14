@@ -41,7 +41,7 @@ Route::get('/confession/{id}', function($id) {
 
     $isCrawler = !empty($userAgent) ? preg_match("/{$botTypes}/", $userAgent) > 0 : false;
 
-    if (!$isCrawler) {
+    if ($isCrawler) {
         return App::make('\App\Http\Controllers\RobotsController')->getConfession($id);
     } else {
         return File::get(public_path() . '/app.html');
