@@ -10,6 +10,8 @@
   <meta property="og:description" content="{{ $confession->content }}" />
   @if ($confession->images)
   <meta property="og:image" content="{{ $confession->images }}" />
+  @else
+  <meta property="og:image" content="http://nuswhispers.com/favicon-512x512.png" />
   @endif
   <meta property="og:url" content="<?php echo url('confession', $confession->confession_id) ?>" />
   <meta property="og:type" content="article" />
