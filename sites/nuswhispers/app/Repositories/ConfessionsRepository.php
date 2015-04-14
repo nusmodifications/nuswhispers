@@ -127,7 +127,7 @@ class ConfessionsRepository extends BaseRepository {
             }
 
             $response = \Facebook::post($endpoint, [
-                'message' => $confession->content . "\n\n" . url('/#!/confession/' . $confession->confession_id),
+                'message' => $confession->content . "\n-\n #" . $confession->confession_id . ": " . url('/confession/' . $confession->confession_id),
                 'url'  => $confession->images,
             ], $this->getPageToken())->getGraphObject();
 
@@ -143,14 +143,8 @@ class ConfessionsRepository extends BaseRepository {
                 $endpoint = '/' . env('FACEBOOK_PAGE_ID', '') . '/feed';
             }
 
-            if ($confession->confession_id % 5 == 0) { // yup, random
-                $message = $confession->content . "\n-\n" . 'Submit your own confessions at: ' . url('/');
-            } else {
-                $message = $confession->content;
-            }
-
             $response = \Facebook::post($endpoint, [
-                'message' => $message,
+                'message' => $confession->content . "\n-\n #" . $confession->confession_id . ": " . url('/confession/' . $confession->confession_id),
                 // 'link' => url('/#!/confession/' . $confession->confession_id)
             ], $this->getPageToken())->getGraphObject();
 
