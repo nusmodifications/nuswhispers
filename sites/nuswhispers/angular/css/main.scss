@@ -161,6 +161,7 @@ a:focus {
     @include transition(all, 0.5s, ease, 0s);
     width: $sidebar-width;
     margin-left: -$sidebar-width;
+    overflow-y: auto;
     hr {
         margin: .25em auto;
         opacity: 0.5;
