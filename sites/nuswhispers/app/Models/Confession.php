@@ -8,7 +8,7 @@ class Confession extends Model {
      * The database table used by the model.
      * @var string
      */
-	protected $table = 'confessions';
+    protected $table = 'confessions';
 
     /**
      * Primary key of the model.
@@ -34,19 +34,19 @@ class Confession extends Model {
      * Defines confession categories relationship to model.
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-	public function categories()
-	{
-		return $this->belongsToMany('App\Models\Category', 'confession_categories', 'confession_id', 'confession_category_id');
-	}
+    public function categories()
+    {
+        return $this->belongsToMany('App\Models\Category', 'confession_categories', 'confession_id', 'confession_category_id');
+    }
 
     /**
      * Defines confession tags relationship to model.
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-	public function tags()
-	{
-		return $this->belongsToMany('App\Models\Tag', 'confession_tags', 'confession_id', 'confession_tag_id');
-	}
+    public function tags()
+    {
+        return $this->belongsToMany('App\Models\Tag', 'confession_tags', 'confession_id', 'confession_tag_id');
+    }
 
     /**
      * Defines confession favourites relationship to model.

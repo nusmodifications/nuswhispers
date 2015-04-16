@@ -3,14 +3,14 @@
 use Illuminate\Database\Eloquent\Model;
 
 class Tag extends Model {
-	protected $table = 'tags';
-	protected $fillable = array('confession_tag');
+    protected $table = 'tags';
+    protected $fillable = array('confession_tag');
     protected $primaryKey = 'confession_tag_id';
-	public $timestamps = false;
+    public $timestamps = false;
 
-	public function confessions()
-	{
-		return $this->belongsToMany('App\Models\Confession', 'confession_tags', 'confession_tag_id', 'confession_id');
-	}
+    public function confessions()
+    {
+        return $this->belongsToMany('App\Models\Confession', 'confession_tags', 'confession_tag_id', 'confession_id');
+    }
 
 }

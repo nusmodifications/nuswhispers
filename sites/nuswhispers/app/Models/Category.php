@@ -8,7 +8,7 @@ class Category extends Model {
      * The database table used by the model.
      * @var string
      */
-	protected $table = 'categories';
+    protected $table = 'categories';
 
     /**
      * Primary key of the model.
@@ -20,15 +20,15 @@ class Category extends Model {
      * Disable timestamps functionality.
      * @var boolean
      */
-	public $timestamps = false;
+    public $timestamps = false;
 
-	public function confessions()
-	{
-		return $this->belongsToMany('App\Models\Confession', 'confession_categories', 'confession_category_id', 'confession_id');
-	}
+    public function confessions()
+    {
+        return $this->belongsToMany('App\Models\Confession', 'confession_categories', 'confession_category_id', 'confession_id');
+    }
 
-	public function scopeCategoryAsc($query)
-	{
-		return $query->orderBy('confession_category', 'ASC');
-	}
+    public function scopeCategoryAsc($query)
+    {
+        return $query->orderBy('confession_category', 'ASC');
+    }
 }
