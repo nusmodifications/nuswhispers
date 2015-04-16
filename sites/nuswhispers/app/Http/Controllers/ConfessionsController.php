@@ -197,6 +197,8 @@ class ConfessionsController extends Controller {
 
 		$validator = \Validator::make(\Input::all(), $validationRules);
 
+		\Log::info(json_encode(\Input::all()));
+
 		if ($validator->fails()) {
 			return \Response::json(['success' => false, 'errors' => $validator->messages()]);
 		}
@@ -209,10 +211,18 @@ class ConfessionsController extends Controller {
 			return \Response::json(['success' => false, 'errors' => ['reCAPTCHA' => ['The reCAPTCHA was not entered correctly. Please try again.']]]);
 		}
 
-        $res = $this->confessionsRepo->create([
-            'content' => \Input::get('content'),
-            'images'  => \Input::get('image'),
-        ], \Input::get('categories'));
+		if (is_array(\Input::get('categories'))) {
+			$res = $this->confessionsRepo->create([
+	            'content' => \Input::get('content'),
+	            'images'  => \Input::get('image'),
+	        ], \Input::get('categories'));
+		} else {
+			$res = $this->confessionsRepo->create([
+	            'content' => \Input::get('content'),
+	            'images'  => \Input::get('image'),
+	        ]);
+		}
+        
 
         return \Response::json(['success' => $res]);
 	}
