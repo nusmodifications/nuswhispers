@@ -184,6 +184,10 @@ class ConfessionsRepository extends BaseRepository {
 
     protected function syncCategories(&$confession, $categories)
     {
+        if ($categories == null) {
+            $categories = [];
+        }
+
         $confession->categories()->sync($categories);
         return $confession;
     }
