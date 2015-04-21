@@ -29,7 +29,15 @@
 
   <div class="search-filters">
     <div class="form-group">
-      <?php echo Form::select('category', array_flip($categoryOptions), Request::input('category'), array('class' => 'input-sm form-control')) ?>
+      <?php echo Form::select('category', array_flip($categoryOptions), Request::input('category'), ['class' => 'input-sm form-control']) ?>
+      <div class="date-range">
+        <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+        <span>Anytime</span> <strong class="caret"></strong>
+        <?php echo Form::hidden('start', Request::input('start')) ?>
+        <?php echo Form::hidden('end', Request::input('end')) ?>
+        <div class="tz" style="display:none"><?php echo date('Z') ?></div>
+      </div>
+      <a style="display: none" class="clear-dates" href="#" title="Clear date filter"><i class="typcn typcn-delete"></i></a>
     </div>
     <button class="btn btn-primary btn-sm btn-filter" type="submit">Filter</button>
     <?php echo str_replace('pagination', 'pagination pagination-sm', $confessions->render()); ?>

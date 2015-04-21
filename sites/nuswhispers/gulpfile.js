@@ -249,6 +249,10 @@ gulp.task('copy:fonts', function () {
 
     console.log('-------------------------------------------------- COPY :fonts');
 
+    // Bootstrap
+    gulp.src(SETTINGS.src.bower + 'bootstrap-sass-official/assets/fonts/bootstrap/**.*')
+        .pipe(gulp.dest(SETTINGS.build.bower + 'bootstrap/assets/fonts'));
+
     // Typicons
     gulp.src(SETTINGS.src.bower + 'typicons/src/font/**.*')
         .pipe(gulp.dest(SETTINGS.build.bower + 'typicons/src/font'));
@@ -288,6 +292,8 @@ gulp.task('watch', function () {
     watchedFiles.push(gulp.watch([SETTINGS.src.bower + '*.js', SETTINGS.src.bower + '**/*.js'], { interval: 500 }, ['concat:bower']));
 
     watchedFiles.push(gulp.watch([SETTINGS.src.templates + '*.html', SETTINGS.src.templates + '**/*.html'], { interval: 500 }, ['copy:html']));
+
+    watchedFiles.push(gulp.watch(['resources/assets/js/*.js'], { interval: 500 }, ['concat:js']));
 
 
     // Just to add log messages on Terminal, in case any file is changed

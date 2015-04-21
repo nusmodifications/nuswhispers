@@ -8,6 +8,7 @@
 
   <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="/assets/css/admin.css">
+  <link rel="stylesheet" href="/assets/css/daterangepicker-bs3.css">
 </head>
 <body>
 
@@ -55,5 +56,8 @@
   <!-- Scripts -->
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
+  <script src="/assets/js/moment.min.js"></script>
+  <script src="/assets/js/daterangepicker.min.js"></script>
+  <script src="/assets/js/admin.js"></script>
 </body>
 </html>

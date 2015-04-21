@@ -1,7 +1,7 @@
 /** NUSWhispers Admin CSS */
 
 // import bootstrap-sass-official
-$icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/" !default;
+$icon-font-path: "/assets/bower/bootstrap/assets/fonts/" !default;
 @import "../../bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 
 /* typicons */
@@ -155,6 +155,27 @@ h2 {
             background: $primary-color;
             border-color: $primary-color;
         }
+    }
+}
+
+.clear-dates {
+    font-size: 125%;
+    margin-right: 1em;
+}
+
+.date-range {
+    display: inline-block;
+    padding: .325em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    vertical-align: middle;
+
+    span {
+        display: inline-block;
+        font-size: 12px;
+        vertical-align: top;
+        padding: 2px .25em;
     }
 }
 

@@ -191,8 +191,8 @@ td, th {
 
 @font-face {
   font-family: 'Glyphicons Halflings';
-  src: url('../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/glyphicons-halflings-regular.eot');
-  src: url('../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/glyphicons-halflings-regular.woff2') format('woff2'), url('../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/glyphicons-halflings-regular.woff') format('woff'), url('../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/glyphicons-halflings-regular.ttf') format('truetype'), url('../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg'); }
+  src: url('/assets/bower/bootstrap/assets/fonts/glyphicons-halflings-regular.eot');
+  src: url('/assets/bower/bootstrap/assets/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('/assets/bower/bootstrap/assets/fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('/assets/bower/bootstrap/assets/fonts/glyphicons-halflings-regular.woff') format('woff'), url('/assets/bower/bootstrap/assets/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('/assets/bower/bootstrap/assets/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg'); }
 
 .glyphicon {
   position: relative;
@@ -5086,7 +5086,7 @@ a:focus {
   #sidebar-wrapper ul.nav.main-nav {
     margin: 0.5em 0 1em; }
     #sidebar-wrapper ul.nav.main-nav li a {
-      display: inline-block;
+      display: block;
       font-size: 115%;
       padding-top: 0.5em;
       padding-bottom: 0.5em; }
@@ -5267,6 +5267,23 @@ h2 {
     .search-filters .pagination > .active span {
       background: #f55260;
       border-color: #f55260; }
+
+.clear-dates {
+  font-size: 125%;
+  margin-right: 1em; }
+
+.date-range {
+  display: inline-block;
+  padding: 0.325em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  vertical-align: middle; }
+  .date-range span {
+    display: inline-block;
+    font-size: 12px;
+    vertical-align: top;
+    padding: 2px 0.25em; }
 
 .btn-filter {
   margin-left: 1em; }

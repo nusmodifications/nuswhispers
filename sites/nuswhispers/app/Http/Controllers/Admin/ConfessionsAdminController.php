@@ -3,6 +3,7 @@
 use App\Models\Category as Category;
 use App\Models\Confession as Confession;
 use App\Repositories\ConfessionsRepository;
+use Carbon\Carbon;
 
 use Illuminate\Http\Request;
 
@@ -37,6 +38,21 @@ class ConfessionsAdminController extends AdminController {
         {
             $search = stripslashes(\Input::get('q'));
             $query = $query->where('content', 'LIKE', "%$search%");
+        }
+
+        if (\Input::get('start') && \Input::get('end'))
+        {
+            $start = Carbon::createFromFormat('dmY', \Input::get('start'))->startOfDay();
+            $end = Carbon::createFromFormat('dmY', \Input::get('end'))->endOfDay();
+
+            if ($start > $end)
+            {
+                return \Redirect::back()->withMessage('Start date cannot be later than end date.')
+                    ->with('alert-class', 'alert-danger');
+            }
+
+            $query = $query->where('created_at', '>=', $start->toDateTimeString());
+            $query = $query->where('created_at', '<=', $end->toDateTimeString());
         }
 
         if ($status != 'All')
