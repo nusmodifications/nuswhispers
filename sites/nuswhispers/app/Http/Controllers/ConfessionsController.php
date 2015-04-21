@@ -126,15 +126,21 @@ class ConfessionsController extends Controller {
 
     public function tag($tagName)
     {
-        $query = Confession::select(\DB::raw('confessions.*'))
-            ->join('confession_tags', 'confessions.confession_id' , '=', 'confession_tags.confession_id')
+        $query = Confession::select(\DB::raw('confessions.*'));
+
+        if (!ctype_digit($tagName) || Confession::find($tagName)->has('tags')->count() > 0) {
+            $query->join('confession_tags', 'confessions.confession_id' , '=', 'confession_tags.confession_id')
             ->join('tags', 'confession_tags.confession_tag_id' , '=', 'tags.confession_tag_id')
             ->where(function ($query) use ($tagName)
             {
                 $query->where('tags.confession_tag', '=', "#$tagName")
                     ->orWhere('confessions.confession_id', '=', $tagName);
-            })
-            ->orderBy('status_updated_at', 'DESC')
+            });
+        } else {
+            $query->where('confessions.confession_id', '=', $tagName);
+        }
+
+        $query->orderBy('status_updated_at', 'DESC')
             ->approved()
             ->with('favourites')
             ->with('categories');
@@ -225,7 +231,7 @@ class ConfessionsController extends Controller {
                 'images'  => \Input::get('image'),
             ]);
         }
-        
+
 
         return \Response::json(['success' => $res]);
     }
