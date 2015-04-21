@@ -147,7 +147,7 @@ class ConfessionsController extends Controller {
             $query->skip(\Input::get('offset'));
         }
 
-        $confessions = $query->get();
+        $confessions = $query->distinct()->get();
 
         foreach ($confessions as $confession) {
             $confession->status_updated_at_timestamp = $confession->status_updated_at->timestamp;
