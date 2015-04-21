@@ -129,7 +129,11 @@ class ConfessionsController extends Controller {
         $query = Confession::select(\DB::raw('confessions.*'))
             ->join('confession_tags', 'confessions.confession_id' , '=', 'confession_tags.confession_id')
             ->join('tags', 'confession_tags.confession_tag_id' , '=', 'tags.confession_tag_id')
-            ->where('tags.confession_tag', '=', "#$tagName")
+            ->where(function ($query) use ($tagName)
+            {
+                $query->where('tags.confession_tag', '=', "#$tagName")
+                    ->orWhere('confessions.confession_id', '=', $tagName);
+            })
             ->orderBy('status_updated_at', 'DESC')
             ->approved()
             ->with('favourites')
@@ -144,6 +148,7 @@ class ConfessionsController extends Controller {
         }
 
         $confessions = $query->get();
+
         foreach ($confessions as $confession) {
             $confession->status_updated_at_timestamp = $confession->status_updated_at->timestamp;
             $confession->getFacebookInformation();
@@ -196,8 +201,6 @@ class ConfessionsController extends Controller {
         ];
 
         $validator = \Validator::make(\Input::all(), $validationRules);
-
-        \Log::info(json_encode(\Input::all()));
 
         if ($validator->fails()) {
             return \Response::json(['success' => false, 'errors' => $validator->messages()]);
