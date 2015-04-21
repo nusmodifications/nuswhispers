@@ -126,21 +126,15 @@ class ConfessionsController extends Controller {
 
     public function tag($tagName)
     {
-        $query = Confession::select(\DB::raw('confessions.*'));
-
-        if (ctype_digit($tagName) && Confession::find($tagName)->has('tags')->count() == 0) {
-            $query->where('confessions.confession_id', '=', $tagName);
-        } else {
-            $query->join('confession_tags', 'confessions.confession_id' , '=', 'confession_tags.confession_id')
-                ->join('tags', 'confession_tags.confession_tag_id' , '=', 'tags.confession_tag_id')
-                ->where(function ($query) use ($tagName)
-                {
-                    $query->where('tags.confession_tag', '=', "#$tagName")
-                        ->orWhere('confessions.confession_id', '=', $tagName);
-                });
-        }
-
-        $query->orderBy('status_updated_at', 'DESC')
+        $query = Confession::select(\DB::raw('confessions.*'))
+            ->join('confession_tags', 'confessions.confession_id' , '=', 'confession_tags.confession_id')
+            ->join('tags', 'confession_tags.confession_tag_id' , '=', 'tags.confession_tag_id')
+            ->where(function ($query) use ($tagName)
+            {
+                $query->where('tags.confession_tag', '=', "#$tagName")
+                    ->orWhere('confessions.confession_id', '=', $tagName);
+            })
+            ->orderBy('status_updated_at', 'DESC')
             ->approved()
             ->with('favourites')
             ->with('categories');
@@ -153,7 +147,12 @@ class ConfessionsController extends Controller {
             $query->skip(\Input::get('offset'));
         }
 
-        $confessions = $query->get();
+        $confessions = $query->get()->keyBy('confessions.confession_id');
+
+        // Workaround to add the confession itself if it's not retrieved
+        if (ctype_digit($tagName) && !isset($confessions[$tagName])) {
+            $confessions[$tagName] = Confession::approved()->with('favourites')->with('categories')->find($tagName);
+        }
 
         foreach ($confessions as $confession) {
             $confession->status_updated_at_timestamp = $confession->status_updated_at->timestamp;
