@@ -147,13 +147,6 @@ class ConfessionsController extends Controller {
             $query->skip(\Input::get('offset'));
         }
 
-        $confessions = $query->get()->keyBy('confessions.confession_id');
-
-        // Workaround to add the confession itself if it's not retrieved
-        if (ctype_digit($tagName) && !isset($confessions[$tagName])) {
-            $confessions[$tagName] = Confession::approved()->with('favourites')->with('categories')->find($tagName);
-        }
-
         foreach ($confessions as $confession) {
             $confession->status_updated_at_timestamp = $confession->status_updated_at->timestamp;
             $confession->getFacebookInformation();
