@@ -42,8 +42,8 @@ class ConfessionsAdminController extends AdminController {
 
         if (\Input::get('start') && \Input::get('end'))
         {
-            $start = Carbon::createFromFormat('dmY', \Input::get('start'))->startOfDay();
-            $end = Carbon::createFromFormat('dmY', \Input::get('end'))->endOfDay();
+            $start = Carbon::createFromFormat('U', strtotime(\Input::get('start')))->startOfDay();
+            $end = Carbon::createFromFormat('U', strtotime(\Input::get('end')))->startOfDay();
 
             if ($start > $end)
             {
@@ -52,7 +52,7 @@ class ConfessionsAdminController extends AdminController {
             }
 
             $query = $query->where('created_at', '>=', $start->toDateTimeString());
-            $query = $query->where('created_at', '<=', $end->toDateTimeString());
+            $query = $query->where('created_at', '<', $end->toDateTimeString());
         }
 
         if ($status != 'All')

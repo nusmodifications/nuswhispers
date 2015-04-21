@@ -6,8 +6,8 @@
       $label = $('.date-range span'),
       $clearFilter = $('.clear-dates');
 
-    var startDate = ($startInput.val() !== '') ? moment($startInput.val(), 'DDMMYYYY') : moment(),
-      endDate = ($endInput.val() !== '') ? moment($endInput.val(), 'DDMMYYYY') : moment();
+    var startDate = ($startInput.val() !== '') ? moment($startInput.val()) : moment(),
+      endDate = ($endInput.val() !== '') ? moment($endInput.val()) : moment();
 
     if ($startInput.val() !== '' && $endInput.val() !== '') {
       $label.html(startDate.format('DD/MM/YYYY') + ' &ndash; ' + endDate.format('DD/MM/YYYY'));
@@ -45,8 +45,8 @@
 
     function applyDate(start, end) {
       $label.html(start.format('DD/MM/YYYY') + ' &ndash; ' + end.format('DD/MM/YYYY'));
-      $startInput.val(start.format('DDMMYYYY'));
-      $endInput.val(end.format('DDMMYYYY'));
+      $startInput.val(start.format());
+      $endInput.val(end.format());
       $clearFilter.show();
     }
   })(jQuery, moment);
