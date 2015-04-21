@@ -147,6 +147,8 @@ class ConfessionsController extends Controller {
             $query->skip(\Input::get('offset'));
         }
 
+        $confessions = $query->get();
+
         foreach ($confessions as $confession) {
             $confession->status_updated_at_timestamp = $confession->status_updated_at->timestamp;
             $confession->getFacebookInformation();
