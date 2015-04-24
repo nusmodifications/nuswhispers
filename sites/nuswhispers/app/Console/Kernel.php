@@ -11,7 +11,7 @@ class Kernel extends ConsoleKernel {
 	 * @var array
 	 */
 	protected $commands = [
-		'App\Console\Commands\Inspire',
+		'App\Console\Commands\UpdateConfessionFacebookInfo',
 	];
 
 	/**
@@ -22,7 +22,7 @@ class Kernel extends ConsoleKernel {
 	 */
 	protected function schedule(Schedule $schedule)
 	{
-		$schedule->command('inspire')
+		$schedule->command('confession:facebook-update')
 				 ->hourly();
 	}
 
