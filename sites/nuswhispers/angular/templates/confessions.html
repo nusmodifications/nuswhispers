@@ -25,7 +25,7 @@
     </div>
     <div class="post-content">
       <a ng-href="/#!tag/{{confession.confession_id}}" ng-bind="'#' + confession.confession_id"></a>:&nbsp;
-      <span class="post-text" ng-bind-html="processConfessionContent(confession.content)"></span><br>
+      <span class="post-text" ng-bind-html="processConfessionContent(confession.content) | parseUrl"></span><br>
       <img class="post-image" ng-hide="confession.images == null" ng-src="{{confession.images}}"/>
       <div class="post-facebook-link">
         <a ng-href="https://www.facebook.com/permalink.php?story_fbid={{confession.fb_post_id}}&id={{fbUser.getPageID()}}" target="_blank">View on Facebook</a>
