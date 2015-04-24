@@ -23,6 +23,8 @@
     "globals": {
         "angular": false,
         "filepicker": false,
-        "$": false
+        "$": false,
+        "jQuery": false,
+        "moment": false
     }
 }
