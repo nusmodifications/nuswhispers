@@ -127,8 +127,8 @@ class ConfessionsController extends Controller {
     public function tag($tagName)
     {
         $query = Confession::select(\DB::raw('confessions.*'))
-            ->join('confession_tags', 'confessions.confession_id' , '=', 'confession_tags.confession_id')
-            ->join('tags', 'confession_tags.confession_tag_id' , '=', 'tags.confession_tag_id')
+            ->leftJoin('confession_tags', 'confessions.confession_id' , '=', 'confession_tags.confession_id')
+            ->leftJoin('tags', 'confession_tags.confession_tag_id' , '=', 'tags.confession_tag_id')
             ->where(function ($query) use ($tagName)
             {
                 $query->where('tags.confession_tag', '=', "#$tagName")
