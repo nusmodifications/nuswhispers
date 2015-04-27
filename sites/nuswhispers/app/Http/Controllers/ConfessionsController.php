@@ -31,7 +31,7 @@ class ConfessionsController extends Controller {
             ->orderBy('status_updated_at', 'DESC');
 
         if (\Input::get('timestamp')) {
-            $query->whereRaw('UNIX_TIMESTAMP(status_updated_at) <=' . \Input::get('timestamp'));
+            $query->whereRaw('UNIX_TIMESTAMP(status_updated_at) <= ?', [\Input::get('timestamp')]);
         }
         if (\Input::get('count') > 0) {
             $query->take(\Input::get('count'));
@@ -55,7 +55,7 @@ class ConfessionsController extends Controller {
             ->orderBy('status_updated_at', 'DESC');
 
         if (\Input::get('timestamp')) {
-            $query->whereRaw('UNIX_TIMESTAMP(status_updated_at) <=' . \Input::get('timestamp'));
+            $query->whereRaw('UNIX_TIMESTAMP(status_updated_at) <= ?', [\Input::get('timestamp')]);
         }
         if (\Input::get('count') > 0) {
             $query->take(\Input::get('count'));
@@ -82,7 +82,7 @@ class ConfessionsController extends Controller {
             ->with('categories');
 
         if (\Input::get('timestamp')) {
-            $query->whereRaw('UNIX_TIMESTAMP(status_updated_at) <=' . \Input::get('timestamp'));
+            $query->whereRaw('UNIX_TIMESTAMP(status_updated_at) <= ?', [\Input::get('timestamp')]);
         }
         if (\Input::get('count') > 0) {
             $query->take(\Input::get('count'));
@@ -99,16 +99,15 @@ class ConfessionsController extends Controller {
 
     public function category($categoryId)
     {
-        $query = Confession::select(\DB::raw('confessions.*'))
+        $query = Confession::orderBy('status_updated_at', 'DESC')
             ->join('confession_categories', 'confessions.confession_id' , '=', 'confession_categories.confession_id')
             ->where('confession_categories.confession_category_id', '=', $categoryId)
-            ->orderBy('status_updated_at', 'DESC')
             ->approved()
             ->with('favourites')
             ->with('categories');
 
         if (\Input::get('timestamp')) {
-            $query->whereRaw('UNIX_TIMESTAMP(status_updated_at) <=' . \Input::get('timestamp'));
+            $query->whereRaw('UNIX_TIMESTAMP(status_updated_at) <= ?', [\Input::get('timestamp')]);
         }
         if (\Input::get('count') > 0) {
             $query->take(\Input::get('count'));
@@ -125,8 +124,7 @@ class ConfessionsController extends Controller {
 
     public function tag($tagName)
     {
-        $query = Confession::select(\DB::raw('confessions.*'))
-            ->leftJoin('confession_tags', 'confessions.confession_id' , '=', 'confession_tags.confession_id')
+        $query = Confession::leftJoin('confession_tags', 'confessions.confession_id' , '=', 'confession_tags.confession_id')
             ->leftJoin('tags', 'confession_tags.confession_tag_id' , '=', 'tags.confession_tag_id')
             ->where(function ($query) use ($tagName)
             {
@@ -139,7 +137,7 @@ class ConfessionsController extends Controller {
             ->with('categories');
 
         if (\Input::get('timestamp')) {
-            $query->whereRaw('UNIX_TIMESTAMP(status_updated_at) <=' . \Input::get('timestamp'));
+            $query->whereRaw('UNIX_TIMESTAMP(status_updated_at) <= ?', [\Input::get('timestamp')]);
         }
         if (\Input::get('count') > 0) {
             $query->take(\Input::get('count'));
@@ -159,8 +157,7 @@ class ConfessionsController extends Controller {
     {
         $fbUserId = \Session::get('fb_user_id');
         if ($fbUserId) {
-            $query = Confession::select(\DB::raw('confessions.*'))
-            ->join('favourites', 'confessions.confession_id' , '=', 'favourites.confession_id')
+            $query = Confession::join('favourites', 'confessions.confession_id' , '=', 'favourites.confession_id')
             ->where('favourites.fb_user_id', '=', $fbUserId)
             ->orderBy('status_updated_at', 'DESC')
             ->approved()
@@ -168,7 +165,7 @@ class ConfessionsController extends Controller {
             ->with('categories');
 
             if (\Input::get('timestamp')) {
-                $query->whereRaw('UNIX_TIMESTAMP(status_updated_at) <=' . \Input::get('timestamp'));
+                $query->whereRaw('UNIX_TIMESTAMP(status_updated_at) <= ?', [\Input::get('timestamp')]);
             }
             if (\Input::get('count') > 0) {
                 $query->take(\Input::get('count'));
@@ -268,7 +265,7 @@ class ConfessionsController extends Controller {
             ->with('categories');
 
         if (\Input::get('timestamp')) {
-            $query->whereRaw('UNIX_TIMESTAMP(status_updated_at) <=' . \Input::get('timestamp'));
+            $query->whereRaw('UNIX_TIMESTAMP(status_updated_at) <= ?', [\Input::get('timestamp')]);
         }
         if (\Input::get('count') > 0) {
             $query->take(\Input::get('count'));
