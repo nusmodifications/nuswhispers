@@ -11,6 +11,9 @@ use Illuminate\Http\Request;
 
 class ConfessionsController extends Controller {
 
+    const MAX_CONFESSION_COUNT = 10;
+    const MAX_TAG_COUNT = 30;
+
     protected $confessionsRepo;
 
     public function __construct(ConfessionsRepository $confessionsRepo)
@@ -30,12 +33,19 @@ class ConfessionsController extends Controller {
             ->featured()
             ->orderBy('status_updated_at', 'DESC');
 
+        if (intval(\Input::get('count')) == 0)
+            $count = self::MAX_CONFESSION_COUNT;
+        else
+            $count = min(intval(\Input::get('count')), self::MAX_CONFESSION_COUNT);
+
         if (\Input::get('timestamp')) {
             $query->whereRaw('UNIX_TIMESTAMP(status_updated_at) <= ?', [\Input::get('timestamp')]);
         }
-        if (\Input::get('count') > 0) {
-            $query->take(\Input::get('count'));
-            $query->skip(\Input::get('offset'));
+
+        $query->take($count);
+
+        if (intval(\Input::get('offset')) > 0) {
+            $query->skip(intval(\Input::get('offset')));
         }
 
         $confessions = $query->get();
@@ -54,12 +64,19 @@ class ConfessionsController extends Controller {
             ->approved()
             ->orderBy('status_updated_at', 'DESC');
 
+        if (intval(\Input::get('count')) == 0)
+            $count = self::MAX_CONFESSION_COUNT;
+        else
+            $count = min(intval(\Input::get('count')), self::MAX_CONFESSION_COUNT);
+
         if (\Input::get('timestamp')) {
             $query->whereRaw('UNIX_TIMESTAMP(status_updated_at) <= ?', [\Input::get('timestamp')]);
         }
-        if (\Input::get('count') > 0) {
-            $query->take(\Input::get('count'));
-            $query->skip(\Input::get('offset'));
+
+        $query->take($count);
+
+        if (intval(\Input::get('offset')) > 0) {
+            $query->skip(intval(\Input::get('offset')));
         }
 
         $confessions = $query->get();
@@ -81,12 +98,19 @@ class ConfessionsController extends Controller {
             ->with('favourites')
             ->with('categories');
 
+        if (intval(\Input::get('count')) == 0)
+            $count = self::MAX_CONFESSION_COUNT;
+        else
+            $count = min(intval(\Input::get('count')), self::MAX_CONFESSION_COUNT);
+
         if (\Input::get('timestamp')) {
             $query->whereRaw('UNIX_TIMESTAMP(status_updated_at) <= ?', [\Input::get('timestamp')]);
         }
-        if (\Input::get('count') > 0) {
-            $query->take(\Input::get('count'));
-            $query->skip(\Input::get('offset'));
+
+        $query->take($count);
+
+        if (intval(\Input::get('offset')) > 0) {
+            $query->skip(intval(\Input::get('offset')));
         }
 
         $confessions = $query->get();
@@ -137,12 +161,19 @@ class ConfessionsController extends Controller {
             ->with('favourites')
             ->with('categories');
 
+        if (intval(\Input::get('count')) == 0)
+            $count = self::MAX_TAG_COUNT;
+        else
+            $count = min(intval(\Input::get('count')), self::MAX_TAG_COUNT);
+
         if (\Input::get('timestamp')) {
             $query->whereRaw('UNIX_TIMESTAMP(status_updated_at) <= ?', [\Input::get('timestamp')]);
         }
-        if (\Input::get('count') > 0) {
-            $query->take(\Input::get('count'));
-            $query->skip(\Input::get('offset'));
+
+        $query->take($count);
+
+        if (intval(\Input::get('offset')) > 0) {
+            $query->skip(intval(\Input::get('offset')));
         }
 
         $confessions = $query->distinct()->get();
@@ -165,12 +196,19 @@ class ConfessionsController extends Controller {
             ->with('favourites')
             ->with('categories');
 
+            if (intval(\Input::get('count')) == 0)
+                $count = self::MAX_CONFESSION_COUNT;
+            else
+                $count = min(intval(\Input::get('count')), self::MAX_CONFESSION_COUNT);
+
             if (\Input::get('timestamp')) {
                 $query->whereRaw('UNIX_TIMESTAMP(status_updated_at) <= ?', [\Input::get('timestamp')]);
             }
-            if (\Input::get('count') > 0) {
-                $query->take(\Input::get('count'));
-                $query->skip(\Input::get('offset'));
+
+            $query->take($count);
+
+            if (intval(\Input::get('offset')) > 0) {
+                $query->skip(intval(\Input::get('offset')));
             }
 
             $confessions = $query->get();
@@ -265,12 +303,19 @@ class ConfessionsController extends Controller {
             ->with('favourites')
             ->with('categories');
 
+        if (intval(\Input::get('count')) == 0)
+            $count = self::MAX_CONFESSION_COUNT;
+        else
+            $count = min(intval(\Input::get('count')), self::MAX_CONFESSION_COUNT);
+
         if (\Input::get('timestamp')) {
             $query->whereRaw('UNIX_TIMESTAMP(status_updated_at) <= ?', [\Input::get('timestamp')]);
         }
-        if (\Input::get('count') > 0) {
-            $query->take(\Input::get('count'));
-            $query->skip(\Input::get('offset'));
+
+        $query->take($count);
+
+        if (intval(\Input::get('offset')) > 0) {
+            $query->skip(intval(\Input::get('offset')));
         }
 
         $confessions = $query->get();
