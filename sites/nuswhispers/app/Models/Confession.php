@@ -129,4 +129,9 @@ class Confession extends Model {
         return ['Featured', 'Pending', 'Approved', 'Rejected'];
     }
 
+    public function getFacebookMessage()
+    {
+        return $this->content . "\n-\n#" . $this->confession_id . ": " . url('/confession/' . $this->confession_id);
+    }
+
 }

@@ -119,6 +119,9 @@ class ConfessionsRepository extends BaseRepository {
 
     protected function postToFacebook($confession)
     {
+        if (env('MANUAL_MODE', false))
+            return 0;
+
         if ($confession->images) {
             if ($confession->fb_post_id) {
                 $endpoint = '/' . $confession->fb_post_id;
@@ -127,7 +130,7 @@ class ConfessionsRepository extends BaseRepository {
             }
 
             $response = \Facebook::post($endpoint, [
-                'message' => $confession->content . "\n-\n #" . $confession->confession_id . ": " . url('/confession/' . $confession->confession_id),
+                'message' => $confession->getFacebookMessage(),
                 'url'  => $confession->images,
             ], $this->getPageToken())->getGraphObject();
 
@@ -144,7 +147,7 @@ class ConfessionsRepository extends BaseRepository {
             }
 
             $response = \Facebook::post($endpoint, [
-                'message' => $confession->content . "\n-\n #" . $confession->confession_id . ": " . url('/confession/' . $confession->confession_id),
+                'message' => $confession->getFacebookMessage(),
                 // 'link' => url('/#!/confession/' . $confession->confession_id)
             ], $this->getPageToken())->getGraphObject();
 
@@ -158,6 +161,11 @@ class ConfessionsRepository extends BaseRepository {
 
     protected function deleteFromFacebook($confession)
     {
+        if (env('MANUAL_MODE', false)) {
+            $confession->fb_post_id = '';
+            return 0;
+        }
+
         try {
             if ($confession->images) {
                 \Facebook::delete('/' . $confession->fb_post_id, [], $this->getPageToken());
