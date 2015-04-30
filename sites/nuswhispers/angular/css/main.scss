@@ -29,6 +29,11 @@ a:focus {
 
 .likebox-wrapper {
     text-align: center;
+
+    .misc-links {
+        padding-top: 1em;
+        padding-bottom: 1em;
+    }
 }
 
 .whispers-brand {
@@ -67,6 +72,16 @@ a:focus {
     background-color: $secondary-text-color;
     color: #ffffff;
     opacity: 1;
+}
+
+h1.fancy-header {
+    color: #ffffff;
+    background: url('../img/pattern.png');
+    margin-top: 0;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 0.8em;
+    padding-bottom: 0.3em;  
 }
 
 #topbar-wrapper {

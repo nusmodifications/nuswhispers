@@ -116,6 +116,9 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
             templateUrl: 'assets/templates/submit.html',
             controller: 'SubmitController'
         })
+        .when('/policy/', {
+            templateUrl: 'assets/templates/policy.html',
+        })
         .otherwise({
             redirectTo: '/home/'
         });

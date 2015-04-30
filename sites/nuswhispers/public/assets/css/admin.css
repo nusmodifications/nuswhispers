@@ -4933,6 +4933,9 @@ a:focus {
 
 .likebox-wrapper {
   text-align: center; }
+  .likebox-wrapper .misc-links {
+    padding-top: 1em;
+    padding-bottom: 1em; }
 
 .whispers-brand {
   float: none;
@@ -4964,6 +4967,15 @@ a:focus {
   background-color: #8e8e8e;
   color: #ffffff;
   opacity: 1; }
+
+h1.fancy-header {
+  color: #ffffff;
+  background: url('../img/pattern.png');
+  margin-top: 0;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 0.8em;
+  padding-bottom: 0.3em; }
 
 #topbar-wrapper {
   background-color: #eeeeee;
