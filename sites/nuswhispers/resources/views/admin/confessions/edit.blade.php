@@ -53,18 +53,11 @@
         <p><?php echo \Form::select('status', array_combine($confession->statuses(), $confession->statuses()), null, ['class' => 'form-control']) ?>
         </p>
         <p style="text-align:center; color: #999">Latest status updated {{$confession->status_updated_at->diffForHumans()}}.</p>
-        @if (env('MANUAL_MODE', false))
-          <hr>
-          <p>
-            <?php echo \Form::label('fb_link', 'Link to Facebook status (we will grab the ID for you):') ?>
-            <?php echo \Form::text('fb_link', null, ['class' => 'form-control', 'placeholder' => 'Example: https://www.facebook.com/permalink.php?story_fbid=1464487647176272&id=1448006645491039']) ?>
-          </p>
-        @endif
         @if ($confession->fb_post_id)
           <hr>
           <p>
             <?php echo \Form::label('fb_post_id', 'Facebook #ID:') ?>
-            <?php echo \Form::text('fb_post_id', null, ['class' => 'form-control', 'disabled' => 'disabled']) ?>
+            <?php echo \Form::text('fb_post_id', null, ['class' => 'form-control']) ?>
           </p>
         @endif
         <hr>

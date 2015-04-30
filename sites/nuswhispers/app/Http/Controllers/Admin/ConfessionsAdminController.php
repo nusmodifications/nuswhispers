@@ -98,17 +98,8 @@ class ConfessionsAdminController extends AdminController {
                 'images' => \Input::get('images')
             ];
 
-            if (env('MANUAL_MODE', false) && \Input::get('fb_link')) {
-                $url = parse_url(\Input::get('fb_link'));
-                $query = [];
-                parse_str($url['query'], $query);
-
-                if (!isset($query['story_fbid'])) {
-                    return \Redirect::back()->withMessage('Failed updating confession: Facebook post ID not found in the URL.')
-                        ->with('alert-class', 'alert-danger');
-                }
-
-                $data['fb_post_id'] = $query['story_fbid'];
+            if (env('MANUAL_MODE', false) && \Input::get('fb_post_id')) {
+                $data['fb_post_id'] = \Input::get('fb_post_id');
             }
 
             $res = $this->confessionsRepo->update($id, $data, \Input::get('categories'));
