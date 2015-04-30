@@ -25,7 +25,7 @@
     </div>
     <div class="post-content">
       <a ng-href="/#!tag/{{confession.confession_id}}" ng-bind="'#' + confession.confession_id"></a>:&nbsp;
-      <span class="post-text" ng-bind-html="processConfessionContent(confession.content) | parseUrl"></span><br>
+      <span class="post-text" ng-bind-html="confession.content | escapeHTML | linkTags | parseUrl"></span><br>
       <img class="post-image" ng-hide="confession.images == null" ng-src="{{confession.images}}"/>
       <div class="post-facebook-link">
         <a ng-href="https://www.facebook.com/permalink.php?story_fbid={{confession.fb_post_id}}&id={{fbUser.getPageID()}}" target="_blank">View on Facebook</a>
@@ -58,7 +58,7 @@
           <div class="media-body">
             <a href="https://www.facebook.com/{{comment.from.id}}" target="_blank">{{comment.from.name}}</a> -
             <span class="post-time" am-time-ago="comment.created_time"></span>
-            <p>{{comment.message}}</p>
+            <p ng-bind-html="comment.message | escapeHTML | parseUrl | linkTags"></p>
             <!-- Nested comment replies -->
             <div ng-repeat="reply in comment.comments.data" class="media post-comment">
               <a class="media-left" href="https://www.facebook.com/{{reply.from.id}}" target="_blank">
@@ -67,34 +67,12 @@
               <div class="media-body">
                 <a href="https://www.facebook.com/{{reply.from.id}}" target="_blank">{{reply.from.name}}</a> -
                 <span class="post-time" am-time-ago="reply.created_time"></span>
-                <p>{{reply.message}}</p>
+                <p ng-bind-html="comment.message | escapeHTML | parseUrl | linkTags"></p>
               </div>
             </div>
           </div>
         </li>
       </ul>
-<!--       <div ng-repeat="comment in confession.facebook_information.comments.data">
-        <div class="post-comment" ng-class="{'comment-highlight': (highlightNewCommentID === comment.id)}">
-          <a class="media-left" href="https://www.facebook.com/{{comment.from.id}}" target="_blank">
-            <img class="post-user-thumbnail" ng-src="http://graph.facebook.com/{{comment.from.id}}/picture?width=256&height=256" />
-          </a>
-          <div class="media-body">
-            <a href="https://www.facebook.com/{{comment.from.id}}" target="_blank">{{comment.from.name}}</a> -
-            <span class="post-time" am-time-ago="comment.created_time"></span>
-            <p>{{comment.message}}</p>
-          </div>
-        </div>
-        <div ng-repeat="reply in comment.comments.data" class="post-comment post-comment-reply">
-          <a class="media-left" href="https://www.facebook.com/{{reply.from.id}}" target="_blank">
-            <img class="post-user-thumbnail" ng-src="http://graph.facebook.com/{{reply.from.id}}/picture?width=256&height=256" />
-          </a>
-          <div class="media-body">
-            <a href="https://www.facebook.com/{{reply.from.id}}" target="_blank">{{reply.from.name}}</a> -
-            <span class="post-time" am-time-ago="reply.created_time"></span>
-            <p>{{reply.message}}</p>
-          </div>
-        </div>
-      </div> -->
       <div class="post-comment-fb-link">
         <a ng-href="https://www.facebook.com/permalink.php?story_fbid={{confession.fb_post_id}}&id={{fbUser.getPageID()}}" target="_blank">View Comments on Facebook</a>
       </div>

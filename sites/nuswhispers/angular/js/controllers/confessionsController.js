@@ -90,20 +90,6 @@ angular.module('nuswhispersApp.controllers')
 
     $scope.getConfessions();
 
-    $scope.processConfessionContent = function (content) {
-        content = escapeHTML(content);
-        var splitContentTags = content.split(/(#\w+)/);
-        var processedContent = '';
-        for (var i in splitContentTags) {
-            if (/(#\w+)/.test(splitContentTags[i])) {
-                processedContent += '<a href="/#!tag/' + splitContentTags[i].substring(1) + '">' + splitContentTags[i] + '</a>';
-            } else {
-                processedContent += splitContentTags[i];
-            }
-        }
-        return processedContent;
-    };
-
     $scope.confessionIsFavourited = function (confession) {
         if (FacebookUser.getAccessToken() !== '') {
             var fbUserID = parseInt(FacebookUser.getUserID());
