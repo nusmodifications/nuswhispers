@@ -53,13 +53,13 @@
         <p><?php echo \Form::select('status', array_combine($confession->statuses(), $confession->statuses()), null, ['class' => 'form-control']) ?>
         </p>
         <p style="text-align:center; color: #999">Latest status updated {{$confession->status_updated_at->diffForHumans()}}.</p>
-        @if ($confession->fb_post_id)
-          <hr>
-          <p>
-            <?php echo \Form::label('fb_post_id', 'Facebook #ID:') ?>
-            <?php echo \Form::text('fb_post_id', null, ['class' => 'form-control']) ?>
-          </p>
-        @endif
+
+        <hr>
+        <p>
+          <?php echo \Form::label('fb_post_id', 'Facebook #ID:') ?>
+          <?php echo \Form::text('fb_post_id', null, ['class' => 'form-control']) ?>
+        </p>
+
         <hr>
         <?php echo \Form::submit('Update Confession', ['class' => 'btn btn-block btn-primary']) ?>
       </div>
