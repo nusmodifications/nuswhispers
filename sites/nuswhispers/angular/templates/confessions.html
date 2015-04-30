@@ -50,7 +50,30 @@
           <button class="btn comment-btn" type="submit">Comment</button>
         </form>
       </div>
-      <div ng-repeat="comment in confession.facebook_information.comments.data">
+      <ul class="media-list">
+        <li class="media post-comment" ng-repeat="comment in confession.facebook_information.comments.data" ng-class="{'comment-highlight': (highlightNewCommentID === comment.id)}">
+          <a class="media-left" href="https://www.facebook.com/{{comment.from.id}}" target="_blank">
+            <img class="post-user-thumbnail" ng-src="http://graph.facebook.com/{{comment.from.id}}/picture?width=256&height=256" />
+          </a>
+          <div class="media-body">
+            <a href="https://www.facebook.com/{{comment.from.id}}" target="_blank">{{comment.from.name}}</a> -
+            <span class="post-time" am-time-ago="comment.created_time"></span>
+            <p>{{comment.message}}</p>
+            <!-- Nested comment replies -->
+            <div ng-repeat="reply in comment.comments.data" class="media post-comment">
+              <a class="media-left" href="https://www.facebook.com/{{reply.from.id}}" target="_blank">
+                <img class="post-user-thumbnail" ng-src="http://graph.facebook.com/{{reply.from.id}}/picture?width=256&height=256" />
+              </a>
+              <div class="media-body">
+                <a href="https://www.facebook.com/{{reply.from.id}}" target="_blank">{{reply.from.name}}</a> -
+                <span class="post-time" am-time-ago="reply.created_time"></span>
+                <p>{{reply.message}}</p>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+<!--       <div ng-repeat="comment in confession.facebook_information.comments.data">
         <div class="post-comment" ng-class="{'comment-highlight': (highlightNewCommentID === comment.id)}">
           <a class="media-left" href="https://www.facebook.com/{{comment.from.id}}" target="_blank">
             <img class="post-user-thumbnail" ng-src="http://graph.facebook.com/{{comment.from.id}}/picture?width=256&height=256" />
@@ -71,7 +94,7 @@
             <p>{{reply.message}}</p>
           </div>
         </div>
-      </div>
+      </div> -->
       <div class="post-comment-fb-link">
         <a ng-href="https://www.facebook.com/permalink.php?story_fbid={{confession.fb_post_id}}&id={{fbUser.getPageID()}}" target="_blank">View Comments on Facebook</a>
       </div>
