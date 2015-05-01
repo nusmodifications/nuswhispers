@@ -1,6 +1,28 @@
 angular.module('nuswhispersApp.controllers')
-.controller('SubmitController', function ($scope, $http, Confession, Category, vcRecaptchaService) {
+.controller('SubmitController', function ($scope, $http, Confession, Category, localStorageService, vcRecaptchaService) {
     'use strict';
+
+    // functions for controlling confession submission limit
+    function getConfessionLimit() {
+        var doResetLimit = !localStorageService.get('confessionLimit.date') ||
+            localStorageService.get('confessionLimit.date') !== (new Date()).toDateString();
+        if (doResetLimit) {
+            localStorageService.set('confessionLimit.count', 3);
+            localStorageService.set('confessionLimit.date', (new Date()).toDateString());
+        }
+        return localStorageService.get('confessionLimit.count');
+    }
+
+    $scope.hasConfessionLimitExceeded = function () {
+        var confessionLimit = getConfessionLimit();
+        return (confessionLimit <= 0);
+    };
+
+    function decreaseConfessionLimit() {
+        var confessionLimit = getConfessionLimit();
+        confessionLimit--;
+        localStorageService.set('confessionLimit.count', confessionLimit);
+    }
 
     // Load all categories onto form
     Category.getAll().success(function (response) {
@@ -13,7 +35,7 @@ angular.module('nuswhispersApp.controllers')
         selectedCategoryIDs: [],
         errors: [],
         submitSuccess: false,
-        submitButtonDisabled: false
+        submitButtonDisabled: $scope.hasConfessionLimitExceeded()
     };
 
     $scope.setRecaptchaResponse = function (response) {
@@ -24,6 +46,9 @@ angular.module('nuswhispersApp.controllers')
         $scope.form.submitButtonDisabled = true;
         $scope.confessionData.categories = $scope.form.selectedCategoryIDs;
 
+        if ($scope.hasConfessionLimitExceeded()) {
+            return;
+        }
         Confession.submit($scope.confessionData)
             .success(function (response) {
                 $scope.form.submitSuccess = response.success;
@@ -37,6 +62,7 @@ angular.module('nuswhispersApp.controllers')
                         }
                     }
                 }
+                decreaseConfessionLimit();
             })
             .error(function (response) {
                 $scope.form.submitButtonDisabled = false;

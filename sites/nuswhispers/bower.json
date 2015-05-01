@@ -23,7 +23,8 @@
     "angular-loading-bar": "~0.7.1",
     "angular-elastic": "~2.4.2",
     "angular-moment": "~0.9.2",
-    "ngInfiniteScroll": "~1.2.0"
+    "ngInfiniteScroll": "~1.2.0",
+    "angular-local-storage": "~0.1.5"
   },
   "devDependencies": {
     "angular-mocks": "*",

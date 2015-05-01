@@ -11,6 +11,9 @@
         Have an interesting story to share or just need to get something off your chest? Tell us your story here! No one will know it was you.<br><br>
         Please be reminded to be socially responsible. No racist, vulgar, sexual, obscene, or other forms of sensitive material. These entries will be rejected (and make us sad).
     </div>
+    <div class="alert alert-danger" role="alert" ng-show="hasConfessionLimitExceeded()">
+        You've submitted too many confessions today! Please try again tomorrow.
+    </div>
     <div class="form-group">
         <div class="form-group-header">
             <span class="typcn typcn-pencil"></span> Your Story
