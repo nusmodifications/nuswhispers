@@ -18,17 +18,26 @@
         <p class="alert alert-danger">{{$errors->first('content')}}</p>
         @endif
       </div>
-
     </div>
 
-    @if ($confession->images)
-    <div class="panel panel-default panel-photo">
-      <div class="panel-heading">Photo</div>
+    @if (env('MANUAL_MODE', false) && ($confession->status == 'Approved' || $confession->status == 'Featured'))
+    <div class="panel panel-default">
+      <div class="panel-heading">Copy and paste in Facebook!</div>
       <div class="panel-body">
-        <img src="{{$confession->images}}" alt="Confession Photo">
+      <?php echo \Form::textarea('fb_content', $confession->getFacebookMessage(), ['id' => '', 'class' => 'form-control', 'readonly' => 'readonly', 'onfocus' => 'this.select()']) ?>
       </div>
     </div>
     @endif
+
+    <div class="panel panel-default panel-photo">
+      <div class="panel-heading">Photo</div>
+      <div class="panel-body">
+        <p><?php echo \Form::text('images', null, ['id' => '', 'class' => 'form-control', 'placeholder' => 'URL to photo']) ?></p>
+        @if ($confession->images)
+        <img src="{{$confession->images}}" alt="Confession Photo">
+        @endif
+      </div>
+    </div>
 
     <!--<div class="panel panel-default">
       <div class="panel-heading">Admin Comments</div>
@@ -44,13 +53,13 @@
         <p><?php echo \Form::select('status', array_combine($confession->statuses(), $confession->statuses()), null, ['class' => 'form-control']) ?>
         </p>
         <p style="text-align:center; color: #999">Latest status updated {{$confession->status_updated_at->diffForHumans()}}.</p>
-        @if ($confession->fb_post_id)
+
         <hr>
         <p>
           <?php echo \Form::label('fb_post_id', 'Facebook #ID:') ?>
-          <?php echo \Form::text('fb_post_id', null, ['class' => 'form-control', 'disabled' => 'disabled']) ?>
+          <?php echo \Form::text('fb_post_id', null, ['class' => 'form-control']) ?>
         </p>
-        @endif
+
         <hr>
         <?php echo \Form::submit('Update Confession', ['class' => 'btn btn-block btn-primary']) ?>
       </div>

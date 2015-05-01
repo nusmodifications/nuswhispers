@@ -4933,9 +4933,29 @@ a:focus {
 
 .likebox-wrapper {
   text-align: center; }
-  .likebox-wrapper .misc-links {
-    padding-top: 1em;
-    padding-bottom: 1em; }
+
+footer {
+  margin-top: 1em;
+  border-top: 1px solid #ddd;
+  padding: 1em 0;
+  font-size: 90%;
+  color: #999; }
+  footer a:link, footer a:visited {
+    color: #999; }
+  footer a:hover {
+    color: #999;
+    text-decoration: underline; }
+
+.privacy-content {
+  padding: 1.5em 1.25em 0.5em;
+  background: #fff;
+  text-align: justify;
+  line-height: 1.5em;
+  font-size: 100%; }
+  .privacy-content h2 {
+    font-size: 120%;
+    font-weight: 700;
+    margin: 1em 0 0.75em; }
 
 .whispers-brand {
   float: none;

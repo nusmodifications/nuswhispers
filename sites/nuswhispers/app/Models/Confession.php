@@ -19,7 +19,7 @@ class Confession extends Model {
     /**
      * Attributes should be mass-assignable.
      */
-    protected $fillable = ['content', 'images', 'status', 'status_updated_at'];
+    protected $fillable = ['content', 'images', 'fb_post_id', 'status', 'status_updated_at'];
 
     public function getFacebookInformation()
     {
@@ -127,6 +127,11 @@ class Confession extends Model {
     public function statuses()
     {
         return ['Featured', 'Pending', 'Approved', 'Rejected'];
+    }
+
+    public function getFacebookMessage()
+    {
+        return $this->content . "\n-\n#" . $this->confession_id . ": " . url('/confession/' . $this->confession_id);
     }
 
 }

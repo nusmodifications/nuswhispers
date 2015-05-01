@@ -92,10 +92,17 @@ class ConfessionsAdminController extends AdminController {
         }
 
         try {
-            $res = $this->confessionsRepo->update($id, [
+            $data = [
                 'content' => \Input::get('content'),
                 'status' => \Input::get('status'),
-            ], \Input::get('categories'));
+                'images' => \Input::get('images')
+            ];
+
+            if (env('MANUAL_MODE', false) && \Input::get('fb_post_id')) {
+                $data['fb_post_id'] = \Input::get('fb_post_id');
+            }
+
+            $res = $this->confessionsRepo->update($id, $data, \Input::get('categories'));
 
             return \Redirect::back()->withMessage('Confession successfully updated.')
                 ->with('alert-class', 'alert-success');
