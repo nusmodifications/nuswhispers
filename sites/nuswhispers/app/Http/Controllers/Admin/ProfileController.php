@@ -58,7 +58,7 @@ class ProfileController extends AdminController {
             }
             return redirect('/admin/profile');
         } else {
-            $scopes = $provider == 'facebook' ? ['manage_pages', 'publish_pages', 'publish_actions'] : [];
+            $scopes = $provider == 'facebook' ? ['manage_pages', 'publish_pages'] : [];
             return \Socialize::with($provider)->scopes($scopes)->redirect();
         }
     }
@@ -84,6 +84,10 @@ class ProfileController extends AdminController {
         if ($provider == 'facebook') {
             // Extend current token to long-lived access token
             $response = \Facebook::get('/oauth/access_token?client_id=' . urlencode(env('FACEBOOK_APP_ID')) . '&client_secret=' . urlencode(env('FACEBOOK_APP_SECRET')) . '&grant_type=fb_exchange_token&fb_exchange_token=' . urlencode($oauthUser->token));
+
+            if (!isset($response->getDecodedBody()['access_token']))
+                throw new \Exception('User is not a page admin of Facebook page #' . env('FACEBOOK_PAGE_ID', '') . '.');
+
             $token = $response->getDecodedBody()['access_token'];
 
             // Get page token (never expires)
