@@ -31,7 +31,7 @@ class UserProfile extends Model {
 
     /**
      * Defines user relationship from model.
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
     {
