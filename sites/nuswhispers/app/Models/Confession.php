@@ -134,4 +134,19 @@ class Confession extends Model {
         return $this->content . "\n-\n#" . $this->confession_id . ": " . url('/confession/' . $this->confession_id);
     }
 
+    public function getFormattedContent()
+    {
+        // Wrap URLs with <a>
+        $content = preg_replace('/(\b(https?|ftp):\/\/[A-Z0-9+&@#\/%?=~_|!:,.;-]*[-A-Z0-9+&@#\/%=~_|])/im', '<a href="$1" target="_blank">$1</a>', $this->content);
+
+        // Wrap tags with <a>
+        $matches = [];
+        preg_match_all('/(#\w+)/', $content, $matches);
+        foreach ($matches[0] as $tag) {
+            $content = str_replace($tag, '<a target="_blank" href="' . url('/#!tag/' . substr($tag, 1)) . '">' . $tag . '</a>', $content);
+        }
+
+        return $content;
+    }
+
 }
