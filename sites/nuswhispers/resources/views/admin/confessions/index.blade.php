@@ -90,7 +90,7 @@
           </a>
         </div>
       </div>
-      <div class="post-content">{{ $confession->content }}</div>
+      <div class="post-content">#{{ $confession->confession_id }}: {{ $confession->content }}</div>
       @if ($confession->images)
       <div class="post-image"><img src="{{ $confession->images }}"></div>
       @endif
