@@ -91,7 +91,7 @@ class ConfessionsController extends Controller {
     public function popular()
     {
         $query = Confession::select(\DB::raw('confessions.*,
-            (confessions.fb_like_count) + (confessions.fb_comment_count * 2) * (1 + (NOW() - status_updated_at < 86400)) AS popularity_rating'))
+            (confessions.views + confessions.fb_like_count + (confessions.fb_comment_count * 2)) / (DAY(NOW()) - DAY(confessions.status_updated_at)) AS popularity_rating'))
             ->orderBy('popularity_rating', 'DESC')
             ->orderBy('status_updated_at', 'DESC')
             ->approved()
