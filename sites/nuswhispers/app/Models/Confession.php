@@ -59,11 +59,20 @@ class Confession extends Model {
 
     /**
      * Defines confession logs relationship to model.
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function logs()
     {
         return $this->hasMany('App\Models\ConfessionLog');
+    }
+
+    /**
+     * Defines moderator comments relationship to model.
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function moderatorComments()
+    {
+        return $this->hasMany('App\Models\ModeratorComment');
     }
 
     public function isApproved()

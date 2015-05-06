@@ -2,6 +2,7 @@
 
 use App\Models\Category as Category;
 use App\Models\Confession as Confession;
+use App\Models\ModeratorComment as ModeratorComment;
 use App\Repositories\ConfessionsRepository;
 use Carbon\Carbon;
 
@@ -62,7 +63,7 @@ class ConfessionsAdminController extends AdminController {
             $query->where('status', '=', ucfirst($status));
         }
 
-        $confessions = $query->paginate(10);
+        $confessions = $query->with('moderatorComments')->paginate(10);
 
         return view('admin.confessions.index', [
             'confessions' => $confessions,
@@ -73,7 +74,7 @@ class ConfessionsAdminController extends AdminController {
 
     public function getEdit($id)
     {
-        $confession = Confession::findOrFail($id);
+        $confession = Confession::with('moderatorComments')->findOrFail($id);
 
         return view('admin.confessions.edit', [
             'confession' => $confession,
@@ -82,35 +83,58 @@ class ConfessionsAdminController extends AdminController {
 
     public function postEdit($id)
     {
-        $validationRules = [
-            'content' => 'required',
-            'categories' => 'array',
-            'status' => 'in:Featured,Pending,Approved,Rejected'
-        ];
-
-        $validator = \Validator::make(\Input::all(), $validationRules);
-        if ($validator->fails()) {
-            return \Redirect::back()->withInput()->withErrors($validator);
-        }
-
-        try {
-            $data = [
-                'content' => \Input::get('content'),
-                'status' => \Input::get('status'),
-                'images' => \Input::get('images')
+        if (\Input::get('action') == 'Post Comment') {
+            $validationRules = [
+                'comment' => 'required',
             ];
 
-            if (env('MANUAL_MODE', false) && \Input::get('fb_post_id')) {
-                $data['fb_post_id'] = \Input::get('fb_post_id');
+            $validator = \Validator::make(\Input::all(), $validationRules);
+            if ($validator->fails()) {
+                return \Redirect::back()->withInput()->withErrors($validator);
             }
 
-            $res = $this->confessionsRepo->update($id, $data, \Input::get('categories'));
+            $comment = new ModeratorComment([
+                'content' => \Input::get('comment'),
+                'user_id' => \Auth::user()->getAuthIdentifier(),
+                'created_at' => new \DateTime()
+            ]);
 
-            return \Redirect::back()->withMessage('Confession successfully updated.')
-                ->with('alert-class', 'alert-success');
-        } catch (\Exception $e) {
-            return \Redirect::back()->withMessage('Failed updating confession: ' . $e->getMessage())
-                ->with('alert-class', 'alert-danger');
+            $confession = Confession::with('moderatorComments')->findOrFail($id);
+            $confession->moderatorComments()->save($comment);
+
+            return \Redirect::back()->withMessage('Comment successfully added.')
+                    ->with('alert-class', 'alert-success');
+        } else {
+            $validationRules = [
+                'content' => 'required',
+                'categories' => 'array',
+                'status' => 'in:Featured,Pending,Approved,Rejected'
+            ];
+
+            $validator = \Validator::make(\Input::all(), $validationRules);
+            if ($validator->fails()) {
+                return \Redirect::back()->withInput()->withErrors($validator);
+            }
+
+            try {
+                $data = [
+                    'content' => \Input::get('content'),
+                    'status' => \Input::get('status'),
+                    'images' => \Input::get('images')
+                ];
+
+                if (env('MANUAL_MODE', false) && \Input::get('fb_post_id')) {
+                    $data['fb_post_id'] = \Input::get('fb_post_id');
+                }
+
+                $res = $this->confessionsRepo->update($id, $data, \Input::get('categories'));
+
+                return \Redirect::back()->withMessage('Confession successfully updated.')
+                    ->with('alert-class', 'alert-success');
+            } catch (\Exception $e) {
+                return \Redirect::back()->withMessage('Failed updating confession: ' . $e->getMessage())
+                    ->with('alert-class', 'alert-danger');
+            }
         }
 
     }

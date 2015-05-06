@@ -39,11 +39,39 @@
       </div>
     </div>
 
-    <!--<div class="panel panel-default">
-      <div class="panel-heading">Admin Comments</div>
+    <a name="comments"></a>
+    <div class="panel panel-default">
+      <div class="panel-heading">Moderator Comments</div>
       <div class="panel-body">
+        @if ($confession->moderatorComments()->count() == 0)
+        <p class="no-comments">No comments available.</p>
+        @else
+          @foreach ($confession->moderatorComments()->with('user')->orderBy('created_at', 'desc')->get() as $comment)
+          <div class="comment" id="comment-{{ $comment->comment_id }}">
+            <div class="comment-meta">
+              <p><span class="comment-author">{{!empty($comment->user->name) ? $comment->user->name : $comment->user->email}}</span> commented {{$comment->created_at->diffForHumans()}}</p>
+              @if (\Auth::user()->user_id == $comment->user_id || \Auth::user()->role == 'Administrator')
+              <a class="delete-comment" href="/admin/confessions/comments/delete/{{ $comment->comment_id }}" title="Delete Comment"><span class="typcn typcn-times"></span></a>
+              @endif
+            </div>
+            <div class="comment-content">
+              {{$comment->content}}
+            </div>
+          </div>
+          @endforeach
+        @endif
       </div>
-    </div>-->
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">Leave a Comment</div>
+      <div class="panel-body comments-form {{$errors->first('comment') ? 'has-error' : ''}}">
+        <p><?php echo \Form::textarea('comment', null, ['class' => 'form-control', 'placeholder' => 'Leave a comment here for other moderators to see.', 'rows' => 5]) ?></p>
+        <p><?php echo \Form::submit('Post Comment', ['name' => 'action', 'class' => 'btn btn-primary']) ?></p>
+        @if ($errors->first('comment'))
+          <p class="alert alert-danger">{{$errors->first('comment')}}</p>
+        @endif
+      </div>
+    </div>
   </div>
 
   <div class="col-md-12 col-lg-4">
@@ -61,7 +89,7 @@
         </p>
 
         <hr>
-        <?php echo \Form::submit('Update Confession', ['class' => 'btn btn-block btn-primary']) ?>
+        <?php echo \Form::submit('Update Confession', ['name' => 'action', 'class' => 'btn btn-block btn-primary']) ?>
       </div>
     </div>
     <div class="panel panel-default">

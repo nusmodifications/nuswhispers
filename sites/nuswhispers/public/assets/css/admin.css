@@ -5349,6 +5349,10 @@ h2 {
   margin: 1em;
   border-top: 1px solid #eaeaea;
   padding: 1em 0; }
+.post-list .post-comments {
+  float: right; }
+  .post-list .post-comments span {
+    font-size: 125%; }
 
 .admin-content-wrapper {
   padding: 0 1em;
@@ -5402,3 +5406,31 @@ h2 {
 
 .user-list > tbody > tr > td {
   vertical-align: middle; }
+
+.comment-meta {
+  background: #f5f5f5;
+  padding: 0.75em 1em;
+  font-size: 95%;
+  color: #999;
+  display: inline-block;
+  width: 100%;
+  box-sizing: border-box; }
+  .comment-meta p {
+    float: left;
+    margin: 0; }
+
+.comment-author {
+  font-weight: 400;
+  color: #333; }
+
+.comment-content {
+  padding: 0.75em 1em;
+  margin-bottom: 1em; }
+
+.delete-comment {
+  float: right;
+  font-size: 125%;
+  line-height: 0;
+  color: #999; }
+  .delete-comment:hover {
+    color: #f55260; }

@@ -64,6 +64,8 @@ Route::controller('admin/profile', 'Admin\ProfileController', [
     'postEdit' => 'admin.profile.edit',
 ]);
 
+Route::controller('admin/confessions/comments', 'Admin\ModeratorCommentsAdminController');
+
 Route::controller('admin/confessions', 'Admin\ConfessionsAdminController', [
     'postEdit' => 'admin.confessions.edit'
 ]);
