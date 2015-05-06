@@ -31,13 +31,15 @@ class ConfessionsAdminController extends AdminController {
 
         if (\Input::get('category'))
         {
-            $query = $query->has('categories', '=', intval(\Input::get('category')));
+            $query->whereHas('categories', function($query) {
+                $query->where('confession_categories.confession_category_id', '=', intval(\Input::get('category')));
+            });
         }
 
         if (\Input::get('q'))
         {
             $search = stripslashes(\Input::get('q'));
-            $query = $query->where('content', 'LIKE', "%$search%");
+            $query->where('content', 'LIKE', "%$search%");
         }
 
         if (\Input::get('start') && \Input::get('end'))
@@ -51,13 +53,13 @@ class ConfessionsAdminController extends AdminController {
                     ->with('alert-class', 'alert-danger');
             }
 
-            $query = $query->where('created_at', '>=', $start->toDateTimeString());
-            $query = $query->where('created_at', '<', $end->toDateTimeString());
+            $query->where('created_at', '>=', $start->toDateTimeString());
+            $query->where('created_at', '<', $end->toDateTimeString());
         }
 
         if ($status != 'All')
         {
-            $query = $query->where('status', '=', ucfirst($status));
+            $query->where('status', '=', ucfirst($status));
         }
 
         $confessions = $query->paginate(10);
