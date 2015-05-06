@@ -105,6 +105,8 @@
 
         echo implode(', ', $formattedCategories);
         ?>
+        @else
+        &nbsp;
         @endif
         <a class="post-comments" href="/admin/confessions/edit/{{ $confession->confession_id }}#comments" title="{{ $confession->moderatorComments()->count() }} Comment(s)">
           <span class="typcn typcn-messages"></span> {{ $confession->moderatorComments()->count() }}
