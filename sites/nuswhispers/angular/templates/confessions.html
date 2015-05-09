@@ -67,7 +67,7 @@
               <div class="media-body">
                 <a href="https://www.facebook.com/{{reply.from.id}}" target="_blank">{{reply.from.name}}</a> -
                 <span class="post-time" am-time-ago="reply.created_time"></span>
-                <p ng-bind-html="comment.message | escapeHTML | parseUrl | linkTags"></p>
+                <p ng-bind-html="reply.message | escapeHTML | parseUrl | linkTags"></p>
               </div>
             </div>
           </div>
