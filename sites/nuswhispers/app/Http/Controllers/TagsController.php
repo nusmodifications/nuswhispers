@@ -15,15 +15,16 @@ class TagsController extends Controller {
      */
     private function getSortedTags()
     {
-        $tags = Tag::get()
-        ->filter(function ($tag)
-        {
-            return $tag->confessions()->approved()->count() > 0;
-        })
-        ->sortBy(function ($tag)
-        {
-            return -$tag->confessions()->approved()->count();
-        });
+        $tags = Tag::where('confession_tag', 'REGEXP', '#[a-z]+')->get()
+            ->filter(function ($tag)
+            {
+                return $tag->confessions()->approved()->count() > 0;
+            })
+            ->sortBy(function ($tag)
+            {
+                return -$tag->confessions()->approved()->count();
+            });
+
         return array_values($tags->toArray());
     }
 
@@ -41,7 +42,7 @@ class TagsController extends Controller {
     }
 
     /**
-     * Get the top n tags JSON sorted by number of associated posts 
+     * Get the top n tags JSON sorted by number of associated posts
      * method: get
      * route: api/tags/top/<num> (if not clashes with api below)
      * @param int $num
@@ -64,7 +65,7 @@ class TagsController extends Controller {
      * route: api/tags/<tag_id>
      * @param  int $tag_id
      * @return json {"success": true or false, "data": {"tag": tag}};
-     */ 
+     */
     public function show($tag_id)
     {
         $tag = Tag::find($tag_id);
