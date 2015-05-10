@@ -38,27 +38,29 @@
             $(this).hide();
         });
 
-        var scheduleInput = $('input[name="schedule"]');
-
-        $('.schedule-date').daterangepicker({
-            'minDate': moment().add(5, 'minutes'),
-            'timePicker': true,
-            'singleDatePicker': true,
-            'format': 'DD/MM/YYYY h:mm A',
-            'timePickerIncrement': 5,
-            'timePicker12Hour': true,
-            'timePickerSeconds': false,
-            'timeZone': $('input[name="tz"]').val(),
-        }).on('apply.daterangepicker', function (evt, picker) {
-            $(this).children('span').html(picker.startDate.format('DD/MM/YYYY h:mm A'));
-            scheduleInput.val(picker.startDate.format());
-        });
+        var scheduleInput = $('input[name="schedule"]'),
+            scheduleDateRangePickerOptions = {
+                'minDate': moment().add(5, 'minutes'),
+                'timePicker': true,
+                'singleDatePicker': true,
+                'format': 'DD/MM/YYYY h:mm A',
+                'timePickerIncrement': 5,
+                'timePicker12Hour': true,
+                'timePickerSeconds': false,
+                'timeZone': $('input[name="tz"]').val()
+            };
 
         if (typeof scheduleInput.val() !== 'undefined' && scheduleInput.val() !== '') {
             var scheduleDate = moment(scheduleInput.val());
-            $('.schedule-date').data('daterangepicker').setStartDate(scheduleDate);
+
+            scheduleDateRangePickerOptions.startDate = scheduleDate;
             $('.schedule-date span').html(scheduleDate.format('DD/MM/YYYY h:mm A'));
         }
+
+        $('.schedule-date').daterangepicker(scheduleDateRangePickerOptions).on('apply.daterangepicker', function (evt, picker) {
+            $(this).children('span').html(picker.startDate.format('DD/MM/YYYY h:mm A'));
+            scheduleInput.val(picker.startDate.format());
+        });
 
         $('select[name="status"]').on('change', function (evt) {
             if ($(this).val() === 'Approved' || $(this).val() === 'Featured') {
