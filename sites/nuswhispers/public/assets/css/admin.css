@@ -5217,6 +5217,10 @@ label {
     color: #fff819;
     background: #f66a78; }
 
+.open > .btn-primary.dropdown-toggle {
+  color: #fff819;
+  background: #f66a78; }
+
 .btn-danger {
   color: #c92e2c; }
   .btn-danger:hover {
@@ -5383,6 +5387,36 @@ h2 {
 
 .panel-body .checkbox:first-child {
   margin-top: 0; }
+
+.schedule-confession {
+  margin: 1em 0;
+  padding: 1em 0.5em;
+  border: solid #ddd;
+  border-width: 1px 0;
+  text-align: center; }
+  .schedule-confession .typcn {
+    font-size: 150%; }
+  .schedule-confession .time {
+    font-weight: 700; }
+  .schedule-confession .schedule {
+    display: block;
+    text-decoration: underline; }
+  .schedule-confession .schedule-date {
+    text-align: left;
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.5em 1em;
+    margin: 0.5em 0;
+    background: #efefef;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    cursor: default; }
+    .schedule-confession .schedule-date span {
+      padding-left: 0.25em; }
+    .schedule-confession .schedule-date .caret {
+      float: right;
+      margin-top: 0.5em; }
 
 .status-history-list {
   list-style: none;

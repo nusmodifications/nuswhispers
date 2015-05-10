@@ -12,6 +12,7 @@ class Kernel extends ConsoleKernel {
 	 */
 	protected $commands = [
 		'App\Console\Commands\UpdateConfessionFacebookInfo',
+        'App\Console\Commands\PostScheduledConfessions',
 	];
 
 	/**
@@ -22,8 +23,8 @@ class Kernel extends ConsoleKernel {
 	 */
 	protected function schedule(Schedule $schedule)
 	{
-		$schedule->command('confession:facebook-update')
-				 ->hourly();
+        $schedule->command('confession:scheduled')->everyFiveMinutes();
+		$schedule->command('confession:facebook-update')->hourly();
 	}
 
 }

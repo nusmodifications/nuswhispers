@@ -43,6 +43,10 @@ label {
         background: lighten($primary-color, 5%);
     }
 }
+.open > .btn-primary.dropdown-toggle {
+    color: $highlight-color;
+    background: lighten($primary-color, 5%);
+}
 .btn-danger {
     color: #c92e2c;
 
@@ -271,6 +275,49 @@ h2 {
 
 .panel-body .checkbox:first-child {
     margin-top: 0;
+}
+
+.schedule-confession {
+    margin: 1em 0;
+    padding: 1em .5em;
+    border: solid #ddd;
+    border-width: 1px 0;
+    text-align: center;
+
+    .typcn {
+        font-size: 150%;
+    }
+
+    .time {
+        font-weight: 700;
+    }
+
+    .schedule {
+        display: block;
+        text-decoration: underline;
+    }
+
+    .schedule-date {
+        text-align: left;
+        display: inline-block;
+        width: 100%;
+        box-sizing: border-box;
+        padding: .5em 1em;
+        margin: .5em 0;
+        background: #efefef;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        cursor: default;
+
+        span {
+            padding-left: .25em;
+        }
+
+        .caret {
+            float: right;
+            margin-top: .5em;
+        }
+    }
 }
 
 .status-history-list {

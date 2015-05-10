@@ -75,6 +75,15 @@ class Confession extends Model {
         return $this->hasMany('App\Models\ModeratorComment');
     }
 
+    /**
+     * Defines queue relationship to model.
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function queue()
+    {
+        return $this->hasOne('App\Models\ConfessionQueue');
+    }
+
     public function isApproved()
     {
         return $this->status === 'Featured' || $this->status === 'Approved';
@@ -98,6 +107,16 @@ class Confession extends Model {
     public function scopeFeatured($query)
     {
         return $query->whereStatus('Featured');
+    }
+
+    /**
+     * Query scope for scheduled confessions
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeScheduled($query)
+    {
+        return $query->whereStatus('Scheduled');
     }
 
     /**

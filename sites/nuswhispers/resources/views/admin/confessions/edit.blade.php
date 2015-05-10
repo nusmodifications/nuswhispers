@@ -1,3 +1,9 @@
+<?php
+if ($confession->status == 'Scheduled') {
+  $queue = $confession->queue()->get()->get(0);
+}
+?>
+
 @extends('admin')
 
 @section('content')
@@ -78,11 +84,37 @@
     <div class="panel panel-default panel-status">
       <div class="panel-heading">Status</div>
       <div class="panel-body">
-        <p><?php echo \Form::select('status', array_combine($confession->statuses(), $confession->statuses()), null, ['class' => 'form-control']) ?>
+        <p>
+        <?php
+        $status = $confession->status == 'Scheduled' ? $queue->status_after : $confession->status;
+        echo \Form::select('status', array_combine($confession->statuses(), $confession->statuses()), $status, ['class' => 'form-control'])
+        ?>
         </p>
         <p style="text-align:center; color: #999">Latest status updated {{$confession->status_updated_at->diffForHumans()}}.</p>
+        @if (in_array($confession->status, ['Pending', 'Rejected', 'Scheduled']))
+        <div class="schedule-confession" @if ($confession->status == 'Pending' || $confession->status == 'Rejected')style="display: none" @endif>
+          @if ($confession->status == 'Pending')
+          Schedule confession to go public:
+          @else
+          Currently scheduled to go public at:
+          @endif
+          <div class="schedule-date">
+            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+            <span>Now</span> <strong class="caret"></strong>
+            <div class="tz" style="display:none"><?php echo date('Z') ?></div>
+            <?php
+            if (Request::input('schedule') != '')
+              $schedule = Request::input('schedule');
+            elseif (isset($queue))
+              $schedule = $queue->update_status_at->format('c');
+            else
+              $schedule = '';
+            echo Form::hidden('schedule', $schedule)
+            ?>
+          </div>
+        </div>
+        @endif
 
-        <hr>
         <p>
           <?php echo \Form::label('fb_post_id', 'Facebook #ID:') ?>
           <?php echo \Form::text('fb_post_id', null, ['class' => 'form-control']) ?>
@@ -93,10 +125,10 @@
       </div>
     </div>
     <div class="panel panel-default">
-      <div class="panel-heading">Status History</div>
+      <div class="panel-heading">Status History (Last 5)</div>
       <div class="panel-body">
         <ul class="status-history-list">
-          @foreach ($confession->logs()->with('user')->orderBy('created_on', 'desc')->get() as $log)
+          @foreach ($confession->logs()->with('user')->orderBy('created_on', 'desc')->take(5)->get() as $log)
           <li>
             Changed from <strong>{{$log->status_before}}</strong> to <strong>{{$log->status_after}}</strong>
             <span class="status-meta">

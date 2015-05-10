@@ -37,6 +37,36 @@
             $('.date-range').data('daterangepicker').setEndDate(moment());
             $(this).hide();
         });
+
+        var scheduleInput = $('input[name="schedule"]');
+
+        $('.schedule-date').daterangepicker({
+            'minDate': moment().add(5, 'minutes'),
+            'timePicker': true,
+            'singleDatePicker': true,
+            'format': 'DD/MM/YYYY h:mm A',
+            'timePickerIncrement': 5,
+            'timePicker12Hour': true,
+            'timePickerSeconds': false,
+            'timeZone': $('input[name="tz"]').val(),
+        }).on('apply.daterangepicker', function (evt, picker) {
+            $(this).children('span').html(picker.startDate.format('DD/MM/YYYY h:mm A'));
+            scheduleInput.val(picker.startDate.format());
+        });
+
+        if (typeof scheduleInput.val() !== 'undefined' && scheduleInput.val() !== '') {
+            var scheduleDate = moment(scheduleInput.val());
+            $('.schedule-date').data('daterangepicker').setStartDate(scheduleDate);
+            $('.schedule-date span').html(scheduleDate.format('DD/MM/YYYY h:mm A'));
+        }
+
+        $('select[name="status"]').on('change', function (evt) {
+            if ($(this).val() === 'Approved' || $(this).val() === 'Featured') {
+                $('.schedule-confession').slideDown('fast');
+            } else {
+                $('.schedule-confession').slideUp('fast');
+            }
+        });
     });
 
     function applyDate(start, end) {

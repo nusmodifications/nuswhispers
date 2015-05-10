@@ -2,7 +2,9 @@
 
 use App\Models\Tag as Tag;
 use App\Models\ConfessionLog as ConfessionLog;
+use App\Models\ConfessionQueue as ConfessionQueue;
 use App\Repositories\BaseRepository;
+use Carbon\Carbon;
 
 class ConfessionsRepository extends BaseRepository {
 
@@ -26,9 +28,23 @@ class ConfessionsRepository extends BaseRepository {
 
     public function update($id, array $data, $categories = [])
     {
-        $confession = $this->model->find($id);
+        $confession = $this->model->with('queue')->find($id);
         if (!$confession) {
             throw new \Exception("Model #{$id} is not found");
+        }
+
+        // Remove scheduling for 'Pending' and 'Rejected'
+        if ($data['status'] == 'Pending' || $data['status'] == 'Rejected') {
+            $data['schedule'] = '';
+            // Delete any existing queues
+            if ($confession->queue())
+                $confession->queue()->delete();
+        }
+
+        // Check if we need to schedule the confession
+        if ($data['schedule'] != '') {
+            $this->schedule($confession, $data['status'], $data['schedule']);
+            $data['status'] = 'Scheduled';
         }
 
         // Switch status
@@ -68,32 +84,66 @@ class ConfessionsRepository extends BaseRepository {
         return $confession->delete();
     }
 
+    public function schedule($confession, $status, $time)
+    {
+        $time = Carbon::createFromFormat('U', strtotime($time));
+
+        // Delete any existing queues
+        if ($confession->queue())
+            $confession->queue()->delete();
+
+        $queue = new ConfessionQueue([
+            'status_after' => $status,
+            'update_status_at' => $time,
+        ]);
+        $confession->queue()->save($queue);
+    }
+
+    public function unschedule($confession)
+    {
+        $confession->status = 'Pending';
+        // Delete any existing queues
+        if ($confession->queue())
+            $confession->queue()->delete();
+    }
+
     public function switchStatus($confession, $new, $save = true)
     {
-        switch ($new) {
-            case 'Featured':
-            case 'Approved':
-                if (!$confession->fb_post_id) {
-                    $confession->fb_post_id = $this->postToFacebook($confession);
-                }
-                break;
-            case 'Pending':
-            case 'Rejected':
-                if ($confession->fb_post_id) {
-                    $this->deleteFromFacebook($confession);
-                }
-                break;
-        }
-        $old = $confession->status;
-        $confession->status = $new;
-        $confession->status_updated_at = new \DateTime();
-
         if (\Auth::check()) {
-            $user = \Auth::user()->getAuthIdentifier();
+            $user = \Auth::user();
+        } else {
+            // Get latest log's owner (for scheduled)
+            $logs = $confession->logs()
+                ->orderBy('created_on', 'DESC')
+                ->take(1)
+                ->with('user')
+                ->get();
+            if ($logs)
+                $user = $logs->get(0)->user()->with('profiles')->get()->get(0);
+        }
+        if ($user) {
+            switch ($new) {
+                case 'Featured':
+                case 'Approved':
+                    if (!$confession->fb_post_id) {
+                        $confession->fb_post_id = $this->postToFacebook($confession, $user);
+                    }
+                    break;
+                case 'Pending':
+                case 'Rejected':
+                    if ($confession->fb_post_id) {
+                        $this->deleteFromFacebook($confession, $user);
+                    }
+                    break;
+            }
+            $old = $confession->status;
+            $confession->status = $new;
+            $confession->status_updated_at = new \DateTime();
+
             $log = new ConfessionLog([
                 'status_before' => $old,
                 'status_after' => $new,
-                'changed_by_user' => $user,
+                'changed_by_user' => $user->user_id,
                 'created_on' => new \DateTime(),
             ]);
             $confession->logs()->save($log);
@@ -105,10 +155,14 @@ class ConfessionsRepository extends BaseRepository {
             return true;
     }
 
-    public function getPageToken()
+    public function getPageToken($user = null)
     {
+        if (\Auth::check()) {
+            $user = \Auth::user();
+        }
+
         if (!$this->_pageToken) {
-            $profile = \Auth::user()->profiles()->where('provider_name', '=', 'facebook')->get();
+            $profile = $user->profiles()->where('provider_name', '=', 'facebook')->get();
             if (count($profile) !== 1) {
                 return false;
             }
@@ -117,7 +171,7 @@ class ConfessionsRepository extends BaseRepository {
         return $this->_pageToken;
     }
 
-    protected function postToFacebook($confession)
+    protected function postToFacebook($confession, $user = null)
     {
         if (env('MANUAL_MODE', false))
             return 0;
@@ -132,7 +186,7 @@ class ConfessionsRepository extends BaseRepository {
             $response = \Facebook::post($endpoint, [
                 'message' => $confession->getFacebookMessage(),
                 'url'  => $confession->images,
-            ], $this->getPageToken())->getGraphObject();
+            ], $this->getPageToken($user))->getGraphObject();
 
             if ($confession->fb_post_id) {
                 return $confession->fb_post_id;
@@ -149,7 +203,7 @@ class ConfessionsRepository extends BaseRepository {
             $response = \Facebook::post($endpoint, [
                 'message' => $confession->getFacebookMessage(),
                 // 'link' => url('/#!/confession/' . $confession->confession_id)
-            ], $this->getPageToken())->getGraphObject();
+            ], $this->getPageToken($user))->getGraphObject();
 
             if ($confession->fb_post_id) {
                 return $confession->fb_post_id;
@@ -159,7 +213,7 @@ class ConfessionsRepository extends BaseRepository {
         }
     }
 
-    protected function deleteFromFacebook($confession)
+    protected function deleteFromFacebook($confession, $user = null)
     {
         if (env('MANUAL_MODE', false)) {
             $confession->fb_post_id = '';
@@ -168,9 +222,9 @@ class ConfessionsRepository extends BaseRepository {
 
         try {
             if ($confession->images) {
-                \Facebook::delete('/' . $confession->fb_post_id, [], $this->getPageToken());
+                \Facebook::delete('/' . $confession->fb_post_id, [], $this->getPageToken($user));
             } else {
-                \Facebook::delete('/' . env('FACEBOOK_PAGE_ID', '') . '_' . $confession->fb_post_id, [], $this->getPageToken());
+                \Facebook::delete('/' . env('FACEBOOK_PAGE_ID', '') . '_' . $confession->fb_post_id, [], $this->getPageToken($user));
             }
         } catch (\Exception $e) {
         }

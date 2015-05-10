@@ -23,6 +23,7 @@
     <li class="{{ Request::is('admin/confessions/index/all') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/all">All</a></li>
     <li class="{{ Request::is('admin/confessions/index/featured') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/featured">Featured</a></li>
     <li class="{{ Request::is('admin/confessions') || Request::is('admin/confessions/index/pending') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/pending">Pending ({{ \App\Models\Confession::pending()->count() }})</a></li>
+    <li class="{{ Request::is('admin/confessions/index/scheduled') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/scheduled">Scheduled ({{ \App\Models\Confession::scheduled()->count() }})</a></li>
     <li class="{{ Request::is('admin/confessions/index/approved') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/approved">Approved</a></li>
     <li class="{{ Request::is('admin/confessions/index/rejected') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/rejected">Rejected</a></li>
   </ul>
@@ -53,6 +54,10 @@
           @if ($confession->status == 'Featured')
           <span class="label label-success">Featured</span>
           @endif
+          @if ($confession->status == 'Scheduled')
+          <?php $queue = $confession->queue()->get()->get(0) ?>
+          <span class="label label-info">Scheduled: {{ $queue->update_status_at->diffForHumans() }}</span>
+          @endif
           @if ($confession->status == 'Approved')
           <span class="label label-primary">Approved</span>
           @endif
@@ -63,18 +68,40 @@
         <div class="post-actions">
           @if ($hasPageToken)
           @if ($confession->status != 'Featured')
-          <a class="btn btn-sm btn-primary" href="/admin/confessions/feature/{{ $confession->confession_id }}">
-            Feature
-          </a>
+          <div class="btn-group">
+            <a class="btn btn-sm btn-primary" href="/admin/confessions/feature/{{ $confession->confession_id }}">
+              Feature
+            </a>
+            <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+              <span class="caret"></span>
+              <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="/admin/confessions/feature/{{ $confession->confession_id }}/1">Feature in 1 hour</a></li>
+              <li><a href="/admin/confessions/feature/{{ $confession->confession_id }}/2">Feature in 2 hours</a></li>
+              <li><a href="/admin/confessions/feature/{{ $confession->confession_id }}/3">Feature in 3 hours</a></li>
+            </ul>
+          </div>
           @else
           <a class="btn btn-sm" href="/admin/confessions/unfeature/{{ $confession->confession_id }}">
             Remove from Featured
           </a>
           @endif
           @if ($confession->status != 'Approved' && $confession->status != 'Featured')
-          <a class="btn btn-sm btn-primary" href="/admin/confessions/approve/{{ $confession->confession_id }}">
-            Approve
-          </a>
+          <div class="btn-group">
+            <a class="btn btn-sm btn-primary" href="/admin/confessions/approve/{{ $confession->confession_id }}">
+              Approve
+            </a>
+            <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+              <span class="caret"></span>
+              <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="/admin/confessions/approve/{{ $confession->confession_id }}/1">Approve in 1 hour</a></li>
+              <li><a href="/admin/confessions/approve/{{ $confession->confession_id }}/2">Approve in 2 hours</a></li>
+              <li><a href="/admin/confessions/approve/{{ $confession->confession_id }}/3">Approve in 3 hours</a></li>
+            </ul>
+          </div>
           @endif
           @if ($confession->status != 'Rejected')
           <a class="btn btn-sm" href="/admin/confessions/reject/{{ $confession->confession_id }}">

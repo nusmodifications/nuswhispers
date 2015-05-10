@@ -74,7 +74,7 @@ class ConfessionsAdminController extends AdminController {
 
     public function getEdit($id)
     {
-        $confession = Confession::with('moderatorComments')->findOrFail($id);
+        $confession = Confession::with('moderatorComments', 'queue')->findOrFail($id);
 
         return view('admin.confessions.edit', [
             'confession' => $confession,
@@ -120,7 +120,8 @@ class ConfessionsAdminController extends AdminController {
                 $data = [
                     'content' => \Input::get('content'),
                     'status' => \Input::get('status'),
-                    'images' => \Input::get('images')
+                    'images' => \Input::get('images'),
+                    'schedule' => \Input::get('schedule'),
                 ];
 
                 if (env('MANUAL_MODE', false) && \Input::get('fb_post_id')) {
@@ -132,34 +133,26 @@ class ConfessionsAdminController extends AdminController {
                 return \Redirect::back()->withMessage('Confession successfully updated.')
                     ->with('alert-class', 'alert-success');
             } catch (\Exception $e) {
-                return \Redirect::back()->withMessage('Failed updating confession: ' . $e->getMessage())
-                    ->with('alert-class', 'alert-danger');
+                var_dump($e);
+                // return \Redirect::back()->withMessage('Failed updating confession: ' . $e->getMessage())
+                //     ->with('alert-class', 'alert-danger');
             }
         }
 
     }
 
-    public function getApprove($id)
+    public function getApprove($id, $hours = 0)
     {
-        // @TODO: Move this to a repository
-        $confession = Confession::findOrFail($id);
-
-        if (!$this->confessionsRepo->getPageToken()) {
-            return \Redirect::back()->withMessage('You have not connected your account with Facebook.')->with('alert-class', 'alert-danger');
-        }
-
-        try {
-            $this->confessionsRepo->switchStatus($confession, 'Approved');
-
-            return \Redirect::back()->withMessage('Confession successfully approved and posted.')->with('alert-class', 'alert-success');
-        } catch (\Exception $e) {
-            return \Redirect::back()->withMessage('Error approving confession: ' . $e->getMessage())->with('alert-class', 'alert-danger');
-        }
+        return $this->switchOrScheduleConfession($id, 'Approved', intval($hours));
     }
 
-    public function getFeature($id)
+    public function getFeature($id, $hours = 0)
     {
-        // @TODO: Move this to a repository
+        return $this->switchOrScheduleConfession($id, 'Featured', intval($hours));
+    }
+
+    protected function switchOrScheduleConfession($id, $status, $hours)
+    {
         $confession = Confession::findOrFail($id);
 
         if (!$this->confessionsRepo->getPageToken()) {
@@ -167,11 +160,16 @@ class ConfessionsAdminController extends AdminController {
         }
 
         try {
-            $this->confessionsRepo->switchStatus($confession, 'Featured');
-
-            return \Redirect::back()->withMessage('Confession successfully featured.')->with('alert-class', 'alert-success');
+            if ($hours > 0) {
+                $this->confessionsRepo->schedule($confession, $status, Carbon::now()->addHours($hours));
+                $this->confessionsRepo->switchStatus($confession, 'Scheduled');
+                return \Redirect::back()->withMessage('Confession has been scheduled to be ' . strtolower($status) . ' in ' . $hours . ' hour(s).')->with('alert-class', 'alert-success');
+            } else {
+                $this->confessionsRepo->switchStatus($confession, $status);
+                return \Redirect::back()->withMessage('Confession successfully ' . strtolower($status) . ' and posted.')->with('alert-class', 'alert-success');
+            }
         } catch (\Exception $e) {
-            return \Redirect::back()->withMessage('Error featuring confession: ' . $e->getMessage())->with('alert-class', 'alert-danger');
+            return \Redirect::back()->withMessage('Error switching status of confession: ' . $e->getMessage())->with('alert-class', 'alert-danger');
         }
     }
 
