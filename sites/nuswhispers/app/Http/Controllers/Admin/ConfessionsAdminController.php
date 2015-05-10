@@ -133,9 +133,8 @@ class ConfessionsAdminController extends AdminController {
                 return \Redirect::back()->withMessage('Confession successfully updated.')
                     ->with('alert-class', 'alert-success');
             } catch (\Exception $e) {
-                var_dump($e);
-                // return \Redirect::back()->withMessage('Failed updating confession: ' . $e->getMessage())
-                //     ->with('alert-class', 'alert-danger');
+                return \Redirect::back()->withMessage('Failed updating confession: ' . $e->getMessage())
+                    ->with('alert-class', 'alert-danger');
             }
         }
 
