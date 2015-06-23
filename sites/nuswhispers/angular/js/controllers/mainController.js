@@ -32,7 +32,7 @@ angular.module('nuswhispersApp.controllers')
         Facebook.login(function (response) {
             $scope.getLoginStatus();
         }, {
-            // scope: 'publish_actions'
+            scope: 'publish_actions'
         });
     };
 
