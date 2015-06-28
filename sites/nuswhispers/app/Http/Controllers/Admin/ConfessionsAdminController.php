@@ -67,7 +67,7 @@ class ConfessionsAdminController extends AdminController {
 
         return view('admin.confessions.index', [
             'confessions' => $confessions,
-            'categoryOptions' => array_merge(['All Categories' => 0], Category::orderBy('confession_category', 'asc')->lists('confession_category_id', 'confession_category')->all()),
+            'categoryOptions' => array_merge(array('All Categories' => 0), Category::orderBy('confession_category', 'asc')->lists('confession_category_id', 'confession_category')),
             'hasPageToken' => (bool)$this->confessionsRepo->getPageToken(),
         ]);
     }
