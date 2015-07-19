@@ -50,13 +50,20 @@ class TagsController extends Controller {
      */
     public function topNTags($num)
     {
-        $tags = $this->getSortedTags();
-        if ($num  < count($tags)) {
-            $top_n = array_slice($tags, 0, $num);
-            return \Response::json(array("data" => array("tags" => $top_n)));
-        } else {
-            return \Response::json(array("data" => array("tags" => $tags)));
-        }
+        $num = ($num > 20) ? 5 : $num;
+
+        $tags = \DB::table('tags')
+            ->join('confession_tags', 'tags.confession_tag_id', '=', 'confession_tags.confession_tag_id')
+            ->join('confessions', 'confessions.confession_id', '=', 'confession_tags.confession_id')
+            ->where('confession_tag', 'REGEXP', '#[a-z]+')
+            ->select(\DB::raw('tags.*, (confessions.fb_like_count + (confessions.fb_comment_count * 2)) / POW(DATEDIFF(NOW(), confessions.status_updated_at) + 2, 1.8) AS `popularity_rating`'))
+            ->groupBy('confession_tag_id')
+            ->orderBy('popularity_rating', 'DESC')
+            ->orderBy('status_updated_at', 'DESC')
+            ->limit(5)
+            ->get();
+
+        return \Response::json(['data' => ['tags' => $tags]]);
     }
 
     /**
