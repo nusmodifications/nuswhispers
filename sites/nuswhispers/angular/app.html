@@ -82,8 +82,11 @@
           </button>
           <div id="topbar-nav">
             <a class="btn btn-social-media" href="https://github.com/nusmodifications/nuswhispers" target="_blank" tooltip-placement="bottom" tooltip="Contribute to NUSWhispers!"><span class="typcn typcn-social-github"></span></a>
-            <a class="btn btn-alt-style" href="/#!/submit"><span class="typcn typcn-heart-full-outline"></span> New Confession</a>
-            <a ng-show="!isLoggedIn" ng-click="login()" class="btn"><span class="typcn typcn-social-facebook"></span> Login with Facebook</a>
+            <a class="btn btn-alt-style" href="/#!/submit">
+                <span class="typcn typcn-plus"></span>
+                &nbsp;New<span class="hidden-sm hidden-xs">&nbsp;Confession</span>
+            </a>
+            <a ng-show="!isLoggedIn" ng-click="login()" class="btn"><span class="typcn typcn-social-facebook"></span> Login <span class="hidden-sm hidden-xs">with Facebook</span></a>
             <a ng-show="isLoggedIn" ng-click="logout()" class="btn">
               <span class="typcn typcn-social-facebook"></span> Logout<img ng-src="http://graph.facebook.com/{{fbUser.getUserID()}}/picture" />
             </a>
