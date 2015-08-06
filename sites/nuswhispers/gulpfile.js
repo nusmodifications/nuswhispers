@@ -102,16 +102,16 @@ gulp.task('concat', ['concat:bower', 'concat:js', 'concat:css']);
 gulp.task('concat:bower', function () {
     console.log('-------------------------------------------------- CONCAT :bower');
 
-    var jsFilter = gulpPlugins.filter('**/*.js'),
-        cssFilter = gulpPlugins.filter('**/*.css'),
-        assetsFilter = gulpPlugins.filter(['!**/*.js', '!**/*.css', '!**/*.scss']);
+    var jsFilter = gulpPlugins.filter('**/*.js', {restore: true}),
+        cssFilter = gulpPlugins.filter('**/*.css', {restore: true}),
+        assetsFilter = gulpPlugins.filter(['!**/*.js', '!**/*.css', '!**/*.scss'], {restore: true});
 
     var stream = gulp.src(bowerFiles(bowerConfig), {base: SETTINGS.src.bower})
         .pipe(jsFilter)
         .pipe(gulpPlugins.concat('_bower.js'))
         .pipe(gulpPlugins.if(isProduction, gulpPlugins.uglify()))
         .pipe(gulp.dest(SETTINGS.build.bower))
-        .pipe(jsFilter.restore())
+        .pipe(jsFilter.restore)
         .pipe(cssFilter)
         .pipe(gulpPlugins.sass())
         .pipe(map(function (file, callback) {
@@ -137,11 +137,11 @@ gulp.task('concat:bower', function () {
         .pipe(gulpPlugins.concat('_bower.css'))
         .pipe(gulpPlugins.if(isProduction, gulpPlugins.minifyCss({keepSpecialComments: '*'})))
         .pipe(gulp.dest(SETTINGS.build.bower))
-        .pipe(cssFilter.restore())
+        .pipe(cssFilter.restore)
         .pipe(assetsFilter)
         .pipe(gulpPlugins.if(isProduction, gulpPlugins.minifyCss({keepSpecialComments: '*'})))
         .pipe(gulp.dest(SETTINGS.build.bower))
-        .pipe(assetsFilter.restore())
+        .pipe(assetsFilter.restore)
         .pipe(gulpPlugins.connect.reload());
     return stream;
 });
