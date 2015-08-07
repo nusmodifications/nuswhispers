@@ -118,6 +118,10 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', 'localStorag
             templateUrl: 'assets/templates/submit.html',
             controller: 'SubmitController'
         })
+        .when('/mobile_submit/', {
+            templateUrl: 'assets/templates/submit.html',
+            controller: 'SubmitController'
+        })
         .when('/policy/', {
             templateUrl: 'assets/templates/policy.html',
         })

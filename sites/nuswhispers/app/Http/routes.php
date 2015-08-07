@@ -75,6 +75,11 @@ Route::get('/admin', function() {
     return redirect('admin/confessions');
 });
 
+// Mobile submit page
+Route::get('/mobile_submit', function() {
+    return File::get(public_path() . '/mobile_submit.html');
+});
+
 // reroute to angular
 Route::get('/{getEverything?}/{all?}', function() {
     return File::get(public_path() . '/app.html');
