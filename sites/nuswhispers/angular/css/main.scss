@@ -1,5 +1,6 @@
 body {
-    font: 1.4em 'Montserrat', sans-serif;
+    font-family: 'proxima-nova', sans-serif;
+    font-size: 1.4em;
     color: $primary-text-color;
     background-color: $background-color;
 }
@@ -29,6 +30,10 @@ a:focus {
 
 .likebox-wrapper {
     text-align: center;
+}
+
+#main-content {
+    margin-top: 15px;
 }
 
 footer {
@@ -82,6 +87,7 @@ footer {
     line-height: 30px;
     margin-top: 3px;
     margin-left: 5px;
+    font-weight: 600;
 }
 
 // fix safari bug
