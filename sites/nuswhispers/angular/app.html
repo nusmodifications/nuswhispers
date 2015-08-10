@@ -43,6 +43,9 @@
         </a>
         <hr>
         <ul class="nav main-nav">
+          <li ng-class="{active: isActivePage('/submit/')}">
+            <a href="/#!submit"><span class="typcn typcn-heart-full-outline"></span>Post Confession</a>
+          </li>
           <li ng-class="{active: isActivePage('/home/')}">
             <a href="/#!home"><span class="typcn typcn-pin"></span>Featured</a>
           </li>
@@ -54,9 +57,6 @@
           </li>
           <li ng-show="isLoggedIn" ng-class="{active: isActivePage('/favourites/')}">
             <a href="/#!favourites"><span class="typcn typcn-star-full-outline"></span>Favourites</a>
-          </li>
-          <li ng-class="{active: isActivePage('/submit/')}">
-            <a href="/#!submit"><span class="typcn typcn-heart-full-outline"></span>New Confession</a>
           </li>
         </ul>
         <hr>
@@ -85,7 +85,7 @@
             <a class="btn btn-social-media" href="https://github.com/nusmodifications/nuswhispers" target="_blank" tooltip-placement="bottom" tooltip="Contribute to NUSWhispers!"><span class="typcn typcn-social-github"></span></a>
             <a class="btn btn-alt-style" href="/#!/submit">
                 <span class="typcn typcn-plus"></span>
-                &nbsp;New<span class="hidden-sm hidden-xs">&nbsp;Confession</span>
+                &nbsp;Post<span class="hidden-sm hidden-xs">&nbsp;Confession</span>
             </a>
             <a ng-show="!isLoggedIn" ng-click="login()" class="btn"><span class="typcn typcn-social-facebook"></span> Login <span class="hidden-sm hidden-xs">with Facebook</span></a>
             <a ng-show="isLoggedIn" ng-click="logout()" class="btn">
