@@ -80,6 +80,15 @@
               <li><a href="/admin/confessions/feature/{{ $confession->confession_id }}/1">Feature in 1 hour</a></li>
               <li><a href="/admin/confessions/feature/{{ $confession->confession_id }}/2">Feature in 2 hours</a></li>
               <li><a href="/admin/confessions/feature/{{ $confession->confession_id }}/3">Feature in 3 hours</a></li>
+              <li><a href="/admin/confessions/feature/{{ $confession->confession_id }}/4">Feature in 4 hour</a></li>
+              <li><a href="/admin/confessions/feature/{{ $confession->confession_id }}/5">Feature in 5 hours</a></li>
+              <li><a href="/admin/confessions/feature/{{ $confession->confession_id }}/6">Feature in 6 hours</a></li>
+              <li><a href="/admin/confessions/feature/{{ $confession->confession_id }}/7">Feature in 7 hour</a></li>
+              <li><a href="/admin/confessions/feature/{{ $confession->confession_id }}/8">Feature in 8 hours</a></li>
+              <li><a href="/admin/confessions/feature/{{ $confession->confession_id }}/9">Feature in 9 hours</a></li>
+              <li><a href="/admin/confessions/feature/{{ $confession->confession_id }}/10">Feature in 10 hour</a></li>
+              <li><a href="/admin/confessions/feature/{{ $confession->confession_id }}/11">Feature in 11 hours</a></li>
+              <li><a href="/admin/confessions/feature/{{ $confession->confession_id }}/12">Feature in 12 hours</a></li>
             </ul>
           </div>
           @else
@@ -100,6 +109,15 @@
               <li><a href="/admin/confessions/approve/{{ $confession->confession_id }}/1">Approve in 1 hour</a></li>
               <li><a href="/admin/confessions/approve/{{ $confession->confession_id }}/2">Approve in 2 hours</a></li>
               <li><a href="/admin/confessions/approve/{{ $confession->confession_id }}/3">Approve in 3 hours</a></li>
+              <li><a href="/admin/confessions/approve/{{ $confession->confession_id }}/4">Approve in 4 hours</a></li>
+              <li><a href="/admin/confessions/approve/{{ $confession->confession_id }}/5">Approve in 5 hours</a></li>
+              <li><a href="/admin/confessions/approve/{{ $confession->confession_id }}/6">Approve in 6 hours</a></li>
+              <li><a href="/admin/confessions/approve/{{ $confession->confession_id }}/7">Approve in 7 hours</a></li>
+              <li><a href="/admin/confessions/approve/{{ $confession->confession_id }}/8">Approve in 8 hours</a></li>
+              <li><a href="/admin/confessions/approve/{{ $confession->confession_id }}/9">Approve in 9 hours</a></li>
+              <li><a href="/admin/confessions/approve/{{ $confession->confession_id }}/10">Approve in 10 hours</a></li>
+              <li><a href="/admin/confessions/approve/{{ $confession->confession_id }}/11">Approve in 11 hours</a></li>
+              <li><a href="/admin/confessions/approve/{{ $confession->confession_id }}/12">Approve in 12 hours</a></li>
             </ul>
           </div>
           @endif
