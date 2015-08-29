@@ -14,7 +14,7 @@ class ProfileController extends AdminController {
         return view('admin.profile.index', [
             'providers' => $allowedProviders,
             'user'      => \Auth::user(),
-            'profiles'  => \Auth::user()->profiles()->get()->keyBy('provider_name'),
+            'profiles'  => \Auth::user()->profiles()->get()->keyBy('provider_name')->all(),
         ]);
     }
 

@@ -32,7 +32,7 @@
     <div class="form-group">
       <?php echo Form::select('category', array_flip($categoryOptions), Request::input('category'), ['class' => 'input-sm form-control']) ?>
       <div class="date-range">
-        <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+        <i class="typcn typcn-calendar-outline"></i>
         <span>Anytime</span> <strong class="caret"></strong>
         <?php echo Form::hidden('start', Request::input('start')) ?>
         <?php echo Form::hidden('end', Request::input('end')) ?>

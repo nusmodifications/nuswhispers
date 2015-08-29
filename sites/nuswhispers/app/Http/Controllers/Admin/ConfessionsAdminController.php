@@ -64,10 +64,11 @@ class ConfessionsAdminController extends AdminController {
         }
 
         $confessions = $query->with('moderatorComments')->paginate(10);
+        $categories = Category::orderBy('confession_category', 'asc')->lists('confession_category_id', 'confession_category')->all();
 
         return view('admin.confessions.index', [
             'confessions' => $confessions,
-            'categoryOptions' => array_merge(array('All Categories' => 0), Category::orderBy('confession_category', 'asc')->lists('confession_category_id', 'confession_category')),
+            'categoryOptions' => array_merge(array('All Categories' => 0), $categories),
             'hasPageToken' => (bool)$this->confessionsRepo->getPageToken(),
         ]);
     }
