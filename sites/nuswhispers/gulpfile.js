@@ -9,7 +9,6 @@ var gulp       = require('gulp'),
     chalk      = require('chalk'),
     args       = require('yargs').argv,
     map        = require('map-stream'),
-    browserSync = require('browser-sync'),
     runSequence = require('run-sequence'),
     gulpPlugins = require('gulp-load-plugins')();
 
@@ -389,18 +388,3 @@ gulp.task('default', ['build']);
 
 // Just in case you are too lazy to type: $ gulp --type production
 gulp.task('prod', ['build:prod']);
-
-
-
-/*============================================================
-=                       Browser Sync                         =
-============================================================*/
-
-gulp.task('bs', function () {
-    browserSync.init([SETTINGS.build.app + 'index.html', SETTINGS.build + 'templates/*.html', SETTINGS.build.css + '*css', SETTINGS.build.js + '*.js'], {
-        proxy: {
-            host: '127.0.0.1',
-            port: serverConfig.port
-        }
-    });
-});
