@@ -1,64 +1,19 @@
 <?php namespace App\Repositories;
 
-use App\Models\Tag as Tag;
 use App\Models\ConfessionLog as ConfessionLog;
 use App\Models\ConfessionQueue as ConfessionQueue;
+use App\Models\Tag as Tag;
 use App\Repositories\BaseRepository;
 use Carbon\Carbon;
 
-class ConfessionsRepository extends BaseRepository {
-
+class ConfessionsRepository extends BaseRepository
+{
     private $_pageToken = '';
-
-    public function model()
-    {
-        return 'App\Models\Confession';
-    }
 
     public function create(array $data, $categories = [])
     {
         $confession = $this->model->create($data);
         $confession->status_updated_at = new \DateTime();
-
-        $this->syncTags($confession);
-        $this->syncCategories($confession, $categories);
-
-        return $confession->save();
-    }
-
-    public function update($id, array $data, $categories = [])
-    {
-        $confession = $this->model->with('queue')->find($id);
-        if (!$confession) {
-            throw new \Exception("Model #{$id} is not found");
-        }
-
-        // Remove scheduling for 'Pending' and 'Rejected'
-        if ($data['status'] == 'Pending' || $data['status'] == 'Rejected') {
-            $data['schedule'] = '';
-            // Delete any existing queues
-            if ($confession->queue())
-                $confession->queue()->delete();
-        }
-
-        // Check if we need to schedule the confession
-        if ($data['schedule'] != '') {
-            $this->schedule($confession, $data['status'], $data['schedule']);
-            $data['status'] = 'Scheduled';
-        }
-
-        // Switch status
-        $switched = false;
-        if ($data['status'] != $confession->status) {
-            $this->switchStatus($confession, $data['status'], false);
-            $switched = true;
-        }
-
-        $confession->fill($data);
-
-        // Update Facebook if it's featured or approved
-        if (!$switched && ($confession->status == 'Featured' || $confession->status == 'Approved'))
-            $this->postToFacebook($confession);
 
         $this->syncTags($confession);
         $this->syncCategories($confession, $categories);
@@ -84,27 +39,41 @@ class ConfessionsRepository extends BaseRepository {
         return $confession->delete();
     }
 
+    public function getPageToken($user = null)
+    {
+        if (\Auth::check()) {
+            $user = \Auth::user();
+        }
+
+        if (!$this->_pageToken) {
+            $profile = $user->profiles()->where('provider_name', '=', 'facebook')->get();
+            if (count($profile) !== 1) {
+                return false;
+            }
+            $this->_pageToken = $profile[0]->page_token;
+        }
+        return $this->_pageToken;
+    }
+
+    public function model()
+    {
+        return 'App\Models\Confession';
+    }
+
     public function schedule($confession, $status, $time)
     {
         $time = Carbon::createFromFormat('U', strtotime($time));
 
         // Delete any existing queues
-        if ($confession->queue())
+        if ($confession->queue()) {
             $confession->queue()->delete();
+        }
 
         $queue = new ConfessionQueue([
             'status_after' => $status,
-            'update_status_at' => $time,
+            'update_status_at' => $time
         ]);
         $confession->queue()->save($queue);
-    }
-
-    public function unschedule($confession)
-    {
-        $confession->status = 'Pending';
-        // Delete any existing queues
-        if ($confession->queue())
-            $confession->queue()->delete();
     }
 
     public function switchStatus($confession, $new, $save = true)
@@ -118,8 +87,10 @@ class ConfessionsRepository extends BaseRepository {
                 ->take(1)
                 ->with('user')
                 ->get();
-            if ($logs)
+            if ($logs) {
                 $user = $logs->get(0)->user()->with('profiles')->get()->get(0);
+            }
+
         }
         if ($user) {
             switch ($new) {
@@ -144,73 +115,70 @@ class ConfessionsRepository extends BaseRepository {
                 'status_before' => $old,
                 'status_after' => $new,
                 'changed_by_user' => $user->user_id,
-                'created_on' => new \DateTime(),
+                'created_on' => new \DateTime()
             ]);
             $confession->logs()->save($log);
         }
 
-        if ($save)
+        if ($save) {
             return $confession->save();
-        else
-            return true;
-    }
-
-    public function getPageToken($user = null)
-    {
-        if (\Auth::check()) {
-            $user = \Auth::user();
-        }
-
-        if (!$this->_pageToken) {
-            $profile = $user->profiles()->where('provider_name', '=', 'facebook')->get();
-            if (count($profile) !== 1) {
-                return false;
-            }
-            $this->_pageToken = $profile[0]->page_token;
-        }
-        return $this->_pageToken;
-    }
-
-    protected function postToFacebook($confession, $user = null)
-    {
-        if (env('MANUAL_MODE', false))
-            return 0;
-
-        if ($confession->images) {
-            if ($confession->fb_post_id) {
-                $endpoint = '/' . $confession->fb_post_id;
-            } else {
-                $endpoint = '/' . env('FACEBOOK_PAGE_ID', '') . '/photos';
-            }
-
-            $response = \Facebook::post($endpoint, [
-                'message' => $confession->getFacebookMessage(),
-                'url'  => $confession->images,
-            ], $this->getPageToken($user))->getGraphObject();
-
-            if ($confession->fb_post_id) {
-                return $confession->fb_post_id;
-            } else {
-                return $response['id'];
-            }
         } else {
-            if ($confession->fb_post_id) {
-                $endpoint = '/' . env('FACEBOOK_PAGE_ID', '') . '_' . $confession->fb_post_id;
-            } else {
-                $endpoint = '/' . env('FACEBOOK_PAGE_ID', '') . '/feed';
-            }
-
-            $response = \Facebook::post($endpoint, [
-                'message' => $confession->getFacebookMessage(),
-                // 'link' => url('/#!/confession/' . $confession->confession_id)
-            ], $this->getPageToken($user))->getGraphObject();
-
-            if ($confession->fb_post_id) {
-                return $confession->fb_post_id;
-            } else {
-                return explode('_', $response['id'])[1];
-            }
+            return true;
         }
+
+    }
+
+    public function unschedule($confession)
+    {
+        $confession->status = 'Pending';
+        // Delete any existing queues
+        if ($confession->queue()) {
+            $confession->queue()->delete();
+        }
+
+    }
+
+    public function update($id, array $data, $categories = [])
+    {
+        $confession = $this->model->with('queue')->find($id);
+        if (!$confession) {
+            throw new \Exception("Model #{$id} is not found");
+        }
+
+        // Remove scheduling for 'Pending' and 'Rejected'
+        if ($data['status'] == 'Pending' || $data['status'] == 'Rejected') {
+            $data['schedule'] = '';
+            // Delete any existing queues
+            if ($confession->queue()) {
+                $confession->queue()->delete();
+            }
+
+        }
+
+        // Check if we need to schedule the confession
+        if ($data['schedule'] != '') {
+            $this->schedule($confession, $data['status'], $data['schedule']);
+            $data['status'] = 'Scheduled';
+        }
+
+        // Switch status
+        $switched = false;
+        if ($data['status'] != $confession->status) {
+            $this->switchStatus($confession, $data['status'], false);
+            $switched = true;
+        }
+
+        $confession->fill($data);
+
+        // Update Facebook if it's featured or approved
+        if (!$switched && ($confession->status == 'Featured' || $confession->status == 'Approved')) {
+            $this->postToFacebook($confession);
+        }
+
+        $this->syncTags($confession);
+        $this->syncCategories($confession, $categories);
+
+        return $confession->save();
     }
 
     protected function deleteFromFacebook($confession, $user = null)
@@ -231,17 +199,53 @@ class ConfessionsRepository extends BaseRepository {
         $confession->fb_post_id = '';
     }
 
-    protected function syncTags(&$confession)
+    protected function getTagNamesFromContent($content)
     {
-        $tagNames = $this->getTagNamesFromContent($confession->content);
-        $tagsToSync = [];
-        foreach ($tagNames as $tagName) {
-            $tag = Tag::firstOrCreate(['confession_tag' => $tagName]);
-            $tagsToSync[] = $tag->confession_tag_id;
-        }
-        $confession->tags()->sync($tagsToSync);
+        preg_match_all('/(#\w+)/', $content, $matches);
+        return array_unique(array_shift($matches));
+    }
 
-        return $confession;
+    protected function postToFacebook($confession, $user = null)
+    {
+        if (env('MANUAL_MODE', false)) {
+            return 0;
+        }
+
+        if ($confession->images) {
+            if ($confession->fb_post_id) {
+                $endpoint = '/' . $confession->fb_post_id;
+            } else {
+                $endpoint = '/' . env('FACEBOOK_PAGE_ID', '') . '/photos';
+            }
+
+            $response = \Facebook::post($endpoint, [
+                'message' => $confession->getFacebookMessage(),
+                'url' => $confession->images
+            ], $this->getPageToken($user))->getGraphObject();
+
+            if ($confession->fb_post_id) {
+                return $confession->fb_post_id;
+            } else {
+                return $response['id'];
+            }
+        } else {
+            if ($confession->fb_post_id) {
+                $endpoint = '/' . env('FACEBOOK_PAGE_ID', '') . '_' . $confession->fb_post_id;
+            } else {
+                $endpoint = '/' . env('FACEBOOK_PAGE_ID', '') . '/feed';
+            }
+
+            $response = \Facebook::post($endpoint, [
+                'message' => $confession->getFacebookMessage()
+                // 'link' => url('/#!/confession/' . $confession->confession_id)
+            ], $this->getPageToken($user))->getGraphObject();
+
+            if ($confession->fb_post_id) {
+                return $confession->fb_post_id;
+            } else {
+                return explode('_', $response['id'])[1];
+            }
+        }
     }
 
     protected function syncCategories(&$confession, $categories)
@@ -254,10 +258,16 @@ class ConfessionsRepository extends BaseRepository {
         return $confession;
     }
 
-    protected function getTagNamesFromContent($content)
+    protected function syncTags(&$confession)
     {
-        preg_match_all('/(#\w+)/', $content, $matches);
-        return array_unique(array_shift($matches));
-    }
+        $tagNames = $this->getTagNamesFromContent($confession->content);
+        $tagsToSync = [];
+        foreach ($tagNames as $tagName) {
+            $tag = Tag::firstOrCreate(['confession_tag' => $tagName]);
+            $tagsToSync[] = $tag->confession_tag_id;
+        }
+        $confession->tags()->sync($tagsToSync);
 
+        return $confession;
+    }
 }
