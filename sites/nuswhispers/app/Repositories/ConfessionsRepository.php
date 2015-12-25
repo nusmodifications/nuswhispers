@@ -1,8 +1,10 @@
-<?php namespace App\Repositories;
+<?php
 
-use App\Models\ConfessionLog as ConfessionLog;
-use App\Models\ConfessionQueue as ConfessionQueue;
-use App\Models\Tag as Tag;
+namespace App\Repositories;
+
+use App\Models\ConfessionLog;
+use App\Models\ConfessionQueue;
+use App\Models\Tag;
 use App\Repositories\BaseRepository;
 use Carbon\Carbon;
 
@@ -90,7 +92,6 @@ class ConfessionsRepository extends BaseRepository
             if ($logs) {
                 $user = $logs->get(0)->user()->with('profiles')->get()->get(0);
             }
-
         }
         if ($user) {
             switch ($new) {
@@ -105,6 +106,7 @@ class ConfessionsRepository extends BaseRepository
                     if ($confession->fb_post_id) {
                         $this->deleteFromFacebook($confession, $user);
                     }
+                    $this->unschedule($confession);
                     break;
             }
             $old = $confession->status;
@@ -130,12 +132,10 @@ class ConfessionsRepository extends BaseRepository
 
     public function unschedule($confession)
     {
-        $confession->status = 'Pending';
         // Delete any existing queues
         if ($confession->queue()) {
             $confession->queue()->delete();
         }
-
     }
 
     public function update($id, array $data, $categories = [])
