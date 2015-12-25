@@ -2,7 +2,7 @@
   "name": "nuswhispers",
   "version": "0.1.0",
   "description": "Laravel 5 + AngularJS project.",
-  "repository": "https://github.com/zyml/nuswhispers",
+  "repository": "https://github.com/nusmodifications/nuswhispers",
   "dependencies": {
     "angular-recaptcha": "^1.0.1"
   },
