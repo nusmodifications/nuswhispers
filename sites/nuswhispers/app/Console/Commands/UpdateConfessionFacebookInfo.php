@@ -38,9 +38,11 @@ class UpdateConfessionFacebookInfo extends Command {
      */
     public function fire()
     {
+        $accessToken = \Config::get('laravel-facebook-sdk.facebook_config.page_access_token');
+
         // Get the latest 250 facebook posts and record likes/comments
-        $facebookRequest = sprintf('/%s/feed?limit=250&oauth_token=%s&fields=comments.limit(1).summary(true),likes.limit(1).summary(true)', env('FACEBOOK_PAGE_ID', ''), \Config::get('laravel-facebook-sdk.facebook_config.page_access_token'));
-        $facebookResponse = \Facebook::get($facebookRequest)->getDecodedBody();
+        $facebookRequest = sprintf('/%s/feed?limit=250&oauth_token=%s&fields=comments.limit(1).summary(true),likes.limit(1).summary(true)', env('FACEBOOK_PAGE_ID', ''), $accessToken);
+        $facebookResponse = \Facebook::get($facebookRequest, $accessToken)->getDecodedBody();
         foreach ($facebookResponse['data'] as $facebookPost) {
             $facebookPostId = explode('_', $facebookPost['id'])[1]; // get facebook post id
             $confession = Confession::where('fb_post_id', '=', $facebookPostId)->first(); // get confession associated with fb post

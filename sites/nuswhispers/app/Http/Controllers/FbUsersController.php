@@ -13,9 +13,9 @@ class FbUsersController extends Controller {
     public function postLogin()
     {
         if (\Input::get('fb_access_token')) {
-            \Facebook::setDefaultAccessToken(\Input::get('fb_access_token'));
+            $accessToken = \Input::get('fb_access_token');
             try {
-                $response = \Facebook::get('/me?fields=id');
+                $response = \Facebook::get('/me?fields=id', $accessToken);
                 $fbUserId = $response->getGraphUser()->getProperty('id');
                 $fbUser = FbUser::firstOrNew(['fb_user_id' => $fbUserId]);
 
