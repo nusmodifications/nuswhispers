@@ -31,6 +31,12 @@ Laravel 5 + AngularJS setup. Development environment powered by [Laravel Homeste
     $ npm install
     $ bower install
     ```
+* Run database migrations to ensure all the database tables are created, followed by seeding categories and default admin user:
+    ```bash
+    $ php artisan migrate
+    $ php artisan db:seed
+    ```
+
 * If everything is running perfectly, you should be able to access the website by requesting http://nuswhispers.local with your web browser.
 
 ## Development
