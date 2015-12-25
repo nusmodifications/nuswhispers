@@ -9,7 +9,7 @@
         "laravel/socialite": "~2.0",
         "laravelcollective/html": "5.2.*",
         "sammyk/laravel-facebook-sdk": "~3.0",
-        "facebook/php-sdk-v4": "~5.0"
+        "facebook/php-sdk-v4": "~5.1"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~4.0",
