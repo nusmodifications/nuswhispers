@@ -2,6 +2,7 @@
 
 var gulp       = require('gulp'),
     bowerFiles = require('main-bower-files'),
+    del        = require('del'),
     stylish    = require('jshint-stylish'),
     path       = require('path'),
     open       = require('open'),
@@ -319,8 +320,9 @@ gulp.task('watch', function () {
 
 var cleanFiles = function (files, logMessage) {
     console.log('-------------------------------------------------- CLEAN :' + logMessage);
-    gulp.src(files, {read: false})
-        .pipe(gulpPlugins.rimraf({force: true}));
+    del(files).then(function (paths) {
+        console.log('Deleted files and folders: \n', paths.join('\n'));
+    });
 };
 
 gulp.task('clean', function () {
