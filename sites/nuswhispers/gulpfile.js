@@ -222,7 +222,7 @@ gulp.task('copy:html', function () {
     gulp.src([SETTINGS.src.templates + '*.html', SETTINGS.src.templates + '**/*.html'])
         .pipe(gulpPlugins.if(isProduction, gulpPlugins.preprocess({ context: { NODE_ENV: 'production', DEBUG: false }})))
         .pipe(gulpPlugins.if(!isProduction, gulpPlugins.preprocess({ context: { NODE_ENV: 'development', DEBUG: true }})))
-        .pipe(gulpPlugins.if(isProduction, gulpPlugins.minifyHtml({comments: false, quotes: true, spare: true, empty: true, cdata: true})))
+        .pipe(gulpPlugins.if(isProduction, gulpPlugins.htmlmin({collapseWhitespace: true})))
         .pipe(gulp.dest(SETTINGS.build.templates))
         .pipe(gulpPlugins.connect.reload());
 });
@@ -233,7 +233,7 @@ gulp.task('copy:html:root', function () {
     gulp.src(SETTINGS.src.app + '*.html')
         .pipe(gulpPlugins.if(isProduction, gulpPlugins.preprocess({ context: { NODE_ENV: 'production', DEBUG: false }})))
         .pipe(gulpPlugins.if(!isProduction, gulpPlugins.preprocess({ context: { NODE_ENV: 'development', DEBUG: true }})))
-        .pipe(gulpPlugins.if(isProduction, gulpPlugins.minifyHtml({comments: false, quotes: true, spare: true, empty: true, cdata: true})))
+        .pipe(gulpPlugins.if(isProduction, gulpPlugins.htmlmin({collapseWhitespace: true})))
         .pipe(gulp.dest(SETTINGS.build.app))
         .pipe(gulpPlugins.connect.reload());
 });
@@ -383,7 +383,7 @@ gulp.task('build', function () {
 gulp.task('build:prod', function () {
     console.log(hintLog('-------------------------------------------------- BUILD - Production Mode'));
     isProduction = true;
-    runSequence('copy', 'concat', 'watch');
+    runSequence('copy', 'concat');
 });
 
 gulp.task('default', ['build']);
