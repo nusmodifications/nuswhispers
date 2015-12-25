@@ -135,11 +135,11 @@ gulp.task('concat:bower', function () {
             callback(null, file);
         }))
         .pipe(gulpPlugins.concat('_bower.css'))
-        .pipe(gulpPlugins.if(isProduction, gulpPlugins.minifyCss({keepSpecialComments: '*'})))
+        .pipe(gulpPlugins.if(isProduction, gulpPlugins.cssnano()))
         .pipe(gulp.dest(SETTINGS.build.bower))
         .pipe(cssFilter.restore)
         .pipe(assetsFilter)
-        .pipe(gulpPlugins.if(isProduction, gulpPlugins.minifyCss({keepSpecialComments: '*'})))
+        .pipe(gulpPlugins.if(isProduction, gulpPlugins.cssnano()))
         .pipe(gulp.dest(SETTINGS.build.bower))
         .pipe(assetsFilter.restore)
         .pipe(gulpPlugins.connect.reload());
@@ -185,13 +185,13 @@ gulp.task('concat:css', ['convert:scss'], function () {
     console.log('-------------------------------------------------- CONCAT :css ');
     gulp.src([SETTINGS.src.css + 'fonts.css', SETTINGS.scss + 'application.css', SETTINGS.src.css + '*.css'])
         .pipe(gulpPlugins.concat('styles.css'))
-        .pipe(gulpPlugins.if(isProduction, gulpPlugins.minifyCss({keepSpecialComments: '*'})))
+        .pipe(gulpPlugins.if(isProduction, gulpPlugins.cssnano()))
         .pipe(gulp.dest(SETTINGS.build.css))
         .pipe(gulpPlugins.connect.reload());
 
     // Copy over admin.css to public folder (no need for concat)
     gulp.src([SETTINGS.scss + 'admin.css'])
-    //    .pipe(gulpPlugins.if(isProduction, gulpPlugins.minifyCss({keepSpecialComments: '*'})))
+    //    .pipe(gulpPlugins.if(isProduction, gulpPlugins.cssnano()))
         .pipe(gulp.dest(SETTINGS.build.css))
         .pipe(gulpPlugins.connect.reload());
 });
