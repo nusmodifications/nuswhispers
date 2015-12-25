@@ -1,10 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Eloquent\Model;
 
-class UsersSeeder extends Seeder {
-
+class UsersSeeder extends Seeder
+{
     /**
      * Run the database seeds.
      *
@@ -20,5 +19,4 @@ class UsersSeeder extends Seeder {
             ]
         ]);
     }
-
 }

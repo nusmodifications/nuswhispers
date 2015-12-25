@@ -1,27 +1,25 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Eloquent\Model;
 
-class CategoriesSeeder extends Seeder {
+class CategoriesSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        DB::table('categories')->delete();
 
-	/**
-	 * Run the database seeds.
-	 *
-	 * @return void
-	 */
-	public function run()
-	{
-		DB::table('categories')->delete();
-
-		DB::table('categories')->insert(array(
-			array('confession_category' => 'Funny'),
-			array('confession_category' => 'Lost and Found'),
-			array('confession_category' => 'Romance'),
-			array('confession_category' => 'Rant'),
-			array('confession_category' => 'Nostalgia'),
-			array('confession_category' => 'Advice')
-		));
-	}
-
+        DB::table('categories')->insert([
+            ['confession_category' => 'Funny'],
+            ['confession_category' => 'Lost and Found'],
+            ['confession_category' => 'Romance'],
+            ['confession_category' => 'Rant'],
+            ['confession_category' => 'Nostalgia'],
+            ['confession_category' => 'Advice']
+        ]);
+    }
 }
