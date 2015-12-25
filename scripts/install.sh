@@ -5,3 +5,5 @@ composer install
 
 npm install -g npm
 npm install
+
+php artisan migrate

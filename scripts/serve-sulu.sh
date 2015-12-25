@@ -11,37 +11,63 @@ block="server {
     server_name $1;
     root \"$2\";
 
-    index index.html index.htm index.php;
-
     charset utf-8;
-
-    location / {
-        try_files \$uri \$uri/ /index.php?\$query_string;
-    }
 
     location = /favicon.ico { access_log off; log_not_found off; }
     location = /robots.txt  { access_log off; log_not_found off; }
 
     access_log off;
-    error_log  /var/log/nginx/$1-error.log error;
+    error_log  /var/log/nginx/$1-ssl-error.log error;
 
     sendfile off;
 
     client_max_body_size 100m;
 
-    location ~ \.php$ {
+    # PROD
+    location ~ ^/(website|admin|app)\.php(/|$) {
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
         fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
-        fastcgi_index index.php;
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_intercept_errors off;
         fastcgi_buffer_size 16k;
         fastcgi_buffers 4 16k;
-        fastcgi_connect_timeout 300;
-        fastcgi_send_timeout 300;
-        fastcgi_read_timeout 300;
+        # Prevents URIs that include the front controller. This will 404:
+        # http://domain.tld/app.php/some-path
+        # Remove the internal directive to allow URIs like this
+        internal;
     }
+    
+    # strip app.php/ prefix if it is present
+    rewrite ^/app\.php/?(.*)\$ /$1 permanent;
+
+    location /admin {
+        index admin.php;
+        try_files \$uri @rewriteadmin;
+    }
+
+    location @rewriteadmin {
+        rewrite ^(.*)\$ /admin.php/$1 last;
+    }
+
+    location / {
+      index website.php;
+      try_files \$uri @rewritewebsite;
+    }
+
+    # expire
+    location ~* \.(?:ico|css|js|gif|jpe?g|png)\$ {
+        try_files \$uri /website.php/$1;
+        access_log off;
+        expires 30d;
+        add_header Pragma public;
+        add_header Cache-Control "public";
+    }
+
+    location @rewritewebsite {
+        rewrite ^(.*)\$ /website.php/$1 last;
+    }
+
 
     location ~ /\.ht {
         deny all;
