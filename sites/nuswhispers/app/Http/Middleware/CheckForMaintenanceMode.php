@@ -1,12 +1,13 @@
-<?php namespace App\Http\Middleware;
+<?php
+
+namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Contracts\Routing\Middleware;
 use Illuminate\Contracts\Foundation\Application;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class CheckForMaintenanceMode implements Middleware {
-
+class CheckForMaintenanceMode
+{
     /**
      * The application implementation.
      *
@@ -35,12 +36,10 @@ class CheckForMaintenanceMode implements Middleware {
     public function handle($request, Closure $next)
     {
         if ($this->app->isDownForMaintenance() &&
-            !in_array($request->getClientIp(), ['127.0.0.1']))
-        {
+            !in_array($request->getClientIp(), ['127.0.0.1'])) {
             throw new HttpException(503);
         }
 
         return $next($request);
     }
-
 }

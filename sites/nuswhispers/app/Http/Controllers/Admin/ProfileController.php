@@ -83,7 +83,7 @@ class ProfileController extends AdminController {
 
         if ($provider == 'facebook') {
             // Extend current token to long-lived access token
-            $response = \Facebook::get('/oauth/access_token?client_id=' . urlencode(env('FACEBOOK_APP_ID')) . '&client_secret=' . urlencode(env('FACEBOOK_APP_SECRET')) . '&grant_type=fb_exchange_token&fb_exchange_token=' . urlencode($oauthUser->token));
+            $response = \Facebook::get('/oauth/access_token?client_id=' . urlencode(env('FACEBOOK_APP_ID')) . '&client_secret=' . urlencode(env('FACEBOOK_APP_SECRET')) . '&grant_type=fb_exchange_token&fb_exchange_token=' . urlencode($oauthUser->token), $token);
 
             if (!isset($response->getDecodedBody()['access_token']))
                 throw new \Exception('User is not a page admin of Facebook page #' . env('FACEBOOK_PAGE_ID', '') . '.');

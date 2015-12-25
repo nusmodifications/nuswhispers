@@ -1,7 +1,5 @@
 <?php
-
 define('LARAVEL_START', microtime(true));
-
 /*
 |--------------------------------------------------------------------------
 | Register The Composer Auto Loader
@@ -12,10 +10,8 @@ define('LARAVEL_START', microtime(true));
 | into the script here so that we do not have to worry about the
 | loading of any our classes "manually". Feels great to relax.
 |
-*/
-
-require __DIR__.'/../vendor/autoload.php';
-
+ */
+require __DIR__ . '/../vendor/autoload.php';
 /*
 |--------------------------------------------------------------------------
 | Include The Compiled Class File
@@ -25,11 +21,8 @@ require __DIR__.'/../vendor/autoload.php';
 | compiled class file which contains all of the classes commonly used
 | by a request. The Artisan "optimize" is used to create this file.
 |
-*/
-
-$compiledPath = __DIR__.'/cache/compiled.php';
-
-if (file_exists($compiledPath))
-{
-	require $compiledPath;
+ */
+$compiledPath = __DIR__ . '/cache/compiled.php';
+if (file_exists($compiledPath)) {
+    require $compiledPath;
 }
