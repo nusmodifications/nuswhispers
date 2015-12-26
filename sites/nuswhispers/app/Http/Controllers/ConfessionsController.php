@@ -366,6 +366,12 @@ class ConfessionsController extends Controller
      */
     protected function resolveCacheIdentifier(Request $request)
     {
-        return 'confessions/' . md5($request->fullUrl());
+        $url = $request->fullUrl();
+
+        if ($request->input('timestamp')) {
+            $url = str_replace($request->input('timestamp'), $this->normalizeTimestamp($request->input('timestamp')), $url);
+        }
+
+        return 'confessions/' . md5();
     }
 }
