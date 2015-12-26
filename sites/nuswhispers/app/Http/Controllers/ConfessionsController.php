@@ -372,6 +372,6 @@ class ConfessionsController extends Controller
             $url = str_replace($request->input('timestamp'), $this->normalizeTimestamp($request->input('timestamp')), $url);
         }
 
-        return 'confessions/' . md5();
+        return 'confessions/' . md5($url);
     }
 }
