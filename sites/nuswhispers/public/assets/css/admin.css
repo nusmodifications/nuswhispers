@@ -5992,6 +5992,7 @@ h1.fancy-header {
     color: #f70; }
 
 #sidebar-wrapper {
+  backface-visibility: hidden;
   background-color: #f55260;
   height: 100%;
   position: fixed;
