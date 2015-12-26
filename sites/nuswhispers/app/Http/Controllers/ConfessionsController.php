@@ -354,7 +354,8 @@ class ConfessionsController extends Controller
      */
     protected function normalizeTimestamp($timestamp)
     {
-        return ceil($timestamp / 3600) * 3600;
+        $seconds = self::CACHE_TIMEOUT * 60;
+        return ceil($timestamp / $seconds) * $seconds;
     }
 
     /**
