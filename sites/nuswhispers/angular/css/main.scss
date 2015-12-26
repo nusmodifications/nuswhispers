@@ -200,6 +200,7 @@ h1.fancy-header {
 }
 
 #sidebar-wrapper {
+    backface-visibility: hidden;
     background-color: $primary-color;
     height: 100%;
     position: fixed;
