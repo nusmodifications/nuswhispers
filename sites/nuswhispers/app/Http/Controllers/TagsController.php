@@ -18,11 +18,11 @@ class TagsController extends Controller
      */
     public function index()
     {
-        $json = Cache::remember('tags', Config::get('cache.api.timeout'), function () {
+        $output = Cache::remember('tags', Config::get('cache.api.timeout'), function () {
             return ['data' => ['tags' => $this->getSortedTags()]];
         });
 
-        return response()->json($json);
+        return response()->json($output);
     }
 
     /**
@@ -52,7 +52,7 @@ class TagsController extends Controller
     {
         $num = ($num > 20) ? 5 : $num;
 
-        $json = Cache::remember('top_' . $num . '_tags', Config::get('cache.api.timeout'), function () {
+        $output = Cache::remember('top_' . $num . '_tags', Config::get('cache.api.timeout'), function () {
             $tags = DB::table('tags')
                 ->join('confession_tags', 'tags.confession_tag_id', '=', 'confession_tags.confession_tag_id')
                 ->join('confessions', 'confessions.confession_id', '=', 'confession_tags.confession_id')
@@ -67,7 +67,7 @@ class TagsController extends Controller
             return ['data' => ['tags' => $tags]];
         });
 
-        return response()->json($json);
+        return response()->json($output);
     }
 
     /**

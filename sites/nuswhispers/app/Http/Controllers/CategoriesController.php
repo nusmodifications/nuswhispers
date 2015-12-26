@@ -15,11 +15,11 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        $json = Cache::rememberForever('categories', function () {
+        $output = Cache::rememberForever('categories', function () {
             return ['data' => ['categories' => Category::categoryAsc()->get()]];
         });
 
-        return response()->json($json);
+        return response()->json($output);
     }
 
     /**
