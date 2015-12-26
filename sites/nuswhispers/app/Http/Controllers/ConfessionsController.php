@@ -2,28 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use DB;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Confession;
 use App\Models\Tag;
 use App\Repositories\ConfessionsRepository;
 use App\Services\FacebookBatchProcessor;
-use Input;
 use Cache;
+use DB;
+use Illuminate\Http\Request;
+use Input;
 
 class ConfessionsController extends Controller
 {
+    /**
+     * Refresh cache every 5 minutes.
+     */
+    const CACHE_TIMEOUT = 5;
+
     /**
      * Maximum confessions allowed in API.
      * We can't go any higher or Facebook will not allow it.
      */
     const MAX_CONFESSION_COUNT = 10;
-
-    /**
-     * Refresh cache every 5 minutes.
-     */
-    const CACHE_TIMEOUT = 5;
 
     /**
      * Facebook batch processor.
@@ -47,17 +47,6 @@ class ConfessionsController extends Controller
         ConfessionsRepository $confessionsRepo) {
         $this->batchProcessor = $batchProcessor;
         $this->confessionsRepo = $confessionsRepo;
-    }
-
-    /**
-     * Resolves the cache identifier.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return string
-     */
-    protected function resolveCacheIdentifier(Request $request)
-    {
-        return 'confessions/' . md5($request->fullUrl());
     }
 
     /**
@@ -130,9 +119,9 @@ class ConfessionsController extends Controller
         $cacheId = $this->resolveCacheIdentifier($request);
         $output = Cache::remember($cacheId, self::CACHE_TIMEOUT, function () {
             $query = Confession::with('categories')
-            ->with('favourites')
-            ->featured()
-            ->orderBy('status_updated_at', 'DESC');
+                ->with('favourites')
+                ->featured()
+                ->orderBy('status_updated_at', 'DESC');
 
             $query = $this->filterQuery($query, Input::all());
 
@@ -141,7 +130,6 @@ class ConfessionsController extends Controller
 
             return ['data' => ['confessions' => $confessions]];
         });
-
 
         return response()->json($output);
     }
@@ -342,6 +330,7 @@ class ConfessionsController extends Controller
     protected function filterQuery($query, $input = [])
     {
         if (($timestamp = array_get($input, 'timestamp'))) {
+            $timestamp = $this->normalizeTimestamp($timestamp);
             $query->whereRaw('UNIX_TIMESTAMP(status_updated_at) <= ?', [$timestamp]);
         }
 
@@ -355,5 +344,27 @@ class ConfessionsController extends Controller
         }
 
         return $query;
+    }
+
+    /**
+     * Normalize the timestamp; up to the highest minute.
+     *
+     * @param  int $timestamp
+     * @return int
+     */
+    protected function normalizeTimestamp($timestamp)
+    {
+        return ceil($timestamp / 3600) * 3600;
+    }
+
+    /**
+     * Resolves the cache identifier.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return string
+     */
+    protected function resolveCacheIdentifier(Request $request)
+    {
+        return 'confessions/' . md5($request->fullUrl());
     }
 }
