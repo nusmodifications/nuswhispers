@@ -76,4 +76,18 @@ return [
 
 	'prefix' => 'laravel',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Cache API
+    |--------------------------------------------------------------------------
+    |
+    | Specify how many minutes should the API responses should expire in
+    | the cache.
+    |
+    */
+
+    'api' => [
+        'timeout' => env('CACHE_TIMEOUT', 30),
+    ],
+
 ];

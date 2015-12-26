@@ -1,13 +1,13 @@
-<?php namespace App\Http\Controllers;
+<?php
 
-use App\Models\Category as Category;
-use App\Http\Requests;
+namespace App\Http\Controllers;
+
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use Cache;
 
-use Illuminate\Http\Request;
-
-class CategoriesController extends Controller {
-
+class CategoriesController extends Controller
+{
     /**
      * Display a listing of the resource.
      *
@@ -15,13 +15,12 @@ class CategoriesController extends Controller {
      */
     public function index()
     {
-        $json = \Cache::rememberForever('categories_json', function()
-        {
+        $json = Cache::rememberForever('categories', function () {
             return ['data' => ['categories' => Category::categoryAsc()->get()]];
         });
-        return \Response::json($json);
-    }
 
+        return response()->json($json);
+    }
 
     /**
      * Get the category JSON by a given category_id
@@ -32,10 +31,9 @@ class CategoriesController extends Controller {
     public function show($categoryd)
     {
         $category = Category::find($categoryId);
-        if ($category == NULL) {
-            return \Response::json(array("success" => false));
+        if ($category === null) {
+            return response()->json(['success' => false]);
         }
-        return \Response::json(["success" => true, "data" => array("category" => $category)]);
+        return response()->json(["success" => true, "data" => ["category" => $category]]);
     }
-
 }
