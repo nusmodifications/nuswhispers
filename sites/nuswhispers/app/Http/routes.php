@@ -12,7 +12,7 @@
 */
 
 // API Routes
-Route::group(array('prefix' => 'api'), function() {
+Route::group(['prefix' => 'api', 'middleware' => 'api'], function() {
     Route::get('confessions/popular', 'ConfessionsController@popular');
     Route::get('confessions/recent', 'ConfessionsController@recent');
     Route::get('confessions/category/{categoryId}', 'ConfessionsController@category');
@@ -35,7 +35,7 @@ Route::group(array('prefix' => 'api'), function() {
 });
 
 // Search Engine Robot Routes
-Route::get('/confession/{id}', function($id) {
+Route::get('/confession/{id}', function ($id) {
     $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : null;
     $botTypes = 'bot|crawl|slurp|spider|facebookexternalhit';
 
