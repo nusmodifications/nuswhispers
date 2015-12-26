@@ -18,7 +18,7 @@ angular.module('nuswhispersApp.services', ['facebook']).config(
 );
 angular.module('nuswhispersApp.controllers', ['nuswhispersApp.services', 'vcRecaptcha']);
 
-var app = angular.module('nuswhispersApp', ['nuswhispersApp.controllers', 'filters', 'LocalStorageModule', 'angular-loading-bar', 'monospaced.elastic', 'angularMoment', 'infinite-scroll', 'ngCookies', 'ngResource', 'ngSanitize', 'ngRoute', 'ngAnimate', 'ui.utils', 'ui.bootstrap', 'ui.router', 'ngGrid']);
+var app = angular.module('nuswhispersApp', ['nuswhispersApp.controllers', 'filters', 'LocalStorageModule', 'angular-loading-bar', 'monospaced.elastic', 'angularMoment', 'infinite-scroll', 'ngCookies', 'ngResource', 'ngSanitize', 'ngRoute', 'ngAnimate', 'ui.utils', 'ui.bootstrap', 'ui.router']);
 
 app.config(['$routeProvider', '$locationProvider', '$httpProvider', 'localStorageServiceProvider', function ($routeProvider, $locationProvider, $httpProvider, localStorageServiceProvider) {
     'use strict';
