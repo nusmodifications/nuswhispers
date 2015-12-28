@@ -5,6 +5,14 @@ use Illuminate\Database\Eloquent\Model;
 class UserProfile extends Model {
 
     /**
+     * The attributes that should be casted to native types.
+     * @var array
+     */
+    protected $casts = [
+        'profile_id' => 'string'
+    ];
+
+    /**
      * The database table used by the model.
      * @var string
      */
