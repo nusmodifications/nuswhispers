@@ -64,7 +64,12 @@ class FacebookBatchProcessor
         }
 
         foreach ($confessions as $confession) {
-            $requestUrl = sprintf('/%s?oauth_token=%s&fields=comments.summary(true).filter(toplevel).fields(parent.fields(id),comments.summary(true),message,from,created_time),likes.summary(true)', $confession->getAttribute('fb_post_id'), $this->accessToken);
+            $requestUrl = sprintf(
+                '/%s?oauth_token=%s&fields=%scomments.summary(true).filter(toplevel).fields(parent.fields(id),comments.summary(true),message,from,created_time),likes.summary(true)',
+                $confession->getAttribute('fb_post_id'),
+                $this->accessToken,
+                !empty($confession->getAttribute('images')) ? 'images,' : ''
+            );
 
             $batchRequests[$confession->getAttribute('confession_id')] = $this->fb->request('GET', $requestUrl);
         }
@@ -75,6 +80,12 @@ class FacebookBatchProcessor
             $facebookResponse = $responses[$confession->getAttribute('confession_id')]->getDecodedBody();
             $confession->setAttribute('status_updated_at_timestamp', $confession->status_updated_at->timestamp);
             $confession->setAttribute('facebook_information', $facebookResponse);
+
+            // Update image field with Facebook's image URL.
+            $facebookImage = array_get($facebookResponse, 'images.0.source');
+            if ($facebookImage) {
+                $confession->setAttribute('images', $facebookImage);
+            }
         });
 
         return $confessions;
