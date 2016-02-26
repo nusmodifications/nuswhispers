@@ -40,7 +40,10 @@ class ConfessionsAdminController extends AdminController {
         if (\Input::get('q'))
         {
             $search = stripslashes(\Input::get('q'));
-            $query->where('content', 'LIKE', "%$search%");
+            $query->where(function ($q) use ($search) {
+                $q->where('content', 'LIKE', "%$search%");
+                $q->orWhere('confession_id', (int) $search);
+            });
         }
 
         if (\Input::get('start') && \Input::get('end'))

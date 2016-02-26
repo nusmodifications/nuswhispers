@@ -35,12 +35,12 @@
       <span class="typcn typcn-watch"></span><span am-time-ago="confession.status_updated_at_timestamp" am-preprocess="unix" class="post-time"></span>
       <div class="post-media-summary">
         <a href="/#!home" class="tweets-count liked" target="_blank">8</a>
-        <a ng-click="confession.show_comments = !confession.show_comments" ng-class="{shown: confession.show_comments}" class="post-media-action-btn show-comments-btn" tooltip-placement="bottom" tooltip="{{confession.show_comments ? 'Hide Comments' : 'Show Comments'}}">{{confession.facebook_information.comments.data.length}}</a>
-        <a ng-click="toggleLikeConfession(confession)" ng-class="{liked: confessionIsLiked(confession)}" class="post-media-action-btn fb-likes" target="_blank" tooltip-placement="bottom" tooltip="{{fbUser.getAccessToken() === '' ? 'Login to Like' : (confessionIsLiked(confession) ? 'Unlike' : 'Like')}}">{{confession.facebook_information.likes.summary.total_count}}</a>
-        <a ng-click="toggleFavouriteConfession(confession)" ng-class="{liked: confessionIsFavourited(confession)}" class="post-media-action-btn favs-count" target="_blank" tooltip-placement="bottom" tooltip="{{fbUser.getAccessToken() === '' ? 'Login to Favourite' : (confessionIsFavourited(confession) ? 'Unfavourite' : 'Favourite')}}">{{confession.favourites.length}}</a>
+        <a ng-click="confession.show_comments = !confession.show_comments" ng-class="{shown: confession.show_comments}" class="post-media-action-btn show-comments-btn" tooltip-placement="bottom" uib-tooltip="{{confession.show_comments ? 'Hide Comments' : 'Show Comments'}}">{{confession.facebook_information.comments.data.length}}</a>
+        <a ng-click="toggleLikeConfession(confession)" ng-class="{liked: confessionIsLiked(confession)}" class="post-media-action-btn fb-likes" target="_blank" tooltip-placement="bottom" uib-tooltip="{{fbUser.getAccessToken() === '' ? 'Login to Like' : (confessionIsLiked(confession) ? 'Unlike' : 'Like')}}">{{confession.facebook_information.likes.summary.total_count}}</a>
+        <a ng-click="toggleFavouriteConfession(confession)" ng-class="{liked: confessionIsFavourited(confession)}" class="post-media-action-btn favs-count" target="_blank" tooltip-placement="bottom" uib-tooltip="{{fbUser.getAccessToken() === '' ? 'Login to Favourite' : (confessionIsFavourited(confession) ? 'Unfavourite' : 'Favourite')}}">{{confession.favourites.length}}</a>
       </div>
     </div>
-    <div class="post-comment-list" collapse="!confession.show_comments">
+    <div class="post-comment-list" uib-collapse="!confession.show_comments">
       <div ng-hide="fbUser.getAccessToken() === ''" class="post-new-comment post-comment">
         <span class="media-left">
           <img class="post-user-thumbnail" ng-src="http://graph.facebook.com/{{fbUser.getUserID()}}/picture?width=256&height=256" />

@@ -11,6 +11,14 @@ class ConfessionLog extends Model {
     protected $table = 'confession_logs';
 
     /**
+     * The attributes that should be casted to native types.
+     * @var array
+     */
+    protected $casts = [
+        'confession_log_id' => 'string'
+    ];
+
+    /**
      * Primary key of the model.
      * @var string
      */

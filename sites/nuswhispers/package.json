@@ -27,7 +27,7 @@
     "gulp-uglify": "^1.5.1",
     "gulp-watch": "^4.3.5",
     "gulp-zip": "^3.0.2",
-    "jshint": "^2.9.1",
+    "jshint": "^2.8.0",
     "jshint-stylish": "^2.1.0",
     "main-bower-files": "^2.11.0",
     "map-stream": "^0.1.0",
