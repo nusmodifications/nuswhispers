@@ -1,6 +1,8 @@
 # NUS Whispers
 
-Laravel 5 + AngularJS setup. Development environment powered by [Laravel Homestead](https://github.com/laravel/homestead) (modified).
+[![Dependency Status](https://gemnasium.com/nusmodifications/nuswhispers.svg)](https://gemnasium.com/nusmodifications/nuswhispers)
+
+> Laravel 5 + AngularJS setup. Development environment powered by [Laravel Homestead](https://github.com/laravel/homestead) (modified).
 
 ## Requirements
 * [Vagrant](http://www.vagrantup.com)
@@ -49,4 +51,3 @@ $ gulp
 ## Credits
 * https://github.com/Swader/homestead_improved
 * https://www.npmjs.com/package/generator-boom
-
