@@ -6,6 +6,7 @@
   "dependencies": {
     "map-stream": "^0.1.0"
   },
+  "license": "MIT",
   "devDependencies": {
     "bower": "^1.7.1",
     "chalk": "^1.1.1",
