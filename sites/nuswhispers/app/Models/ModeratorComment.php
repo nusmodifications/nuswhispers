@@ -30,6 +30,13 @@ class ModeratorComment extends Model {
     protected $fillable = ['user_id', 'content', 'created_at'];
 
     /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['created_at'];
+
+    /**
      * Disable timestamps functionality.
      * @var boolean
      */
