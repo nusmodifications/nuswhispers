@@ -67,7 +67,7 @@ angular.module('nuswhispersApp.services')
     Confession.search = function (query, timestamp, offset, count) {
         return $http({
             method: 'GET',
-            url: '/api/confessions/search/' + encodeURIComponent(escape(query)),
+            url: '/api/confessions/search/' + encodeURIComponent(query),
             params: {timestamp: timestamp, offset: offset, count: count}
         });
     };
