@@ -1,0 +1,161 @@
+FORMAT: 1A
+HOST: http://www.nuswhispers.com/api/
+
+# NUSWhispers API
+
+REST API for NUSWhispers platform. Powered by Laravel backend.
+
+# Group Confessions
+
+## Confession Collection [/confessions/{?timestamp,count,offset}]
+
++ Parameters
+    + timestamp: `1457257656` (number, optional) - Retrieve confessions up to this UNIX timestamp.
+    + count: `10` (number, optional) - Number of confessions to retrieve. Maximum is `10` (default).
+        + Default: `10`
+    + offset: `0` (number, optional) - Skips a specified number of confessions.
+
+### List Featured Confessions [GET]
+
++ Response 200 (application/json)
+
+### Create a New Confession [POST]
+
++ Request (application/json)
+
+        {
+            "content": "Confession content. Hello World!",
+            "image": "http://foobar.com/image.png",
+            "categories": []
+            "captcha": "12345"
+        }    
+
++ Response 200 (application/json)
+
+## Popular Confessions [/confessions/popular/{?timestamp,count,offset}]
+
++ Parameters
+    + timestamp: `1457257656` (number, optional) - Retrieve confessions up to this UNIX timestamp.
+    + count: `10` (number, optional) - Number of confessions to retrieve. Maximum is `10` (default).
+        + Default: `10`
+    + offset: `0` (number, optional) - Skips a specified number of confessions.
+
+### List Popular Confessions [GET]
+
++ Response 200 (application/json)
+
+## Recent Confessions [/confessions/recent/{?timestamp,count,offset}]
+
++ Parameters
+    + timestamp: `1457257656` (number, optional) - Retrieve confessions up to this UNIX timestamp.
+    + count: `10` (number, optional) - Number of confessions to retrieve. Maximum is `10` (default).
+        + Default: `10`
+    + offset: `0` (number, optional) - Skips a specified number of confessions.
+
+### List Recent Confessions [GET]
+
++ Response 200 (application/json)
+
+## Favourite Confessions [/confessions/favourites/{?timestamp,count,offset}]
+
++ Parameters
+    + timestamp: `1457257656` (number, optional) - Retrieve confessions up to this UNIX timestamp.
+    + count: `10` (number, optional) - Number of confessions to retrieve. Maximum is `10` (default).
+        + Default: `10`
+    + offset: `0` (number, optional) - Skips a specified number of confessions.
+
+### List Favourite Confessions [GET]
+
++ Response 200 (application/json)
+
+## Confessions by Category [/confessions/category/{category_id}/{?timestamp,count,offset}]
+
++ Parameters
+    + category_id: `10` (number, required) - ID of the confession category.
+    + timestamp: `1457257656` (number, optional) - Retrieve confessions up to this UNIX timestamp.
+    + count: `10` (number, optional) - Number of confessions to retrieve. Maximum is `10` (default).
+        + Default: `10`
+    + offset: `0` (number, optional) - Skips a specified number of confessions.
+
+### List Confessions by Category [GET]
+
++ Response 200 (application/json)
+
+## Confessions by Tag [/confessions/tag/{slug}/{?timestamp,count,offset}]
+
++ Parameters
+    + slug: `whattodo` (string, required) - Slug of the confession tag.
+    + timestamp: `1457257656` (number, optional) - Retrieve confessions up to this UNIX timestamp.
+    + count: `10` (number, optional) - Number of confessions to retrieve. Maximum is `10` (default).
+        + Default: `10`
+    + offset: `0` (number, optional) - Skips a specified number of confessions.
+
+### List Confessions by Tag [GET]
+
++ Response 200 (application/json)
+
+## Confessions by Search Term [/confessions/search/{query}/{?timestamp,count,offset}]
+
++ Parameters
+    + query: `hello` (string) - Search query.
+    + timestamp: `1457257656` (number, optional) - Retrieve confessions up to this UNIX timestamp.
+    + count: `10` (number, optional) - Number of confessions to retrieve. Maximum is `10` (default).
+        + Default: `10`
+    + offset: `0` (number, optional) - Skips a specified number of confessions.
+
+### List Confessions by Search Term [GET]
+
++ Response 200 (application/json)
+
+## Confession [/confessions/{confession_id}]
+
++ Parameters
+    + confession_id (number) - ID of the confession.
+
+### View a Single Confession [GET]
+
++ Response 200 (application/json)
+
+# Group Categories
+
+## Categories Collection [/categories]
+
+### List Categories [GET]
+
++ Response 200 (application/json)
+
+## Category [/categories/{category_id}]
+
++ Parameters
+    + category_id: `10` (number) - ID of the category.
+
+### View a Category Detail [GET]
+
++ Response 200 (application/json)
+
+# Group Tags
+
+## Tags Collection [/tags]
+
+### List Tags [GET]
+
++ Response 200 (application/json)
+
+## Popular Tags [/tags/top/{num}]
+
++ Parameters
+    + num: `5` (number, optional) - Number of top tags to return. Maximum is `20`.
+        + Default: `5`
+
+### List Popular Tags [GET]
+
++ Response 200 (application/json)
+
+## Tag [/tags/{tag_id}]
+
++ Parameters
+    + tag_id: `1` (number) - ID of the tag.
+    
+### View a Tag Detail [GET]
+
++ Response 200 (application/json)
