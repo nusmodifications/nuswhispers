@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\ApiKey;
 use App\Models\Confession;
 use App\Models\Tag;
 use App\Repositories\ConfessionsRepository;
@@ -253,7 +254,8 @@ class ConfessionsController extends Controller
             'content' => 'required',
             'image' => 'url',
             'categories' => 'array',
-            'captcha' => 'required'
+            'captcha' => 'required_without:api_key',
+            'api_key' => 'required_without:captcha'
         ];
 
         $validator = \Validator::make(\Input::all(), $validationRules);
@@ -263,11 +265,21 @@ class ConfessionsController extends Controller
         }
 
         // Check reCAPTCHA
-        $captchaResponseJSON = file_get_contents(sprintf(\Config::get('services.reCAPTCHA.verify'), \Config::get('services.reCAPTCHA.key'), \Input::get('captcha')));
-        $captchaResponse = json_decode($captchaResponseJSON);
+        if (!empty(\Input::get('captcha'))) {
+            $captchaResponseJSON = file_get_contents(sprintf(\Config::get('services.reCAPTCHA.verify'), \Config::get('services.reCAPTCHA.key'), \Input::get('captcha')));
+            $captchaResponse = json_decode($captchaResponseJSON);
 
-        if (!$captchaResponse->success) {
-            return response()->json(['success' => false, 'errors' => ['reCAPTCHA' => ['The reCAPTCHA was not entered correctly. Please try again.']]]);
+            if (!$captchaResponse->success) {
+                return response()->json(['success' => false, 'errors' => ['reCAPTCHA' => ['The reCAPTCHA was not entered correctly. Please try again.']]]);
+            }
+        } else {
+            $key = ApiKey::where('key', \Input::get('api_key'))->first();
+            if (!$key) {
+                return response()->json(['success' => false, 'errors' => ['API key' => ['Invalid API key. Please try again or use reCAPTCHA.']]]);
+            }
+            
+            $key->last_used_on = new \DateTime();
+            $key->save();
         }
 
         if (is_array(\Input::get('categories'))) {
