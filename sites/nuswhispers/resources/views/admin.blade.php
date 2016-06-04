@@ -40,6 +40,7 @@
       </ul>
       <hr>
       <ul class="nav main-nav">
+        <li class="{{ Request::is('admin/api-keys') ? 'active' : ''}}"><a href="/admin/api-keys"><span class="typcn typcn-key"></span>API Keys Management</a></li>
         @if (\Auth::user()->role == 'Administrator')
         <li class="{{ Request::is('admin/users') ? 'active' : '' }}"><a href="/admin/users"><span class="typcn typcn-group"></span>User Management</a></li>
         @endif
