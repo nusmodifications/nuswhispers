@@ -28,11 +28,12 @@ class ApiKeysAdminController extends AdminController
         try {
             $key = new ApiKey([
                 'user_id' => (int) Auth::user()->getKey(),
+                'last_used_on' => new \DateTime(),
                 'created_on' => new \DateTime(),
                 'key' => ApiKey::generateKey()
             ]);
             $key->save();
-            
+
             return redirect('/admin/api-keys')->withMessage('API key successfully added.')
                 ->with('alert-class', 'alert-success');
         } catch (\Exception $e) {
