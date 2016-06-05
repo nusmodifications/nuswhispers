@@ -55,6 +55,8 @@ Route::controllers([
 ]);
 
 // Admin Routes
+Route::controller('admin/api-keys', 'Admin\ApiKeysAdminController');
+
 Route::controller('admin/users', 'Admin\UsersAdminController', [
     'postEdit' => 'admin.users.edit',
     'postAdd' => 'admin.users.add',
