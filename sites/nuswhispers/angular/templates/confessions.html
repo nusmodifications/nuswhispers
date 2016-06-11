@@ -43,7 +43,7 @@
     <div class="post-comment-list" uib-collapse="!confession.show_comments">
       <div ng-hide="fbUser.getAccessToken() === ''" class="post-new-comment post-comment">
         <span class="media-left">
-          <img class="post-user-thumbnail" ng-src="http://graph.facebook.com/{{fbUser.getUserID()}}/picture?width=256&height=256" />
+          <img class="post-user-thumbnail" ng-src="//graph.facebook.com/{{fbUser.getUserID()}}/picture?width=256&height=256" />
         </span>
         <form class="media-body" ng-submit="commentConfession(confession, confession.new_comment)">
           <textarea class="msd-elastic form-control" ng-required="true" ng-trim="false" ng-model="confession.new_comment" placeholder="Write a comment..."></textarea>
@@ -53,7 +53,7 @@
       <ul class="media-list">
         <li class="media post-comment" ng-repeat="comment in confession.facebook_information.comments.data" ng-class="{'comment-highlight': (highlightNewCommentID === comment.id)}">
           <a class="media-left" href="https://www.facebook.com/{{comment.from.id}}" target="_blank">
-            <img class="post-user-thumbnail" ng-src="http://graph.facebook.com/{{comment.from.id}}/picture?width=256&height=256" />
+            <img class="post-user-thumbnail" ng-src="//graph.facebook.com/{{comment.from.id}}/picture?width=256&height=256" />
           </a>
           <div class="media-body">
             <a href="https://www.facebook.com/{{comment.from.id}}" target="_blank">{{comment.from.name}}</a> -
@@ -62,7 +62,7 @@
             <!-- Nested comment replies -->
             <div ng-repeat="reply in comment.comments.data" class="media post-comment">
               <a class="media-left" href="https://www.facebook.com/{{reply.from.id}}" target="_blank">
-                <img class="post-user-thumbnail" ng-src="http://graph.facebook.com/{{reply.from.id}}/picture?width=256&height=256" />
+                <img class="post-user-thumbnail" ng-src="//graph.facebook.com/{{reply.from.id}}/picture?width=256&height=256" />
               </a>
               <div class="media-body">
                 <a href="https://www.facebook.com/{{reply.from.id}}" target="_blank">{{reply.from.name}}</a> -
