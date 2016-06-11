@@ -89,7 +89,7 @@
             </a>
             <a ng-show="!isLoggedIn" ng-click="login()" class="btn"><span class="typcn typcn-social-facebook"></span> Login <span class="hidden-sm hidden-xs">with Facebook</span></a>
             <a ng-show="isLoggedIn" ng-click="logout()" class="btn">
-              <span class="typcn typcn-social-facebook"></span> Logout<img ng-src="http://graph.facebook.com/{{fbUser.getUserID()}}/picture" />
+              <span class="typcn typcn-social-facebook"></span> Logout<img ng-src="//graph.facebook.com/{{fbUser.getUserID()}}/picture" />
             </a>
           </div>
           <form class="search-form" role="search" ng-submit="searchConfessions(searchQuery)">
