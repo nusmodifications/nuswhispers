@@ -63,7 +63,7 @@ angular.module('nuswhispersApp.controllers')
     };
 
     $scope.searchConfessions = function (query) {
-        console.log('/search/' + query);
+        // console.log('/search/' + query);
         $location.path('/search/' + query);
     };
 

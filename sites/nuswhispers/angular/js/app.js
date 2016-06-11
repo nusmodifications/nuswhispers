@@ -145,7 +145,7 @@ app.run(['$rootScope', function ($rootScope) {
 
     'use strict';
 
-    console.log('Angular.js run() function...');
+    // console.log('Angular.js run() function...');
 }]);
 
 function escapeHTML(content) {
