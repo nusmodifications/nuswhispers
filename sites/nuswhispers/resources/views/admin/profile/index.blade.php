@@ -19,7 +19,7 @@
         <td class="actions">
           @if (isset($profiles[$id]))
             <?php $linkedData = json_decode($profiles[$id]['data']); ?>
-            Connected as {{$linkedData->first_name}} <a href="/admin/profile/delete/{{$id}}"><span class="typcn typcn-delete"></span></a>
+            Connected as {{$linkedData->name ? $linkedData->name : $linkedData->first_name}} <a href="/admin/profile/delete/{{$id}}"><span class="typcn typcn-delete"></span></a>
           @else
             <a href="/admin/profile/connect/{{$id}}">Connect</a>
           @endif
