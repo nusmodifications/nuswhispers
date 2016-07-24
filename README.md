@@ -27,10 +27,11 @@ npm install
 bower install
 ```
 
-4) Run database migrations via command line:
+4) Run database migrations and seed data via command line:
 ```
 cd /path/to/current/directory
 php artisan migrate
+php artisan db:seed
 ```
 
 5) Compile angular via gulp:
