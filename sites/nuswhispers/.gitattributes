@@ -1,5 +1,0 @@
-# gitattributes
-* text=auto
-*.jpg binary
-*.png binary
-*.gif binary

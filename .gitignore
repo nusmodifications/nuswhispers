@@ -1,13 +1,10 @@
-/vendor
-/.vagrant
-
-.DS_Store
 .AppleDouble
+.DS_Store
 .LSOverride
+.sass-cache
 
 # Icon must end with two \r
 Icon
-
 
 # Thumbnails
 ._*
@@ -45,3 +42,15 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Package managers
+vendor
+node_modules
+bower_components
+
+# Environment files
+.env
+
+# Other folders
+/zip
+/scss
