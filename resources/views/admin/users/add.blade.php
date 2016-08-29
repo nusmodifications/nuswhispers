@@ -9,7 +9,7 @@
 
   <div class="admin-content-wrapper">
 
-    <?php echo \Form::model($user, ['route' => 'admin.users.add', 'class' => 'user-form form']) ?>
+    <?php echo \Form::model($user, ['url' => url('admin/users/add'), 'class' => 'user-form form']) ?>
 
     <div class="form-group {{$errors->first('email') ? 'has-error' : ''}}">
       <label for="email">E-mail Address <span class="text-danger">*</span></label>

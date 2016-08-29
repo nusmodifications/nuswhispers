@@ -30,7 +30,7 @@
   </table>
 
   <h2>Edit My Profile</h2>
-  <?php echo \Form::model($user, ['route' => 'admin.profile.edit', 'class' => 'profile-form form']) ?>
+  <?php echo \Form::model($user, ['url' => url('admin/profile/edit'), 'class' => 'profile-form form']) ?>
 
   <div class="form-group {{$errors->first('email') ? 'has-error' : ''}}">
     <label for="email">E-mail Address <span class="text-danger">*</span></label>
