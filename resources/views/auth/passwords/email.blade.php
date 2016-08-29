@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container-fluid">
-	<div class="row">
+    <div class="row">
         <div class="col-md-4 col-md-offset-4">
             @if (session('status'))
                 <div class="alert alert-success">
@@ -21,8 +21,8 @@
                 </div>
             @endif
 
-            <form class="card form" role="form" method="POST" action="/password/email">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            <form class="card form" role="form" method="POST" action="{{ url('/password/email') }}">
+                {{ csrf_field() }}
 
                 <div class="form-group">
                     <label class="control-label">E-Mail Address</label>

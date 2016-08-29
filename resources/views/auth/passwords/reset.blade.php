@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container-fluid">
-	<div class="row">
+    <div class="row">
         <div class="col-md-4 col-md-offset-4">
             @if (count($errors) > 0)
                 <div class="alert alert-danger">
@@ -15,8 +15,9 @@
                 </div>
             @endif
 
-            <form class="card form" role="form" method="POST" action="/password/reset">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            <form class="card form" role="form" method="POST" action="{{ url('/password/reset') }}">
+                {{ csrf_field() }}
+
                 <input type="hidden" name="token" value="{{ $token }}">
 
                 <div class="form-group">
@@ -41,6 +42,6 @@
                 </div>
             </form>
         </div>
-	</div>
+    </div>
 </div>
 @endsection
