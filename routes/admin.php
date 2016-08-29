@@ -33,7 +33,7 @@ Route::get('profile/delete/{provider}', 'ProfileController@getDelete');
 
 Route::get('confessions/comments/delete/{id}', 'ModeratorCommentsAdminController@getDelete');
 
-Route::get('confessions/{status?}', 'ConfessionsAdminController@getIndex');
+Route::get('confessions/{index?}/{status?}', 'ConfessionsAdminController@getIndex');
 Route::get('confessions/edit/{id}', 'ConfessionsAdminController@getEdit');
 Route::post('confessions/edit/{id}', 'ConfessionsAdminController@postEdit');
 Route::post('confessions/approve/{id}/{hours}', 'ConfessionsAdminController@getApprove');
