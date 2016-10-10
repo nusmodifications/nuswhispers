@@ -50,7 +50,7 @@
       <div class="post-header">
         <div class="post-meta">
           <span class="typcn typcn-watch"></span>
-          Posted {{ $confession->created_at->diffForHumans() }}
+          Posted <time datetime="{{ $confession->created_at->toW3cString() }}" title="{{ $confession->created_at->toCookieString() }}">{{ $confession->created_at->diffForHumans() }}</time>
           @if ($confession->status == 'Featured')
           <span class="label label-success">Featured</span>
           @endif
