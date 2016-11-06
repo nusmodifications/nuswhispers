@@ -13,7 +13,6 @@ class UsersAdminController extends AdminController
      */
     public function __construct()
     {
-        parent::__construct();
         $this->middleware('adminAuth');
     }
 

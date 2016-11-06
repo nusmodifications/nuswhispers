@@ -6,11 +6,6 @@ use App\Models\ModeratorComment as ModeratorComment;
 
 class ModeratorCommentsAdminController extends AdminController
 {
-    public function __construct()
-    {
-        return parent::__construct();
-    }
-
     public function getDelete($id)
     {
         $comment = ModeratorComment::findOrFail($id);
