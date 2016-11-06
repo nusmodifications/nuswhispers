@@ -1,34 +1,31 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class AddStatusLastUpdatedToConfessionsTable extends Migration {
+class AddStatusLastUpdatedToConfessionsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('confessions', function (Blueprint $table) {
+            $table->timestamp('status_last_updated_on')->default(DB::raw('CURRENT_TIMESTAMP'));
+        });
+    }
 
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
-	public function up()
-	{
-		Schema::table('confessions', function(Blueprint $table)
-		{
-			$table->timestamp('status_last_updated_on')->default(DB::raw('CURRENT_TIMESTAMP'));
-		});
-	}
-
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
-	public function down()
-	{
-		Schema::table('confessions', function(Blueprint $table)
-		{
-			$table->dropColumn('status_last_updated_on');
-		});
-	}
-
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('confessions', function (Blueprint $table) {
+            $table->dropColumn('status_last_updated_on');
+        });
+    }
 }

@@ -1,12 +1,14 @@
-<?php namespace App\Console\Commands;
+<?php
+
+namespace App\Console\Commands;
 
 use App\Models\Confession as Confession;
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
-class UpdateConfessionFacebookInfo extends Command {
-
+class UpdateConfessionFacebookInfo extends Command
+{
     /**
      * The console command name.
      *
@@ -78,5 +80,4 @@ class UpdateConfessionFacebookInfo extends Command {
             // ['example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null],
         ];
     }
-
 }

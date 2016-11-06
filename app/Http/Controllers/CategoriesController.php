@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Cache;
 
@@ -24,8 +23,10 @@ class CategoriesController extends Controller
 
     /**
      * Get the category JSON by a given category_id
-     * route: api/categories/<category_id>
-     * @param  int $category_id
+     * route: api/categories/<category_id>.
+     *
+     * @param int $category_id
+     *
      * @return json {"success": true or false, "data": {"category": category}};
      */
     public function show($categoryId)
@@ -34,6 +35,7 @@ class CategoriesController extends Controller
         if ($category === null) {
             return response()->json(['success' => false]);
         }
-        return response()->json(["success" => true, "data" => ["category" => $category]]);
+
+        return response()->json(['success' => true, 'data' => ['category' => $category]]);
     }
 }

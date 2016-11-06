@@ -1,16 +1,18 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use App\Models\Confession as Confession;
-use App\Http\Controllers\Controller;
-use App\Repositories\ConfessionsRepository;
 
-use Illuminate\Http\Request;
 
-class RobotsController extends Controller {
 
+class RobotsController extends Controller
+{
     /**
-     * Display a confession based on ID for search engine crawlers
-     * @param  int $id confession ID
+     * Display a confession based on ID for search engine crawlers.
+     *
+     * @param int $id confession ID
+     *
      * @return void
      */
     public function getConfession($id)
@@ -20,6 +22,7 @@ class RobotsController extends Controller {
             if (!$confession) {
                 \App::abort(404);
             }
+
             return view('robots.confession', [
                 'confession' => $confession,
             ]);
@@ -31,7 +34,8 @@ class RobotsController extends Controller {
     /**
      * Checks if current user agent is a crawler.
      * Adapted from https://gist.github.com/Exadra37/9453909.
-     * @return boolean
+     *
+     * @return bool
      */
     protected function isCrawler()
     {
@@ -40,5 +44,4 @@ class RobotsController extends Controller {
 
         return !empty($userAgent) ? preg_match("/{$botTypes}/", $userAgent) > 0 : false;
     }
-
 }

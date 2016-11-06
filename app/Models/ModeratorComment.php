@@ -1,25 +1,30 @@
-<?php namespace App\Models;
+<?php
+
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ModeratorComment extends Model {
-
+class ModeratorComment extends Model
+{
     /**
      * The attributes that should be casted to native types.
+     *
      * @var array
      */
     protected $casts = [
-        'comment_id' => 'string'
+        'comment_id' => 'string',
     ];
 
-	/**
+    /**
      * The database table used by the model.
+     *
      * @var string
      */
     protected $table = 'moderator_comments';
 
     /**
      * Primary key of the model.
+     *
      * @var string
      */
     protected $primaryKey = 'comment_id';
@@ -38,12 +43,14 @@ class ModeratorComment extends Model {
 
     /**
      * Disable timestamps functionality.
-     * @var boolean
+     *
+     * @var bool
      */
     public $timestamps = false;
 
     /**
      * Defines confession relationship from model.
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function confession()
@@ -53,11 +60,11 @@ class ModeratorComment extends Model {
 
     /**
      * Defines user relationship from model.
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
     {
         return $this->belongsTo('App\Models\User');
     }
-
 }

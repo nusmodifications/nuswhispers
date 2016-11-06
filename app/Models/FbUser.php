@@ -1,9 +1,11 @@
-<?php namespace App\Models;
+<?php
+
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class FbUser extends Model {
-
+class FbUser extends Model
+{
     protected $table = 'fb_users';
     protected $primaryKey = 'fb_user_id';
     public $timestamps = false;
@@ -11,19 +13,20 @@ class FbUser extends Model {
 
     /**
      * The attributes that should be casted to native types.
+     *
      * @var array
      */
     protected $casts = [
-        'fb_user_id' => 'string'
+        'fb_user_id' => 'string',
     ];
 
     /**
      * Defines favourites fb_users relationship to model.
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function favourites()
     {
         return $this->belongsToMany('App\Models\Confession', 'favourites', 'fb_user_id', 'confession_id');
     }
-
 }

@@ -1,9 +1,11 @@
-<?php namespace App\Repositories;
+<?php
+
+namespace App\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
 
-abstract class BaseRepository {
-
+abstract class BaseRepository
+{
     /**
      * @var \App
      */
@@ -15,7 +17,8 @@ abstract class BaseRepository {
     protected $model;
 
     /**
-     * Constructor
+     * Constructor.
+     *
      * @param \App $app
      */
     public function __construct(\App $app)
@@ -25,19 +28,20 @@ abstract class BaseRepository {
     }
 
     /**
-     * Specify Model class name
+     * Specify Model class name.
+     *
      * @return mixed
      */
-    public abstract function model();
+    abstract public function model();
 
     public function makeModel()
     {
         $model = $this->_app->getFacadeApplication()->make($this->model());
 
-        if (!$model instanceof Model)
+        if (!$model instanceof Model) {
             throw new \Exception("Class {$this->model()} must be an instance of Illuminate\\Database\\Eloquent\\Model");
+        }
 
         return $this->model = $model;
     }
-
 }

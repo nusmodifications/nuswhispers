@@ -1,32 +1,38 @@
-<?php namespace App\Models;
+<?php
+
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class UserProfile extends Model {
-
+class UserProfile extends Model
+{
     /**
      * The attributes that should be casted to native types.
+     *
      * @var array
      */
     protected $casts = [
-        'profile_id' => 'string'
+        'profile_id' => 'string',
     ];
 
     /**
      * The database table used by the model.
+     *
      * @var string
      */
     protected $table = 'user_profiles';
 
     /**
      * Primary key of the model.
+     *
      * @var string
      */
     protected $primaryKey = 'profile_id';
 
     /**
      * Disable timestamps functionality.
-     * @var boolean
+     *
+     * @var bool
      */
     public $timestamps = false;
 
@@ -39,11 +45,11 @@ class UserProfile extends Model {
 
     /**
      * Defines user relationship from model.
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
     {
         return $this->belongsTo('App\Models\User');
     }
-
 }

@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class AddScheduledConfessionsSupportToDatabase extends Migration {
-
+class AddScheduledConfessionsSupportToDatabase extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -17,11 +17,10 @@ class AddScheduledConfessionsSupportToDatabase extends Migration {
         DB::statement("ALTER TABLE confession_logs CHANGE COLUMN status_before status_before ENUM('Pending', 'Scheduled', 'Approved', 'Featured', 'Rejected')");
         DB::statement("ALTER TABLE confession_logs CHANGE COLUMN status_after status_after ENUM('Pending', 'Scheduled', 'Approved', 'Featured', 'Rejected')");
 
-        Schema::create('confession_queue', function(Blueprint $table)
-        {
+        Schema::create('confession_queue', function (Blueprint $table) {
             $table->increments('confession_queue_id')->unsigned();
             $table->integer('confession_id')->unsigned();
-            $table->enum('status_after', array('Approved', 'Featured', 'Rejected'));
+            $table->enum('status_after', ['Approved', 'Featured', 'Rejected']);
             $table->timestamp('update_status_at');
             $table->foreign('confession_id')->references('confession_id')->on('confessions')->onDelete('cascade')->onUpdate('cascade');
         });
@@ -40,5 +39,4 @@ class AddScheduledConfessionsSupportToDatabase extends Migration {
 
         Schema::drop('confession_queue');
     }
-
 }

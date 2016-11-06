@@ -1,18 +1,22 @@
-<?php namespace App\Models;
+<?php
+
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Tag extends Model {
+class Tag extends Model
+{
     /**
      * The attributes that should be casted to native types.
+     *
      * @var array
      */
     protected $casts = [
-        'confession_tag_id' => 'string'
+        'confession_tag_id' => 'string',
     ];
 
     protected $table = 'tags';
-    protected $fillable = array('confession_tag');
+    protected $fillable = ['confession_tag'];
     protected $primaryKey = 'confession_tag_id';
     public $timestamps = false;
 
@@ -20,5 +24,4 @@ class Tag extends Model {
     {
         return $this->belongsToMany('App\Models\Confession', 'confession_tags', 'confession_tag_id', 'confession_id');
     }
-
 }

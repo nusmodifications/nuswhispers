@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Models\ConfessionLog;
 use App\Models\ConfessionQueue;
 use App\Models\Tag;
-use App\Repositories\BaseRepository;
 use Carbon\Carbon;
 
 class ConfessionsRepository extends BaseRepository
@@ -54,6 +53,7 @@ class ConfessionsRepository extends BaseRepository
             }
             $this->_pageToken = $profile[0]->page_token;
         }
+
         return $this->_pageToken;
     }
 
@@ -72,8 +72,8 @@ class ConfessionsRepository extends BaseRepository
         }
 
         $queue = new ConfessionQueue([
-            'status_after' => $status,
-            'update_status_at' => $time
+            'status_after'     => $status,
+            'update_status_at' => $time,
         ]);
         $confession->queue()->save($queue);
     }
@@ -114,10 +114,10 @@ class ConfessionsRepository extends BaseRepository
             $confession->status_updated_at = new \DateTime();
 
             $log = new ConfessionLog([
-                'status_before' => $old,
-                'status_after' => $new,
+                'status_before'   => $old,
+                'status_after'    => $new,
                 'changed_by_user' => $user->user_id,
-                'created_on' => new \DateTime()
+                'created_on'      => new \DateTime(),
             ]);
             $confession->logs()->save($log);
         }
@@ -127,7 +127,6 @@ class ConfessionsRepository extends BaseRepository
         } else {
             return true;
         }
-
     }
 
     public function unschedule($confession)
@@ -152,7 +151,6 @@ class ConfessionsRepository extends BaseRepository
             if ($confession->queue()) {
                 $confession->queue()->delete();
             }
-
         }
 
         // Check if we need to schedule the confession
@@ -185,14 +183,15 @@ class ConfessionsRepository extends BaseRepository
     {
         if (env('MANUAL_MODE', false)) {
             $confession->fb_post_id = '';
+
             return 0;
         }
 
         try {
             if ($confession->images) {
-                \Facebook::delete('/' . $confession->fb_post_id, [], $this->getPageToken($user));
+                \Facebook::delete('/'.$confession->fb_post_id, [], $this->getPageToken($user));
             } else {
-                \Facebook::delete('/' . env('FACEBOOK_PAGE_ID', '') . '_' . $confession->fb_post_id, [], $this->getPageToken($user));
+                \Facebook::delete('/'.env('FACEBOOK_PAGE_ID', '').'_'.$confession->fb_post_id, [], $this->getPageToken($user));
             }
         } catch (\Exception $e) {
         }
@@ -202,6 +201,7 @@ class ConfessionsRepository extends BaseRepository
     protected function getTagNamesFromContent($content)
     {
         preg_match_all('/(#\w+)/', $content, $matches);
+
         return array_unique(array_shift($matches));
     }
 
@@ -213,14 +213,14 @@ class ConfessionsRepository extends BaseRepository
 
         if ($confession->images) {
             if ($confession->fb_post_id) {
-                $endpoint = '/' . $confession->fb_post_id;
+                $endpoint = '/'.$confession->fb_post_id;
             } else {
-                $endpoint = '/' . env('FACEBOOK_PAGE_ID', '') . '/photos';
+                $endpoint = '/'.env('FACEBOOK_PAGE_ID', '').'/photos';
             }
 
             $response = \Facebook::post($endpoint, [
                 'message' => $confession->getFacebookMessage(),
-                'url' => $confession->images
+                'url'     => $confession->images,
             ], $this->getPageToken($user))->getGraphObject();
 
             if ($confession->fb_post_id) {
@@ -230,13 +230,13 @@ class ConfessionsRepository extends BaseRepository
             }
         } else {
             if ($confession->fb_post_id) {
-                $endpoint = '/' . env('FACEBOOK_PAGE_ID', '') . '_' . $confession->fb_post_id;
+                $endpoint = '/'.env('FACEBOOK_PAGE_ID', '').'_'.$confession->fb_post_id;
             } else {
-                $endpoint = '/' . env('FACEBOOK_PAGE_ID', '') . '/feed';
+                $endpoint = '/'.env('FACEBOOK_PAGE_ID', '').'/feed';
             }
 
             $response = \Facebook::post($endpoint, [
-                'message' => $confession->getFacebookMessage()
+                'message' => $confession->getFacebookMessage(),
                 // 'link' => url('/#!/confession/' . $confession->confession_id)
             ], $this->getPageToken($user))->getGraphObject();
 
@@ -255,6 +255,7 @@ class ConfessionsRepository extends BaseRepository
         }
 
         $confession->categories()->sync($categories);
+
         return $confession;
     }
 

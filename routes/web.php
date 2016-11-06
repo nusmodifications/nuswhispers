@@ -21,7 +21,7 @@ Route::get('/confession/{id}', function ($id) {
     if ($isCrawler) {
         return App::make('App\Http\Controllers\RobotsController')->getConfession($id);
     } else {
-        return File::get(public_path() . '/app.html');
+        return File::get(public_path().'/app.html');
     }
 });
 
@@ -29,11 +29,11 @@ Route::get('/confession/{id}', function ($id) {
 Auth::routes();
 
 // Mobile submit page
-Route::get('/mobile_submit', function() {
-    return File::get(public_path() . '/mobile_submit.html');
+Route::get('/mobile_submit', function () {
+    return File::get(public_path().'/mobile_submit.html');
 });
 
 // Reroute everything else to angular
-Route::get('/{getEverything?}/{all?}', function() {
-    return File::get(public_path() . '/app.html');
+Route::get('/{getEverything?}/{all?}', function () {
+    return File::get(public_path().'/app.html');
 });
