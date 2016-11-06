@@ -61,7 +61,7 @@ class FacebookBatchProcessor
     {
         $batchRequests = [];
 
-        if (!$confessions->count()) {
+        if (! $confessions->count()) {
             return $confessions;
         }
 
@@ -70,7 +70,7 @@ class FacebookBatchProcessor
                 '/%s?oauth_token=%s&fields=%scomments.summary(true).filter(toplevel).fields(parent.fields(id),comments.summary(true),message,from,created_time),likes.summary(true)',
                 $confession->getAttribute('fb_post_id'),
                 $this->accessToken,
-                !empty($confession->getAttribute('images')) ? 'images,' : ''
+                ! empty($confession->getAttribute('images')) ? 'images,' : ''
             );
 
             $batchRequests[$confession->getAttribute('confession_id')] = $this->fb->request('GET', $requestUrl);

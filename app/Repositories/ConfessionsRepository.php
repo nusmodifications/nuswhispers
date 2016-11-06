@@ -25,7 +25,7 @@ class ConfessionsRepository extends BaseRepository
     public function delete($id)
     {
         $confession = $this->model->find($id);
-        if (!$confession) {
+        if (! $confession) {
             throw new \Exception("Model #{$id} is not found");
         }
 
@@ -46,7 +46,7 @@ class ConfessionsRepository extends BaseRepository
             $user = \Auth::user();
         }
 
-        if (!$this->_pageToken) {
+        if (! $this->_pageToken) {
             $profile = $user->profiles()->where('provider_name', '=', 'facebook')->get();
             if (count($profile) !== 1) {
                 return false;
@@ -97,7 +97,7 @@ class ConfessionsRepository extends BaseRepository
             switch ($new) {
                 case 'Featured':
                 case 'Approved':
-                    if (!$confession->fb_post_id) {
+                    if (! $confession->fb_post_id) {
                         $confession->fb_post_id = $this->postToFacebook($confession, $user);
                     }
                     break;
@@ -140,7 +140,7 @@ class ConfessionsRepository extends BaseRepository
     public function update($id, array $data, $categories = [])
     {
         $confession = $this->model->with('queue')->find($id);
-        if (!$confession) {
+        if (! $confession) {
             throw new \Exception("Model #{$id} is not found");
         }
 
@@ -169,7 +169,7 @@ class ConfessionsRepository extends BaseRepository
         $confession->fill($data);
 
         // Update Facebook if it's featured or approved
-        if (!$switched && ($confession->status == 'Featured' || $confession->status == 'Approved')) {
+        if (! $switched && ($confession->status == 'Featured' || $confession->status == 'Approved')) {
             $this->postToFacebook($confession);
         }
 

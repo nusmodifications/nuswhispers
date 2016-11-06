@@ -38,7 +38,7 @@ class CheckForMaintenanceMode
     public function handle($request, Closure $next)
     {
         if ($this->app->isDownForMaintenance() &&
-            !in_array($request->getClientIp(), ['127.0.0.1'])) {
+            ! in_array($request->getClientIp(), ['127.0.0.1'])) {
             throw new HttpException(503);
         }
 

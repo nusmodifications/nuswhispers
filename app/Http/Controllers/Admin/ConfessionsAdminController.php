@@ -148,7 +148,7 @@ class ConfessionsAdminController extends AdminController
     {
         $confession = Confession::findOrFail($id);
 
-        if (!$this->confessionsRepo->getPageToken()) {
+        if (! $this->confessionsRepo->getPageToken()) {
             return \Redirect::back()->withMessage('You have not connected your account with Facebook.')->with('alert-class', 'alert-danger');
         }
 
@@ -173,7 +173,7 @@ class ConfessionsAdminController extends AdminController
         // @TODO: Move this to a repository
         $confession = Confession::findOrFail($id);
 
-        if (!$this->confessionsRepo->getPageToken()) {
+        if (! $this->confessionsRepo->getPageToken()) {
             return \Redirect::back()->withMessage('You have not connected your account with Facebook.')->with('alert-class', 'alert-danger');
         }
 
@@ -191,7 +191,7 @@ class ConfessionsAdminController extends AdminController
         // @TODO: Move this to a repository
         $confession = Confession::findOrFail($id);
 
-        if (!$this->confessionsRepo->getPageToken()) {
+        if (! $this->confessionsRepo->getPageToken()) {
             return \Redirect::back()->withMessage('You have not connected your account with Facebook.')->with('alert-class', 'alert-danger');
         }
 
