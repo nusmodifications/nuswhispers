@@ -1,6 +1,7 @@
 # NUSWhispers
 
 [![Dependency Status](https://gemnasium.com/nusmodifications/nuswhispers.svg)](https://gemnasium.com/nusmodifications/nuswhispers)
+[![StyleCI Status](https://styleci.io/repos/31862595/shield?style=plastic)](https://styleci.io/repos/31862595)
 
 > Laravel 5 + AngularJS setup.
 
