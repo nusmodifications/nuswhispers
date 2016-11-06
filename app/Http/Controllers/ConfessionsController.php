@@ -88,7 +88,7 @@ class ConfessionsController extends Controller
     {
         $fbUserId = session()->get('fb_user_id');
 
-        if (!$fbUserId) {
+        if (! $fbUserId) {
             return response()->json(['success' => false, 'errors' => ['User not logged in.']]);
         }
 
@@ -270,16 +270,16 @@ class ConfessionsController extends Controller
         }
 
         // Check reCAPTCHA
-        if (!empty(\Input::get('captcha'))) {
+        if (! empty(\Input::get('captcha'))) {
             $captchaResponseJSON = file_get_contents(sprintf(\Config::get('services.reCAPTCHA.verify'), \Config::get('services.reCAPTCHA.key'), \Input::get('captcha')));
             $captchaResponse = json_decode($captchaResponseJSON);
 
-            if (!$captchaResponse->success) {
+            if (! $captchaResponse->success) {
                 return response()->json(['success' => false, 'errors' => ['reCAPTCHA' => ['The reCAPTCHA was not entered correctly. Please try again.']]]);
             }
         } else {
             $key = ApiKey::where('key', \Input::get('api_key'))->first();
-            if (!$key) {
+            if (! $key) {
                 return response()->json(['success' => false, 'errors' => ['API key' => ['Invalid API key. Please try again or use reCAPTCHA.']]]);
             }
 
@@ -352,7 +352,7 @@ class ConfessionsController extends Controller
         }
 
         $count = (int) array_get($input, 'count');
-        $count = !$count ? self::MAX_CONFESSION_COUNT : min($count, self::MAX_CONFESSION_COUNT);
+        $count = ! $count ? self::MAX_CONFESSION_COUNT : min($count, self::MAX_CONFESSION_COUNT);
 
         $query->take($count);
 

@@ -17,7 +17,7 @@ class RobotsController extends Controller
     {
         if ($this->isCrawler()) {
             $confession = Confession::approved()->find($id);
-            if (!$confession) {
+            if (! $confession) {
                 \App::abort(404);
             }
 
@@ -40,6 +40,6 @@ class RobotsController extends Controller
         $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : null;
         $botTypes = 'bot|crawl|slurp|spider|facebookexternalhit';
 
-        return !empty($userAgent) ? preg_match("/{$botTypes}/", $userAgent) > 0 : false;
+        return ! empty($userAgent) ? preg_match("/{$botTypes}/", $userAgent) > 0 : false;
     }
 }
