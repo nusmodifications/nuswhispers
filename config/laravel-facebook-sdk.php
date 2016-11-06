@@ -14,10 +14,10 @@ return [
      * https://github.com/facebook/facebook-php-sdk-v4/blob/master/src/Facebook/Facebook.php#L132
      */
     'facebook_config' => [
-        'app_id'                => env('FACEBOOK_APP_ID', ''),
-        'app_secret'            => env('FACEBOOK_APP_SECRET', ''),
-        'app_access_token'      => env('FACEBOOK_APP_ID', '').'|'.env('FACEBOOK_APP_SECRET'),
-        'page_access_token'     => env('FACEBOOK_PAGE_TOKEN', ''),
+        'app_id' => env('FACEBOOK_APP_ID', ''),
+        'app_secret' => env('FACEBOOK_APP_SECRET', ''),
+        'app_access_token' => env('FACEBOOK_APP_ID', '') . '|' . env('FACEBOOK_APP_SECRET'),
+        'page_access_token' => env('FACEBOOK_PAGE_TOKEN', ''),
         'default_graph_version' => 'v2.2',
         //'enable_beta_mode' => true,
         //'http_client_handler' => 'guzzle',

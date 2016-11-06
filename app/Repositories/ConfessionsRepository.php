@@ -72,7 +72,7 @@ class ConfessionsRepository extends BaseRepository
         }
 
         $queue = new ConfessionQueue([
-            'status_after'     => $status,
+            'status_after' => $status,
             'update_status_at' => $time,
         ]);
         $confession->queue()->save($queue);
@@ -114,10 +114,10 @@ class ConfessionsRepository extends BaseRepository
             $confession->status_updated_at = new \DateTime();
 
             $log = new ConfessionLog([
-                'status_before'   => $old,
-                'status_after'    => $new,
+                'status_before' => $old,
+                'status_after' => $new,
                 'changed_by_user' => $user->user_id,
-                'created_on'      => new \DateTime(),
+                'created_on' => new \DateTime(),
             ]);
             $confession->logs()->save($log);
         }
@@ -189,9 +189,9 @@ class ConfessionsRepository extends BaseRepository
 
         try {
             if ($confession->images) {
-                \Facebook::delete('/'.$confession->fb_post_id, [], $this->getPageToken($user));
+                \Facebook::delete('/' . $confession->fb_post_id, [], $this->getPageToken($user));
             } else {
-                \Facebook::delete('/'.env('FACEBOOK_PAGE_ID', '').'_'.$confession->fb_post_id, [], $this->getPageToken($user));
+                \Facebook::delete('/' . env('FACEBOOK_PAGE_ID', '') . '_' . $confession->fb_post_id, [], $this->getPageToken($user));
             }
         } catch (\Exception $e) {
         }
@@ -213,14 +213,14 @@ class ConfessionsRepository extends BaseRepository
 
         if ($confession->images) {
             if ($confession->fb_post_id) {
-                $endpoint = '/'.$confession->fb_post_id;
+                $endpoint = '/' . $confession->fb_post_id;
             } else {
-                $endpoint = '/'.env('FACEBOOK_PAGE_ID', '').'/photos';
+                $endpoint = '/' . env('FACEBOOK_PAGE_ID', '') . '/photos';
             }
 
             $response = \Facebook::post($endpoint, [
                 'message' => $confession->getFacebookMessage(),
-                'url'     => $confession->images,
+                'url' => $confession->images,
             ], $this->getPageToken($user))->getGraphObject();
 
             if ($confession->fb_post_id) {
@@ -230,9 +230,9 @@ class ConfessionsRepository extends BaseRepository
             }
         } else {
             if ($confession->fb_post_id) {
-                $endpoint = '/'.env('FACEBOOK_PAGE_ID', '').'_'.$confession->fb_post_id;
+                $endpoint = '/' . env('FACEBOOK_PAGE_ID', '') . '_' . $confession->fb_post_id;
             } else {
-                $endpoint = '/'.env('FACEBOOK_PAGE_ID', '').'/feed';
+                $endpoint = '/' . env('FACEBOOK_PAGE_ID', '') . '/feed';
             }
 
             $response = \Facebook::post($endpoint, [

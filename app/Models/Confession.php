@@ -190,7 +190,7 @@ class Confession extends Model
 
     public function getFacebookMessage()
     {
-        return $this->content."\n-\n#".$this->confession_id.': '.url('/confession/'.$this->confession_id);
+        return $this->content . "\n-\n#" . $this->confession_id . ': ' . url('/confession/' . $this->confession_id);
     }
 
     public function getFormattedContent()
@@ -202,7 +202,7 @@ class Confession extends Model
         $matches = [];
         preg_match_all('/(#\w+)/', $content, $matches);
         foreach ($matches[0] as $tag) {
-            $content = str_replace($tag, '<a target="_blank" href="'.url('/#!tag/'.substr($tag, 1)).'">'.$tag.'</a>', $content);
+            $content = str_replace($tag, '<a target="_blank" href="' . url('/#!tag/' . substr($tag, 1)) . '">' . $tag . '</a>', $content);
         }
 
         return $content;

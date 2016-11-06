@@ -24,26 +24,26 @@ return [
     ],
 
     'ses' => [
-        'key'    => '',
+        'key' => '',
         'secret' => '',
         'region' => 'us-east-1',
     ],
 
     'stripe' => [
-        'model'  => 'User',
+        'model' => 'User',
         'secret' => '',
     ],
 
     'reCAPTCHA' => [
-        'key'    => env('RECAPTCHA_SECRET', '6LcUdQMTAAAAAD_LA9uHt2DQgiJ24zBpN64KBGIh'),
+        'key' => env('RECAPTCHA_SECRET', '6LcUdQMTAAAAAD_LA9uHt2DQgiJ24zBpN64KBGIh'),
         'verify' => 'https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s',
     ],
 
     'facebook' => [
-        'client_id'     => env('FACEBOOK_APP_ID', ''),
+        'client_id' => env('FACEBOOK_APP_ID', ''),
         'client_secret' => env('FACEBOOK_APP_SECRET', ''),
-        'page_id'       => env('FACEBOOK_PAGE_ID', ''),
-        'redirect'      => env('APP_URL', 'http://www.nuswhispers.com').'/admin/profile/connect/facebook',
+        'page_id' => env('FACEBOOK_PAGE_ID', ''),
+        'redirect' => env('APP_URL', 'http://www.nuswhispers.com') . '/admin/profile/connect/facebook',
     ],
 
 ];

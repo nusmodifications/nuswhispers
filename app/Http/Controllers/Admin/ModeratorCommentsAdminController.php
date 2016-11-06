@@ -16,7 +16,7 @@ class ModeratorCommentsAdminController extends AdminController
 
                 return \Redirect::back()->withMessage('Comment successfully deleted.')->with('alert-class', 'alert-success');
             } catch (\Exception $e) {
-                return \Redirect::back()->withMessage('Error deleting comment: '.$e->getMessage())->with('alert-class', 'alert-danger');
+                return \Redirect::back()->withMessage('Error deleting comment: ' . $e->getMessage())->with('alert-class', 'alert-danger');
             }
         } else {
             return \Redirect::back()->withMessage('Only administrators and comment owners are allowed to delete moderator comments.')->with('alert-class', 'alert-danger');

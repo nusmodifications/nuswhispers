@@ -92,7 +92,7 @@ class ConfessionsController extends Controller
             return response()->json(['success' => false, 'errors' => ['User not logged in.']]);
         }
 
-        $cacheId = $fbUserId.'/'.$this->resolveCacheIdentifier($request);
+        $cacheId = $fbUserId . '/' . $this->resolveCacheIdentifier($request);
         $output = Cache::remember($cacheId, self::CACHE_TIMEOUT, function () use ($fbUserId) {
             $query = Confession::join('favourites', 'confessions.confession_id', '=', 'favourites.confession_id')
                 ->where('favourites.fb_user_id', '=', $fbUserId)
@@ -205,7 +205,7 @@ class ConfessionsController extends Controller
         $output = Cache::remember($cacheId, self::CACHE_TIMEOUT, function () use ($searchString) {
             // Naive search ...
             $query = Confession::orderBy('status_updated_at', 'DESC')
-                ->where('content', 'LIKE', '%'.$searchString.'%')
+                ->where('content', 'LIKE', '%' . $searchString . '%')
                 ->approved()
                 ->with('favourites')
                 ->with('categories');
@@ -230,7 +230,7 @@ class ConfessionsController extends Controller
      */
     public function show($id)
     {
-        $output = Cache::remember('confessions/'.$id, self::CACHE_TIMEOUT, function () use ($id) {
+        $output = Cache::remember('confessions/' . $id, self::CACHE_TIMEOUT, function () use ($id) {
             $confession = Confession::with('categories')->with('favourites')->find($id);
             if ($confession && $confession->isApproved()) {
                 // increment number of views
@@ -256,11 +256,11 @@ class ConfessionsController extends Controller
     public function store()
     {
         $validationRules = [
-            'content'    => 'required',
-            'image'      => 'url',
+            'content' => 'required',
+            'image' => 'url',
             'categories' => 'array',
-            'captcha'    => 'required_without:api_key',
-            'api_key'    => 'required_without:captcha',
+            'captcha' => 'required_without:api_key',
+            'api_key' => 'required_without:captcha',
         ];
 
         $validator = \Validator::make(\Input::all(), $validationRules);
@@ -290,12 +290,12 @@ class ConfessionsController extends Controller
         if (is_array(\Input::get('categories'))) {
             $res = $this->confessionsRepo->create([
                 'content' => \Input::get('content'),
-                'images'  => \Input::get('image'),
+                'images' => \Input::get('image'),
             ], \Input::get('categories'));
         } else {
             $res = $this->confessionsRepo->create([
                 'content' => \Input::get('content'),
-                'images'  => \Input::get('image'),
+                'images' => \Input::get('image'),
             ]);
         }
 
@@ -392,6 +392,6 @@ class ConfessionsController extends Controller
             $url = str_replace($request->input('timestamp'), $this->normalizeTimestamp($request->input('timestamp')), $url);
         }
 
-        return 'confessions/'.md5($url);
+        return 'confessions/' . md5($url);
     }
 }
