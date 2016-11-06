@@ -13,7 +13,7 @@ class UpdateConfessionFacebookInfo extends Command
      *
      * @var string
      */
-    protected $description = 'Command description.';
+    protected $description = 'Updates the latest 250 confessions with Facebook information.';
 
     /**
      * The console command name.
