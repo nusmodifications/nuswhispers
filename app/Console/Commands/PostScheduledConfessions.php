@@ -55,7 +55,7 @@ class PostScheduledConfessions extends Command
 
         $confessions->each(function ($confession) {
             $queue = $confession->queue()->first();
-            echo '[INFO] Setting confession #' . $confession->confession_id . ' to ' . strtolower($queue->status_after) . '.' . "\n";
+            $this->comment('[INFO] Setting confession #' . $confession->confession_id . ' to ' . strtolower($queue->status_after) . '.');
             $this->confessionsRepo->switchStatus($confession, $queue->status_after);
             $confession->queue()->delete();
         });
