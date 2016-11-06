@@ -48,6 +48,9 @@ vendor
 node_modules
 bower_components
 
+# Log files
+*.log
+
 # Environment files
 .env
 
