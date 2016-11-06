@@ -45,7 +45,7 @@ class FbUsersController extends Controller
 
         if ($fbUserId && $confessionId) {
             $fbUser = FbUser::find($fbUserId);
-            if (!Confession::find($confessionId)) {
+            if (! Confession::find($confessionId)) {
                 return \Response::json(['success' => false, 'errors' => ['Confession does not exist.']]);
             }
             if ($fbUser->favourites->contains($confessionId)) {

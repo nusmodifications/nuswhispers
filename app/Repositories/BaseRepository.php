@@ -38,7 +38,7 @@ abstract class BaseRepository
     {
         $model = $this->_app->getFacadeApplication()->make($this->model());
 
-        if (!$model instanceof Model) {
+        if (! $model instanceof Model) {
             throw new \Exception("Class {$this->model()} must be an instance of Illuminate\\Database\\Eloquent\\Model");
         }
 
