@@ -61,9 +61,9 @@ class ConfessionsAdminController extends AdminController
         $categories = Category::orderBy('confession_category', 'asc')->pluck('confession_category_id', 'confession_category')->all();
 
         return view('admin.confessions.index', [
-            'confessions'     => $confessions,
+            'confessions' => $confessions,
             'categoryOptions' => array_merge(['All Categories' => 0], $categories),
-            'hasPageToken'    => (bool) $this->confessionsRepo->getPageToken(),
+            'hasPageToken' => (bool) $this->confessionsRepo->getPageToken(),
         ]);
     }
 
@@ -89,8 +89,8 @@ class ConfessionsAdminController extends AdminController
             }
 
             $comment = new ModeratorComment([
-                'content'    => \Input::get('comment'),
-                'user_id'    => \Auth::user()->getAuthIdentifier(),
+                'content' => \Input::get('comment'),
+                'user_id' => \Auth::user()->getAuthIdentifier(),
                 'created_at' => new \DateTime(),
             ]);
 
@@ -101,9 +101,9 @@ class ConfessionsAdminController extends AdminController
                     ->with('alert-class', 'alert-success');
         } else {
             $validationRules = [
-                'content'    => 'required',
+                'content' => 'required',
                 'categories' => 'array',
-                'status'     => 'in:Featured,Pending,Approved,Rejected',
+                'status' => 'in:Featured,Pending,Approved,Rejected',
             ];
 
             $validator = \Validator::make(\Input::all(), $validationRules);
@@ -113,9 +113,9 @@ class ConfessionsAdminController extends AdminController
 
             try {
                 $data = [
-                    'content'  => \Input::get('content'),
-                    'status'   => \Input::get('status'),
-                    'images'   => \Input::get('images'),
+                    'content' => \Input::get('content'),
+                    'status' => \Input::get('status'),
+                    'images' => \Input::get('images'),
                     'schedule' => \Input::get('schedule'),
                 ];
 
@@ -128,7 +128,7 @@ class ConfessionsAdminController extends AdminController
                 return \Redirect::back()->withMessage('Confession successfully updated.')
                     ->with('alert-class', 'alert-success');
             } catch (\Exception $e) {
-                return \Redirect::back()->withMessage('Failed updating confession: '.$e->getMessage())
+                return \Redirect::back()->withMessage('Failed updating confession: ' . $e->getMessage())
                     ->with('alert-class', 'alert-danger');
             }
         }
@@ -157,14 +157,14 @@ class ConfessionsAdminController extends AdminController
                 $this->confessionsRepo->schedule($confession, $status, Carbon::now()->addHours($hours));
                 $this->confessionsRepo->switchStatus($confession, 'Scheduled');
 
-                return \Redirect::back()->withMessage('Confession has been scheduled to be '.strtolower($status).' in '.$hours.' hour(s).')->with('alert-class', 'alert-success');
+                return \Redirect::back()->withMessage('Confession has been scheduled to be ' . strtolower($status) . ' in ' . $hours . ' hour(s).')->with('alert-class', 'alert-success');
             } else {
                 $this->confessionsRepo->switchStatus($confession, $status);
 
-                return \Redirect::back()->withMessage('Confession successfully '.strtolower($status).' and posted.')->with('alert-class', 'alert-success');
+                return \Redirect::back()->withMessage('Confession successfully ' . strtolower($status) . ' and posted.')->with('alert-class', 'alert-success');
             }
         } catch (\Exception $e) {
-            return \Redirect::back()->withMessage('Error switching status of confession: '.$e->getMessage())->with('alert-class', 'alert-danger');
+            return \Redirect::back()->withMessage('Error switching status of confession: ' . $e->getMessage())->with('alert-class', 'alert-danger');
         }
     }
 
@@ -182,7 +182,7 @@ class ConfessionsAdminController extends AdminController
 
             return \Redirect::back()->withMessage('Confession successfully removed from featured.')->with('alert-class', 'alert-success');
         } catch (\Exception $e) {
-            return \Redirect::back()->withMessage('Error removing confession from featured: '.$e->getMessage())->with('alert-class', 'alert-danger');
+            return \Redirect::back()->withMessage('Error removing confession from featured: ' . $e->getMessage())->with('alert-class', 'alert-danger');
         }
     }
 
@@ -200,7 +200,7 @@ class ConfessionsAdminController extends AdminController
 
             return \Redirect::back()->withMessage('Confession successfully rejected.')->with('alert-class', 'alert-success');
         } catch (\Exception $e) {
-            return \Redirect::back()->withMessage('Error rejecting confession: '.$e->getMessage())->with('alert-class', 'alert-danger');
+            return \Redirect::back()->withMessage('Error rejecting confession: ' . $e->getMessage())->with('alert-class', 'alert-danger');
         }
     }
 
@@ -211,7 +211,7 @@ class ConfessionsAdminController extends AdminController
 
             return \Redirect::back()->withMessage('Confession successfully deleted.')->with('alert-class', 'alert-success');
         } catch (\Exception $e) {
-            return \Redirect::back()->withMessage('Error deleting confession: '.$e->getMessage())->with('alert-class', 'alert-danger');
+            return \Redirect::back()->withMessage('Error deleting confession: ' . $e->getMessage())->with('alert-class', 'alert-danger');
         }
     }
 }

@@ -10,7 +10,7 @@ use Illuminate\Console\Command;
 class PostScheduledConfessions extends Command
 {
     /**
-     * Confessions repository
+     * Confessions repository.
      *
      * @var App\Repositories\ConfessionsRepository
      */
