@@ -1,14 +1,17 @@
-<?php namespace App\Http\Controllers\Admin;
+<?php
+
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 
 /**
  * Abstract class for all admin controllers.
  */
-abstract class AdminController extends Controller {
-
+abstract class AdminController extends Controller
+{
     /**
      * Create a new controller instance.
+     *
      * @return void
      */
     public function __construct()
@@ -21,5 +24,4 @@ abstract class AdminController extends Controller {
         \Session::flash('message', $message);
         \Session::flash('alert-class', $class);
     }
-
 }

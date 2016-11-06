@@ -1,14 +1,14 @@
-<?php namespace App\Console\Commands;
+<?php
 
-use App\Repositories\ConfessionsRepository;
+namespace App\Console\Commands;
+
 use App\Models\Confession as Confession;
-use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
+use App\Repositories\ConfessionsRepository;
 use Carbon\Carbon;
+use Illuminate\Console\Command;
 
-class PostScheduledConfessions extends Command {
-
+class PostScheduledConfessions extends Command
+{
     /**
      * The console command name.
      *
@@ -48,15 +48,14 @@ class PostScheduledConfessions extends Command {
             ->where('confession_queue.update_status_at', '<=', Carbon::now()->toDateTimeString())
             ->get();
 
-        $confessions->each(function($confession)
-        {
+        $confessions->each(function ($confession) {
             $queue = $confession->queue()->get()->get(0);
-            echo '[INFO] Setting confession #' . $confession->confession_id . ' to ' . strtolower($queue->status_after) . '.' . "\n";
+            echo '[INFO] Setting confession #'.$confession->confession_id.' to '.strtolower($queue->status_after).'.'."\n";
             $this->confessionsRepo->switchStatus($confession, $queue->status_after);
             $confession->queue()->delete();
         });
 
-        echo '[INFO] Completed posting scheduled confessions.' . "\n";
+        echo '[INFO] Completed posting scheduled confessions.'."\n";
     }
 
     /**
@@ -78,5 +77,4 @@ class PostScheduledConfessions extends Command {
     {
         return [];
     }
-
 }

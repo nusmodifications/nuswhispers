@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateApiKeysTable extends Migration
 {
@@ -18,7 +18,7 @@ class CreateApiKeysTable extends Migration
             $table->string('key')->unique();
             $table->timestamp('last_used_on')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('created_on')->default(DB::raw('CURRENT_TIMESTAMP'));
-            
+
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }

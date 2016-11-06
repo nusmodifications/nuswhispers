@@ -1,4 +1,6 @@
-<?php namespace App\Models;
+<?php
+
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -7,16 +9,18 @@ class ApiKey extends Model
 {
     /**
      * Disable timestamps functionality.
-     * @var boolean
+     *
+     * @var bool
      */
     public $timestamps = false;
 
     /**
      * The attributes that should be casted to native types.
+     *
      * @var array
      */
     protected $casts = [
-        'api_key_id' => 'string'
+        'api_key_id' => 'string',
     ];
 
     /**
@@ -26,12 +30,14 @@ class ApiKey extends Model
 
     /**
      * Primary key of the model.
+     *
      * @var string
      */
     protected $primaryKey = 'api_key_id';
 
     /**
      * The database table used by the model.
+     *
      * @var string
      */
     protected $table = 'api_keys';
@@ -47,7 +53,8 @@ class ApiKey extends Model
     }
 
     /**
-     * Automatically mutate the date fields
+     * Automatically mutate the date fields.
+     *
      * @return array
      */
     public function getDates()

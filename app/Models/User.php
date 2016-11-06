@@ -16,10 +16,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     /**
      * The attributes that should be casted to native types.
+     *
      * @var array
      */
     protected $casts = [
-        'user_id' => 'string'
+        'user_id' => 'string',
     ];
 
     /**
