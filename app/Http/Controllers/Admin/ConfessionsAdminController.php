@@ -8,7 +8,6 @@ use App\Models\ModeratorComment as ModeratorComment;
 use App\Repositories\ConfessionsRepository;
 use Carbon\Carbon;
 
-
 class ConfessionsAdminController extends AdminController
 {
     protected $confessionsRepo;

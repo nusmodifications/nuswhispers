@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Confession as Confession;
 use App\Models\FbUser as FbUser;
 
-
-
 class FbUsersController extends Controller
 {
     // use Facebook access token to login user

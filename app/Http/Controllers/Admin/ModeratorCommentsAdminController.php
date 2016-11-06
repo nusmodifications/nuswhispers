@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\ModeratorComment as ModeratorComment;
 
-
 class ModeratorCommentsAdminController extends AdminController
 {
     public function __construct()

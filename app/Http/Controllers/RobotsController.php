@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Confession as Confession;
 
-
-
 class RobotsController extends Controller
 {
     /**
