@@ -2,20 +2,12 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Confession as Confession;
+use App\Models\Confession;
+use Facebook;
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 
 class UpdateConfessionFacebookInfo extends Command
 {
-    /**
-     * The console command name.
-     *
-     * @var string
-     */
-    protected $name = 'confession:facebook-update';
-
     /**
      * The console command description.
      *
@@ -24,27 +16,24 @@ class UpdateConfessionFacebookInfo extends Command
     protected $description = 'Command description.';
 
     /**
-     * Create a new command instance.
+     * The console command name.
      *
-     * @return void
+     * @var string
      */
-    public function __construct()
-    {
-        parent::__construct();
-    }
+    protected $name = 'confession:facebook-update';
 
     /**
      * Execute the console command.
      *
      * @return mixed
      */
-    public function fire()
+    public function handle()
     {
-        $accessToken = \Config::get('laravel-facebook-sdk.facebook_config.page_access_token');
+        $accessToken = config('laravel-facebook-sdk.facebook_config.page_access_token');
 
         // Get the latest 250 facebook posts and record likes/comments
         $facebookRequest = sprintf('/%s/feed?limit=250&oauth_token=%s&fields=comments.limit(1).summary(true),likes.limit(1).summary(true)', env('FACEBOOK_PAGE_ID', ''), $accessToken);
-        $facebookResponse = \Facebook::get($facebookRequest, $accessToken)->getDecodedBody();
+        $facebookResponse = Facebook::get($facebookRequest, $accessToken)->getDecodedBody();
         foreach ($facebookResponse['data'] as $facebookPost) {
             $facebookPostId = explode('_', $facebookPost['id'])[1]; // get facebook post id
             $confession = Confession::where('fb_post_id', '=', $facebookPostId)->first(); // get confession associated with fb post
@@ -54,30 +43,7 @@ class UpdateConfessionFacebookInfo extends Command
                 $confession->save();
             }
         }
-        $this->info('Facebook Information Updated!');
-    }
 
-    /**
-     * Get the console command arguments.
-     *
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return [
-            // ['example', InputArgument::REQUIRED, 'An example argument.'],
-        ];
-    }
-
-    /**
-     * Get the console command options.
-     *
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [
-            // ['example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null],
-        ];
+        $this->comment('Facebook Information Updated!');
     }
 }
