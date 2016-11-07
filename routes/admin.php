@@ -33,11 +33,12 @@ Route::get('profile/delete/{provider}', 'ProfileController@getDelete');
 
 Route::get('confessions/comments/delete/{id}', 'ModeratorCommentsAdminController@getDelete');
 
-Route::get('confessions/{index?}/{status?}', 'ConfessionsAdminController@getIndex');
+Route::get('confessions', 'ConfessionsAdminController@getIndex');
+Route::get('confessions/index/{status?}', 'ConfessionsAdminController@getIndex');
 Route::get('confessions/edit/{id}', 'ConfessionsAdminController@getEdit');
 Route::post('confessions/edit/{id}', 'ConfessionsAdminController@postEdit');
-Route::post('confessions/approve/{id}/{hours}', 'ConfessionsAdminController@getApprove');
-Route::post('confessions/feature/{id}/{hours}', 'ConfessionsAdminController@getFeature');
-Route::post('confessions/unfeature/{id}', 'ConfessionsAdminController@getUnfeature');
-Route::post('confessions/reject/{id}', 'ConfessionsAdminController@getReject');
-Route::post('confessions/delete/{id}', 'ConfessionsAdminController@getDelete');
+Route::get('confessions/approve/{id}/{hours?}', 'ConfessionsAdminController@getApprove');
+Route::get('confessions/feature/{id}/{hours?}', 'ConfessionsAdminController@getFeature');
+Route::get('confessions/unfeature/{id}', 'ConfessionsAdminController@getUnfeature');
+Route::get('confessions/reject/{id}', 'ConfessionsAdminController@getReject');
+Route::get('confessions/delete/{id}', 'ConfessionsAdminController@getDelete');
