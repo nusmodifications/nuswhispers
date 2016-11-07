@@ -3,14 +3,13 @@
 class ExampleTest extends TestCase
 {
     /**
-     * A basic functional test example.
+     * Test visiting admin page as guest.
      *
      * @return void
      */
-    public function testBasicExample()
+    public function testAdminAsGuest()
     {
-        $response = $this->call('GET', '/');
-
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->get('/admin')
+            ->assertRedirectedTo('/login');
     }
 }
