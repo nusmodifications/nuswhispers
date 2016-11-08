@@ -1,17 +1,15 @@
 <?php
 
-class ExampleTest extends TestCase {
-
-	/**
-	 * A basic functional test example.
-	 *
-	 * @return void
-	 */
-	public function testBasicExample()
-	{
-		$response = $this->call('GET', '/');
-
-		$this->assertEquals(200, $response->getStatusCode());
-	}
-
+class ExampleTest extends TestCase
+{
+    /**
+     * Test visiting admin page as guest.
+     *
+     * @return void
+     */
+    public function testAdminAsGuest()
+    {
+        $this->get('/admin')
+            ->assertRedirectedTo('/login');
+    }
 }

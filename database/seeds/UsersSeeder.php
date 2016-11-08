@@ -15,8 +15,8 @@ class UsersSeeder extends Seeder
             [
                 'email' => 'test@nuswhispers.local',
                 'password' => Hash::make('admin'),
-                'role' => 'Administrator'
-            ]
+                'role' => 'Administrator',
+            ],
         ]);
     }
 }

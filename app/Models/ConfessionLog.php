@@ -1,32 +1,38 @@
-<?php namespace App\Models;
+<?php
+
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ConfessionLog extends Model {
-
+class ConfessionLog extends Model
+{
     /**
      * The database table used by the model.
+     *
      * @var string
      */
     protected $table = 'confession_logs';
 
     /**
      * The attributes that should be casted to native types.
+     *
      * @var array
      */
     protected $casts = [
-        'confession_log_id' => 'string'
+        'confession_log_id' => 'string',
     ];
 
     /**
      * Primary key of the model.
+     *
      * @var string
      */
     protected $primaryKey = 'confession_log_id';
 
     /**
      * Disable timestamps functionality.
-     * @var boolean
+     *
+     * @var bool
      */
     public $timestamps = false;
 
@@ -37,6 +43,7 @@ class ConfessionLog extends Model {
 
     /**
      * Defines user relationship from model.
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function user()
@@ -45,12 +52,12 @@ class ConfessionLog extends Model {
     }
 
     /**
-     * Automatically mutate the date fields
+     * Automatically mutate the date fields.
+     *
      * @return array
      */
     public function getDates()
     {
         return ['created_on'];
     }
-
 }

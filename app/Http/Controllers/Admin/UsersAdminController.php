@@ -1,16 +1,18 @@
-<?php namespace App\Http\Controllers\Admin;
+<?php
+
+namespace App\Http\Controllers\Admin;
 
 use App\Models\User as User;
 
-class UsersAdminController extends AdminController {
-
+class UsersAdminController extends AdminController
+{
     /**
      * Create a new controller instance.
+     *
      * @return void
      */
     public function __construct()
     {
-        parent::__construct();
         $this->middleware('adminAuth');
     }
 
@@ -24,6 +26,7 @@ class UsersAdminController extends AdminController {
     public function getAdd()
     {
         $user = new User();
+
         return view('admin.users.add', [
             'user' => $user,
         ]);
@@ -81,8 +84,9 @@ class UsersAdminController extends AdminController {
             'repeat_password' => 'same:password',
         ];
 
-        if (\Auth::user()->user_id != $user->user_id)
+        if (\Auth::user()->user_id != $user->user_id) {
             $validationRules['role'] = 'in:Moderator,Administrator';
+        }
 
         $validator = \Validator::make(\Input::all(), $validationRules);
         if ($validator->fails()) {
@@ -103,7 +107,6 @@ class UsersAdminController extends AdminController {
             return \Redirect::back()->withMessage('Failed updating user: ' . $e->getMessage())
                 ->with('alert-class', 'alert-danger');
         }
-
     }
 
     public function getDelete($id)
@@ -116,10 +119,10 @@ class UsersAdminController extends AdminController {
 
         try {
             $user->delete();
+
             return \Redirect::back()->withMessage('User successfully deleted.')->with('alert-class', 'alert-success');
         } catch (\Exception $e) {
             return \Redirect::back()->withMessage('Error deleting user: ' . $e->getMessage())->with('alert-class', 'alert-danger');
         }
     }
-
 }

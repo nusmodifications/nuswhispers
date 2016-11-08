@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\ApiKey;
 use App\Models\Confession;
 use App\Models\Tag;
@@ -28,12 +27,14 @@ class ConfessionsController extends Controller
 
     /**
      * Facebook batch processor.
+     *
      * @var \App\Services\FacebookBatchProcessor
      */
     protected $batchProcessor;
 
     /**
      * Confessions repository.
+     *
      * @var \App\Repositories\ConfessionsRepository
      */
     protected $confessionsRepo;
@@ -41,11 +42,12 @@ class ConfessionsController extends Controller
     /**
      * Creates a new ConfessionsController instance.
      *
-     * @param \App\Services\FacebookBatchProcessor $batchProcessor
-     * @param \App\Repositories\ConfessionsRepository  $confessionsRepo
+     * @param \App\Services\FacebookBatchProcessor    $batchProcessor
+     * @param \App\Repositories\ConfessionsRepository $confessionsRepo
      */
     public function __construct(FacebookBatchProcessor $batchProcessor,
-        ConfessionsRepository $confessionsRepo) {
+        ConfessionsRepository $confessionsRepo)
+    {
         $this->batchProcessor = $batchProcessor;
         $this->confessionsRepo = $confessionsRepo;
     }
@@ -86,7 +88,7 @@ class ConfessionsController extends Controller
     {
         $fbUserId = session()->get('fb_user_id');
 
-        if (!$fbUserId) {
+        if (! $fbUserId) {
             return response()->json(['success' => false, 'errors' => ['User not logged in.']]);
         }
 
@@ -191,8 +193,10 @@ class ConfessionsController extends Controller
     /**
      * Search for confessions which contains the search string
      * method: get
-     * route: api/confessions/search/<searchString>?timestamp=<time>&offset=<offset>&count=<count>
-     * @param  string $searchString - non-empty string (of length at least 5? - maybe at least 1)
+     * route: api/confessions/search/<searchString>?timestamp=<time>&offset=<offset>&count=<count>.
+     *
+     * @param string $searchString - non-empty string (of length at least 5? - maybe at least 1)
+     *
      * @return Response
      */
     public function search(Request $request, $searchString)
@@ -220,7 +224,8 @@ class ConfessionsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return Response
      */
     public function show($id)
@@ -255,7 +260,7 @@ class ConfessionsController extends Controller
             'image' => 'url',
             'categories' => 'array',
             'captcha' => 'required_without:api_key',
-            'api_key' => 'required_without:captcha'
+            'api_key' => 'required_without:captcha',
         ];
 
         $validator = \Validator::make(\Input::all(), $validationRules);
@@ -265,19 +270,19 @@ class ConfessionsController extends Controller
         }
 
         // Check reCAPTCHA
-        if (!empty(\Input::get('captcha'))) {
+        if (! empty(\Input::get('captcha'))) {
             $captchaResponseJSON = file_get_contents(sprintf(\Config::get('services.reCAPTCHA.verify'), \Config::get('services.reCAPTCHA.key'), \Input::get('captcha')));
             $captchaResponse = json_decode($captchaResponseJSON);
 
-            if (!$captchaResponse->success) {
+            if (! $captchaResponse->success) {
                 return response()->json(['success' => false, 'errors' => ['reCAPTCHA' => ['The reCAPTCHA was not entered correctly. Please try again.']]]);
             }
         } else {
             $key = ApiKey::where('key', \Input::get('api_key'))->first();
-            if (!$key) {
+            if (! $key) {
                 return response()->json(['success' => false, 'errors' => ['API key' => ['Invalid API key. Please try again or use reCAPTCHA.']]]);
             }
-            
+
             $key->last_used_on = new \DateTime();
             $key->save();
         }
@@ -285,12 +290,12 @@ class ConfessionsController extends Controller
         if (is_array(\Input::get('categories'))) {
             $res = $this->confessionsRepo->create([
                 'content' => \Input::get('content'),
-                'images' => \Input::get('image')
+                'images' => \Input::get('image'),
             ], \Input::get('categories'));
         } else {
             $res = $this->confessionsRepo->create([
                 'content' => \Input::get('content'),
-                'images' => \Input::get('image')
+                'images' => \Input::get('image'),
             ]);
         }
 
@@ -300,14 +305,14 @@ class ConfessionsController extends Controller
     /**
      * List confessions based on a specific tag.
      *
-     * @param  string $tagName
+     * @param string $tagName
+     *
      * @return Response
      */
     public function tag(Request $request, $tagName)
     {
         $cacheId = $this->resolveCacheIdentifier($request);
         $output = Cache::remember($cacheId, self::CACHE_TIMEOUT, function () use ($tagName) {
-
             $query = Confession::select('confessions.*')
                 ->leftJoin('confession_tags', 'confessions.confession_id', '=', 'confession_tags.confession_id')
                 ->leftJoin('tags', 'confession_tags.confession_tag_id', '=', 'tags.confession_tag_id')
@@ -326,7 +331,6 @@ class ConfessionsController extends Controller
             $confessions = $this->batchProcessor->processConfessions($confessions);
 
             return ['data' => ['confessions' => $confessions]];
-
         });
 
         return response()->json($output);
@@ -335,8 +339,9 @@ class ConfessionsController extends Controller
     /**
      * Filters query based on inputs.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  array  $input
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array                                 $input
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     protected function filterQuery($query, $input = [])
@@ -347,7 +352,7 @@ class ConfessionsController extends Controller
         }
 
         $count = (int) array_get($input, 'count');
-        $count = !$count ? self::MAX_CONFESSION_COUNT : min($count, self::MAX_CONFESSION_COUNT);
+        $count = ! $count ? self::MAX_CONFESSION_COUNT : min($count, self::MAX_CONFESSION_COUNT);
 
         $query->take($count);
 
@@ -361,19 +366,22 @@ class ConfessionsController extends Controller
     /**
      * Normalize the timestamp; up to the highest minute.
      *
-     * @param  int $timestamp
+     * @param int $timestamp
+     *
      * @return int
      */
     protected function normalizeTimestamp($timestamp)
     {
         $seconds = self::CACHE_TIMEOUT * 60;
+
         return ceil($timestamp / $seconds) * $seconds;
     }
 
     /**
      * Resolves the cache identifier.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return string
      */
     protected function resolveCacheIdentifier(Request $request)

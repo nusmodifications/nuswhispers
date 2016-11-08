@@ -1,25 +1,30 @@
-<?php namespace App\Models;
+<?php
+
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Confession extends Model {
-
+class Confession extends Model
+{
     /**
      * The attributes that should be casted to native types.
+     *
      * @var array
      */
     protected $casts = [
-        'confession_id' => 'string'
+        'confession_id' => 'string',
     ];
 
     /**
      * The database table used by the model.
+     *
      * @var string
      */
     protected $table = 'confessions';
 
     /**
      * Primary key of the model.
+     *
      * @var string
      */
     protected $primaryKey = 'confession_id';
@@ -42,6 +47,7 @@ class Confession extends Model {
 
     /**
      * Defines confession categories relationship to model.
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function categories()
@@ -51,6 +57,7 @@ class Confession extends Model {
 
     /**
      * Defines confession tags relationship to model.
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function tags()
@@ -60,6 +67,7 @@ class Confession extends Model {
 
     /**
      * Defines confession favourites relationship to model.
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function favourites()
@@ -69,6 +77,7 @@ class Confession extends Model {
 
     /**
      * Defines confession logs relationship to model.
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function logs()
@@ -78,6 +87,7 @@ class Confession extends Model {
 
     /**
      * Defines moderator comments relationship to model.
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function moderatorComments()
@@ -87,6 +97,7 @@ class Confession extends Model {
 
     /**
      * Defines queue relationship to model.
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function queue()
@@ -100,8 +111,10 @@ class Confession extends Model {
     }
 
     /**
-     * Query scope for pending confessions
-     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * Query scope for pending confessions.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopePending($query)
@@ -110,8 +123,10 @@ class Confession extends Model {
     }
 
     /**
-     * Query scope for featured confessions
-     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * Query scope for featured confessions.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeFeatured($query)
@@ -120,8 +135,10 @@ class Confession extends Model {
     }
 
     /**
-     * Query scope for scheduled confessions
-     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * Query scope for scheduled confessions.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeScheduled($query)
@@ -130,21 +147,23 @@ class Confession extends Model {
     }
 
     /**
-     * Query scope for approved confessions
-     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * Query scope for approved confessions.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeApproved($query)
     {
-        return $query->where(function ($query)
-            {
-                $query->where('status', '=', 'Approved')
+        return $query->where(function ($query) {
+            $query->where('status', '=', 'Approved')
                     ->orWhere('status', '=', 'Featured');
-            });
+        });
     }
 
     /**
-     * Automatically mutate the date fields
+     * Automatically mutate the date fields.
+     *
      * @return array
      */
     public function getDates()
@@ -153,8 +172,10 @@ class Confession extends Model {
     }
 
     /**
-     * Query scope for rejected confessions
-     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * Query scope for rejected confessions.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeRejected($query)
@@ -169,7 +190,7 @@ class Confession extends Model {
 
     public function getFacebookMessage()
     {
-        return $this->content . "\n-\n#" . $this->confession_id . ": " . url('/confession/' . $this->confession_id);
+        return $this->content . "\n-\n#" . $this->confession_id . ': ' . url('/confession/' . $this->confession_id);
     }
 
     public function getFormattedContent()
@@ -186,5 +207,4 @@ class Confession extends Model {
 
         return $content;
     }
-
 }

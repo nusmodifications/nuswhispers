@@ -1,20 +1,20 @@
-<?php namespace App\Console\Commands;
+<?php
 
+namespace App\Console\Commands;
+
+use App\Models\Confession;
 use App\Repositories\ConfessionsRepository;
-use App\Models\Confession as Confession;
-use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 use Carbon\Carbon;
+use Illuminate\Console\Command;
 
-class PostScheduledConfessions extends Command {
-
+class PostScheduledConfessions extends Command
+{
     /**
-     * The console command name.
+     * Confessions repository.
      *
-     * @var string
+     * @var App\Repositories\ConfessionsRepository
      */
-    protected $name = 'confession:scheduled';
+    protected $confessionsRepo;
 
     /**
      * The console command description.
@@ -23,7 +23,12 @@ class PostScheduledConfessions extends Command {
      */
     protected $description = 'Posts scheduled confessions.';
 
-    protected $confessionsRepo;
+    /**
+     * The console command name.
+     *
+     * @var string
+     */
+    protected $name = 'confession:scheduled';
 
     /**
      * Create a new command instance.
@@ -41,42 +46,20 @@ class PostScheduledConfessions extends Command {
      *
      * @return mixed
      */
-    public function fire()
+    public function handle()
     {
         $confessions = Confession::orderBy('confession_queue.update_status_at', 'DESC')
             ->join('confession_queue', 'confessions.confession_id', '=', 'confession_queue.confession_id')
             ->where('confession_queue.update_status_at', '<=', Carbon::now()->toDateTimeString())
             ->get();
 
-        $confessions->each(function($confession)
-        {
-            $queue = $confession->queue()->get()->get(0);
-            echo '[INFO] Setting confession #' . $confession->confession_id . ' to ' . strtolower($queue->status_after) . '.' . "\n";
+        $confessions->each(function ($confession) {
+            $queue = $confession->queue()->first();
+            $this->comment('[INFO] Setting confession #' . $confession->confession_id . ' to ' . strtolower($queue->status_after) . '.');
             $this->confessionsRepo->switchStatus($confession, $queue->status_after);
             $confession->queue()->delete();
         });
 
-        echo '[INFO] Completed posting scheduled confessions.' . "\n";
+        $this->comment('[INFO] Completed posting scheduled confessions.');
     }
-
-    /**
-     * Get the console command arguments.
-     *
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return [];
-    }
-
-    /**
-     * Get the console command options.
-     *
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [];
-    }
-
 }

@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Models\ConfessionLog;
 use App\Models\ConfessionQueue;
 use App\Models\Tag;
-use App\Repositories\BaseRepository;
 use Carbon\Carbon;
 
 class ConfessionsRepository extends BaseRepository
@@ -26,7 +25,7 @@ class ConfessionsRepository extends BaseRepository
     public function delete($id)
     {
         $confession = $this->model->find($id);
-        if (!$confession) {
+        if (! $confession) {
             throw new \Exception("Model #{$id} is not found");
         }
 
@@ -47,13 +46,14 @@ class ConfessionsRepository extends BaseRepository
             $user = \Auth::user();
         }
 
-        if (!$this->_pageToken) {
+        if (! $this->_pageToken) {
             $profile = $user->profiles()->where('provider_name', '=', 'facebook')->get();
             if (count($profile) !== 1) {
                 return false;
             }
             $this->_pageToken = $profile[0]->page_token;
         }
+
         return $this->_pageToken;
     }
 
@@ -73,7 +73,7 @@ class ConfessionsRepository extends BaseRepository
 
         $queue = new ConfessionQueue([
             'status_after' => $status,
-            'update_status_at' => $time
+            'update_status_at' => $time,
         ]);
         $confession->queue()->save($queue);
     }
@@ -97,7 +97,7 @@ class ConfessionsRepository extends BaseRepository
             switch ($new) {
                 case 'Featured':
                 case 'Approved':
-                    if (!$confession->fb_post_id) {
+                    if (! $confession->fb_post_id) {
                         $confession->fb_post_id = $this->postToFacebook($confession, $user);
                     }
                     break;
@@ -117,7 +117,7 @@ class ConfessionsRepository extends BaseRepository
                 'status_before' => $old,
                 'status_after' => $new,
                 'changed_by_user' => $user->user_id,
-                'created_on' => new \DateTime()
+                'created_on' => new \DateTime(),
             ]);
             $confession->logs()->save($log);
         }
@@ -127,7 +127,6 @@ class ConfessionsRepository extends BaseRepository
         } else {
             return true;
         }
-
     }
 
     public function unschedule($confession)
@@ -141,7 +140,7 @@ class ConfessionsRepository extends BaseRepository
     public function update($id, array $data, $categories = [])
     {
         $confession = $this->model->with('queue')->find($id);
-        if (!$confession) {
+        if (! $confession) {
             throw new \Exception("Model #{$id} is not found");
         }
 
@@ -152,7 +151,6 @@ class ConfessionsRepository extends BaseRepository
             if ($confession->queue()) {
                 $confession->queue()->delete();
             }
-
         }
 
         // Check if we need to schedule the confession
@@ -171,7 +169,7 @@ class ConfessionsRepository extends BaseRepository
         $confession->fill($data);
 
         // Update Facebook if it's featured or approved
-        if (!$switched && ($confession->status == 'Featured' || $confession->status == 'Approved')) {
+        if (! $switched && ($confession->status == 'Featured' || $confession->status == 'Approved')) {
             $this->postToFacebook($confession);
         }
 
@@ -185,6 +183,7 @@ class ConfessionsRepository extends BaseRepository
     {
         if (env('MANUAL_MODE', false)) {
             $confession->fb_post_id = '';
+
             return 0;
         }
 
@@ -202,6 +201,7 @@ class ConfessionsRepository extends BaseRepository
     protected function getTagNamesFromContent($content)
     {
         preg_match_all('/(#\w+)/', $content, $matches);
+
         return array_unique(array_shift($matches));
     }
 
@@ -220,7 +220,7 @@ class ConfessionsRepository extends BaseRepository
 
             $response = \Facebook::post($endpoint, [
                 'message' => $confession->getFacebookMessage(),
-                'url' => $confession->images
+                'url' => $confession->images,
             ], $this->getPageToken($user))->getGraphObject();
 
             if ($confession->fb_post_id) {
@@ -236,7 +236,7 @@ class ConfessionsRepository extends BaseRepository
             }
 
             $response = \Facebook::post($endpoint, [
-                'message' => $confession->getFacebookMessage()
+                'message' => $confession->getFacebookMessage(),
                 // 'link' => url('/#!/confession/' . $confession->confession_id)
             ], $this->getPageToken($user))->getGraphObject();
 
@@ -255,6 +255,7 @@ class ConfessionsRepository extends BaseRepository
         }
 
         $confession->categories()->sync($categories);
+
         return $confession;
     }
 

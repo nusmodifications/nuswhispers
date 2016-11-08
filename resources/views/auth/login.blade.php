@@ -6,16 +6,11 @@
 		<div class="col-md-4 col-md-offset-4">
 			@if (count($errors) > 0)
 				<div class="alert alert-danger">
-					<strong>Whoops!</strong> There were some problems with your input.<br><br>
-					<ul>
-						@foreach ($errors->all() as $error)
-							<li>{{ $error }}</li>
-						@endforeach
-					</ul>
+					Oops, we can't seem to log you in. Please check your username and password, or try again later.
 				</div>
 			@endif
 
-			<form class="card form" role="form" method="POST" action="/auth/login">
+			<form class="card form" role="form" method="POST" action="{{ url('/login') }}">
 				<input type="hidden" name="_token" value="{{ csrf_token() }}">
 
 				<div class="form-group">
@@ -40,7 +35,7 @@
 					<button type="submit" class="btn btn-block btn-lg btn-primary">Login</button>
 				</div>
                 <p class="form-group forgot-password">
-                    <a href="/password/email">Forgot Your Password?</a>
+                    <a href="/password/reset">Forgot Your Password?</a>
                 </p>
 			</form>
 		</div>

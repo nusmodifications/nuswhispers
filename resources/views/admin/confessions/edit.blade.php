@@ -13,7 +13,7 @@ if ($confession->status == 'Scheduled') {
 
   @include('message')
 
-  <?php echo \Form::model($confession, ['route' => ['admin.confessions.edit', $confession->confession_id], 'class' => 'form row']) ?>
+  <?php echo \Form::model($confession, ['url' => url('admin/confessions/edit', $confession->confession_id), 'class' => 'form row']) ?>
 
   <div class="col-md-12 col-lg-8 edit-confessions-col">
     <div class="panel panel-default">

@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers\Admin;
+<?php
+
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Category as Category;
 use App\Models\Confession as Confession;
@@ -6,39 +8,31 @@ use App\Models\ModeratorComment as ModeratorComment;
 use App\Repositories\ConfessionsRepository;
 use Carbon\Carbon;
 
-use Illuminate\Http\Request;
-
-class ConfessionsAdminController extends AdminController {
-
+class ConfessionsAdminController extends AdminController
+{
     protected $confessionsRepo;
 
     public function __construct(ConfessionsRepository $confessionsRepo)
     {
         $this->confessionsRepo = $confessionsRepo;
-        return parent::__construct();
     }
 
     public function getIndex($status = 'Pending')
     {
         $status = ucfirst($status);
-        if ($status != 'Pending')
-        {
+        if ($status != 'Pending') {
             $query = Confession::orderBy('created_at', 'desc');
-        }
-        else
-        {
+        } else {
             $query = Confession::orderBy('created_at', 'asc');
         }
 
-        if (\Input::get('category'))
-        {
-            $query->whereHas('categories', function($query) {
+        if (\Input::get('category')) {
+            $query->whereHas('categories', function ($query) {
                 $query->where('confession_categories.confession_category_id', '=', intval(\Input::get('category')));
             });
         }
 
-        if (\Input::get('q'))
-        {
+        if (\Input::get('q')) {
             $search = stripslashes(\Input::get('q'));
             $query->where(function ($q) use ($search) {
                 $q->where('content', 'LIKE', "%$search%");
@@ -46,13 +40,11 @@ class ConfessionsAdminController extends AdminController {
             });
         }
 
-        if (\Input::get('start') && \Input::get('end'))
-        {
+        if (\Input::get('start') && \Input::get('end')) {
             $start = Carbon::createFromFormat('U', strtotime(\Input::get('start')))->startOfDay();
             $end = Carbon::createFromFormat('U', strtotime(\Input::get('end')))->startOfDay();
 
-            if ($start > $end)
-            {
+            if ($start > $end) {
                 return \Redirect::back()->withMessage('Start date cannot be later than end date.')
                     ->with('alert-class', 'alert-danger');
             }
@@ -61,8 +53,7 @@ class ConfessionsAdminController extends AdminController {
             $query->where('created_at', '<', $end->toDateTimeString());
         }
 
-        if ($status != 'All')
-        {
+        if ($status != 'All') {
             $query->where('status', '=', ucfirst($status));
         }
 
@@ -71,8 +62,8 @@ class ConfessionsAdminController extends AdminController {
 
         return view('admin.confessions.index', [
             'confessions' => $confessions,
-            'categoryOptions' => array_merge(array('All Categories' => 0), $categories),
-            'hasPageToken' => (bool)$this->confessionsRepo->getPageToken(),
+            'categoryOptions' => array_merge(['All Categories' => 0], $categories),
+            'hasPageToken' => (bool) $this->confessionsRepo->getPageToken(),
         ]);
     }
 
@@ -100,7 +91,7 @@ class ConfessionsAdminController extends AdminController {
             $comment = new ModeratorComment([
                 'content' => \Input::get('comment'),
                 'user_id' => \Auth::user()->getAuthIdentifier(),
-                'created_at' => new \DateTime()
+                'created_at' => new \DateTime(),
             ]);
 
             $confession = Confession::with('moderatorComments')->findOrFail($id);
@@ -112,7 +103,7 @@ class ConfessionsAdminController extends AdminController {
             $validationRules = [
                 'content' => 'required',
                 'categories' => 'array',
-                'status' => 'in:Featured,Pending,Approved,Rejected'
+                'status' => 'in:Featured,Pending,Approved,Rejected',
             ];
 
             $validator = \Validator::make(\Input::all(), $validationRules);
@@ -141,7 +132,6 @@ class ConfessionsAdminController extends AdminController {
                     ->with('alert-class', 'alert-danger');
             }
         }
-
     }
 
     public function getApprove($id, $hours = 0)
@@ -158,7 +148,7 @@ class ConfessionsAdminController extends AdminController {
     {
         $confession = Confession::findOrFail($id);
 
-        if (!$this->confessionsRepo->getPageToken()) {
+        if (! $this->confessionsRepo->getPageToken()) {
             return \Redirect::back()->withMessage('You have not connected your account with Facebook.')->with('alert-class', 'alert-danger');
         }
 
@@ -166,9 +156,11 @@ class ConfessionsAdminController extends AdminController {
             if ($hours > 0) {
                 $this->confessionsRepo->schedule($confession, $status, Carbon::now()->addHours($hours));
                 $this->confessionsRepo->switchStatus($confession, 'Scheduled');
+
                 return \Redirect::back()->withMessage('Confession has been scheduled to be ' . strtolower($status) . ' in ' . $hours . ' hour(s).')->with('alert-class', 'alert-success');
             } else {
                 $this->confessionsRepo->switchStatus($confession, $status);
+
                 return \Redirect::back()->withMessage('Confession successfully ' . strtolower($status) . ' and posted.')->with('alert-class', 'alert-success');
             }
         } catch (\Exception $e) {
@@ -181,7 +173,7 @@ class ConfessionsAdminController extends AdminController {
         // @TODO: Move this to a repository
         $confession = Confession::findOrFail($id);
 
-        if (!$this->confessionsRepo->getPageToken()) {
+        if (! $this->confessionsRepo->getPageToken()) {
             return \Redirect::back()->withMessage('You have not connected your account with Facebook.')->with('alert-class', 'alert-danger');
         }
 
@@ -199,7 +191,7 @@ class ConfessionsAdminController extends AdminController {
         // @TODO: Move this to a repository
         $confession = Confession::findOrFail($id);
 
-        if (!$this->confessionsRepo->getPageToken()) {
+        if (! $this->confessionsRepo->getPageToken()) {
             return \Redirect::back()->withMessage('You have not connected your account with Facebook.')->with('alert-class', 'alert-danger');
         }
 
@@ -222,5 +214,4 @@ class ConfessionsAdminController extends AdminController {
             return \Redirect::back()->withMessage('Error deleting confession: ' . $e->getMessage())->with('alert-class', 'alert-danger');
         }
     }
-
 }

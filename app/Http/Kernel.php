@@ -16,7 +16,7 @@ class Kernel extends HttpKernel
         \Illuminate\Cookie\Middleware\EncryptCookies::class,
         \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
         \Illuminate\Session\Middleware\StartSession::class,
-        \Illuminate\View\Middleware\ShareErrorsFromSession::class
+        \Illuminate\View\Middleware\ShareErrorsFromSession::class,
     ];
 
     /**
@@ -40,6 +40,6 @@ class Kernel extends HttpKernel
         'adminAuth' => \App\Http\Middleware\AuthenticateAdmin::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class
+        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
     ];
 }

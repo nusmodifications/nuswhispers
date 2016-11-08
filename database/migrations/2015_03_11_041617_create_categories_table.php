@@ -1,32 +1,30 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class CreateCategoriesTable extends Migration {
+class CreateCategoriesTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('categories', function (Blueprint $table) {
+            $table->increments('confession_category_id')->unsigned();
+            $table->string('confession_category', 255)->unique();
+        });
+    }
 
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
-	public function up()
-	{
-		Schema::create('categories', function(Blueprint $table)
-		{
-			$table->increments('confession_category_id')->unsigned();
-			$table->string('confession_category', 255)->unique();
-		});
-	}
-
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
-	public function down()
-	{
-		Schema::drop('categories');
-	}
-
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::drop('categories');
+    }
 }

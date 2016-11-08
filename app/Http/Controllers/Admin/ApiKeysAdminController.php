@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers\Admin;
+<?php
+
+namespace App\Http\Controllers\Admin;
 
 use App\Models\ApiKey;
 use Auth;
@@ -19,7 +21,7 @@ class ApiKeysAdminController extends AdminController
     public function getIndex()
     {
         return view('admin.api-keys.index', [
-            'keys' => ApiKey::orderBy('last_used_on', 'desc')->paginate(10)
+            'keys' => ApiKey::orderBy('last_used_on', 'desc')->paginate(10),
         ]);
     }
 
@@ -30,7 +32,7 @@ class ApiKeysAdminController extends AdminController
                 'user_id' => (int) Auth::user()->getKey(),
                 'last_used_on' => new \DateTime(),
                 'created_on' => new \DateTime(),
-                'key' => ApiKey::generateKey()
+                'key' => ApiKey::generateKey(),
             ]);
             $key->save();
 

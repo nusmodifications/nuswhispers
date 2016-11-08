@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Tag;
 use Cache;
 use Config;
@@ -13,7 +12,8 @@ class TagsController extends Controller
     /**
      * Get all the existing tags JSON in sorted order
      * method: get
-     * route: api/tags
+     * route: api/tags.
+     *
      * @return json {"data": {tags": [tag1, tag2, ...]}}
      */
     public function index()
@@ -28,24 +28,29 @@ class TagsController extends Controller
     /**
      * Get a tag JSON by a given tag_id
      * method: get
-     * route: api/tags/<tag_id>
-     * @param  int $tag_id
+     * route: api/tags/<tag_id>.
+     *
+     * @param int $tag_id
+     *
      * @return json {"success": true or false, "data": {"tag": tag}};
      */
     public function show($tag_id)
     {
         $tag = Tag::find($tag_id);
         if ($tag == null) {
-            return response()->json(["success" => false]);
+            return response()->json(['success' => false]);
         }
-        return response()->json(["success" => true, "data" => ["tag" => $tag]]);
+
+        return response()->json(['success' => true, 'data' => ['tag' => $tag]]);
     }
 
     /**
      * Get the top n tags JSON sorted by number of associated posts
      * method: get
-     * route: api/tags/top/<num> (if not clashes with api below)
+     * route: api/tags/top/<num> (if not clashes with api below).
+     *
      * @param int $num
+     *
      * @return json {"data": {"tags": [tag1, tag2, ...]}}
      */
     public function topNTags($num = 5)

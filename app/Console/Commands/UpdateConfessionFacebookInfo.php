@@ -1,11 +1,19 @@
-<?php namespace App\Console\Commands;
+<?php
 
-use App\Models\Confession as Confession;
+namespace App\Console\Commands;
+
+use App\Models\Confession;
+use Facebook;
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 
-class UpdateConfessionFacebookInfo extends Command {
+class UpdateConfessionFacebookInfo extends Command
+{
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Updates the latest 250 confessions with Facebook information.';
 
     /**
      * The console command name.
@@ -15,34 +23,17 @@ class UpdateConfessionFacebookInfo extends Command {
     protected $name = 'confession:facebook-update';
 
     /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Command description.';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return mixed
      */
-    public function fire()
+    public function handle()
     {
-        $accessToken = \Config::get('laravel-facebook-sdk.facebook_config.page_access_token');
+        $accessToken = config('laravel-facebook-sdk.facebook_config.page_access_token');
 
         // Get the latest 250 facebook posts and record likes/comments
         $facebookRequest = sprintf('/%s/feed?limit=250&oauth_token=%s&fields=comments.limit(1).summary(true),likes.limit(1).summary(true)', env('FACEBOOK_PAGE_ID', ''), $accessToken);
-        $facebookResponse = \Facebook::get($facebookRequest, $accessToken)->getDecodedBody();
+        $facebookResponse = Facebook::get($facebookRequest, $accessToken)->getDecodedBody();
         foreach ($facebookResponse['data'] as $facebookPost) {
             $facebookPostId = explode('_', $facebookPost['id'])[1]; // get facebook post id
             $confession = Confession::where('fb_post_id', '=', $facebookPostId)->first(); // get confession associated with fb post
@@ -52,31 +43,7 @@ class UpdateConfessionFacebookInfo extends Command {
                 $confession->save();
             }
         }
-        $this->info('Facebook Information Updated!');
-    }
 
-    /**
-     * Get the console command arguments.
-     *
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return [
-            // ['example', InputArgument::REQUIRED, 'An example argument.'],
-        ];
+        $this->comment('Facebook Information Updated!');
     }
-
-    /**
-     * Get the console command options.
-     *
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [
-            // ['example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null],
-        ];
-    }
-
 }

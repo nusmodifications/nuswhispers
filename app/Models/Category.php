@@ -1,32 +1,38 @@
-<?php namespace App\Models;
+<?php
+
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model {
-
+class Category extends Model
+{
     /**
      * The attributes that should be casted to native types.
+     *
      * @var array
      */
     protected $casts = [
-        'confession_category_id' => 'string'
+        'confession_category_id' => 'string',
     ];
 
     /**
      * The database table used by the model.
+     *
      * @var string
      */
     protected $table = 'categories';
 
     /**
      * Primary key of the model.
+     *
      * @var string
      */
     protected $primaryKey = 'confession_category_id';
 
     /**
      * Disable timestamps functionality.
-     * @var boolean
+     *
+     * @var bool
      */
     public $timestamps = false;
 

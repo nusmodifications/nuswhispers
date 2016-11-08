@@ -19,7 +19,7 @@ class CategoriesSeeder extends Seeder
             ['confession_category' => 'Romance'],
             ['confession_category' => 'Rant'],
             ['confession_category' => 'Nostalgia'],
-            ['confession_category' => 'Advice']
+            ['confession_category' => 'Advice'],
         ]);
     }
 }
