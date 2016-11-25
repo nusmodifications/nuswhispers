@@ -9,6 +9,7 @@ before_script:
   - composer self-update
   - composer install --no-interaction
   - php artisan key:generate
+  - php artisan migrate --database=homestead_test
 
 script:
   - vendor/bin/phpunit
