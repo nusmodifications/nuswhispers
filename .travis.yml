@@ -17,3 +17,6 @@ script:
 cache:
   directories:
     - vendor
+
+addons:
+  mariadb: '10.1'
