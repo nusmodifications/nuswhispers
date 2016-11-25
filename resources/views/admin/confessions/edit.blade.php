@@ -87,7 +87,7 @@ if ($confession->status == 'Scheduled') {
         <p>
         <?php
         $status = $confession->status == 'Scheduled' ? $queue->status_after : $confession->status;
-        echo \Form::select('status', array_combine($confession->statuses(), $confession->statuses()), $status, ['class' => 'form-control'])
+        echo \Form::select('status', array_combine(\App\Models\Confession::statuses(), \App\Models\Confession::statuses()), $status, ['class' => 'form-control'])
         ?>
         </p>
         <p style="text-align:center; color: #999">Latest status updated {{$confession->status_updated_at->diffForHumans()}}.</p>

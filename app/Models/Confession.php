@@ -183,9 +183,9 @@ class Confession extends Model
         return $query->whereStatus('Rejected');
     }
 
-    public function statuses()
+    public static function statuses()
     {
-        return ['Featured', 'Pending', 'Approved', 'Rejected'];
+        return ['Featured', 'Scheduled', 'Pending', 'Approved', 'Rejected'];
     }
 
     public function getFacebookMessage()
