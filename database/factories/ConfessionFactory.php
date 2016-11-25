@@ -11,7 +11,7 @@ $factory->define(
             'status' => $faker->randomElement($statuses),
             'views' => $faker->randomNumber(4),
             'fb_like_count' => $faker->randomNumber(3),
-            'fb_comment_count' => $faker->randomNumber(2)
+            'fb_comment_count' => $faker->randomNumber(2),
         ];
     }
 );
@@ -22,7 +22,7 @@ foreach ($statuses as $status) {
         lcfirst($status),
         function ($faker) use ($status) {
             return [
-                'status' => $status
+                'status' => $status,
             ];
         }
     );

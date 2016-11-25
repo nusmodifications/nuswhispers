@@ -9,7 +9,7 @@ class ModelFactoryTest extends TestCase
         App\Models\ConfessionQueue::class,
         App\Models\ModeratorComment::class,
         App\Models\Tag::class,
-        App\Models\User::class
+        App\Models\User::class,
     ];
 
     public function testRaw()

@@ -5,18 +5,18 @@ $factory->define(App\Models\User::class, function ($faker) {
         'role' => $faker->randomElement(['Moderator', 'Administrator']),
         'name' => $faker->name(),
         'email' => $faker->email(),
-        'password' => Hash::make($faker->password())
+        'password' => Hash::make($faker->password()),
     ];
 });
 
 $factory->state(App\Models\User::class, 'moderator', function ($faker) {
     return [
-        'role' => 'Moderator'
+        'role' => 'Moderator',
     ];
 });
 
 $factory->state(App\Models\User::class, 'admin', function ($faker) {
     return [
-        'role' => 'Administrator'
+        'role' => 'Administrator',
     ];
 });

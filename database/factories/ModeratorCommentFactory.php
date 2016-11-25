@@ -8,7 +8,7 @@ $factory->define(App\Models\ModeratorComment::class, function ($faker) {
         'user_id' => function () {
             return factory(App\Models\User::class)->create()->getKey();
         },
-        'content' => $faker->text()
+        'content' => $faker->text(),
     ];
 });
 
