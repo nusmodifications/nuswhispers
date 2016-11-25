@@ -11,5 +11,3 @@ $factory->define(App\Models\ModeratorComment::class, function ($faker) {
         'content' => $faker->text(),
     ];
 });
-
-

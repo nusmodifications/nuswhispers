@@ -27,6 +27,3 @@ foreach ($statuses as $status) {
         }
     );
 }
-
-
-
