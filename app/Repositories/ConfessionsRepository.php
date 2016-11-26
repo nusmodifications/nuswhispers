@@ -112,14 +112,6 @@ class ConfessionsRepository extends BaseRepository
             $old = $confession->status;
             $confession->status = $new;
             $confession->status_updated_at = new \DateTime();
-
-            $log = new ConfessionLog([
-                'status_before' => $old,
-                'status_after' => $new,
-                'changed_by_user' => $user->user_id,
-                'created_on' => new \DateTime(),
-            ]);
-            $confession->logs()->save($log);
         }
 
         if ($save) {
