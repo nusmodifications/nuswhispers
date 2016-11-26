@@ -17,7 +17,7 @@ class ConfessionObserver
     {
         $user = $this->resolveUser($confession);
 
-        if (!$user) {
+        if (! $user) {
             return true;
         }
 
@@ -48,8 +48,8 @@ class ConfessionObserver
             ->with(['user', 'user.profiles'])
             ->first();
 
-        if (!$lastLog) {
-            return null;
+        if (! $lastLog) {
+            return;
         }
 
         return $lastLog->user;

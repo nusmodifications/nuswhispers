@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Models\ConfessionLog;
 use App\Models\ConfessionQueue;
 use App\Models\Tag;
 use Carbon\Carbon;
