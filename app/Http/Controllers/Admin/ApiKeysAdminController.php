@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\ApiKey;
 use Auth;
+use App\Models\ApiKey;
 
 class ApiKeysAdminController extends AdminController
 {
