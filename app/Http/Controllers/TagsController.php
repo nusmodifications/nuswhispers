@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tag;
+use DB;
 use Cache;
 use Config;
-use DB;
+use App\Models\Tag;
 
 class TagsController extends Controller
 {

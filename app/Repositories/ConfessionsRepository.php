@@ -2,10 +2,10 @@
 
 namespace App\Repositories;
 
+use Carbon\Carbon;
+use App\Models\Tag;
 use App\Models\ConfessionLog;
 use App\Models\ConfessionQueue;
-use App\Models\Tag;
-use Carbon\Carbon;
 
 class ConfessionsRepository extends BaseRepository
 {

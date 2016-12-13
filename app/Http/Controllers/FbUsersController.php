@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Confession as Confession;
 use App\Models\FbUser as FbUser;
+use App\Models\Confession as Confession;
 
 class FbUsersController extends Controller
 {

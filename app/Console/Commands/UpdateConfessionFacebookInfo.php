@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Confession;
 use Facebook;
+use App\Models\Confession;
 use Illuminate\Console\Command;
 
 class UpdateConfessionFacebookInfo extends Command

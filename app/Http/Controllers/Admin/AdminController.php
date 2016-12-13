@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use Session;
+use App\Http\Controllers\Controller;
 
 /**
  * Abstract class for all admin controllers.
