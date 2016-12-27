@@ -49,7 +49,9 @@ angular.module('nuswhispersApp.controllers')
         if ($scope.hasConfessionLimitExceeded()) {
             return;
         }
-        $scope.confessionData.content = $scope.confessionData.content.replace(/nus\s*whispers?/gi, 'NUSWhispers');
+        $scope.confessionData.content = $scope.confessionData.content
+            .replace(/nus\s*whispers?/gi, 'NUSWhispers')
+            .replace(/nus\s*mods?/gi, 'NUSMods');
         Confession.submit($scope.confessionData)
             .success(function (response) {
                 $scope.form.submitSuccess = response.success;

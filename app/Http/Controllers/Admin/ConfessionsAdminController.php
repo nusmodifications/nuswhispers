@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Carbon\Carbon;
 use App\Models\Category as Category;
 use App\Models\Confession as Confession;
-use App\Models\ModeratorComment as ModeratorComment;
 use App\Repositories\ConfessionsRepository;
-use Carbon\Carbon;
+use App\Models\ModeratorComment as ModeratorComment;
 
 class ConfessionsAdminController extends AdminController
 {

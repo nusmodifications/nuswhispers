@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use Cache;
+use App\Models\Category;
 
 class CategoriesController extends Controller
 {

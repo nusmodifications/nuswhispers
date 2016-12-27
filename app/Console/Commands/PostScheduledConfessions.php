@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Confession;
-use App\Repositories\ConfessionsRepository;
 use Carbon\Carbon;
+use App\Models\Confession;
 use Illuminate\Console\Command;
+use App\Repositories\ConfessionsRepository;
 
 class PostScheduledConfessions extends Command
 {

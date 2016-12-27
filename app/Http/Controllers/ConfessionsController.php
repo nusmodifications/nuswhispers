@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use DB;
+use Cache;
+use Input;
+use App\Models\Tag;
 use App\Models\ApiKey;
 use App\Models\Confession;
-use App\Models\Tag;
-use App\Repositories\ConfessionsRepository;
-use App\Services\FacebookBatchProcessor;
-use Cache;
-use DB;
 use Illuminate\Http\Request;
-use Input;
+use App\Services\FacebookBatchProcessor;
+use App\Repositories\ConfessionsRepository;
 
 class ConfessionsController extends Controller
 {
