@@ -18,9 +18,18 @@ class EventServiceProvider extends ServiceProvider
         \NUSWhispers\Events\ConfessionWasUpdated::class => [
             \NUSWhispers\Listeners\SyncConfessionTags::class,
         ],
+        \NUSWhispers\Events\ConfessionWasDeleted::class => [
+        ],
         \NUSWhispers\Events\ConfessionStatusWasChanged::class => [
+            \NUSWhispers\Listeners\FlushConfessionQueue::class,
             \NUSWhispers\Listeners\LogConfessionStatusChange::class,
-        ]
+        ],
+        \NUSWhispers\Events\ConfessionWasApproved::class => [
+        ],
+        \NUSWhispers\Events\ConfessionWasFeatured::class => [
+        ],
+        \NUSWhispers\Events\ConfessionWasRejected::class => [
+        ],
     ];
 
     /**
