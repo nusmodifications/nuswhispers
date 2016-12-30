@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace NUSWhispers\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -50,6 +50,6 @@ class UserProfile extends Model
      */
     public function user()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('NUSWhispers\Models\User');
     }
 }

@@ -25,7 +25,7 @@
             "database"
         ],
         "psr-4": {
-            "App\\": "app/"
+            "NUSWhispers\\": "app/"
         }
     },
     "autoload-dev": {

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Repositories;
+namespace NUSWhispers\Repositories;
 
 use Carbon\Carbon;
-use App\Models\Tag;
-use App\Models\ConfessionLog;
-use App\Models\ConfessionQueue;
+use NUSWhispers\Models\Tag;
+use NUSWhispers\Models\ConfessionLog;
+use NUSWhispers\Models\ConfessionQueue;
 
 class ConfessionsRepository extends BaseRepository
 {
@@ -59,7 +59,7 @@ class ConfessionsRepository extends BaseRepository
 
     public function model()
     {
-        return 'App\Models\Confession';
+        return 'NUSWhispers\Models\Confession';
     }
 
     public function schedule($confession, $status, $time)

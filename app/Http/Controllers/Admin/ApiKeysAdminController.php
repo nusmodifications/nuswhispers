@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace NUSWhispers\Http\Controllers\Admin;
 
 use Auth;
-use App\Models\ApiKey;
+use NUSWhispers\Models\ApiKey;
 
 class ApiKeysAdminController extends AdminController
 {

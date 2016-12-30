@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories;
+namespace NUSWhispers\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
 

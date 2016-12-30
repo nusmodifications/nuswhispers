@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Jobs;
+namespace NUSWhispers\Jobs;
 
-use App\Models\Confession;
-use App\Models\User;
+use NUSWhispers\Models\Confession;
+use NUSWhispers\Models\User;
 use DateTime;
 
 class LogConfession extends QueuedJob
 {
     /**
      * Confession.
-     * @var App\Models\Confession
+     * @var NUSWhispers\Models\Confession
      */
     protected $confession;
 
@@ -22,16 +22,16 @@ class LogConfession extends QueuedJob
 
     /**
      * User.
-     * @var App\Models\User
+     * @var NUSWhispers\Models\User
      */
     protected $user;
 
     /**
      * Create a new job instance.
      *
-     * @param App\Models\User $user
+     * @param NUSWhispers\Models\User $user
      * @param string $statusBefore
-     * @param App\Models\Confession $confession
+     * @param NUSWhispers\Models\Confession $confession
      * @return void
      */
     public function __construct(User $user, string $statusBefore, Confession $confession)

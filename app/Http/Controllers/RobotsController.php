@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace NUSWhispers\Http\Controllers;
 
-use App\Models\Confession as Confession;
+use NUSWhispers\Models\Confession;
 
 class RobotsController extends Controller
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace NUSWhispers\Http\Controllers\Admin;
 
 use Carbon\Carbon;
-use App\Models\Category as Category;
-use App\Models\Confession as Confession;
-use App\Repositories\ConfessionsRepository;
-use App\Models\ModeratorComment as ModeratorComment;
+use NUSWhispers\Models\Category;
+use NUSWhispers\Models\Confession;
+use NUSWhispers\Models\ModeratorComment;
+use NUSWhispers\Repositories\ConfessionsRepository;
 
 class ConfessionsAdminController extends AdminController
 {

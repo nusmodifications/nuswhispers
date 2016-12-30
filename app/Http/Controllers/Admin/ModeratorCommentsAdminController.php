@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace NUSWhispers\Http\Controllers\Admin;
 
-use App\Models\ModeratorComment as ModeratorComment;
+use NUSWhispers\Models\ModeratorComment;
 
 class ModeratorCommentsAdminController extends AdminController
 {

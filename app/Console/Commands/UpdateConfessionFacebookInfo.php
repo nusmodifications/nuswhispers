@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Console\Commands;
+namespace NUSWhispers\Console\Commands;
 
 use Facebook;
-use App\Models\Confession;
+use NUSWhispers\Models\Confession;
 use Illuminate\Console\Command;
 
 class UpdateConfessionFacebookInfo extends Command

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace NUSWhispers\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -38,7 +38,7 @@ class Category extends Model
 
     public function confessions()
     {
-        return $this->belongsToMany('App\Models\Confession', 'confession_categories', 'confession_category_id', 'confession_id');
+        return $this->belongsToMany('NUSWhispers\Models\Confession', 'confession_categories', 'confession_category_id', 'confession_id');
     }
 
     public function scopeCategoryAsc($query)

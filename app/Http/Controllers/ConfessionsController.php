@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace NUSWhispers\Http\Controllers;
 
 use DB;
 use Cache;
 use Input;
-use App\Models\Tag;
-use App\Models\ApiKey;
-use App\Models\Confession;
+use NUSWhispers\Models\Tag;
+use NUSWhispers\Models\ApiKey;
+use NUSWhispers\Models\Confession;
 use Illuminate\Http\Request;
-use App\Services\FacebookBatchProcessor;
-use App\Repositories\ConfessionsRepository;
+use NUSWhispers\Services\FacebookBatchProcessor;
+use NUSWhispers\Repositories\ConfessionsRepository;
 
 class ConfessionsController extends Controller
 {
@@ -28,22 +28,22 @@ class ConfessionsController extends Controller
     /**
      * Facebook batch processor.
      *
-     * @var \App\Services\FacebookBatchProcessor
+     * @var \NUSWhispers\Services\FacebookBatchProcessor
      */
     protected $batchProcessor;
 
     /**
      * Confessions repository.
      *
-     * @var \App\Repositories\ConfessionsRepository
+     * @var \NUSWhispers\Repositories\ConfessionsRepository
      */
     protected $confessionsRepo;
 
     /**
      * Creates a new ConfessionsController instance.
      *
-     * @param \App\Services\FacebookBatchProcessor    $batchProcessor
-     * @param \App\Repositories\ConfessionsRepository $confessionsRepo
+     * @param \NUSWhispers\Services\FacebookBatchProcessor    $batchProcessor
+     * @param \NUSWhispers\Repositories\ConfessionsRepository $confessionsRepo
      */
     public function __construct(FacebookBatchProcessor $batchProcessor,
         ConfessionsRepository $confessionsRepo)

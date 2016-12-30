@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Console\Commands;
+namespace NUSWhispers\Console\Commands;
 
 use Carbon\Carbon;
-use App\Models\Confession;
+use NUSWhispers\Models\Confession;
 use Illuminate\Console\Command;
-use App\Repositories\ConfessionsRepository;
+use NUSWhispers\Repositories\ConfessionsRepository;
 
 class PostScheduledConfessions extends Command
 {
     /**
      * Confessions repository.
      *
-     * @var App\Repositories\ConfessionsRepository
+     * @var NUSWhispers\Repositories\ConfessionsRepository
      */
     protected $confessionsRepo;
 

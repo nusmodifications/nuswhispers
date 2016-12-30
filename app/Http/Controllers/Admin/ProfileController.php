@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace NUSWhispers\Http\Controllers\Admin;
 
-use App\Models\User as User;
-use App\Models\UserProfile as UserProfile;
+use NUSWhispers\Models\UserProfile;
 
 class ProfileController extends AdminController
 {
@@ -77,7 +76,7 @@ class ProfileController extends AdminController
      * TODO: Refactor to somewehere better; somewhere like a UserRepository.
      *
      * @param string $provider provider name
-     * @param \App\Models\User user model
+     * @param \NUSWhispers\Models\User user model
      * @param \Laravel\Socialite\Two\User $oauthUser oAuth user object
      */
     protected function addProfile($provider, $user, $oauthUser)

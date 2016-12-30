@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace NUSWhispers\Http\Controllers\Admin;
 
-use App\Models\User as User;
+use NUSWhispers\Models\User;
 
 class UsersAdminController extends AdminController
 {

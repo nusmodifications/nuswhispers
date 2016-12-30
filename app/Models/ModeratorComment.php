@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace NUSWhispers\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -55,7 +55,7 @@ class ModeratorComment extends Model
      */
     public function confession()
     {
-        return $this->belongsTo('App\Models\Confession');
+        return $this->belongsTo('NUSWhispers\Models\Confession');
     }
 
     /**
@@ -65,6 +65,6 @@ class ModeratorComment extends Model
      */
     public function user()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('NUSWhispers\Models\User');
     }
 }

@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Observers;
+namespace NUSWhispers\Observers;
 
-use App\Jobs\LogConfession;
-use App\Models\Confession;
+use NUSWhispers\Jobs\LogConfession;
+use NUSWhispers\Models\Confession;
 
 class ConfessionObserver
 {
     /**
      * Listen to the 'saved' event.
      *
-     * @param  App\Models\Confession $confession
+     * @param  NUSWhispers\Models\Confession $confession
      * @return void
      */
     public function saved(Confession $confession)
@@ -33,8 +33,8 @@ class ConfessionObserver
     /**
      * Resolves the user who changed the status of the confession.
      *
-     * @param  App\Models\Confession $confession
-     * @return App\Models\User|null
+     * @param  NUSWhispers\Models\Confession $confession
+     * @return NUSWhispers\Models\User|null
      */
     protected function resolveUser($confession)
     {

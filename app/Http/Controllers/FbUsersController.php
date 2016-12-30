@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace NUSWhispers\Http\Controllers;
 
-use App\Models\FbUser as FbUser;
-use App\Models\Confession as Confession;
+use NUSWhispers\Models\FbUser;
+use NUSWhispers\Models\Confession;
 
 class FbUsersController extends Controller
 {

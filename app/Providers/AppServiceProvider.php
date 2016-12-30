@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Providers;
+namespace NUSWhispers\Providers;
 
-use App\Models\Confession;
-use App\Observers\ConfessionObserver;
+use NUSWhispers\Models\Confession;
+use NUSWhispers\Observers\ConfessionObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

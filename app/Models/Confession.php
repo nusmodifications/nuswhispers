@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace NUSWhispers\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -52,7 +52,7 @@ class Confession extends Model
      */
     public function categories()
     {
-        return $this->belongsToMany('App\Models\Category', 'confession_categories', 'confession_id', 'confession_category_id');
+        return $this->belongsToMany('NUSWhispers\Models\Category', 'confession_categories', 'confession_id', 'confession_category_id');
     }
 
     /**
@@ -62,7 +62,7 @@ class Confession extends Model
      */
     public function tags()
     {
-        return $this->belongsToMany('App\Models\Tag', 'confession_tags', 'confession_id', 'confession_tag_id');
+        return $this->belongsToMany('NUSWhispers\Models\Tag', 'confession_tags', 'confession_id', 'confession_tag_id');
     }
 
     /**
@@ -72,7 +72,7 @@ class Confession extends Model
      */
     public function favourites()
     {
-        return $this->belongsToMany('App\Models\FbUser', 'favourites', 'confession_id', 'fb_user_id');
+        return $this->belongsToMany('NUSWhispers\Models\FbUser', 'favourites', 'confession_id', 'fb_user_id');
     }
 
     /**
@@ -82,7 +82,7 @@ class Confession extends Model
      */
     public function logs()
     {
-        return $this->hasMany('App\Models\ConfessionLog');
+        return $this->hasMany('NUSWhispers\Models\ConfessionLog');
     }
 
     /**
@@ -92,7 +92,7 @@ class Confession extends Model
      */
     public function moderatorComments()
     {
-        return $this->hasMany('App\Models\ModeratorComment');
+        return $this->hasMany('NUSWhispers\Models\ModeratorComment');
     }
 
     /**
@@ -102,7 +102,7 @@ class Confession extends Model
      */
     public function queue()
     {
-        return $this->hasOne('App\Models\ConfessionQueue');
+        return $this->hasOne('NUSWhispers\Models\ConfessionQueue');
     }
 
     public function isApproved()
