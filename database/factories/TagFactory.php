@@ -1,6 +1,6 @@
 <?php
 
-$factory->define(App\Models\Tag::class, function ($faker) {
+$factory->define(\NUSWhispers\Models\Tag::class, function ($faker) {
     return [
         'confession_tag' => ucfirst($faker->word),
     ];

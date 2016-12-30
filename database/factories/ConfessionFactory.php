@@ -1,9 +1,9 @@
 <?php
 
-$statuses = App\Models\Confession::statuses();
+$statuses = \NUSWhispers\Models\Confession::statuses();
 
 $factory->define(
-    App\Models\Confession::class,
+    \NUSWhispers\Models\Confession::class,
     function ($faker) use ($statuses) {
         return [
             'content' => $faker->text(),
@@ -18,7 +18,7 @@ $factory->define(
 
 foreach ($statuses as $status) {
     $factory->state(
-        App\Models\Confession::class,
+        \NUSWhispers\Models\Confession::class,
         lcfirst($status),
         function ($faker) use ($status) {
             return [

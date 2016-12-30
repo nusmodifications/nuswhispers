@@ -1,6 +1,6 @@
 <?php
 
-$factory->define(App\Models\User::class, function ($faker) {
+$factory->define(\NUSWhispers\Models\User::class, function ($faker) {
     return [
         'role' => $faker->randomElement(['Moderator', 'Administrator']),
         'name' => $faker->name(),
@@ -9,13 +9,13 @@ $factory->define(App\Models\User::class, function ($faker) {
     ];
 });
 
-$factory->state(App\Models\User::class, 'moderator', function ($faker) {
+$factory->state(\NUSWhispers\Models\User::class, 'moderator', function ($faker) {
     return [
         'role' => 'Moderator',
     ];
 });
 
-$factory->state(App\Models\User::class, 'admin', function ($faker) {
+$factory->state(\NUSWhispers\Models\User::class, 'admin', function ($faker) {
     return [
         'role' => 'Administrator',
     ];

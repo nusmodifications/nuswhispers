@@ -1,9 +1,9 @@
 <?php
 
-$factory->define(App\Models\ConfessionQueue::class, function ($faker) {
+$factory->define(\NUSWhispers\Models\ConfessionQueue::class, function ($faker) {
     return [
         'confession_id' => function () {
-            return factory(App\Models\Confession::class)->create([
+            return factory(\NUSWhispers\Models\Confession::class)->create([
                 'status' => 'Pending',
             ])->getKey();
         },

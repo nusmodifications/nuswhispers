@@ -1,6 +1,6 @@
 <?php
 
-$factory->define(App\Models\Category::class, function ($faker) {
+$factory->define(\NUSWhispers\Models\Category::class, function ($faker) {
     return [
         'confession_category' => ucfirst($faker->word),
     ];
