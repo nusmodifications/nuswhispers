@@ -12,6 +12,12 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
+        \NUSWhispers\Events\ConfessionWasCreated::class => [
+            \NUSWhispers\Listeners\SyncConfessionTags::class,
+        ],
+        \NUSWhispers\Events\ConfessionWasUpdated::class => [
+            \NUSWhispers\Listeners\SyncConfessionTags::class,
+        ],
         \NUSWhispers\Events\ConfessionStatusWasChanged::class => [
             \NUSWhispers\Listeners\LogConfessionStatusChange::class,
         ]
