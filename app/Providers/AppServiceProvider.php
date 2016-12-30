@@ -2,8 +2,6 @@
 
 namespace NUSWhispers\Providers;
 
-use NUSWhispers\Models\Confession;
-use NUSWhispers\Observers\ConfessionObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -15,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Confession::observe(ConfessionObserver::class);
+        //
     }
 
     /**
