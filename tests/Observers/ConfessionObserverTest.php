@@ -1,16 +1,19 @@
 <?php
 
+namespace NUSWhispers\Tests\Observers;
+
 use Illuminate\Support\Facades\Auth;
+use NUSWhispers\Tests\TestCase;
 
 class ConfessionObserverTest extends TestCase
 {
     public function testSaved()
     {
-        $confession = factory(App\Models\Confession::class)
+        $confession = factory(\NUSWhispers\Models\Confession::class)
             ->states('pending')
             ->create();
 
-        $user = factory(App\Models\User::class)->states('admin')->create();
+        $user = factory(\NUSWhispers\Models\User::class)->states('admin')->create();
 
         Auth::shouldReceive('check')->andReturn(true);
         Auth::shouldReceive('user')->andReturn($user);
@@ -27,12 +30,12 @@ class ConfessionObserverTest extends TestCase
 
     public function testSavedWithScheduled()
     {
-        $confession = factory(App\Models\Confession::class)
+        $confession = factory(\NUSWhispers\Models\Confession::class)
             ->states('scheduled')
             ->create();
 
         $confession->logs()->save(
-            factory(App\Models\ConfessionLog::class)->make([
+            factory(\NUSWhispers\Models\ConfessionLog::class)->make([
                 'status_before' => 'Pending',
                 'status_after' => 'Scheduled',
             ])

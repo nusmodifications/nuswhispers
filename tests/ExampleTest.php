@@ -1,5 +1,7 @@
 <?php
 
+namespace NUSWhispers\Tests;
+
 class ExampleTest extends TestCase
 {
     /**

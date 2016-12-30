@@ -1,20 +1,22 @@
 <?php
 
+namespace NUSWhispers\Tests;
+
 class ModelFactoryTest extends TestCase
 {
-    public $modelClasses = [
-        App\Models\Category::class,
-        App\Models\Confession::class,
-        App\Models\ConfessionLog::class,
-        App\Models\ConfessionQueue::class,
-        App\Models\ModeratorComment::class,
-        App\Models\Tag::class,
-        App\Models\User::class,
-    ];
-
     public function testRaw()
     {
-        foreach ($this->modelClasses as $modelClass) {
+        $modelClasses = [
+            \NUSWhispers\Models\Category::class,
+            \NUSWhispers\Models\Confession::class,
+            \NUSWhispers\Models\ConfessionLog::class,
+            \NUSWhispers\Models\ConfessionQueue::class,
+            \NUSWhispers\Models\ModeratorComment::class,
+            \NUSWhispers\Models\Tag::class,
+            \NUSWhispers\Models\User::class,
+        ];
+
+        foreach ($modelClasses as $modelClass) {
             $model = factory($modelClass)->make();
             $this->assertInstanceOf($modelClass, $model);
         }
