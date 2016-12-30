@@ -2,7 +2,6 @@
 
 namespace NUSWhispers\Tests\Services;
 
-use NUSWhispers\Events\ConfessionStatusWasChanged;
 use NUSWhispers\Tests\TestCase;
 use NUSWhispers\Services\ConfessionService;
 
