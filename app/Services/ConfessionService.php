@@ -3,6 +3,7 @@
 namespace NUSWhispers\Services;
 
 use Carbon\Carbon;
+use NUSWhispers\Events\ConfessionStatusWasChanged;
 use NUSWhispers\Events\ConfessionWasCreated;
 use NUSWhispers\Events\ConfessionWasDeleted;
 use NUSWhispers\Events\ConfessionWasScheduled;
@@ -44,7 +45,7 @@ class ConfessionService
 
         $result = $confession->delete();
 
-        event(new ConfessionWasDeleted($confession, auth()->user()));
+        event(new ConfessionWasDeleted($confession, $this->resolveUser($confession)));
 
         return $result;
     }
@@ -75,17 +76,52 @@ class ConfessionService
     {
         $attributes = $this->normalize($attributes);
 
-        $confession = $this->resolve($confession);
+        $confession = $this->resolveConfession($confession);
 
         $originalStatus = $confession->status;
 
         $confession->update($attributes);
         $confession = $this->sync($confession, $attributes);
 
-        event(new ConfessionWasUpdated($confession, auth()->user()));
+        event(new ConfessionWasUpdated($confession, $this->resolveUser($confession)));
         $this->dispatchStatusEvents($confession, $originalStatus);
 
         return $confession;
+    }
+
+    /**
+     * Dispatches the respective events if the status is changed.
+     *
+     * @param \NUSWhispers\Models\Confession $confession
+     * @param string $originalStatus
+     *
+     * @return void
+     */
+    protected function dispatchStatusEvents(Confession $confession, $originalStatus = '')
+    {
+        $newStatus = $confession->status;
+
+        // Status change event should not trigger when confession is created.
+        if (! empty($originalStatus) && $originalStatus !== $newStatus) {
+            event(new ConfessionStatusWasChanged(
+                $confession,
+                $originalStatus,
+                $this->resolveUser($confession)
+            ));
+        }
+
+        // Call scheduled event even though the status is the same.
+        if ($newStatus === 'Scheduled') {
+            event(new ConfessionWasScheduled($confession, auth()->user()));
+            return;
+        }
+
+        if ($originalStatus === $newStatus || $newStatus === 'Pending') {
+            return;
+        }
+
+        $eventClass = '\NUSWhispers\Events\ConfessionWas' . $newStatus;
+        event(new $eventClass($confession, $this->resolveUser($confession)));
     }
 
     /**
@@ -99,7 +135,7 @@ class ConfessionService
      */
     protected function schedule($confession, $status = 'Approved', $hours = 1)
     {
-        $confession = $this->resolve($confession);
+        $confession = $this->resolveConfession($confession);
 
         $confession->queue()->delete();
         $confession->queue()->create([
@@ -159,7 +195,7 @@ class ConfessionService
      *
      * @return mixed
      */
-    protected function resolve($confession)
+    protected function resolveConfession($confession)
     {
         if (!$confession instanceof Confession) {
             return Confession::findOrFail($confession);
@@ -169,28 +205,27 @@ class ConfessionService
     }
 
     /**
-     * Dispatches the respective events if the status is changed.
+     * Resolves the user who modified the confession.
      *
-     * @param \NUSWhispers\Models\Confession $confession
-     * @param string $originalStatus
-     *
-     * @return void
+     * @param  \NUSWhispers\Models\Confession $confession
+     * @return \NUSWhispers\Models\User|null
      */
-    protected function dispatchStatusEvents(Confession $confession, $originalStatus = '')
+    protected function resolveUser(Confession $confession)
     {
-        $newStatus = $confession->status;
+        if (auth()->check()) {
+            return auth()->user();
+        }
 
-        // Call scheduled event even though the status is the same.
-        if ($newStatus === 'Scheduled') {
-            event(new ConfessionWasScheduled($confession, auth()->user()));
+        $lastLog = $confession
+            ->logs()
+            ->orderBy('created_on', 'desc')
+            ->with(['user'])
+            ->first();
+
+        if (! $lastLog) {
             return;
         }
 
-        if ($originalStatus === $newStatus || $newStatus === 'Pending') {
-            return;
-        }
-
-        $eventClass = '\NUSWhispers\Events\ConfessionWas' . $newStatus;
-        event(new $eventClass($confession, auth()->user()));
+        return $lastLog->user;
     }
 }

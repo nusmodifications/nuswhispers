@@ -2,6 +2,7 @@
 
 namespace NUSWhispers\Tests\Services;
 
+use NUSWhispers\Events\ConfessionStatusWasChanged;
 use NUSWhispers\Tests\TestCase;
 use NUSWhispers\Services\ConfessionService;
 
@@ -19,6 +20,7 @@ class ConfessionServiceTest extends TestCase
     public function testCreate()
     {
         $this->expectsEvents(\NUSWhispers\Events\ConfessionWasCreated::class);
+        $this->doesntExpectEvents(\NUSWhispers\Events\ConfessionStatusWasChanged::class);
 
         $confession = $this->service->create([
             'content' => 'Test Content'
@@ -34,6 +36,7 @@ class ConfessionServiceTest extends TestCase
             \NUSWhispers\Events\ConfessionWasCreated::class,
             \NUSWhispers\Events\ConfessionWasScheduled::class,
         ]);
+        $this->doesntExpectEvents(\NUSWhispers\Events\ConfessionStatusWasChanged::class);
 
         $confession = $this->service->create([
             'content' => 'Hello World',
@@ -48,6 +51,7 @@ class ConfessionServiceTest extends TestCase
     public function testCreateWithCategories()
     {
         $this->expectsEvents(\NUSWhispers\Events\ConfessionWasCreated::class);
+        $this->doesntExpectEvents(\NUSWhispers\Events\ConfessionStatusWasChanged::class);
 
         $categories = factory(\NUSWhispers\Models\Category::class, 5)->create()
             ->map(function ($item) {
@@ -101,11 +105,14 @@ class ConfessionServiceTest extends TestCase
     public function testUpdateScheduled()
     {
         $this->expectsEvents([
+            \NUSWhispers\Events\ConfessionStatusWasChanged::class,
             \NUSWhispers\Events\ConfessionWasUpdated::class,
             \NUSWhispers\Events\ConfessionWasScheduled::class,
         ]);
 
-        $confession = factory(\NUSWhispers\Models\Confession::class)->create();
+        $confession = factory(\NUSWhispers\Models\Confession::class)->create([
+            'status' => 'Pending'
+        ]);
         $confession = $this->service->update($confession, [
             'schedule' => 3,
             'status' => 'Approved',
@@ -118,7 +125,10 @@ class ConfessionServiceTest extends TestCase
     /** @test */
     public function testUpdateStatus()
     {
-        $this->expectsEvents(\NUSWhispers\Events\ConfessionWasApproved::class);
+        $this->expectsEvents([
+            \NUSWhispers\Events\ConfessionStatusWasChanged::class,
+            \NUSWhispers\Events\ConfessionWasApproved::class,
+        ]);
 
         $confession = factory(\NUSWhispers\Models\Confession::class)->create([
             'status' => 'Pending'
@@ -132,7 +142,10 @@ class ConfessionServiceTest extends TestCase
     /** @test */
     public function testUpdateStatusScheduled()
     {
-        $this->expectsEvents(\NUSWhispers\Events\ConfessionWasScheduled::class);
+        $this->expectsEvents([
+            \NUSWhispers\Events\ConfessionStatusWasChanged::class,
+            \NUSWhispers\Events\ConfessionWasScheduled::class
+        ]);
 
         $confession = factory(\NUSWhispers\Models\Confession::class)->create();
         $confession->queue()->save(factory(\NUSWhispers\Models\ConfessionQueue::class)->make());
