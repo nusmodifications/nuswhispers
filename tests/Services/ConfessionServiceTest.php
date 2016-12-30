@@ -100,6 +100,25 @@ class ConfessionServiceTest extends TestCase
         $this->assertEquals($confession->categories->count(), count($categories));
     }
 
+    /**
+     * @test
+     * @expectedException \InvalidArgumentException
+     */
+    public function testUpdatePending()
+    {
+        $confession = factory(\NUSWhispers\Models\Confession::class)->states('approved')->create();
+        $this->service->update($confession->getKey(), ['status' => 'Pending']);
+    }
+
+    /** @test */
+    public function testUpdatePendingSameStatus()
+    {
+        $confession = factory(\NUSWhispers\Models\Confession::class)->states('pending')->create();
+        $this->service->update($confession->getKey(), ['status' => 'Pending']);
+
+        $this->assertEquals('Pending', $confession->status);
+    }
+
     /** @test */
     public function testUpdateScheduled()
     {

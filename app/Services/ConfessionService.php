@@ -3,6 +3,7 @@
 namespace NUSWhispers\Services;
 
 use Carbon\Carbon;
+use InvalidArgumentException;
 use NUSWhispers\Events\ConfessionStatusWasChanged;
 use NUSWhispers\Events\ConfessionWasCreated;
 use NUSWhispers\Events\ConfessionWasDeleted;
@@ -21,6 +22,7 @@ class ConfessionService
      */
     public function create(array $attributes)
     {
+        $attributes['status'] = 'Pending';
         $attributes = $this->normalize($attributes);
 
         $confession = Confession::create($attributes);
@@ -79,6 +81,11 @@ class ConfessionService
         $confession = $this->resolveConfession($confession);
 
         $originalStatus = $confession->status;
+
+        // Do not allow switching status back to "Pending".
+        if ($originalStatus !== 'Pending' && array_get($attributes, 'status', '') === 'Pending') {
+            throw new InvalidArgumentException('Switching a non-pending confession back to "pending" status is not allowed.');
+        }
 
         $confession->update($attributes);
         $confession = $this->sync($confession, $attributes);
@@ -155,7 +162,6 @@ class ConfessionService
     protected function normalize(array $attributes)
     {
         $attributes['status_updated_at'] = Carbon::now();
-        $attributes['status'] = array_get($attributes, 'status', 'Pending');
 
         if (! empty($attributes['schedule'])) {
             $attributes['status_after'] = $attributes['status'];
