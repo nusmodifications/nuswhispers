@@ -110,9 +110,7 @@ class ConfessionServiceTest extends TestCase
             \NUSWhispers\Events\ConfessionWasScheduled::class,
         ]);
 
-        $confession = factory(\NUSWhispers\Models\Confession::class)->create([
-            'status' => 'Pending'
-        ]);
+        $confession = factory(\NUSWhispers\Models\Confession::class)->states('pending')->create();
         $confession = $this->service->update($confession, [
             'schedule' => 3,
             'status' => 'Approved',
@@ -130,9 +128,7 @@ class ConfessionServiceTest extends TestCase
             \NUSWhispers\Events\ConfessionWasApproved::class,
         ]);
 
-        $confession = factory(\NUSWhispers\Models\Confession::class)->create([
-            'status' => 'Pending'
-        ]);
+        $confession = factory(\NUSWhispers\Models\Confession::class)->states('pending')->create();
 
         $confession = $this->service->updateStatus($confession, 'Approved');
 
@@ -147,7 +143,7 @@ class ConfessionServiceTest extends TestCase
             \NUSWhispers\Events\ConfessionWasScheduled::class
         ]);
 
-        $confession = factory(\NUSWhispers\Models\Confession::class)->create();
+        $confession = factory(\NUSWhispers\Models\Confession::class)->states('pending')->create();
         $confession->queue()->save(factory(\NUSWhispers\Models\ConfessionQueue::class)->make());
 
         $confession = $this->service->updateStatus($confession, 'Approved', 3);
