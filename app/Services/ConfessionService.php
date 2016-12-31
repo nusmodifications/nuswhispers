@@ -4,12 +4,12 @@ namespace NUSWhispers\Services;
 
 use Carbon\Carbon;
 use InvalidArgumentException;
-use NUSWhispers\Events\ConfessionStatusWasChanged;
+use NUSWhispers\Models\Confession;
 use NUSWhispers\Events\ConfessionWasCreated;
 use NUSWhispers\Events\ConfessionWasDeleted;
-use NUSWhispers\Events\ConfessionWasScheduled;
 use NUSWhispers\Events\ConfessionWasUpdated;
-use NUSWhispers\Models\Confession;
+use NUSWhispers\Events\ConfessionWasScheduled;
+use NUSWhispers\Events\ConfessionStatusWasChanged;
 
 class ConfessionService
 {
@@ -120,6 +120,7 @@ class ConfessionService
         // Call scheduled event even though the status is the same.
         if ($newStatus === 'Scheduled') {
             event(new ConfessionWasScheduled($confession, auth()->user()));
+
             return;
         }
 
@@ -203,7 +204,7 @@ class ConfessionService
      */
     protected function resolveConfession($confession)
     {
-        if (!$confession instanceof Confession) {
+        if (! $confession instanceof Confession) {
             return Confession::findOrFail($confession);
         }
 

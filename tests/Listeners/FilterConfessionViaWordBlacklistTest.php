@@ -2,10 +2,10 @@
 
 namespace NUSWhispers\Tests\Listeners;
 
-use anlutro\LaravelSettings\Facade as Settings;
-use NUSWhispers\Events\ConfessionWasCreated;
-use NUSWhispers\Listeners\FilterConfessionViaWordBlacklist;
 use NUSWhispers\Tests\TestCase;
+use NUSWhispers\Events\ConfessionWasCreated;
+use anlutro\LaravelSettings\Facade as Settings;
+use NUSWhispers\Listeners\FilterConfessionViaWordBlacklist;
 
 class FilterConfessionViaWordBlacklistTest extends TestCase
 {
@@ -14,7 +14,7 @@ class FilterConfessionViaWordBlacklistTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        
+
         $this->listener = new FilterConfessionViaWordBlacklist();
 
         Settings::shouldReceive('get')->andReturn('foo, fcuk');

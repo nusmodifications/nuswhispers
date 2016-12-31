@@ -3,8 +3,8 @@
 namespace NUSWhispers\Console\Commands;
 
 use Facebook;
-use NUSWhispers\Models\Confession;
 use Illuminate\Console\Command;
+use NUSWhispers\Models\Confession;
 
 class UpdateConfessionFacebookInfo extends Command
 {

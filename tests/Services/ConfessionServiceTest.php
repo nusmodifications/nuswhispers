@@ -22,7 +22,7 @@ class ConfessionServiceTest extends TestCase
         $this->doesntExpectEvents(\NUSWhispers\Events\ConfessionStatusWasChanged::class);
 
         $confession = $this->service->create([
-            'content' => 'Test Content'
+            'content' => 'Test Content',
         ]);
 
         $this->assertInstanceOf(\NUSWhispers\Models\Confession::class, $confession);
@@ -158,7 +158,7 @@ class ConfessionServiceTest extends TestCase
     {
         $this->expectsEvents([
             \NUSWhispers\Events\ConfessionStatusWasChanged::class,
-            \NUSWhispers\Events\ConfessionWasScheduled::class
+            \NUSWhispers\Events\ConfessionWasScheduled::class,
         ]);
 
         $confession = factory(\NUSWhispers\Models\Confession::class)->states('pending')->create();

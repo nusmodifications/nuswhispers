@@ -2,10 +2,10 @@
 
 namespace NUSWhispers\Listeners;
 
+use NUSWhispers\Models\Tag;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use NUSWhispers\Events\ConfessionWasCreated;
 use NUSWhispers\Events\ConfessionWasUpdated;
-use NUSWhispers\Models\Tag;
 
 class SyncConfessionTags implements ShouldQueue
 {
@@ -28,7 +28,7 @@ class SyncConfessionTags implements ShouldQueue
 
         $tags = $this->fetchTagsFromContent($confession->content)
             ->map(function ($item) {
-               return Tag::firstOrCreate(['confession_tag' => $item])->getKey();
+                return Tag::firstOrCreate(['confession_tag' => $item])->getKey();
             });
 
         $confession->tags()->sync($tags->all());

@@ -2,9 +2,9 @@
 
 namespace NUSWhispers\Tests\Listeners;
 
-use NUSWhispers\Events\ConfessionStatusWasChanged;
-use NUSWhispers\Listeners\FlushConfessionQueue;
 use NUSWhispers\Tests\TestCase;
+use NUSWhispers\Listeners\FlushConfessionQueue;
+use NUSWhispers\Events\ConfessionStatusWasChanged;
 
 class FlushConfessionQueueTest extends TestCase
 {

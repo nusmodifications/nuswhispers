@@ -3,9 +3,9 @@
 namespace NUSWhispers\Tests\Listeners;
 
 use Mockery;
+use NUSWhispers\Tests\TestCase;
 use NUSWhispers\Events\ConfessionWasDeleted;
 use NUSWhispers\Listeners\DeleteConfessionFromFacebook;
-use NUSWhispers\Tests\TestCase;
 
 class DeleteConfessionFromFacebookTest extends TestCase
 {
@@ -47,7 +47,7 @@ class DeleteConfessionFromFacebookTest extends TestCase
         $this->app['config']->set('app.manual_mode', true);
 
         $confession = factory(\NUSWhispers\Models\Confession::class)->create([
-            'fb_post_id' => '123'
+            'fb_post_id' => '123',
         ]);
 
         $this->fb->shouldNotReceive('fb');
