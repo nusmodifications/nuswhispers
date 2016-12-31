@@ -100,6 +100,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Manual Mode
+    |--------------------------------------------------------------------------
+    |
+    | When the application is in manual mode. Confessions will not be
+    | automatically posted to the respective services upon approval.
+    |
+     */
+
+    'manual_mode' => env('MANUAL_MODE', false),
+
+    /*
+    |--------------------------------------------------------------------------
     | Autoloaded Service Providers
     |--------------------------------------------------------------------------
     |
