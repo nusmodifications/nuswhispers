@@ -19,6 +19,9 @@ Route::get('api-keys', 'ApiKeysAdminController@getIndex');
 Route::get('api-keys/add', 'ApiKeysAdminController@getAdd');
 Route::get('api-keys/delete/{id}', 'ApiKeysAdminController@getDelete');
 
+Route::get('settings', 'SettingsAdminController@getIndex');
+Route::post('settings', 'SettingsAdminController@postIndex');
+
 Route::get('users', 'UsersAdminController@getIndex');
 Route::get('users/add', 'UsersAdminController@getAdd');
 Route::post('users/add', 'UsersAdminController@postAdd');
