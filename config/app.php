@@ -156,6 +156,7 @@ return [
         NUSWhispers\Providers\EventServiceProvider::class,
         NUSWhispers\Providers\RouteServiceProvider::class,
 
+        anlutro\LaravelSettings\ServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
         SammyK\LaravelFacebookSdk\LaravelFacebookSdkServiceProvider::class,
