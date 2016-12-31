@@ -26,11 +26,11 @@ class DeleteConfessionFromFacebook implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  \NUSWhispers\Events\BaseConfessionEvent $event
+     * @param  mixed $event
      *
      * @return mixed
      */
-    public function handle(BaseConfessionEvent $event)
+    public function handle($event)
     {
         $confession = $event->confession;
 
