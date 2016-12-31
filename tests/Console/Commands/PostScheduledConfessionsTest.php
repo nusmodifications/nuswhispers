@@ -8,10 +8,12 @@ use NUSWhispers\Models\Confession;
 use NUSWhispers\Models\User;
 use NUSWhispers\Tests\TestCase;
 
-class UpdateConfessionFacebookInfoTest extends TestCase
+class PostScheduledConfessionsTest extends TestCase
 {
     public function testCommand()
     {
+        $this->withoutEvents();
+
         $confession = factory(Confession::class)->states('scheduled')->create();
         $confession->queue()->create([
             'status_after' => 'rejected',
