@@ -16,10 +16,10 @@ class FilterConfessionViaWordBlacklist implements ShouldQueue
      */
     public function handle(ConfessionWasCreated $event)
     {
-        $blacklist = Settings::get('word_blacklist', '');
+        $blacklist = strtolower(Settings::get('word_blacklist', ''));
         $confession = $event->confession;
 
-        if (str_contains($confession->content, explode(',', $blacklist))) {
+        if (str_contains(strtolower($confession->content), explode(',', $blacklist))) {
             $confession->update(['status' => 'Rejected']);
         }
     }

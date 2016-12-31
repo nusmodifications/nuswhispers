@@ -25,7 +25,7 @@ class FilterConfessionViaWordBlacklistTest extends TestCase
     {
         $confession = factory(\NUSWhispers\Models\Confession::class)->create([
             'status' => 'Pending',
-            'content' => 'Hello fcuk.',
+            'content' => 'Hello Fcuk.',
         ]);
 
         $this->listener->handle(new ConfessionWasCreated($confession));
