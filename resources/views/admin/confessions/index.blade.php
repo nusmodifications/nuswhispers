@@ -22,8 +22,8 @@
   <ul class="nav nav-tabs">
     <li class="{{ Request::is('admin/confessions/index/all') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/all">All</a></li>
     <li class="{{ Request::is('admin/confessions/index/featured') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/featured">Featured</a></li>
-    <li class="{{ Request::is('admin/confessions') || Request::is('admin/confessions/index/pending') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/pending">Pending ({{ \App\Models\Confession::pending()->count() }})</a></li>
-    <li class="{{ Request::is('admin/confessions/index/scheduled') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/scheduled">Scheduled ({{ \App\Models\Confession::scheduled()->count() }})</a></li>
+    <li class="{{ Request::is('admin/confessions') || Request::is('admin/confessions/index/pending') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/pending">Pending ({{ \NUSWhispers\Models\Confession::pending()->count() }})</a></li>
+    <li class="{{ Request::is('admin/confessions/index/scheduled') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/scheduled">Scheduled ({{ \NUSWhispers\Models\Confession::scheduled()->count() }})</a></li>
     <li class="{{ Request::is('admin/confessions/index/approved') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/approved">Approved</a></li>
     <li class="{{ Request::is('admin/confessions/index/rejected') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/rejected">Rejected</a></li>
   </ul>

@@ -29,7 +29,7 @@
         <li class="{{ Request::is('admin/confessions/index/pending') || Request::is('admin/confessions') ? 'active' : '' }}">
           <a href="/admin/confessions">
             <span class="typcn typcn-warning"></span>Pending
-            <span class="badge">{{ \App\Models\Confession::pending()->count() }}</span>
+            <span class="badge">{{ \NUSWhispers\Models\Confession::pending()->count() }}</span>
           </a>
         </li>
         <li class="{{ Request::is('admin/confessions/index/approved') ? 'active' : '' }}">
