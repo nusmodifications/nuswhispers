@@ -2,10 +2,10 @@
 
 namespace NUSWhispers\Http\Controllers;
 
-use Cache;
 use DB;
-use Illuminate\Http\Request;
+use Cache;
 use Input;
+use Illuminate\Http\Request;
 use NUSWhispers\Models\ApiKey;
 use NUSWhispers\Models\Confession;
 use NUSWhispers\Services\ConfessionService;

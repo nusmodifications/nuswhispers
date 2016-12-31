@@ -3,9 +3,9 @@
 namespace NUSWhispers\Tests\Listeners;
 
 use Mockery;
+use NUSWhispers\Tests\TestCase;
 use NUSWhispers\Events\ConfessionWasApproved;
 use NUSWhispers\Listeners\PostConfessionToFacebook;
-use NUSWhispers\Tests\TestCase;
 
 class PostConfessionToFacebookTest extends TestCase
 {

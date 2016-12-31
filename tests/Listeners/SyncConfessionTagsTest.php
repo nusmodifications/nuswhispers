@@ -1,12 +1,11 @@
 <?php
 
-
 namespace NUSWhispers\Tests\Listeners;
 
+use NUSWhispers\Tests\TestCase;
 use NUSWhispers\Events\ConfessionWasCreated;
 use NUSWhispers\Events\ConfessionWasUpdated;
 use NUSWhispers\Listeners\SyncConfessionTags;
-use NUSWhispers\Tests\TestCase;
 
 class SyncConfessionTagsTest extends TestCase
 {
@@ -53,7 +52,7 @@ class SyncConfessionTagsTest extends TestCase
         ]);
 
         $firstTag = factory(\NUSWhispers\Models\Tag::class)->create([
-            'confession_tag' => '#firstworldproblems'
+            'confession_tag' => '#firstworldproblems',
         ]);
 
         $confession->tags()->sync([$firstTag->getKey()]);

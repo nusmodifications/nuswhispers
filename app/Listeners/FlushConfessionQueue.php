@@ -2,8 +2,8 @@
 
 namespace NUSWhispers\Listeners;
 
-use NUSWhispers\Events\ConfessionStatusWasChanged;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use NUSWhispers\Events\ConfessionStatusWasChanged;
 
 class FlushConfessionQueue implements ShouldQueue
 {

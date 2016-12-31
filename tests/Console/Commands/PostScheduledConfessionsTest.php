@@ -3,10 +3,10 @@
 namespace NUSWhispers\Tests\Console\Commands;
 
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Artisan;
-use NUSWhispers\Models\Confession;
 use NUSWhispers\Models\User;
 use NUSWhispers\Tests\TestCase;
+use NUSWhispers\Models\Confession;
+use Illuminate\Support\Facades\Artisan;
 
 class PostScheduledConfessionsTest extends TestCase
 {
@@ -17,7 +17,7 @@ class PostScheduledConfessionsTest extends TestCase
         $confession = factory(Confession::class)->states('scheduled')->create();
         $confession->queue()->create([
             'status_after' => 'rejected',
-            'update_status_at' => Carbon::now()->subMinutes(5)
+            'update_status_at' => Carbon::now()->subMinutes(5),
         ]);
         $confession->logs()->create([
             'status_before' => 'Pending',

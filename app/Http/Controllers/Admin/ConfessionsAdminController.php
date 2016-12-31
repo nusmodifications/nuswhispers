@@ -3,11 +3,11 @@
 namespace NUSWhispers\Http\Controllers\Admin;
 
 use Carbon\Carbon;
-use NUSWhispers\Listeners\ResolvesFacebookPageToken;
 use NUSWhispers\Models\Category;
 use NUSWhispers\Models\Confession;
 use NUSWhispers\Models\ModeratorComment;
 use NUSWhispers\Services\ConfessionService;
+use NUSWhispers\Listeners\ResolvesFacebookPageToken;
 
 class ConfessionsAdminController extends AdminController
 {
@@ -221,6 +221,7 @@ class ConfessionsAdminController extends AdminController
     protected function userHasPageToken()
     {
         $profile = auth()->user()->profiles()->where('provider_name', 'facebook')->first();
+
         return $profile && $profile->page_token;
     }
 }
