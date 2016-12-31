@@ -14,6 +14,7 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         'NUSWhispers\Events\ConfessionWasCreated' => [
             'NUSWhispers\Listeners\SyncConfessionTags',
+            'NUSWhispers\Listeners\FilterConfessionViaWordBlacklist',
         ],
         'NUSWhispers\Events\ConfessionWasUpdated' => [
             'NUSWhispers\Listeners\SyncConfessionTags',
