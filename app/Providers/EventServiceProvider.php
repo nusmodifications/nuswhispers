@@ -19,16 +19,20 @@ class EventServiceProvider extends ServiceProvider
             \NUSWhispers\Listeners\SyncConfessionTags::class,
         ],
         \NUSWhispers\Events\ConfessionWasDeleted::class => [
+            \NUSWhispers\Listeners\DeleteConfessionFromFacebook::class,
         ],
         \NUSWhispers\Events\ConfessionStatusWasChanged::class => [
             \NUSWhispers\Listeners\FlushConfessionQueue::class,
             \NUSWhispers\Listeners\LogConfessionStatusChange::class,
         ],
         \NUSWhispers\Events\ConfessionWasApproved::class => [
+            \NUSWhispers\Listeners\PostConfessionToFacebook::class,
         ],
         \NUSWhispers\Events\ConfessionWasFeatured::class => [
+            \NUSWhispers\Listeners\PostConfessionToFacebook::class,
         ],
         \NUSWhispers\Events\ConfessionWasRejected::class => [
+            \NUSWhispers\Listeners\DeleteConfessionFromFacebook::class,
         ],
     ];
 
