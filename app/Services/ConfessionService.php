@@ -182,7 +182,8 @@ class ConfessionService
      */
     protected function sync(Confession $confession, array $attributes = [])
     {
-        $confession->categories()->sync(array_get($attributes, 'categories', []));
+        $categories = ! empty($attributes['categories']) ? $attributes['categories'] : [];
+        $confession->categories()->sync($categories);
 
         if (! empty($attributes['schedule'])) {
             $this->schedule(

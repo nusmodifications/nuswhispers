@@ -47,6 +47,7 @@ class ConfessionServiceTest extends TestCase
         $this->assertEquals($confession->queue->count(), 1);
     }
 
+    /** @test */
     public function testCreateWithCategories()
     {
         $this->expectsEvents(\NUSWhispers\Events\ConfessionWasCreated::class);
@@ -63,7 +64,20 @@ class ConfessionServiceTest extends TestCase
             'categories' => $categories,
         ]);
 
-        $this->assertEquals($confession->categories->count(), count($categories));
+        $this->assertEquals(count($categories), $confession->categories->count());
+    }
+
+    /** @test */
+    public function testCreateCategoriesNull()
+    {
+        $this->withoutEvents();
+
+        $confession = $this->service->create([
+            'content' => 'Test Content',
+            'categories' => null,
+        ]);
+
+        $this->assertEquals(0, $confession->categories->count());
     }
 
     /** @test */
@@ -97,7 +111,7 @@ class ConfessionServiceTest extends TestCase
 
         $confession = $this->service->update($confession->getKey(), ['categories' => $categories]);
 
-        $this->assertEquals($confession->categories->count(), count($categories));
+        $this->assertEquals(count($categories), $confession->categories->count());
     }
 
     /**
