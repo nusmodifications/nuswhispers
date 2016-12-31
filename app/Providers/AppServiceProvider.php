@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace NUSWhispers\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

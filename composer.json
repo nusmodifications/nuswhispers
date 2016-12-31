@@ -11,25 +11,29 @@
         "laravel/socialite": "~2.0",
         "laravelcollective/html": "5.3.*",
         "sammyk/laravel-facebook-sdk": "~3.0",
-        "predis/predis": "^1.0"
+        "predis/predis": "^1.0",
+        "anlutro/l4-settings": "^0.4.9"
     },
     "require-dev": {
         "phpunit/phpunit": "~5.0",
         "symfony/dom-crawler": "3.1.*",
-        "symfony/css-selector": "3.1.*"
+        "symfony/css-selector": "3.1.*",
+        "fzaninotto/faker": "^1.6",
+        "mockery/mockery": "^0.9.6",
+        "satooshi/php-coveralls": "^1.0"
     },
     "autoload": {
         "classmap": [
             "database"
         ],
         "psr-4": {
-            "App\\": "app/"
+            "NUSWhispers\\": "app/"
         }
     },
     "autoload-dev": {
-        "classmap": [
-            "tests/TestCase.php"
-        ]
+        "psr-4": {
+            "NUSWhispers\\Tests\\": "tests/"
+        }
     },
     "scripts": {
         "post-root-package-install": ["php -r \"file_exists('.env') || copy('.env.example', '.env');\""],

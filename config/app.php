@@ -100,6 +100,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Manual Mode
+    |--------------------------------------------------------------------------
+    |
+    | When the application is in manual mode. Confessions will not be
+    | automatically posted to the respective services upon approval.
+    |
+     */
+
+    'manual_mode' => env('MANUAL_MODE', false),
+
+    /*
+    |--------------------------------------------------------------------------
     | Autoloaded Service Providers
     |--------------------------------------------------------------------------
     |
@@ -139,11 +151,12 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
+        NUSWhispers\Providers\AppServiceProvider::class,
+        NUSWhispers\Providers\AuthServiceProvider::class,
+        NUSWhispers\Providers\EventServiceProvider::class,
+        NUSWhispers\Providers\RouteServiceProvider::class,
 
+        anlutro\LaravelSettings\ServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
         SammyK\LaravelFacebookSdk\LaravelFacebookSdkServiceProvider::class,

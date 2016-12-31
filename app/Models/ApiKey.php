@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace NUSWhispers\Models;
 
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
@@ -44,7 +44,7 @@ class ApiKey extends Model
 
     public function creator()
     {
-        return $this->belongsTo('App\Models\User', 'user_id', 'user_id');
+        return $this->belongsTo('NUSWhispers\Models\User', 'user_id', 'user_id');
     }
 
     public static function generateKey()

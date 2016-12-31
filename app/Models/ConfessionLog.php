@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace NUSWhispers\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -48,7 +48,7 @@ class ConfessionLog extends Model
      */
     public function user()
     {
-        return $this->belongsTo('App\Models\User', 'changed_by_user');
+        return $this->belongsTo('NUSWhispers\Models\User', 'changed_by_user');
     }
 
     /**

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace NUSWhispers\Http\Controllers;
 
 use Cache;
-use App\Models\Category;
+use NUSWhispers\Models\Category;
 
 class CategoriesController extends Controller
 {

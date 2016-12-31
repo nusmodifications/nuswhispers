@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace NUSWhispers\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -27,6 +27,6 @@ class FbUser extends Model
      */
     public function favourites()
     {
-        return $this->belongsToMany('App\Models\Confession', 'favourites', 'fb_user_id', 'confession_id');
+        return $this->belongsToMany('NUSWhispers\Models\Confession', 'favourites', 'fb_user_id', 'confession_id');
     }
 }

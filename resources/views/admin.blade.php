@@ -29,7 +29,7 @@
         <li class="{{ Request::is('admin/confessions/index/pending') || Request::is('admin/confessions') ? 'active' : '' }}">
           <a href="/admin/confessions">
             <span class="typcn typcn-warning"></span>Pending
-            <span class="badge">{{ \App\Models\Confession::pending()->count() }}</span>
+            <span class="badge">{{ \NUSWhispers\Models\Confession::pending()->count() }}</span>
           </a>
         </li>
         <li class="{{ Request::is('admin/confessions/index/approved') ? 'active' : '' }}">
@@ -43,6 +43,7 @@
         <li class="{{ Request::is('admin/api-keys') ? 'active' : ''}}"><a href="/admin/api-keys"><span class="typcn typcn-key"></span>API Keys Management</a></li>
         @if (\Auth::user()->role == 'Administrator')
         <li class="{{ Request::is('admin/users') ? 'active' : '' }}"><a href="/admin/users"><span class="typcn typcn-group"></span>User Management</a></li>
+        <li class="{{ Request::is('admin/settings') ? 'active' : '' }}"><a href="/admin/settings"><span class="typcn typcn-spanner"></span>Settings</a></li>
         @endif
         <li><a href="/logout"><span class="typcn typcn-eject"></span>Logout</a></li>
       </ul>

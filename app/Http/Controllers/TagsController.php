@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace NUSWhispers\Http\Controllers;
 
 use DB;
 use Cache;
 use Config;
-use App\Models\Tag;
+use NUSWhispers\Models\Tag;
 
 class TagsController extends Controller
 {
@@ -14,7 +14,7 @@ class TagsController extends Controller
      * method: get
      * route: api/tags.
      *
-     * @return json {"data": {tags": [tag1, tag2, ...]}}
+     * @return json {"data": {"tags": [tag1, tag2, ...]}}
      */
     public function index()
     {

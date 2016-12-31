@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace NUSWhispers\Http\Controllers;
 
 use DB;
 use Cache;
 use Input;
-use App\Models\Tag;
-use App\Models\ApiKey;
-use App\Models\Confession;
 use Illuminate\Http\Request;
-use App\Services\FacebookBatchProcessor;
-use App\Repositories\ConfessionsRepository;
+use NUSWhispers\Models\ApiKey;
+use NUSWhispers\Models\Confession;
+use NUSWhispers\Services\ConfessionService;
+use NUSWhispers\Services\FacebookBatchProcessor;
 
 class ConfessionsController extends Controller
 {
@@ -28,28 +27,28 @@ class ConfessionsController extends Controller
     /**
      * Facebook batch processor.
      *
-     * @var \App\Services\FacebookBatchProcessor
+     * @var \NUSWhispers\Services\FacebookBatchProcessor
      */
     protected $batchProcessor;
 
     /**
-     * Confessions repository.
+     * Confessions service.
      *
-     * @var \App\Repositories\ConfessionsRepository
+     * @var \NUSWhispers\Services\ConfessionService
      */
-    protected $confessionsRepo;
+    protected $service;
 
     /**
      * Creates a new ConfessionsController instance.
      *
-     * @param \App\Services\FacebookBatchProcessor    $batchProcessor
-     * @param \App\Repositories\ConfessionsRepository $confessionsRepo
+     * @param \NUSWhispers\Services\FacebookBatchProcessor  $batchProcessor
+     * @param \NUSWhispers\Services\ConfessionService       $service
      */
     public function __construct(FacebookBatchProcessor $batchProcessor,
-        ConfessionsRepository $confessionsRepo)
+        ConfessionService $service)
     {
         $this->batchProcessor = $batchProcessor;
-        $this->confessionsRepo = $confessionsRepo;
+        $this->service = $service;
     }
 
     /**
@@ -253,7 +252,7 @@ class ConfessionsController extends Controller
      *
      * @return Response
      */
-    public function store()
+    public function store(Request $request)
     {
         $validationRules = [
             'content' => 'required',
@@ -287,19 +286,13 @@ class ConfessionsController extends Controller
             $key->save();
         }
 
-        if (is_array(\Input::get('categories'))) {
-            $res = $this->confessionsRepo->create([
-                'content' => \Input::get('content'),
-                'images' => \Input::get('image'),
-            ], \Input::get('categories'));
-        } else {
-            $res = $this->confessionsRepo->create([
-                'content' => \Input::get('content'),
-                'images' => \Input::get('image'),
-            ]);
-        }
+        $confession = $this->service->create([
+            'content' => $request->input('content'),
+            'images' => $request->input('image'),
+            'categories' => $request->input('categories'),
+        ]);
 
-        return response()->json(['success' => $res]);
+        return response()->json(['success' => $confession->exists]);
     }
 
     /**

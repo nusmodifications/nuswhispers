@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Console\Commands;
+namespace NUSWhispers\Console\Commands;
 
 use Carbon\Carbon;
-use App\Models\Confession;
 use Illuminate\Console\Command;
-use App\Repositories\ConfessionsRepository;
+use NUSWhispers\Models\Confession;
+use NUSWhispers\Services\ConfessionService;
 
 class PostScheduledConfessions extends Command
 {
     /**
      * Confessions repository.
      *
-     * @var App\Repositories\ConfessionsRepository
+     * @var NUSWhispers\Repositories\ConfessionsRepository
      */
     protected $confessionsRepo;
 
@@ -31,14 +31,19 @@ class PostScheduledConfessions extends Command
     protected $name = 'confession:scheduled';
 
     /**
+     * @var \NUSWhispers\Services\ConfessionService
+     */
+    protected $service;
+
+    /**
      * Create a new command instance.
      *
-     * @return void
+     * @param \NUSWhispers\Services\ConfessionService $service
      */
-    public function __construct(ConfessionsRepository $confessionsRepo)
+    public function __construct(ConfessionService $service)
     {
-        $this->confessionsRepo = $confessionsRepo;
         parent::__construct();
+        $this->service = $service;
     }
 
     /**
@@ -56,7 +61,7 @@ class PostScheduledConfessions extends Command
         $confessions->each(function ($confession) {
             $queue = $confession->queue()->first();
             $this->comment('[INFO] Setting confession #' . $confession->confession_id . ' to ' . strtolower($queue->status_after) . '.');
-            $this->confessionsRepo->switchStatus($confession, $queue->status_after);
+            $this->service->updateStatus($confession, $queue->status_after);
             $confession->queue()->delete();
         });
 

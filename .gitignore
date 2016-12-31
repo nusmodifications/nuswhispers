@@ -54,6 +54,11 @@ bower_components
 # Environment files
 .env
 
+# PHPUnit
+phpunit.xml
+
 # Other folders
+/build
 /zip
 /scss
+/.idea

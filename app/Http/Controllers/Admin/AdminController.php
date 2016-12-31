@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace NUSWhispers\Http\Controllers\Admin;
 
 use Session;
-use App\Http\Controllers\Controller;
+use NUSWhispers\Http\Controllers\Controller;
 
 /**
  * Abstract class for all admin controllers.

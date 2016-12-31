@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace NUSWhispers\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -57,6 +57,6 @@ class User extends Authenticatable
      */
     public function profiles()
     {
-        return $this->hasMany('App\Models\UserProfile');
+        return $this->hasMany('NUSWhispers\Models\UserProfile');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace NUSWhispers\Services;
 
 use Config;
 use SammyK\LaravelFacebookSdk\LaravelFacebookSdk as Facebook;
@@ -37,9 +37,9 @@ class FacebookBatchProcessor
     /**
      * Requests information from Facebook about the confession.
      *
-     * @param \App\Models\Confession $confession
+     * @param \NUSWhispers\Models\Confession $confession
      *
-     * @return \App\Models\Confession $confession
+     * @return \NUSWhispers\Models\Confession $confession
      */
     public function processConfession($confession)
     {

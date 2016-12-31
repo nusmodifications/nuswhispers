@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace NUSWhispers\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -48,7 +48,7 @@ class ConfessionQueue extends Model
      */
     public function confession()
     {
-        return $this->belongsTo('App\Models\Confession', 'confession_id');
+        return $this->belongsTo('NUSWhispers\Models\Confession', 'confession_id');
     }
 
     /**

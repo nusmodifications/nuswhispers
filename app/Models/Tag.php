@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace NUSWhispers\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,6 +22,6 @@ class Tag extends Model
 
     public function confessions()
     {
-        return $this->belongsToMany('App\Models\Confession', 'confession_tags', 'confession_tag_id', 'confession_id');
+        return $this->belongsToMany('NUSWhispers\Models\Confession', 'confession_tags', 'confession_tag_id', 'confession_id');
     }
 }

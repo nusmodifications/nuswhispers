@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console;
+namespace NUSWhispers\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -13,8 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        'App\Console\Commands\UpdateConfessionFacebookInfo',
-        'App\Console\Commands\PostScheduledConfessions',
+        'NUSWhispers\Console\Commands\UpdateConfessionFacebookInfo',
+        'NUSWhispers\Console\Commands\PostScheduledConfessions',
     ];
 
     /**

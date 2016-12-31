@@ -87,7 +87,7 @@ if ($confession->status == 'Scheduled') {
         <p>
         <?php
         $status = $confession->status == 'Scheduled' ? $queue->status_after : $confession->status;
-        echo \Form::select('status', array_combine($confession->statuses(), $confession->statuses()), $status, ['class' => 'form-control'])
+        echo \Form::select('status', array_combine(\NUSWhispers\Models\Confession::statuses(), \NUSWhispers\Models\Confession::statuses()), $status, ['class' => 'form-control'])
         ?>
         </p>
         <p style="text-align:center; color: #999">Latest status updated {{$confession->status_updated_at->diffForHumans()}}.</p>
@@ -143,7 +143,7 @@ if ($confession->status == 'Scheduled') {
       <div class="panel-heading">Categories</div>
       <div class="panel-body">
         <?php $categories = $confession->categories()->get()->keyBy('confession_category_id'); ?>
-        @foreach (\App\Models\Category::categoryAsc()->get() as $cat)
+        @foreach (\NUSWhispers\Models\Category::categoryAsc()->get() as $cat)
         <div class="checkbox">
           <label>
           <?php echo \Form::checkbox('categories[]', $cat->confession_category_id, isset($categories[$cat->confession_category_id])) ?>
