@@ -2,15 +2,14 @@
 
 namespace NUSWhispers\Http\Controllers;
 
-use DB;
 use Cache;
+use DB;
+use Illuminate\Http\Request;
 use Input;
-use NUSWhispers\Models\Tag;
 use NUSWhispers\Models\ApiKey;
 use NUSWhispers\Models\Confession;
-use Illuminate\Http\Request;
+use NUSWhispers\Services\ConfessionService;
 use NUSWhispers\Services\FacebookBatchProcessor;
-use NUSWhispers\Repositories\ConfessionsRepository;
 
 class ConfessionsController extends Controller
 {
@@ -33,23 +32,23 @@ class ConfessionsController extends Controller
     protected $batchProcessor;
 
     /**
-     * Confessions repository.
+     * Confessions service.
      *
-     * @var \NUSWhispers\Repositories\ConfessionsRepository
+     * @var \NUSWhispers\Services\ConfessionService
      */
-    protected $confessionsRepo;
+    protected $service;
 
     /**
      * Creates a new ConfessionsController instance.
      *
-     * @param \NUSWhispers\Services\FacebookBatchProcessor    $batchProcessor
-     * @param \NUSWhispers\Repositories\ConfessionsRepository $confessionsRepo
+     * @param \NUSWhispers\Services\FacebookBatchProcessor  $batchProcessor
+     * @param \NUSWhispers\Services\ConfessionService       $service
      */
     public function __construct(FacebookBatchProcessor $batchProcessor,
-        ConfessionsRepository $confessionsRepo)
+        ConfessionService $service)
     {
         $this->batchProcessor = $batchProcessor;
-        $this->confessionsRepo = $confessionsRepo;
+        $this->service = $service;
     }
 
     /**
@@ -253,7 +252,7 @@ class ConfessionsController extends Controller
      *
      * @return Response
      */
-    public function store()
+    public function store(Request $request)
     {
         $validationRules = [
             'content' => 'required',
@@ -287,19 +286,13 @@ class ConfessionsController extends Controller
             $key->save();
         }
 
-        if (is_array(\Input::get('categories'))) {
-            $res = $this->confessionsRepo->create([
-                'content' => \Input::get('content'),
-                'images' => \Input::get('image'),
-            ], \Input::get('categories'));
-        } else {
-            $res = $this->confessionsRepo->create([
-                'content' => \Input::get('content'),
-                'images' => \Input::get('image'),
-            ]);
-        }
+        $confession = $this->service->create([
+            'content' => $request->input('content'),
+            'images' => $request->input('image'),
+            'categories' => $request->input('categories'),
+        ]);
 
-        return response()->json(['success' => $res]);
+        return response()->json(['success' => $confession->exists]);
     }
 
     /**
