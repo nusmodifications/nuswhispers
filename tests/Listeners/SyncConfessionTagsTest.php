@@ -26,7 +26,7 @@ class SyncConfessionTagsTest extends TestCase
 
         $this->listener->handle(new ConfessionWasCreated($confession));
 
-        $this->seeInDatabase('tags', [
+        $this->assertDatabaseHas('tags', [
             'confession_tag' => '#firstworldproblems',
         ]);
     }
@@ -59,11 +59,11 @@ class SyncConfessionTagsTest extends TestCase
 
         $this->listener->handle(new ConfessionWasUpdated($confession));
 
-        $this->seeInDatabase('tags', [
+        $this->assertDatabaseHas('tags', [
             'confession_tag' => '#secondworldproblems',
         ]);
 
-        $this->dontSeeInDatabase('confession_tags', [
+        $this->assertDatabaseMissing('confession_tags', [
             'confession_tag_id' => $firstTag->getKey(),
         ]);
     }
