@@ -3,7 +3,6 @@
 namespace NUSWhispers\Listeners;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
-use NUSWhispers\Events\BaseConfessionEvent;
 use SammyK\LaravelFacebookSdk\LaravelFacebookSdk;
 
 class DeleteConfessionFromFacebook implements ShouldQueue

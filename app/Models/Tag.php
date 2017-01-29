@@ -22,6 +22,6 @@ class Tag extends Model
 
     public function confessions()
     {
-        return $this->belongsToMany('NUSWhispers\Models\Confession', 'confession_tags', 'confession_tag_id', 'confession_id');
+        return $this->belongsToMany(Confession::class, 'confession_tags', 'confession_tag_id', 'confession_id');
     }
 }

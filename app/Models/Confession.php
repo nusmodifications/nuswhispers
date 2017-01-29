@@ -82,7 +82,7 @@ class Confession extends Model
      */
     public function logs()
     {
-        return $this->hasMany('NUSWhispers\Models\ConfessionLog');
+        return $this->hasMany(ConfessionLog::class, 'confession_id', 'confession_id');
     }
 
     /**
@@ -92,7 +92,7 @@ class Confession extends Model
      */
     public function moderatorComments()
     {
-        return $this->hasMany('NUSWhispers\Models\ModeratorComment');
+        return $this->hasMany(ModeratorComment::class, 'confession_id', 'confession_id');
     }
 
     /**
@@ -102,7 +102,7 @@ class Confession extends Model
      */
     public function queue()
     {
-        return $this->hasOne('NUSWhispers\Models\ConfessionQueue');
+        return $this->hasOne(ConfessionQueue::class, 'confession_id', 'confession_id');
     }
 
     public function isApproved()

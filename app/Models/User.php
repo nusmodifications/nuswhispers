@@ -57,6 +57,6 @@ class User extends Authenticatable
      */
     public function profiles()
     {
-        return $this->hasMany('NUSWhispers\Models\UserProfile');
+        return $this->hasMany(UserProfile::class, 'user_id', 'user_id');
     }
 }

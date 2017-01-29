@@ -2,7 +2,7 @@
 
 namespace NUSWhispers\Console\Commands;
 
-use Facebook;
+use SammyK\LaravelFacebookSdk\FacebookFacade as Facebook;
 use Illuminate\Console\Command;
 use NUSWhispers\Models\Confession;
 

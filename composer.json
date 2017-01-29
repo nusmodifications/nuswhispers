@@ -6,18 +6,16 @@
     "type": "project",
     "require": {
         "php": ">=7.0.0",
-        "facebook/php-sdk-v4": "~5.1",
-        "laravel/framework": "5.3.*",
-        "laravel/socialite": "~2.0",
-        "laravelcollective/html": "5.3.*",
+        "facebook/graph-sdk": "~5.1",
+        "laravel/framework": "5.4.*",
+        "laravel/socialite": "~3.0",
+        "laravelcollective/html": "5.4.*",
         "sammyk/laravel-facebook-sdk": "~3.0",
         "predis/predis": "^1.0",
         "anlutro/l4-settings": "^0.4.9"
     },
     "require-dev": {
         "phpunit/phpunit": "~5.0",
-        "symfony/dom-crawler": "3.1.*",
-        "symfony/css-selector": "3.1.*",
         "fzaninotto/faker": "^1.6",
         "mockery/mockery": "^0.9.6",
         "satooshi/php-coveralls": "^1.0"
