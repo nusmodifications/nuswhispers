@@ -3,8 +3,8 @@
 namespace NUSWhispers\Tests\Models;
 
 use NUSWhispers\Models\User;
-use NUSWhispers\Models\UserProfile;
 use NUSWhispers\Tests\TestCase;
+use NUSWhispers\Models\UserProfile;
 
 class UserProfileTest extends TestCase
 {

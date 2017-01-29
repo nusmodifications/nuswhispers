@@ -2,9 +2,9 @@
 
 namespace NUSWhispers\Tests\Models;
 
+use NUSWhispers\Tests\TestCase;
 use NUSWhispers\Models\Confession;
 use NUSWhispers\Models\ConfessionQueue;
-use NUSWhispers\Tests\TestCase;
 
 class ConfessionQueueTest extends TestCase
 {

@@ -2,10 +2,10 @@
 
 namespace NUSWhispers\Tests\Models;
 
-use NUSWhispers\Models\Confession;
-use NUSWhispers\Models\ConfessionLog;
 use NUSWhispers\Models\User;
 use NUSWhispers\Tests\TestCase;
+use NUSWhispers\Models\Confession;
+use NUSWhispers\Models\ConfessionLog;
 
 class ConfessionLogTest extends TestCase
 {
