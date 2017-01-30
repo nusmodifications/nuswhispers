@@ -48,7 +48,7 @@ class ConfessionQueue extends Model
      */
     public function confession()
     {
-        return $this->belongsTo('NUSWhispers\Models\Confession', 'confession_id');
+        return $this->belongsTo(Confession::class, 'confession_id', 'confession_id');
     }
 
     /**

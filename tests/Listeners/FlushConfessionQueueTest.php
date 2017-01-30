@@ -24,7 +24,7 @@ class FlushConfessionQueueTest extends TestCase
 
         $this->listener->handle(new ConfessionStatusWasChanged($confession, 'Scheduled'));
 
-        $this->dontSeeInDatabase('confession_queue', [
+        $this->assertDatabaseMissing('confession_queue', [
             'confession_id' => $confession->getKey(),
         ]);
     }

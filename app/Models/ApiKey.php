@@ -44,7 +44,7 @@ class ApiKey extends Model
 
     public function creator()
     {
-        return $this->belongsTo('NUSWhispers\Models\User', 'user_id', 'user_id');
+        return $this->belongsTo(User::class, 'user_id', 'user_id');
     }
 
     public static function generateKey()

@@ -27,6 +27,6 @@ class FbUser extends Model
      */
     public function favourites()
     {
-        return $this->belongsToMany('NUSWhispers\Models\Confession', 'favourites', 'fb_user_id', 'confession_id');
+        return $this->belongsToMany(Confession::class, 'favourites', 'fb_user_id', 'confession_id');
     }
 }

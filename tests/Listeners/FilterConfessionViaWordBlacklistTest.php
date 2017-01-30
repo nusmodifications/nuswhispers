@@ -30,7 +30,7 @@ class FilterConfessionViaWordBlacklistTest extends TestCase
 
         $this->listener->handle(new ConfessionWasCreated($confession));
 
-        $this->seeInDatabase('confessions', [
+        $this->assertDatabaseHas('confessions', [
             'confession_id' => $confession->getKey(),
             'status' => 'Rejected',
         ]);
@@ -46,7 +46,7 @@ class FilterConfessionViaWordBlacklistTest extends TestCase
 
         $this->listener->handle(new ConfessionWasCreated($confession));
 
-        $this->seeInDatabase('confessions', [
+        $this->assertDatabaseHas('confessions', [
             'confession_id' => $confession->getKey(),
             'status' => 'Pending',
         ]);

@@ -52,7 +52,7 @@ class Confession extends Model
      */
     public function categories()
     {
-        return $this->belongsToMany('NUSWhispers\Models\Category', 'confession_categories', 'confession_id', 'confession_category_id');
+        return $this->belongsToMany(Category::class, 'confession_categories', 'confession_id', 'confession_category_id');
     }
 
     /**
@@ -62,7 +62,7 @@ class Confession extends Model
      */
     public function tags()
     {
-        return $this->belongsToMany('NUSWhispers\Models\Tag', 'confession_tags', 'confession_id', 'confession_tag_id');
+        return $this->belongsToMany(Tag::class, 'confession_tags', 'confession_id', 'confession_tag_id');
     }
 
     /**
@@ -72,7 +72,7 @@ class Confession extends Model
      */
     public function favourites()
     {
-        return $this->belongsToMany('NUSWhispers\Models\FbUser', 'favourites', 'confession_id', 'fb_user_id');
+        return $this->belongsToMany(FbUser::class, 'favourites', 'confession_id', 'fb_user_id');
     }
 
     /**
@@ -82,7 +82,7 @@ class Confession extends Model
      */
     public function logs()
     {
-        return $this->hasMany('NUSWhispers\Models\ConfessionLog');
+        return $this->hasMany(ConfessionLog::class, 'confession_id', 'confession_id');
     }
 
     /**
@@ -92,7 +92,7 @@ class Confession extends Model
      */
     public function moderatorComments()
     {
-        return $this->hasMany('NUSWhispers\Models\ModeratorComment');
+        return $this->hasMany(ModeratorComment::class, 'confession_id', 'confession_id');
     }
 
     /**
@@ -102,7 +102,7 @@ class Confession extends Model
      */
     public function queue()
     {
-        return $this->hasOne('NUSWhispers\Models\ConfessionQueue');
+        return $this->hasOne(ConfessionQueue::class, 'confession_id', 'confession_id');
     }
 
     public function isApproved()

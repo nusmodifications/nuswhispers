@@ -55,7 +55,7 @@ class ModeratorComment extends Model
      */
     public function confession()
     {
-        return $this->belongsTo('NUSWhispers\Models\Confession');
+        return $this->belongsTo(Confession::class, 'confession_id', 'confession_id');
     }
 
     /**
@@ -65,6 +65,6 @@ class ModeratorComment extends Model
      */
     public function user()
     {
-        return $this->belongsTo('NUSWhispers\Models\User');
+        return $this->belongsTo(User::class, 'user_id', 'user_id');
     }
 }

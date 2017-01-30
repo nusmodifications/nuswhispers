@@ -2,9 +2,9 @@
 
 namespace NUSWhispers\Console\Commands;
 
-use Facebook;
 use Illuminate\Console\Command;
 use NUSWhispers\Models\Confession;
+use SammyK\LaravelFacebookSdk\FacebookFacade as Facebook;
 
 class UpdateConfessionFacebookInfo extends Command
 {

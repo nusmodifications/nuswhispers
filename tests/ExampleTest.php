@@ -12,6 +12,6 @@ class ExampleTest extends TestCase
     public function testAdminAsGuest()
     {
         $this->get('/admin')
-            ->assertRedirectedTo('/login');
+            ->assertRedirect('/login');
     }
 }

@@ -41,6 +41,11 @@ class ConfessionLog extends Model
      */
     protected $fillable = ['status_before', 'status_after', 'changed_by_user', 'created_on'];
 
+    public function confession()
+    {
+        return $this->belongsTo(Confession::class, 'confession_id', 'confession_id');
+    }
+
     /**
      * Defines user relationship from model.
      *
@@ -48,7 +53,7 @@ class ConfessionLog extends Model
      */
     public function user()
     {
-        return $this->belongsTo('NUSWhispers\Models\User', 'changed_by_user');
+        return $this->belongsTo(User::class, 'changed_by_user', 'user_id');
     }
 
     /**

@@ -29,7 +29,7 @@ class LogConfessionStatusChangeTest extends TestCase
 
         $this->listener->handle(new ConfessionStatusWasChanged($confession, 'Pending', $user));
 
-        $this->seeInDatabase('confession_logs', [
+        $this->assertDatabaseHas('confession_logs', [
             'confession_id' => $confession->getKey(),
             'status_before' => 'Pending',
             'status_after' => 'Approved',
@@ -44,7 +44,7 @@ class LogConfessionStatusChangeTest extends TestCase
         $confession = factory(\NUSWhispers\Models\Confession::class)->states('approved')->create();
         $this->listener->handle(new ConfessionStatusWasChanged($confession, 'Approved'));
 
-        $this->dontSeeInDatabase('confession_logs', [
+        $this->assertDatabaseMissing('confession_logs', [
             'confession_id' => $confession->getKey(),
         ]);
     }
