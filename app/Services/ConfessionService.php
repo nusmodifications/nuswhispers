@@ -137,18 +137,18 @@ class ConfessionService
      *
      * @param mixed $confession
      * @param string $status
-     * @param int $hours
+     * @param \DateTime $updateAt
      *
      * @return \NUSWhispers\Models\Confession
      */
-    protected function schedule($confession, $status = 'Approved', $hours = 1)
+    protected function schedule($confession, $status = 'Approved', $updateAt)
     {
         $confession = $this->resolveConfession($confession);
 
         $confession->queue()->delete();
         $confession->queue()->create([
             'status_after' => $status,
-            'update_status_at' => Carbon::now()->addHours($hours),
+            'update_status_at' => $updateAt,
         ]);
 
         return $confession;
@@ -167,6 +167,10 @@ class ConfessionService
         if (! empty($attributes['schedule'])) {
             $attributes['status_after'] = $attributes['status'];
             $attributes['status'] = 'Scheduled';
+
+            $attributes['schedule'] = is_string($attributes['schedule']) ?
+                Carbon::parse($attributes['schedule']) :
+                Carbon::now()->addHours($attributes['schedule']);
         }
 
         return $attributes;
@@ -189,7 +193,7 @@ class ConfessionService
             $this->schedule(
                 $confession,
                 $attributes['status_after'],
-                (int) $attributes['schedule']
+                $attributes['schedule']
             );
         }
 

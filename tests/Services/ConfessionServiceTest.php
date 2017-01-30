@@ -44,7 +44,7 @@ class ConfessionServiceTest extends TestCase
         ]);
 
         $this->assertEquals($confession->status, 'Scheduled');
-        $this->assertEquals($confession->queue->count(), 1);
+        $this->assertEquals($confession->queue()->count(), 1);
     }
 
     /** @test */
@@ -64,7 +64,7 @@ class ConfessionServiceTest extends TestCase
             'categories' => $categories,
         ]);
 
-        $this->assertEquals(count($categories), $confession->categories->count());
+        $this->assertEquals(count($categories), $confession->categories()->count());
     }
 
     /** @test */
@@ -77,7 +77,7 @@ class ConfessionServiceTest extends TestCase
             'categories' => null,
         ]);
 
-        $this->assertEquals(0, $confession->categories->count());
+        $this->assertEquals(0, $confession->categories()->count());
     }
 
     /** @test */
@@ -111,7 +111,7 @@ class ConfessionServiceTest extends TestCase
 
         $confession = $this->service->update($confession->getKey(), ['categories' => $categories]);
 
-        $this->assertEquals(count($categories), $confession->categories->count());
+        $this->assertEquals(count($categories), $confession->categories()->count());
     }
 
     /**
@@ -149,7 +149,26 @@ class ConfessionServiceTest extends TestCase
         ]);
 
         $this->assertEquals($confession->status, 'Scheduled');
-        $this->assertEquals($confession->queue->count(), 1);
+        $this->assertEquals($confession->queue()->count(), 1);
+    }
+
+    /** @test */
+    public function testUpdateScheduledDate()
+    {
+        $this->expectsEvents([
+            \NUSWhispers\Events\ConfessionStatusWasChanged::class,
+            \NUSWhispers\Events\ConfessionWasUpdated::class,
+            \NUSWhispers\Events\ConfessionWasScheduled::class,
+        ]);
+
+        $confession = factory(\NUSWhispers\Models\Confession::class)->states('pending')->create();
+        $confession = $this->service->update($confession, [
+            'schedule' => '2017-01-30T11:01:09+00:00',
+            'status' => 'Approved',
+        ]);
+
+        $this->assertEquals($confession->status, 'Scheduled');
+        $this->assertEquals('2017-01-30T11:01:09+00:00', $confession->queue()->first()->update_status_at->toW3cString());
     }
 
     /** @test */
@@ -180,8 +199,8 @@ class ConfessionServiceTest extends TestCase
 
         $confession = $this->service->updateStatus($confession, 'Approved', 3);
 
-        $this->assertEquals($confession->queue->count(), 1);
-        $this->assertEquals($confession->queue->first()->status_after, 'Approved');
+        $this->assertEquals($confession->queue()->count(), 1);
+        $this->assertEquals($confession->queue()->first()->status_after, 'Approved');
         $this->assertEquals($confession->status, 'Scheduled');
     }
 }
