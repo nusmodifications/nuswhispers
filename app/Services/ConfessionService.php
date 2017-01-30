@@ -141,7 +141,7 @@ class ConfessionService
      *
      * @return \NUSWhispers\Models\Confession
      */
-    protected function schedule($confession, $status = 'Approved', $updateAt)
+    protected function schedule($confession, $status, $updateAt)
     {
         $confession = $this->resolveConfession($confession);
 
