@@ -26,6 +26,7 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'api' => [
+            'cors',
             'throttle:120,1',
         ],
     ];
@@ -39,6 +40,7 @@ class Kernel extends HttpKernel
         'auth' => \NUSWhispers\Http\Middleware\Authenticate::class,
         'adminAuth' => \NUSWhispers\Http\Middleware\AuthenticateAdmin::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'cors' => \NUSWhispers\Http\Middleware\Cors::class,
         'guest' => \NUSWhispers\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
     ];
