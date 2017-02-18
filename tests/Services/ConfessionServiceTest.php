@@ -114,6 +114,17 @@ class ConfessionServiceTest extends TestCase
         $this->assertEquals(count($categories), $confession->categories()->count());
     }
 
+    /** @test */
+    public function testUpdateNoNewCategories()
+    {
+        $this->expectsEvents(\NUSWhispers\Events\ConfessionWasUpdated::class);
+        $confession = factory(\NUSWhispers\Models\Confession::class)->create();
+        $confession->categories()->saveMany(factory(\NUSWhispers\Models\Category::class, 3)->create());
+
+        $confession = $this->service->update($confession->getKey(), []);
+        $this->assertEquals(3, $confession->categories()->count());
+    }
+
     /**
      * @test
      * @expectedException \InvalidArgumentException
