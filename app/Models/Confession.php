@@ -38,7 +38,7 @@ class Confession extends Model
         'images',
         'fb_post_id',
         'status',
-        'status_updated_at'
+        'status_updated_at',
     ];
 
     public function getFacebookInformation()
