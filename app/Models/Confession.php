@@ -32,7 +32,14 @@ class Confession extends Model
     /**
      * Attributes should be mass-assignable.
      */
-    protected $fillable = ['content', 'images', 'fb_post_id', 'status', 'status_updated_at'];
+    protected $fillable = [
+        'content',
+        'fingerprint',
+        'images',
+        'fb_post_id',
+        'status',
+        'status_updated_at'
+    ];
 
     public function getFacebookInformation()
     {

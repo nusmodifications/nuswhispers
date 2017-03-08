@@ -45,6 +45,7 @@ angular.module('nuswhispersApp.controllers')
     $scope.submitConfession = function () {
         $scope.form.submitButtonDisabled = true;
         $scope.confessionData.categories = $scope.form.selectedCategoryIDs;
+        $scope.confessionData.token = localStorageService.get('confessionToken');
 
         if ($scope.hasConfessionLimitExceeded()) {
             return;
@@ -66,6 +67,7 @@ angular.module('nuswhispersApp.controllers')
                     }
                 }
                 decreaseConfessionLimit();
+                localStorageService.set('confessionToken', response.token);
             })
             .error(function (response) {
                 $scope.form.submitButtonDisabled = false;

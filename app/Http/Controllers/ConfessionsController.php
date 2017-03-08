@@ -260,6 +260,7 @@ class ConfessionsController extends Controller
             'categories' => 'array',
             'captcha' => 'required_without:api_key',
             'api_key' => 'required_without:captcha',
+            'token' => 'nullable|string',
         ];
 
         $validator = \Validator::make(\Input::all(), $validationRules);
@@ -290,9 +291,13 @@ class ConfessionsController extends Controller
             'content' => $request->input('content'),
             'images' => $request->input('image'),
             'categories' => $request->input('categories'),
+            'token' => $request->input('token'),
         ]);
 
-        return response()->json(['success' => $confession->exists]);
+        return response()->json([
+            'token' => $confession->fingerprint,
+            'success' => $confession->exists,
+        ]);
     }
 
     /**
