@@ -3,6 +3,7 @@
 namespace NUSWhispers\Services;
 
 use Carbon\Carbon;
+use Ramsey\Uuid\Uuid;
 use InvalidArgumentException;
 use NUSWhispers\Models\Confession;
 use NUSWhispers\Events\ConfessionWasCreated;
@@ -10,7 +11,6 @@ use NUSWhispers\Events\ConfessionWasDeleted;
 use NUSWhispers\Events\ConfessionWasUpdated;
 use NUSWhispers\Events\ConfessionWasScheduled;
 use NUSWhispers\Events\ConfessionStatusWasChanged;
-use Ramsey\Uuid\Uuid;
 
 class ConfessionService
 {
