@@ -15,7 +15,6 @@ class ConfessionServiceTest extends TestCase
         $this->service = $this->app->make(ConfessionService::class);
     }
 
-    /** @test */
     public function testCreate()
     {
         $this->expectsEvents(\NUSWhispers\Events\ConfessionWasCreated::class);
@@ -28,7 +27,29 @@ class ConfessionServiceTest extends TestCase
         $this->assertInstanceOf(\NUSWhispers\Models\Confession::class, $confession);
     }
 
-    /** @test */
+    public function testCreateFingerprint()
+    {
+        $this->expectsEvents(\NUSWhispers\Events\ConfessionWasCreated::class);
+
+        $confession = $this->service->create([
+            'content' => 'Test Content',
+        ]);
+
+        $this->assertNotNull($confession->fingerprint);
+    }
+
+    public function testCreateExistingFingerprint()
+    {
+        $this->expectsEvents(\NUSWhispers\Events\ConfessionWasCreated::class);
+
+        $confession = $this->service->create([
+            'content' => 'Test Content',
+            'token' => 'abc',
+        ]);
+
+        $this->assertEquals('abc', $confession->fingerprint);
+    }
+
     public function testCreateScheduled()
     {
         $this->expectsEvents([
@@ -47,7 +68,6 @@ class ConfessionServiceTest extends TestCase
         $this->assertEquals($confession->queue()->count(), 1);
     }
 
-    /** @test */
     public function testCreateWithCategories()
     {
         $this->expectsEvents(\NUSWhispers\Events\ConfessionWasCreated::class);
@@ -67,7 +87,6 @@ class ConfessionServiceTest extends TestCase
         $this->assertEquals(count($categories), $confession->categories()->count());
     }
 
-    /** @test */
     public function testCreateCategoriesNull()
     {
         $this->withoutEvents();
@@ -80,7 +99,6 @@ class ConfessionServiceTest extends TestCase
         $this->assertEquals(0, $confession->categories()->count());
     }
 
-    /** @test */
     public function testDelete()
     {
         $this->expectsEvents(\NUSWhispers\Events\ConfessionWasDeleted::class);
@@ -88,7 +106,6 @@ class ConfessionServiceTest extends TestCase
         $this->assertTrue($this->service->delete($confession->getKey()));
     }
 
-    /** @test */
     public function testUpdate()
     {
         $this->expectsEvents(\NUSWhispers\Events\ConfessionWasUpdated::class);
@@ -98,7 +115,6 @@ class ConfessionServiceTest extends TestCase
         $this->assertEquals('Part II', $confession->content);
     }
 
-    /** @test */
     public function testUpdateCategories()
     {
         $this->expectsEvents(\NUSWhispers\Events\ConfessionWasUpdated::class);
@@ -114,7 +130,6 @@ class ConfessionServiceTest extends TestCase
         $this->assertEquals(count($categories), $confession->categories()->count());
     }
 
-    /** @test */
     public function testUpdateNoNewCategories()
     {
         $this->expectsEvents(\NUSWhispers\Events\ConfessionWasUpdated::class);
@@ -126,7 +141,6 @@ class ConfessionServiceTest extends TestCase
     }
 
     /**
-     * @test
      * @expectedException \InvalidArgumentException
      */
     public function testUpdatePending()
@@ -135,7 +149,6 @@ class ConfessionServiceTest extends TestCase
         $this->service->update($confession->getKey(), ['status' => 'Pending']);
     }
 
-    /** @test */
     public function testUpdatePendingSameStatus()
     {
         $confession = factory(\NUSWhispers\Models\Confession::class)->states('pending')->create();
@@ -144,7 +157,6 @@ class ConfessionServiceTest extends TestCase
         $this->assertEquals('Pending', $confession->status);
     }
 
-    /** @test */
     public function testUpdateScheduled()
     {
         $this->expectsEvents([
@@ -163,7 +175,6 @@ class ConfessionServiceTest extends TestCase
         $this->assertEquals($confession->queue()->count(), 1);
     }
 
-    /** @test */
     public function testUpdateScheduledDate()
     {
         $this->expectsEvents([
@@ -182,7 +193,6 @@ class ConfessionServiceTest extends TestCase
         $this->assertEquals('2017-01-30T11:01:09+00:00', $confession->queue()->first()->update_status_at->toW3cString());
     }
 
-    /** @test */
     public function testUpdateStatus()
     {
         $this->expectsEvents([
@@ -197,7 +207,6 @@ class ConfessionServiceTest extends TestCase
         $this->assertEquals('Approved', $confession->status);
     }
 
-    /** @test */
     public function testUpdateStatusScheduled()
     {
         $this->expectsEvents([

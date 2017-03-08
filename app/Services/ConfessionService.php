@@ -3,6 +3,7 @@
 namespace NUSWhispers\Services;
 
 use Carbon\Carbon;
+use Ramsey\Uuid\Uuid;
 use InvalidArgumentException;
 use NUSWhispers\Models\Confession;
 use NUSWhispers\Events\ConfessionWasCreated;
@@ -133,6 +134,16 @@ class ConfessionService
     }
 
     /**
+     * Generates a fingerprint.
+     *
+     * @return string
+     */
+    protected function generateFingerprint()
+    {
+        return Uuid::uuid4()->toString();
+    }
+
+    /**
      * Schedules a confession to change status in x hours.
      *
      * @param mixed $confession
@@ -163,6 +174,12 @@ class ConfessionService
     protected function normalize(array $attributes)
     {
         $attributes['status_updated_at'] = Carbon::now();
+
+        $attributes['fingerprint'] = ! empty($attributes['token']) ?
+            $attributes['token'] :
+            $this->generateFingerprint();
+
+        unset($attributes['token']);
 
         if (! empty($attributes['schedule'])) {
             $attributes['status_after'] = $attributes['status'];
