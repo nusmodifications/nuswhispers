@@ -254,13 +254,15 @@ class ConfessionsController extends Controller
      */
     public function store(Request $request)
     {
+        $fingerprintKey = config('app.fingerprint_key');
+
         $validationRules = [
             'content' => 'required',
             'image' => 'url',
             'categories' => 'array',
             'captcha' => 'required_without:api_key',
             'api_key' => 'required_without:captcha',
-            'token' => 'nullable|string',
+            $fingerprintKey => 'nullable|string',
         ];
 
         $validator = \Validator::make(\Input::all(), $validationRules);
@@ -291,11 +293,11 @@ class ConfessionsController extends Controller
             'content' => $request->input('content'),
             'images' => $request->input('image'),
             'categories' => $request->input('categories'),
-            'token' => $request->input('token'),
+            'token' => $request->input($fingerprintKey),
         ]);
 
         return response()->json([
-            'token' => $confession->fingerprint,
+            $fingerprintKey => $confession->fingerprint,
             'success' => $confession->exists,
         ]);
     }

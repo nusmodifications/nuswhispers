@@ -2,6 +2,9 @@ angular.module('nuswhispersApp.controllers')
 .controller('SubmitController', function ($scope, $http, Confession, Category, localStorageService, vcRecaptchaService) {
     'use strict';
 
+    var FINGERPRINT_API_KEY = 'EW5AnBNC5YauIxLW<tN';
+    var FINGERPRINT_STORAGE_KEY = '7pF4ZPxJEE';
+
     // functions for controlling confession submission limit
     function getConfessionLimit() {
         var doResetLimit = !localStorageService.get('confessionLimit.date') ||
@@ -45,7 +48,7 @@ angular.module('nuswhispersApp.controllers')
     $scope.submitConfession = function () {
         $scope.form.submitButtonDisabled = true;
         $scope.confessionData.categories = $scope.form.selectedCategoryIDs;
-        $scope.confessionData.token = localStorageService.get('confessionToken');
+        $scope.confessionData[FINGERPRINT_API_KEY] = localStorageService.get(FINGERPRINT_STORAGE_KEY);
 
         if ($scope.hasConfessionLimitExceeded()) {
             return;
@@ -67,7 +70,7 @@ angular.module('nuswhispersApp.controllers')
                     }
                 }
                 decreaseConfessionLimit();
-                localStorageService.set('confessionToken', response.token);
+                localStorageService.set(FINGERPRINT_STORAGE_KEY, response[FINGERPRINT_API_KEY]);
             })
             .error(function (response) {
                 $scope.form.submitButtonDisabled = false;
