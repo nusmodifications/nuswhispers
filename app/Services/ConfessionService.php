@@ -24,6 +24,8 @@ class ConfessionService
     public function create(array $attributes)
     {
         $attributes['status'] = 'Pending';
+
+        $attributes = $this->checkFingerprint($attributes);
         $attributes = $this->normalize($attributes);
 
         $confession = Confession::create($attributes);
@@ -95,6 +97,24 @@ class ConfessionService
         $this->dispatchStatusEvents($confession, $originalStatus);
 
         return $confession;
+    }
+
+    /**
+     * Check fingerprint.
+     *
+     * @param  array $attributes
+     *
+     * @return array
+     */
+    protected function checkFingerprint(array $attributes = [])
+    {
+        $attributes['fingerprint'] = ! empty($attributes['token']) ?
+            $attributes['token'] :
+            $this->generateFingerprint();
+
+        unset($attributes['token']);
+
+        return $attributes;
     }
 
     /**
@@ -174,12 +194,6 @@ class ConfessionService
     protected function normalize(array $attributes)
     {
         $attributes['status_updated_at'] = Carbon::now();
-
-        $attributes['fingerprint'] = ! empty($attributes['token']) ?
-            $attributes['token'] :
-            $this->generateFingerprint();
-
-        unset($attributes['token']);
 
         if (! empty($attributes['schedule'])) {
             $attributes['status_after'] = $attributes['status'];
