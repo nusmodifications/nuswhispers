@@ -142,7 +142,7 @@ class ConfessionServiceTest extends TestCase
         $this->service
             ->findByFingerprint($confessions->first())
             ->each(function ($confession) use ($confessions) {
-               $this->assertEquals('test', $confession->fingerprint);
+                $this->assertEquals('test', $confession->fingerprint);
             });
     }
 
