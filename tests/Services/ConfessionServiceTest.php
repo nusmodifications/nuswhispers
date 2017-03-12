@@ -7,12 +7,39 @@ use NUSWhispers\Services\ConfessionService;
 
 class ConfessionServiceTest extends TestCase
 {
+    /** @var \NUSWhispers\Services\ConfessionService */
     protected $service;
 
     public function setUp()
     {
         parent::setUp();
         $this->service = $this->app->make(ConfessionService::class);
+    }
+
+    public function testCountByFingerprint()
+    {
+        $confessions = factory(\NUSWhispers\Models\Confession::class, 5)->create([
+            'fingerprint' => 'test',
+        ]);
+
+        $this->assertEquals(5, $this->service->countByFingerprint($confessions->first()));
+    }
+
+    public function testCountByFingerprintWithStatus()
+    {
+        $confessions = factory(\NUSWhispers\Models\Confession::class, 5)
+            ->states(['approved'])
+            ->create([
+                'fingerprint' => 'test',
+            ]);
+
+        factory(\NUSWhispers\Models\Confession::class, 15)
+            ->states(['rejected'])
+            ->create([
+                'fingerprint' => 'test',
+            ]);
+
+        $this->assertEquals(5, $this->service->countByFingerprint($confessions->first(), 'Approved'));
     }
 
     public function testCreate()
@@ -104,6 +131,41 @@ class ConfessionServiceTest extends TestCase
         $this->expectsEvents(\NUSWhispers\Events\ConfessionWasDeleted::class);
         $confession = factory(\NUSWhispers\Models\Confession::class)->create();
         $this->assertTrue($this->service->delete($confession->getKey()));
+    }
+
+    public function testFindByFingerprint()
+    {
+        $confessions = factory(\NUSWhispers\Models\Confession::class, 5)->create([
+            'fingerprint' => 'test',
+        ]);
+
+        $this->service
+            ->findByFingerprint($confessions->first())
+            ->each(function ($confession) use ($confessions) {
+                $this->assertEquals('test', $confession->fingerprint);
+            });
+    }
+
+    public function testFindByFingerprintWithStatus()
+    {
+        $confessions = factory(\NUSWhispers\Models\Confession::class, 5)
+            ->states(['approved'])
+            ->create([
+                'fingerprint' => 'test',
+            ]);
+
+        factory(\NUSWhispers\Models\Confession::class, 15)
+            ->states(['rejected'])
+            ->create([
+                'fingerprint' => 'test',
+            ]);
+
+        $this->service
+            ->findByFingerprint($confessions->first(), 'Approved')
+            ->each(function ($confession) use ($confessions) {
+                $this->assertEquals('test', $confession->fingerprint);
+                $this->assertEquals('Approved', $confession->status);
+            });
     }
 
     public function testUpdate()

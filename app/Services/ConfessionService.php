@@ -15,6 +15,19 @@ use NUSWhispers\Events\ConfessionStatusWasChanged;
 class ConfessionService
 {
     /**
+     * Returns confession count by fingerprint.
+     *
+     * @param \NUSWhispers\Models\Confession
+     * @param string|null $status
+     *
+     * @return mixed
+     */
+    public function countByFingerprint(Confession $confession, $status = null)
+    {
+        return $this->buildFingerprintQuery($confession, $status)->count();
+    }
+
+    /**
      * Creates a new confession.
      *
      * @param array $attributes
@@ -53,6 +66,19 @@ class ConfessionService
         event(new ConfessionWasDeleted($confession, $this->resolveUser($confession)));
 
         return $result;
+    }
+
+    /**
+     * Returns confessions by fingerprint.
+     *
+     * @param \NUSWhispers\Models\Confession
+     * @param string|null $status
+     *
+     * @return mixed
+     */
+    public function findByFingerprint(Confession $confession, $status = null)
+    {
+        return $this->buildFingerprintQuery($confession, $status)->get();
     }
 
     /**
@@ -97,6 +123,26 @@ class ConfessionService
         $this->dispatchStatusEvents($confession, $originalStatus);
 
         return $confession;
+    }
+
+    /**
+     * Build fingerprint query.
+     *
+     * @param \NUSWhispers\Models\Confession $confession
+     * @param null $status
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function buildFingerprintQuery($confession, $status = null)
+    {
+        /** @var \Illuminate\Database\Eloquent\Builder $builder */
+        $builder = Confession::where('fingerprint', $confession->fingerprint);
+
+        if ($status !== null) {
+            $builder = $builder->where('status', $status);
+        }
+
+        return $builder;
     }
 
     /**

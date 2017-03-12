@@ -3,6 +3,7 @@
 namespace NUSWhispers\Http\Controllers\Admin;
 
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use NUSWhispers\Models\Category;
 use NUSWhispers\Models\Confession;
 use NUSWhispers\Models\ModeratorComment;
@@ -20,7 +21,7 @@ class ConfessionsAdminController extends AdminController
         $this->service = $service;
     }
 
-    public function getIndex($status = 'Pending')
+    public function getIndex(Request $request, $status = 'Pending')
     {
         $status = ucfirst($status);
         if ($status != 'Pending') {
@@ -29,23 +30,23 @@ class ConfessionsAdminController extends AdminController
             $query = Confession::orderBy('created_at', 'asc');
         }
 
-        if (\Input::get('category')) {
-            $query->whereHas('categories', function ($query) {
-                $query->where('confession_categories.confession_category_id', '=', intval(\Input::get('category')));
+        if ($request->input('category')) {
+            $query->whereHas('categories', function ($query) use ($request) {
+                $query->where('confession_categories.confession_category_id', '=', (int) $request->input('category'));
             });
         }
 
-        if (\Input::get('q')) {
-            $search = stripslashes(\Input::get('q'));
+        if ($request->input('q')) {
+            $search = stripslashes($request->input('q'));
             $query->where(function ($q) use ($search) {
                 $q->where('content', 'LIKE', "%$search%");
                 $q->orWhere('confession_id', (int) $search);
             });
         }
 
-        if (\Input::get('start') && \Input::get('end')) {
-            $start = Carbon::createFromFormat('U', strtotime(\Input::get('start')))->startOfDay();
-            $end = Carbon::createFromFormat('U', strtotime(\Input::get('end')))->startOfDay();
+        if ($request->input('start') && $request->input('end')) {
+            $start = Carbon::createFromFormat('U', strtotime($request->input('start')))->startOfDay();
+            $end = Carbon::createFromFormat('U', strtotime($request->input('end')))->startOfDay();
 
             if ($start > $end) {
                 return \Redirect::back()->withMessage('Start date cannot be later than end date.')
@@ -54,6 +55,10 @@ class ConfessionsAdminController extends AdminController
 
             $query->where('created_at', '>=', $start->toDateTimeString());
             $query->where('created_at', '<', $end->toDateTimeString());
+        }
+
+        if ($request->input('fingerprint')) {
+            $query->where('fingerprint', $request->input('fingerprint'));
         }
 
         if ($status != 'All') {
