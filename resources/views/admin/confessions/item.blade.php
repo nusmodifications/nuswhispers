@@ -120,7 +120,7 @@
         </a>
         &nbsp;
         <a title="Pending confessions by the same fingerprint" href="/admin/confessions/index/pending?fingerprint={{ urlencode($confession->fingerprint) }}">
-          <span class="typcn typcn-minus"></span>
+          <span class="typcn typcn-media-record"></span>
           {{ $confessionService->countByFingerprint($confession, 'Pending') }}
         </a>
         &nbsp;
