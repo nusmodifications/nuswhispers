@@ -15,6 +15,7 @@ class EventServiceProvider extends ServiceProvider
         'NUSWhispers\Events\ConfessionWasCreated' => [
             'NUSWhispers\Listeners\SyncConfessionTags',
             'NUSWhispers\Listeners\FilterConfessionViaWordBlacklist',
+            'NUSWhispers\Listeners\FilterConfessionViaFingerprint',
         ],
         'NUSWhispers\Events\ConfessionWasUpdated' => [
             'NUSWhispers\Listeners\SyncConfessionTags',
@@ -36,14 +37,4 @@ class EventServiceProvider extends ServiceProvider
             'NUSWhispers\Listeners\DeleteConfessionFromFacebook',
         ],
     ];
-
-    /**
-     * Register any events for your application.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        parent::boot();
-    }
 }
