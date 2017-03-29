@@ -3,10 +3,10 @@
 namespace NUSWhispers\Listeners;
 
 use Carbon\Carbon;
+use NUSWhispers\Models\Confession;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use NUSWhispers\Events\ConfessionWasCreated;
 use anlutro\LaravelSettings\Facade as Settings;
-use NUSWhispers\Models\Confession;
 
 class FilterConfessionViaFingerprint implements ShouldQueue
 {
