@@ -2,8 +2,8 @@
 
 namespace NUSWhispers\Http\Controllers\Admin;
 
-use anlutro\LaravelSettings\Facade as Settings;
 use Illuminate\Support\Facades\Redirect;
+use anlutro\LaravelSettings\Facade as Settings;
 use NUSWhispers\Http\Requests\AdminSettingsRequest;
 
 class SettingsAdminController extends AdminController
