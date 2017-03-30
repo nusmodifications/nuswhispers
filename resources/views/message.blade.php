@@ -5,3 +5,14 @@
 @if(\Session::has('message'))
 <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
 @endif
+
+@if($errors->any())
+  <div class="alert alert-danger">
+    Please fix the following validation errors:
+    <ul>
+      @foreach($errors->all() as $error)
+        <li>{{ $error }}</li>
+      @endforeach
+    </ul>
+  </div>
+@endif

@@ -2,9 +2,9 @@
 
 namespace NUSWhispers\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use anlutro\LaravelSettings\Facade as Settings;
+use NUSWhispers\Http\Requests\AdminSettingsRequest;
 
 class SettingsAdminController extends AdminController
 {
@@ -23,9 +23,13 @@ class SettingsAdminController extends AdminController
         ]);
     }
 
-    public function postIndex(Request $request)
+    public function postIndex(AdminSettingsRequest $request)
     {
-        Settings::set('word_blacklist', $request->input('word_blacklist', ''));
+        Settings::set($request->only([
+            'word_blacklist',
+            'rejection_net_score',
+            'rejection_decay',
+        ]));
         Settings::save();
 
         return Redirect::back()->withMessage('Settings successfully saved.')
