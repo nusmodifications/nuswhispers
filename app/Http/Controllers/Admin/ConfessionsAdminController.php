@@ -66,6 +66,8 @@ class ConfessionsAdminController extends AdminController
         }
 
         $confessions = $query->with('moderatorComments')->paginate(10);
+        $confessions->appends($request->input());
+
         $categories = Category::orderBy('confession_category', 'asc')->pluck('confession_category_id', 'confession_category')->all();
 
         return view('admin.confessions.index', [
