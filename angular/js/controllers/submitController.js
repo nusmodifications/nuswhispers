@@ -54,8 +54,8 @@ angular.module('nuswhispersApp.controllers')
             return;
         }
         $scope.confessionData.content = $scope.confessionData.content
-            .replace(/nus\s*whispers?/gi, 'NUSWhispers')
-            .replace(/nus\s*mods?/gi, 'NUSMods');
+            .replace(/nus\s*whispers?\b/gi, 'NUSWhispers')
+            .replace(/nus\s*mods?\b/gi, 'NUSMods');
         Confession.submit($scope.confessionData)
             .success(function (response) {
                 $scope.form.submitSuccess = response.success;
