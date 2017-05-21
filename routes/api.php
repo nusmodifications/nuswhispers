@@ -31,3 +31,5 @@ Route::post('fbuser/login', 'FbUsersController@postLogin');
 Route::post('fbuser/logout', 'FbUsersController@postLogout');
 Route::post('fbuser/favourite', 'FbUsersController@postFavourite');
 Route::post('fbuser/unfavourite', 'FbUsersController@postUnfavourite');
+
+Route::options('{all?}', 'ApiController@index');
