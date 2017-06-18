@@ -88,7 +88,7 @@
       </a>
     </div>
   </div>
-  <div class="post-content">#{{ $confession->confession_id }}:&nbsp;{{ $confession->getFormattedContent() }}</div>
+  <div class="post-content">#{{ $confession->confession_id }}:&nbsp;{!! $confession->getFormattedContent() !!}</div>
   @if ($confession->images)
     <div class="post-image"><img src="{{ $confession->images }}"></div>
   @endif

@@ -202,8 +202,11 @@ class Confession extends Model
 
     public function getFormattedContent()
     {
+        // Encode HTML entities
+        $content = htmlentities($this->content);
+
         // Wrap URLs with <a>
-        $content = preg_replace('/(\b(https?|ftp):\/\/[A-Z0-9+&@#\/%?=~_|!:,.;-]*[-A-Z0-9+&@#\/%=~_|])/im', '<a href="$1" target="_blank">$1</a>', $this->content);
+        $content = preg_replace('/(\b(https?|ftp):\/\/[A-Z0-9+&@#\/%?=~_|!:,.;-]*[-A-Z0-9+&@#\/%=~_|])/im', '<a href="$1" target="_blank">$1</a>', $content);
 
         // Wrap tags with <a>
         $matches = [];
