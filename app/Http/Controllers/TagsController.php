@@ -69,7 +69,7 @@ class TagsController extends Controller
                 ->limit($num)
                 ->get();
 
-            return ['data' => ['tags' => $tags]];
+            return ['data' => ['tags' => $this->transformTags($tags)]];
         });
 
         return response()->json($output);
@@ -91,5 +91,25 @@ class TagsController extends Controller
             });
 
         return array_values($tags->toArray());
+    }
+
+    /**
+     * Transform tags to its correct type.
+     *
+     * @param $tags
+     *
+     * @return mixed
+     */
+    protected function transformTags($tags)
+    {
+        return collect($tags)
+            ->map(function ($tag) {
+                return [
+                    'confession_tag_id' => (string) $tag->confession_tag_id,
+                    'confession_tag' => (string) $tag->confession_tag,
+                    'popularity_rating' => $tag->popularity_rating,
+                ];
+            })
+            ->all();
     }
 }
