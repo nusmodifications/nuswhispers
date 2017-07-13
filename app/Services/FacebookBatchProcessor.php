@@ -2,7 +2,6 @@
 
 namespace NUSWhispers\Services;
 
-use Config;
 use SammyK\LaravelFacebookSdk\LaravelFacebookSdk as Facebook;
 
 class FacebookBatchProcessor
@@ -28,7 +27,7 @@ class FacebookBatchProcessor
      */
     public function __construct(Facebook $fb)
     {
-        $this->accessToken = Config::get('laravel-facebook-sdk.facebook_config.page_access_token');
+        $this->accessToken = config('laravel-facebook-sdk.facebook_config.page_access_token');
         $this->fb = $fb;
 
         $this->fb->setDefaultAccessToken($this->accessToken);
@@ -68,7 +67,7 @@ class FacebookBatchProcessor
         foreach ($confessions as $confession) {
             $requestUrl = sprintf(
                 '/%s?oauth_token=%s&fields=%scomments.summary(true).filter(toplevel).fields(parent.fields(id),comments.summary(true),message,from,created_time),likes.summary(true)',
-                $confession->getAttribute('fb_post_id'),
+                config('services.facebook.page_id') . '_' . $confession->getAttribute('fb_post_id'),
                 $this->accessToken,
                 ! empty($confession->getAttribute('images')) ? 'images,' : ''
             );
