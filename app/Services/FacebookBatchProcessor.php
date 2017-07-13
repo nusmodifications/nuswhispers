@@ -2,6 +2,7 @@
 
 namespace NUSWhispers\Services;
 
+use NUSWhispers\Models\Confession;
 use SammyK\LaravelFacebookSdk\LaravelFacebookSdk as Facebook;
 
 class FacebookBatchProcessor
@@ -67,7 +68,7 @@ class FacebookBatchProcessor
         foreach ($confessions as $confession) {
             $requestUrl = sprintf(
                 '/%s?oauth_token=%s&fields=%scomments.summary(true).filter(toplevel).fields(parent.fields(id),comments.summary(true),message,from,created_time),likes.summary(true)',
-                config('services.facebook.page_id') . '_' . $confession->getAttribute('fb_post_id'),
+                $this->parseFacebookPostId($confession),
                 $this->accessToken,
                 ! empty($confession->getAttribute('images')) ? 'images,' : ''
             );
@@ -90,5 +91,19 @@ class FacebookBatchProcessor
         });
 
         return $confessions;
+    }
+
+    /**
+     * Parse the correct Facebook post ID to pass in through.
+     *
+     * @param \NUSWhispers\Models\Confession $confession
+     *
+     * @return mixed|string
+     */
+    protected function parseFacebookPostId(Confession $confession)
+    {
+        return $confession->getAttribute('images') ?
+            $confession->getAttribute('fb_post_id') :
+            config('services.facebook.page_id') . '_' . $confession->getAttribute('fb_post_id');
     }
 }
