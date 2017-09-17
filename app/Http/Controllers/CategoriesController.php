@@ -32,7 +32,7 @@ class CategoriesController extends Controller
     public function show($categoryId)
     {
         $category = Category::find($categoryId);
-        
+
         if ($category === null) {
             return response()->json(['success' => false]);
         }

@@ -3,9 +3,9 @@
 namespace NUSWhispers\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-use NUSWhispers\Models\UserProfile;
-use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Socialite\Facades\Socialite;
+use NUSWhispers\Models\UserProfile;
 
 class ProfileController extends AdminController
 {
