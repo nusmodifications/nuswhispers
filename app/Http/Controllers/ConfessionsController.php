@@ -265,22 +265,22 @@ class ConfessionsController extends Controller
             $fingerprintKey => 'nullable|string',
         ];
 
-        $validator = \Validator::make(\Input::all(), $validationRules);
+        $validator = \Validator::make(request()->all(), $validationRules);
 
         if ($validator->fails()) {
             return response()->json(['success' => false, 'errors' => $validator->messages()]);
         }
 
         // Check reCAPTCHA
-        if (! empty(\Input::get('captcha'))) {
-            $captchaResponseJSON = file_get_contents(sprintf(\Config::get('services.reCAPTCHA.verify'), \Config::get('services.reCAPTCHA.key'), \Input::get('captcha')));
+        if (! empty(request()->input('captcha'))) {
+            $captchaResponseJSON = file_get_contents(sprintf(\Config::get('services.reCAPTCHA.verify'), \Config::get('services.reCAPTCHA.key'), request()->input('captcha')));
             $captchaResponse = json_decode($captchaResponseJSON);
 
             if (! $captchaResponse->success) {
                 return response()->json(['success' => false, 'errors' => ['reCAPTCHA' => ['The reCAPTCHA was not entered correctly. Please try again.']]]);
             }
         } else {
-            $key = ApiKey::where('key', \Input::get('api_key'))->first();
+            $key = ApiKey::where('key', request()->input('api_key'))->first();
             if (! $key) {
                 return response()->json(['success' => false, 'errors' => ['API key' => ['Invalid API key. Please try again or use reCAPTCHA.']]]);
             }

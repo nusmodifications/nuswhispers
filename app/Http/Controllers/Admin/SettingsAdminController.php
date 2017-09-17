@@ -32,7 +32,7 @@ class SettingsAdminController extends AdminController
         ]));
         Settings::save();
 
-        return Redirect::back()->withMessage('Settings successfully saved.')
+        return redirect()->back()->withMessage('Settings successfully saved.')
             ->with('alert-class', 'alert-success');
     }
 }

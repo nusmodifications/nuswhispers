@@ -21,18 +21,18 @@
       </a>
       <hr>
       <ul class="nav main-nav">
-        <li class="{{ Request::is('admin/profile') ? 'active' : '' }}"><a href="/admin/profile"><span class="typcn typcn-user"></span>My Profile</a></li>
+        <li class="{{ request()->is('admin/profile') ? 'active' : '' }}"><a href="/admin/profile"><span class="typcn typcn-user"></span>My Profile</a></li>
       </ul>
       <hr>
       <h2 class="nav-section-label">Confessions Management</h2>
       <ul class="nav main-nav">
-        <li class="{{ Request::is('admin/confessions/index/pending') || Request::is('admin/confessions') ? 'active' : '' }}">
+        <li class="{{ request()->is('admin/confessions/index/pending') || request()->is('admin/confessions') ? 'active' : '' }}">
           <a href="/admin/confessions">
             <span class="typcn typcn-warning"></span>Pending
             <span class="badge">{{ \NUSWhispers\Models\Confession::pending()->count() }}</span>
           </a>
         </li>
-        <li class="{{ Request::is('admin/confessions/index/approved') ? 'active' : '' }}">
+        <li class="{{ request()->is('admin/confessions/index/approved') ? 'active' : '' }}">
           <a href="/admin/confessions/index/approved">
               <span class="typcn typcn-tick"></span>Approved
           </a>
@@ -40,10 +40,10 @@
       </ul>
       <hr>
       <ul class="nav main-nav">
-        <li class="{{ Request::is('admin/api-keys') ? 'active' : ''}}"><a href="/admin/api-keys"><span class="typcn typcn-key"></span>API Keys Management</a></li>
-        @if (\Auth::user()->role == 'Administrator')
-        <li class="{{ Request::is('admin/users') ? 'active' : '' }}"><a href="/admin/users"><span class="typcn typcn-group"></span>User Management</a></li>
-        <li class="{{ Request::is('admin/settings') ? 'active' : '' }}"><a href="/admin/settings"><span class="typcn typcn-spanner"></span>Settings</a></li>
+        <li class="{{ request()->is('admin/api-keys') ? 'active' : ''}}"><a href="/admin/api-keys"><span class="typcn typcn-key"></span>API Keys Management</a></li>
+        @if (auth()->user()->role === 'Administrator')
+        <li class="{{ request()->is('admin/users') ? 'active' : '' }}"><a href="/admin/users"><span class="typcn typcn-group"></span>User Management</a></li>
+        <li class="{{ request()->is('admin/settings') ? 'active' : '' }}"><a href="/admin/settings"><span class="typcn typcn-spanner"></span>Settings</a></li>
         @endif
         <li><a href="/logout"><span class="typcn typcn-eject"></span>Logout</a></li>
       </ul>

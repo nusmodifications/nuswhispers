@@ -27,13 +27,13 @@
     @foreach ($users as $user)
     <tr>
       <td>{{$user->email}}</td>
-      <td>{{$user->name ? $user->name : '-'}}</td>
+      <td>{{$user->name ?: '-'}}</td>
       <td>{{$user->role}}</td>
       <td>
         <a class="btn btn-sm" href="/admin/users/edit/{{ $user->user_id }}">
           Edit
         </a>
-        @if (\Auth::user()->user_id != $user->user_id)
+        @if (auth()->user()->user_id !== $user->user_id)
         <a class="btn btn-sm btn-danger" href="/admin/users/delete/{{ $user->user_id }}">
           Delete
         </a>

@@ -21,9 +21,9 @@ class AuthenticateAdmin
         if (Auth::guard($guard)->user()->role !== 'Administrator') {
             if ($request->ajax()) {
                 return response('Unauthorized.', 401);
-            } else {
-                return \Redirect::back()->withMessage('You are not authorized to visit this page.')->with('alert-class', 'alert-warning');
             }
+
+            return redirect()->back()->withMessage('You are not authorized to visit this page.')->with('alert-class', 'alert-warning');
         }
 
         return $next($request);

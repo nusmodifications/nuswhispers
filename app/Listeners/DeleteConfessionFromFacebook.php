@@ -39,7 +39,7 @@ class DeleteConfessionFromFacebook implements ShouldQueue
 
         if (
             ! config('app.manual_mode') &&
-            (! $confession->exists || in_array($confession->status, ['Pending', 'Rejected']))
+            (! $confession->exists || in_array($confession->status, ['Pending', 'Rejected'], true))
         ) {
             $endpoint = $confession->images ?
                 '/' . $confession->fb_post_id :

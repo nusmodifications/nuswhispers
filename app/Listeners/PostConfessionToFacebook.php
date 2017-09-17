@@ -40,7 +40,7 @@ class PostConfessionToFacebook implements ShouldQueue
         $confession = $event->confession;
 
         // Someone might have changed his/her mind...
-        if (! in_array($confession->status, ['Approved', 'Featured'])) {
+        if (! in_array($confession->status, ['Approved', 'Featured'], true)) {
             return true;
         }
 

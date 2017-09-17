@@ -49,7 +49,7 @@ class ConfessionsAdminController extends AdminController
             $end = Carbon::createFromFormat('U', strtotime($request->input('end')))->startOfDay();
 
             if ($start > $end) {
-                return \Redirect::back()->withMessage('Start date cannot be later than end date.')
+                return redirect()->back()->withMessage('Start date cannot be later than end date.')
                     ->with('alert-class', 'alert-danger');
             }
 
@@ -61,7 +61,7 @@ class ConfessionsAdminController extends AdminController
             $query->where('fingerprint', $request->input('fingerprint'));
         }
 
-        if ($status != 'All') {
+        if ($status !== 'All') {
             $query->where('status', '=', ucfirst($status));
         }
 
@@ -88,26 +88,26 @@ class ConfessionsAdminController extends AdminController
 
     public function postEdit($id)
     {
-        if (\Input::get('action') == 'Post Comment') {
+        if (request()->input('action') === 'Post Comment') {
             $validationRules = [
                 'comment' => 'required',
             ];
 
-            $validator = \Validator::make(\Input::all(), $validationRules);
+            $validator = \Validator::make(request()->all(), $validationRules);
             if ($validator->fails()) {
-                return \Redirect::back()->withInput()->withErrors($validator);
+                return redirect()->back()->withInput()->withErrors($validator);
             }
 
             $comment = new ModeratorComment([
-                'content' => \Input::get('comment'),
-                'user_id' => \Auth::user()->getAuthIdentifier(),
+                'content' => request()->input('comment'),
+                'user_id' => auth()->user()->getAuthIdentifier(),
                 'created_at' => new \DateTime(),
             ]);
 
             $confession = Confession::with('moderatorComments')->findOrFail($id);
             $confession->moderatorComments()->save($comment);
 
-            return \Redirect::back()->withMessage('Comment successfully added.')
+            return redirect()->back()->withMessage('Comment successfully added.')
                     ->with('alert-class', 'alert-success');
         } else {
             $validationRules = [
@@ -116,30 +116,30 @@ class ConfessionsAdminController extends AdminController
                 'status' => 'in:Featured,Pending,Approved,Rejected',
             ];
 
-            $validator = \Validator::make(\Input::all(), $validationRules);
+            $validator = \Validator::make(request()->all(), $validationRules);
             if ($validator->fails()) {
-                return \Redirect::back()->withInput()->withErrors($validator);
+                return redirect()->back()->withInput()->withErrors($validator);
             }
 
             try {
                 $data = [
-                    'content' => \Input::get('content'),
-                    'status' => \Input::get('status'),
-                    'images' => \Input::get('images'),
-                    'schedule' => \Input::get('schedule'),
-                    'categories' => \Input::get('categories', []),
+                    'content' => request()->input('content'),
+                    'status' => request()->input('status'),
+                    'images' => request()->input('images'),
+                    'schedule' => request()->input('schedule'),
+                    'categories' => request()->input('categories', []),
                 ];
 
-                if (env('MANUAL_MODE', false) && \Input::get('fb_post_id')) {
-                    $data['fb_post_id'] = \Input::get('fb_post_id');
+                if (env('MANUAL_MODE', false) && request()->input('fb_post_id')) {
+                    $data['fb_post_id'] = request()->input('fb_post_id');
                 }
 
                 $this->service->update($id, $data);
 
-                return \Redirect::back()->withMessage('Confession successfully updated.')
+                return redirect()->back()->withMessage('Confession successfully updated.')
                     ->with('alert-class', 'alert-success');
             } catch (\Exception $e) {
-                return \Redirect::back()->withMessage('Failed updating confession: ' . $e->getMessage())
+                return redirect()->back()->withMessage('Failed updating confession: ' . $e->getMessage())
                     ->with('alert-class', 'alert-danger');
             }
         }
@@ -147,12 +147,12 @@ class ConfessionsAdminController extends AdminController
 
     public function getApprove($id, $hours = 0)
     {
-        return $this->switchOrScheduleConfession($id, 'Approved', intval($hours));
+        return $this->switchOrScheduleConfession($id, 'Approved', (int) $hours);
     }
 
     public function getFeature($id, $hours = 0)
     {
-        return $this->switchOrScheduleConfession($id, 'Featured', intval($hours));
+        return $this->switchOrScheduleConfession($id, 'Featured', (int) $hours);
     }
 
     protected function switchOrScheduleConfession($id, $status, $hours)
@@ -160,21 +160,20 @@ class ConfessionsAdminController extends AdminController
         $confession = Confession::findOrFail($id);
 
         if (! $this->userHasPageToken()) {
-            return \Redirect::back()->withMessage('You have not connected your account with Facebook.')->with('alert-class', 'alert-danger');
+            return redirect()->back()->withMessage('You have not connected your account with Facebook.')->with('alert-class', 'alert-danger');
         }
 
         try {
             if ($hours > 0) {
                 $this->service->updateStatus($confession, $status, $hours);
 
-                return \Redirect::back()->withMessage('Confession has been scheduled to be ' . strtolower($status) . ' in ' . $hours . ' hour(s).')->with('alert-class', 'alert-success');
-            } else {
-                $this->service->updateStatus($confession, $status);
-
-                return \Redirect::back()->withMessage('Confession successfully ' . strtolower($status) . ' and posted.')->with('alert-class', 'alert-success');
+                return redirect()->back()->withMessage('Confession has been scheduled to be ' . strtolower($status) . ' in ' . $hours . ' hour(s).')->with('alert-class', 'alert-success');
             }
+            $this->service->updateStatus($confession, $status);
+
+            return redirect()->back()->withMessage('Confession successfully ' . strtolower($status) . ' and posted.')->with('alert-class', 'alert-success');
         } catch (\Exception $e) {
-            return \Redirect::back()->withMessage('Error switching status of confession: ' . $e->getMessage())->with('alert-class', 'alert-danger');
+            return redirect()->back()->withMessage('Error switching status of confession: ' . $e->getMessage())->with('alert-class', 'alert-danger');
         }
     }
 
@@ -184,15 +183,15 @@ class ConfessionsAdminController extends AdminController
         $confession = Confession::findOrFail($id);
 
         if (! $this->userHasPageToken()) {
-            return \Redirect::back()->withMessage('You have not connected your account with Facebook.')->with('alert-class', 'alert-danger');
+            return redirect()->back()->withMessage('You have not connected your account with Facebook.')->with('alert-class', 'alert-danger');
         }
 
         try {
             $this->service->updateStatus($confession, 'Approved');
 
-            return \Redirect::back()->withMessage('Confession successfully removed from featured.')->with('alert-class', 'alert-success');
+            return redirect()->back()->withMessage('Confession successfully removed from featured.')->with('alert-class', 'alert-success');
         } catch (\Exception $e) {
-            return \Redirect::back()->withMessage('Error removing confession from featured: ' . $e->getMessage())->with('alert-class', 'alert-danger');
+            return redirect()->back()->withMessage('Error removing confession from featured: ' . $e->getMessage())->with('alert-class', 'alert-danger');
         }
     }
 
@@ -202,15 +201,15 @@ class ConfessionsAdminController extends AdminController
         $confession = Confession::findOrFail($id);
 
         if (! $this->userHasPageToken()) {
-            return \Redirect::back()->withMessage('You have not connected your account with Facebook.')->with('alert-class', 'alert-danger');
+            return redirect()->back()->withMessage('You have not connected your account with Facebook.')->with('alert-class', 'alert-danger');
         }
 
         try {
             $this->service->updateStatus($confession, 'Rejected');
 
-            return \Redirect::back()->withMessage('Confession successfully rejected.')->with('alert-class', 'alert-success');
+            return redirect()->back()->withMessage('Confession successfully rejected.')->with('alert-class', 'alert-success');
         } catch (\Exception $e) {
-            return \Redirect::back()->withMessage('Error rejecting confession: ' . $e->getMessage())->with('alert-class', 'alert-danger');
+            return redirect()->back()->withMessage('Error rejecting confession: ' . $e->getMessage())->with('alert-class', 'alert-danger');
         }
     }
 
@@ -219,9 +218,9 @@ class ConfessionsAdminController extends AdminController
         try {
             $this->service->delete($id);
 
-            return \Redirect::back()->withMessage('Confession successfully deleted.')->with('alert-class', 'alert-success');
+            return redirect()->back()->withMessage('Confession successfully deleted.')->with('alert-class', 'alert-success');
         } catch (\Exception $e) {
-            return \Redirect::back()->withMessage('Error deleting confession: ' . $e->getMessage())->with('alert-class', 'alert-danger');
+            return redirect()->back()->withMessage('Error deleting confession: ' . $e->getMessage())->with('alert-class', 'alert-danger');
         }
     }
 

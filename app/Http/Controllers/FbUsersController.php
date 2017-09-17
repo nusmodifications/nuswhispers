@@ -10,8 +10,8 @@ class FbUsersController extends Controller
     // use Facebook access token to login user
     public function postLogin()
     {
-        if (\Input::get('fb_access_token')) {
-            $accessToken = \Input::get('fb_access_token');
+        if (request()->input('fb_access_token')) {
+            $accessToken = request()->input('fb_access_token');
             try {
                 $response = \Facebook::get('/me?fields=id', $accessToken);
                 $fbUserId = $response->getGraphUser()->getProperty('id');
@@ -41,7 +41,7 @@ class FbUsersController extends Controller
     public function postFavourite()
     {
         $fbUserId = \Session::get('fb_user_id');
-        $confessionId = \Input::get('confession_id');
+        $confessionId = request()->input('confession_id');
 
         if ($fbUserId && $confessionId) {
             $fbUser = FbUser::find($fbUserId);
@@ -63,7 +63,7 @@ class FbUsersController extends Controller
     public function postUnfavourite()
     {
         $fbUserId = \Session::get('fb_user_id');
-        $confessionId = \Input::get('confession_id');
+        $confessionId = request()->input('confession_id');
 
         if ($fbUserId && $confessionId) {
             $fbUser = FbUser::find($fbUserId);

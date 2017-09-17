@@ -17,7 +17,7 @@ class FacebookBatchProcessor
     /**
      * Facebook object.
      *
-     * @var SammyK\LaravelFacebookSdk\LaravelFacebookSdk
+     * @var \SammyK\LaravelFacebookSdk\LaravelFacebookSdk
      */
     protected $fb;
 

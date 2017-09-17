@@ -298,6 +298,7 @@ class ConfessionService
      * Resolves the user who modified the confession.
      *
      * @param  \NUSWhispers\Models\Confession $confession
+     *
      * @return \NUSWhispers\Models\User|null
      */
     protected function resolveUser(Confession $confession)
@@ -313,7 +314,7 @@ class ConfessionService
             ->first();
 
         if (! $lastLog) {
-            return;
+            return null;
         }
 
         return $lastLog->user;

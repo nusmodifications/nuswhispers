@@ -26,7 +26,7 @@ if ($confession->status == 'Scheduled') {
       </div>
     </div>
 
-    @if (env('MANUAL_MODE', false) && ($confession->status == 'Approved' || $confession->status == 'Featured'))
+    @if (env('MANUAL_MODE', false) && ($confession->status === 'Approved' || $confession->status === 'Featured'))
     <div class="panel panel-default">
       <div class="panel-heading">Copy and paste in Facebook!</div>
       <div class="panel-body">
@@ -56,7 +56,7 @@ if ($confession->status == 'Scheduled') {
           <div class="comment" id="comment-{{ $comment->comment_id }}">
             <div class="comment-meta">
               <p><span class="comment-author">{{!empty($comment->user->name) ? $comment->user->name : $comment->user->email}}</span> commented {{$comment->created_at->diffForHumans()}}</p>
-              @if (\Auth::user()->user_id == $comment->user_id || \Auth::user()->role == 'Administrator')
+              @if (auth()->user()->user_id == $comment->user_id || auth()->user()->role == 'Administrator')
               <a class="delete-comment" href="/admin/confessions/comments/delete/{{ $comment->comment_id }}" title="Delete Comment"><span class="typcn typcn-times"></span></a>
               @endif
             </div>
@@ -91,9 +91,9 @@ if ($confession->status == 'Scheduled') {
         ?>
         </p>
         <p style="text-align:center; color: #999">Latest status updated {{$confession->status_updated_at->diffForHumans()}}.</p>
-        @if (in_array($confession->status, ['Pending', 'Rejected', 'Scheduled']))
-        <div class="schedule-confession" @if ($confession->status == 'Pending' || $confession->status == 'Rejected')style="display: none" @endif>
-          @if ($confession->status == 'Pending')
+        @if (in_array($confession->status, ['Pending', 'Rejected', 'Scheduled'], true))
+        <div class="schedule-confession" @if ($confession->status === 'Pending' || $confession->status === 'Rejected')style="display: none" @endif>
+          @if ($confession->status === 'Pending')
           Schedule confession to go public:
           @else
           Currently scheduled to go public at:
@@ -103,8 +103,8 @@ if ($confession->status == 'Scheduled') {
             <span>Now</span> <strong class="caret"></strong>
             <div class="tz" style="display:none"><?php echo date('Z') ?></div>
             <?php
-            if (Request::input('schedule') != '')
-              $schedule = Request::input('schedule');
+            if (request()->input('schedule') !== '')
+              $schedule = request()->input('schedule');
             elseif (isset($queue))
               $schedule = $queue->update_status_at->format('c');
             else

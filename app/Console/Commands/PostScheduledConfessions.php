@@ -10,13 +10,6 @@ use NUSWhispers\Services\ConfessionService;
 class PostScheduledConfessions extends Command
 {
     /**
-     * Confessions repository.
-     *
-     * @var NUSWhispers\Repositories\ConfessionsRepository
-     */
-    protected $confessionsRepo;
-
-    /**
      * The console command description.
      *
      * @var string
@@ -53,12 +46,13 @@ class PostScheduledConfessions extends Command
      */
     public function handle()
     {
-        $confessions = Confession::orderBy('confession_queue.update_status_at', 'DESC')
+        $confessions = Confession::query()
+            ->orderBy('confession_queue.update_status_at', 'DESC')
             ->join('confession_queue', 'confessions.confession_id', '=', 'confession_queue.confession_id')
             ->where('confession_queue.update_status_at', '<=', Carbon::now()->toDateTimeString())
             ->get();
 
-        $confessions->each(function ($confession) {
+        $confessions->each(function (Confession $confession) {
             $queue = $confession->queue()->first();
             $this->comment('[INFO] Setting confession #' . $confession->confession_id . ' to ' . strtolower($queue->status_after) . '.');
             $this->service->updateStatus($confession, $queue->status_after);
