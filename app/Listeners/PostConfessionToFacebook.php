@@ -2,9 +2,9 @@
 
 namespace NUSWhispers\Listeners;
 
-use NUSWhispers\Models\Confession;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use NUSWhispers\Events\BaseConfessionEvent;
+use NUSWhispers\Models\Confession;
 use SammyK\LaravelFacebookSdk\LaravelFacebookSdk;
 
 class PostConfessionToFacebook implements ShouldQueue

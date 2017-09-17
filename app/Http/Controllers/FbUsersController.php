@@ -2,8 +2,8 @@
 
 namespace NUSWhispers\Http\Controllers;
 
-use NUSWhispers\Models\FbUser;
 use NUSWhispers\Models\Confession;
+use NUSWhispers\Models\FbUser;
 
 class FbUsersController extends Controller
 {

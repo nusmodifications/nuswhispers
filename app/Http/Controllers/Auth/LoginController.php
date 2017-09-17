@@ -2,8 +2,8 @@
 
 namespace NUSWhispers\Http\Controllers\Auth;
 
-use NUSWhispers\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use NUSWhispers\Http\Controllers\Controller;
 
 class LoginController extends Controller
 {

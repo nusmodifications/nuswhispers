@@ -2,10 +2,10 @@
 
 namespace NUSWhispers\Tests\Listeners;
 
-use NUSWhispers\Tests\TestCase;
-use NUSWhispers\Events\ConfessionWasCreated;
 use anlutro\LaravelSettings\Facade as Settings;
+use NUSWhispers\Events\ConfessionWasCreated;
 use NUSWhispers\Listeners\FilterConfessionViaWordBlacklist;
+use NUSWhispers\Tests\TestCase;
 
 class FilterConfessionViaWordBlacklistTest extends TestCase
 {

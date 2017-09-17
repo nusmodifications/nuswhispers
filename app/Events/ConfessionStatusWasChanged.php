@@ -2,8 +2,8 @@
 
 namespace NUSWhispers\Events;
 
-use NUSWhispers\Models\User;
 use NUSWhispers\Models\Confession;
+use NUSWhispers\Models\User;
 
 class ConfessionStatusWasChanged extends BaseConfessionEvent
 {

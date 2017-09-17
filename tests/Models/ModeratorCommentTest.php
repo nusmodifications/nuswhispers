@@ -2,10 +2,10 @@
 
 namespace NUSWhispers\Tests\Models;
 
-use NUSWhispers\Models\User;
-use NUSWhispers\Tests\TestCase;
 use NUSWhispers\Models\Confession;
 use NUSWhispers\Models\ModeratorComment;
+use NUSWhispers\Models\User;
+use NUSWhispers\Tests\TestCase;
 
 class ModeratorCommentTest extends TestCase
 {

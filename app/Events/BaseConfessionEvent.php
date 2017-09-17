@@ -2,9 +2,9 @@
 
 namespace NUSWhispers\Events;
 
-use NUSWhispers\Models\User;
-use NUSWhispers\Models\Confession;
 use Illuminate\Queue\SerializesModels;
+use NUSWhispers\Models\Confession;
+use NUSWhispers\Models\User;
 
 abstract class BaseConfessionEvent
 {

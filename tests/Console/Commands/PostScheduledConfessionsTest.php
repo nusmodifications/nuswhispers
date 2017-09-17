@@ -3,10 +3,10 @@
 namespace NUSWhispers\Tests\Console\Commands;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Artisan;
+use NUSWhispers\Models\Confession;
 use NUSWhispers\Models\User;
 use NUSWhispers\Tests\TestCase;
-use NUSWhispers\Models\Confession;
-use Illuminate\Support\Facades\Artisan;
 
 class PostScheduledConfessionsTest extends TestCase
 {
