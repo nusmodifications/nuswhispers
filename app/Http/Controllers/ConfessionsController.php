@@ -2,10 +2,9 @@
 
 namespace NUSWhispers\Http\Controllers;
 
-use DB;
-use Cache;
-use Input;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use NUSWhispers\Models\ApiKey;
 use NUSWhispers\Models\Confession;
 use NUSWhispers\Services\ConfessionService;
@@ -67,7 +66,7 @@ class ConfessionsController extends Controller
                 ->with('favourites')
                 ->with('categories');
 
-            $query = $this->filterQuery($query, Input::all());
+            $query = $this->filterQuery($query, request()->all());
 
             $confessions = $query->get();
             $confessions = $this->batchProcessor->processConfessions($confessions);
@@ -100,7 +99,7 @@ class ConfessionsController extends Controller
                 ->with('favourites')
                 ->with('categories');
 
-            $query = $this->filterQuery($query, Input::all());
+            $query = $this->filterQuery($query, request()->all());
 
             $confessions = $query->get();
             $confessions = $this->batchProcessor->processConfessions($confessions);
@@ -125,7 +124,7 @@ class ConfessionsController extends Controller
                 ->featured()
                 ->orderBy('status_updated_at', 'DESC');
 
-            $query = $this->filterQuery($query, Input::all());
+            $query = $this->filterQuery($query, request()->all());
 
             $confessions = $query->get();
             $confessions = $this->batchProcessor->processConfessions($confessions);
@@ -153,7 +152,7 @@ class ConfessionsController extends Controller
                 ->with('favourites')
                 ->with('categories');
 
-            $query = $this->filterQuery($query, Input::all());
+            $query = $this->filterQuery($query, request()->all());
 
             $confessions = $query->get();
             $confessions = $this->batchProcessor->processConfessions($confessions);
@@ -178,7 +177,7 @@ class ConfessionsController extends Controller
                 ->approved()
                 ->orderBy('status_updated_at', 'DESC');
 
-            $query = $this->filterQuery($query, Input::all());
+            $query = $this->filterQuery($query, request()->all());
 
             $confessions = $query->get();
             $confessions = $this->batchProcessor->processConfessions($confessions);
@@ -209,7 +208,7 @@ class ConfessionsController extends Controller
                 ->with('favourites')
                 ->with('categories');
 
-            $query = $this->filterQuery($query, Input::all());
+            $query = $this->filterQuery($query, request()->all());
 
             $confessions = $query->get();
             $confessions = $this->batchProcessor->processConfessions($confessions);
@@ -273,7 +272,7 @@ class ConfessionsController extends Controller
 
         // Check reCAPTCHA
         if (! empty(request()->input('captcha'))) {
-            $captchaResponseJSON = file_get_contents(sprintf(\Config::get('services.reCAPTCHA.verify'), \Config::get('services.reCAPTCHA.key'), request()->input('captcha')));
+            $captchaResponseJSON = file_get_contents(sprintf(config('services.reCAPTCHA.verify'), config('services.reCAPTCHA.key'), request()->input('captcha')));
             $captchaResponse = json_decode($captchaResponseJSON);
 
             if (! $captchaResponse->success) {
@@ -325,7 +324,7 @@ class ConfessionsController extends Controller
                 ->with('favourites')
                 ->with('categories');
 
-            $query = $this->filterQuery($query, Input::all());
+            $query = $this->filterQuery($query, request()->all());
 
             $confessions = $query->distinct()->get();
             $confessions = $this->batchProcessor->processConfessions($confessions);
