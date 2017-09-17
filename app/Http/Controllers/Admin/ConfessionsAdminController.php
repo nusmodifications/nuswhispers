@@ -4,11 +4,11 @@ namespace NUSWhispers\Http\Controllers\Admin;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use NUSWhispers\Listeners\ResolvesFacebookPageToken;
 use NUSWhispers\Models\Category;
 use NUSWhispers\Models\Confession;
 use NUSWhispers\Models\ModeratorComment;
 use NUSWhispers\Services\ConfessionService;
-use NUSWhispers\Listeners\ResolvesFacebookPageToken;
 
 class ConfessionsAdminController extends AdminController
 {

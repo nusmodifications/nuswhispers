@@ -2,9 +2,9 @@
 
 namespace NUSWhispers\Listeners;
 
+use anlutro\LaravelSettings\Facade as Settings;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use NUSWhispers\Events\ConfessionWasCreated;
-use anlutro\LaravelSettings\Facade as Settings;
 
 class FilterConfessionViaWordBlacklist implements ShouldQueue
 {

@@ -2,8 +2,8 @@
 
 namespace NUSWhispers\Tests\Services;
 
-use NUSWhispers\Tests\TestCase;
 use NUSWhispers\Services\ConfessionService;
+use NUSWhispers\Tests\TestCase;
 
 class ConfessionServiceTest extends TestCase
 {
