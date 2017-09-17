@@ -2,7 +2,10 @@
 
 namespace NUSWhispers\Http\Controllers\Admin;
 
+use Illuminate\Http\Request;
 use NUSWhispers\Models\UserProfile;
+use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends AdminController
 {
@@ -17,25 +20,20 @@ class ProfileController extends AdminController
         ]);
     }
 
-    public function postEdit()
+    public function postEdit(Request $request)
     {
-        $validationRules = [
+        $request->validate([
             'email' => 'required|email',
             'name' => 'required|string',
             'new_password' => 'min:6|max:32|string',
             'repeat_password' => 'same:new_password',
-        ];
-
-        $validator = \Validator::make(request()->all(), $validationRules);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator);
-        }
+        ]);
 
         try {
-            $res = auth()->user()->update([
+            auth()->user()->update([
                 'email' => request()->input('email'),
                 'name' => request()->input('name'),
-                'password' => request()->input('new_password') ? \Hash::make(request()->input('new_password')) : auth()->user()->password,
+                'password' => request()->input('new_password') ? Hash::make(request()->input('new_password')) : auth()->user()->password,
             ]);
 
             return redirect()->back()->withMessage('Profile successfully updated.')
@@ -50,18 +48,18 @@ class ProfileController extends AdminController
     {
         if (request()->all()) {
             try {
-                $this->addProfile($provider, auth()->user(), \Socialize::with($provider)->user());
+                $this->addProfile($provider, auth()->user(), Socialite::with($provider)->user());
                 $this->flashMessage('Sucessfully connected to ' . ucfirst($provider) . '.');
             } catch (\Exception $e) {
                 $this->flashMessage('Error connecting to provider: ' . $e->getMessage(), 'alert-danger');
             }
 
             return redirect('/admin/profile');
-        } else {
-            $scopes = $provider === 'facebook' ? ['manage_pages', 'publish_pages'] : [];
-
-            return \Socialize::with($provider)->scopes($scopes)->redirect();
         }
+
+        $scopes = $provider === 'facebook' ? ['manage_pages', 'publish_pages'] : [];
+
+        return Socialite::with($provider)->scopes($scopes)->redirect();
     }
 
     public function getDelete($provider = 'facebook')

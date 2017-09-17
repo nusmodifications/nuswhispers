@@ -24,7 +24,7 @@ class ConfessionsAdminController extends AdminController
     public function getIndex(Request $request, $status = 'Pending')
     {
         $status = ucfirst($status);
-        if ($status != 'Pending') {
+        if ($status !== 'Pending') {
             $query = Confession::orderBy('created_at', 'desc');
         } else {
             $query = Confession::orderBy('created_at', 'asc');
@@ -86,20 +86,15 @@ class ConfessionsAdminController extends AdminController
         ]);
     }
 
-    public function postEdit($id)
+    public function postEdit(Request $request, $id)
     {
-        if (request()->input('action') === 'Post Comment') {
-            $validationRules = [
+        if ($request->input('action') === 'Post Comment') {
+            $request->validate([
                 'comment' => 'required',
-            ];
-
-            $validator = \Validator::make(request()->all(), $validationRules);
-            if ($validator->fails()) {
-                return redirect()->back()->withInput()->withErrors($validator);
-            }
+            ]);
 
             $comment = new ModeratorComment([
-                'content' => request()->input('comment'),
+                'content' => $request->input('comment'),
                 'user_id' => auth()->user()->getAuthIdentifier(),
                 'created_at' => new \DateTime(),
             ]);
@@ -109,39 +104,29 @@ class ConfessionsAdminController extends AdminController
 
             return redirect()->back()->withMessage('Comment successfully added.')
                     ->with('alert-class', 'alert-success');
-        } else {
-            $validationRules = [
-                'content' => 'required',
-                'categories' => 'array',
-                'status' => 'in:Featured,Pending,Approved,Rejected',
-            ];
+        }
 
-            $validator = \Validator::make(request()->all(), $validationRules);
-            if ($validator->fails()) {
-                return redirect()->back()->withInput()->withErrors($validator);
+        $request->validate([
+            'content' => 'required',
+            'categories' => 'array',
+            'status' => 'in:Featured,Pending,Approved,Rejected',
+        ]);
+
+        try {
+            $data = $request->only(['content', 'status', 'images', 'schedule']);
+            $data['categories'] = $request->input('categories', []);
+
+            if (env('MANUAL_MODE', false) && request()->input('fb_post_id')) {
+                $data['fb_post_id'] = request()->input('fb_post_id');
             }
 
-            try {
-                $data = [
-                    'content' => request()->input('content'),
-                    'status' => request()->input('status'),
-                    'images' => request()->input('images'),
-                    'schedule' => request()->input('schedule'),
-                    'categories' => request()->input('categories', []),
-                ];
+            $this->service->update($id, $data);
 
-                if (env('MANUAL_MODE', false) && request()->input('fb_post_id')) {
-                    $data['fb_post_id'] = request()->input('fb_post_id');
-                }
-
-                $this->service->update($id, $data);
-
-                return redirect()->back()->withMessage('Confession successfully updated.')
-                    ->with('alert-class', 'alert-success');
-            } catch (\Exception $e) {
-                return redirect()->back()->withMessage('Failed updating confession: ' . $e->getMessage())
-                    ->with('alert-class', 'alert-danger');
-            }
+            return redirect()->back()->withMessage('Confession successfully updated.')
+                ->with('alert-class', 'alert-success');
+        } catch (\Exception $e) {
+            return redirect()->back()->withMessage('Failed updating confession: ' . $e->getMessage())
+                ->with('alert-class', 'alert-danger');
         }
     }
 

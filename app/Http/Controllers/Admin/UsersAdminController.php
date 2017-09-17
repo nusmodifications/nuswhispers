@@ -2,14 +2,14 @@
 
 namespace NUSWhispers\Http\Controllers\Admin;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use NUSWhispers\Models\User;
 
 class UsersAdminController extends AdminController
 {
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -25,34 +25,27 @@ class UsersAdminController extends AdminController
 
     public function getAdd()
     {
-        $user = new User();
-
         return view('admin.users.add', [
-            'user' => $user,
+            'user' => new User(),
         ]);
     }
 
-    public function postAdd()
+    public function postAdd(Request $request)
     {
-        $validationRules = [
+        $request->validate([
             'email' => 'required|email|unique:users,email',
             'name' => 'required|string',
             'password' => 'required|min:6',
             'repeat_password' => 'required|same:password',
             'role' => 'in:Moderator,Administrator',
-        ];
-
-        $validator = \Validator::make(request()->all(), $validationRules);
-        if ($validator->fails()) {
-            return redirect()->back()->withInput()->withErrors($validator);
-        }
+        ]);
 
         try {
             $user = new User([
-                'email' => request()->input('email'),
-                'name' => request()->input('name'),
-                'password' => \Hash::make(request()->input('password')),
-                'role' => request()->input('role'),
+                'email' => $request->input('email'),
+                'name' => $request->input('name'),
+                'password' => Hash::make($request->input('password')),
+                'role' => $request->input('role'),
             ]);
             $user->save();
 
@@ -66,39 +59,29 @@ class UsersAdminController extends AdminController
 
     public function getEdit($id)
     {
-        $user = User::findOrFail($id);
-
         return view('admin.users.edit', [
-            'user' => $user,
+            'user' => User::findOrFail($id),
         ]);
     }
 
-    public function postEdit($id)
+    public function postEdit(Request $request, $id)
     {
         $user = User::findOrFail($id);
 
-        $validationRules = [
+        $request->validate([
             'email' => 'required|email|unique:users,email,' . $user->user_id . ',user_id',
             'name' => 'required|string',
             'password' => 'min:6',
             'repeat_password' => 'same:password',
-        ];
-
-        if (auth()->user()->user_id != $user->user_id) {
-            $validationRules['role'] = 'in:Moderator,Administrator';
-        }
-
-        $validator = \Validator::make(request()->all(), $validationRules);
-        if ($validator->fails()) {
-            return redirect()->back()->withInput()->withErrors($validator);
-        }
+            'role' => auth()->user()->user_id !== $user->user_id ? 'in:Moderator,Administrator' : '',
+        ]);
 
         try {
             $user->update([
-                'email' => request()->input('email'),
-                'name' => request()->input('name'),
-                'password' => \Hash::make(request()->input('password')),
-                'role' => auth()->user()->user_id != $user->user_id ? request()->input('role') : $user->role,
+                'email' => $request->input('email'),
+                'name' => $request->input('name'),
+                'password' => Hash::make($request->input('password')),
+                'role' => auth()->user()->user_id !== $user->user_id ? $request->input('role') : $user->role,
             ]);
 
             return redirect('/admin/users')->withMessage('User successfully updated.')
@@ -111,7 +94,7 @@ class UsersAdminController extends AdminController
 
     public function getDelete($id)
     {
-        if (auth()->user()->user_id == $id) {
+        if (auth()->user()->user_id === $id) {
             return redirect()->back()->withMessage('You cannnot delete yourself!')->with('alert-class', 'alert-danger');
         }
 
