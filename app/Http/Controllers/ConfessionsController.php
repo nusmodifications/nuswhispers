@@ -238,20 +238,14 @@ class ConfessionsController extends Controller
     {
         $fingerprintKey = config('app.fingerprint_key');
 
-        $validationRules = [
+        $request->validate([
             'content' => 'required',
             'image' => 'url',
             'categories' => 'array',
             'captcha' => 'required_without:api_key',
             'api_key' => 'required_without:captcha',
             $fingerprintKey => 'nullable|string',
-        ];
-
-        $validator = \Validator::make(request()->all(), $validationRules);
-
-        if ($validator->fails()) {
-            return response()->json(['success' => false, 'errors' => $validator->messages()]);
-        }
+        ]);
 
         // Check reCAPTCHA
         if (! empty(request()->input('captcha'))) {
