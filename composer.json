@@ -6,14 +6,15 @@
     "type": "project",
     "require": {
         "php": ">=7.0.0",
+        "anlutro/l4-settings": "^0.4.9",
         "facebook/graph-sdk": "~5.1",
+        "google/recaptcha": "^1.1",
         "laravel/framework": "~5.5.0",
         "laravel/socialite": "~3.0",
         "laravelcollective/html": "~5.5.0",
-        "sammyk/laravel-facebook-sdk": "~3.0",
         "predis/predis": "^1.0",
-        "anlutro/l4-settings": "^0.4.9",
-        "roave/security-advisories": "dev-master"
+        "roave/security-advisories": "dev-master",
+        "sammyk/laravel-facebook-sdk": "~3.0"
     },
     "require-dev": {
         "filp/whoops": "~2.0",

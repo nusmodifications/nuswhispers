@@ -188,9 +188,9 @@ return [
         /*
          * Application Service Providers...
          */
-        NUSWhispers\Providers\AppServiceProvider::class,
         NUSWhispers\Providers\AuthServiceProvider::class,
         NUSWhispers\Providers\EventServiceProvider::class,
+        NUSWhispers\Providers\ReCaptchaServiceProvider::class,
         NUSWhispers\Providers\RouteServiceProvider::class,
 
         anlutro\LaravelSettings\ServiceProvider::class,

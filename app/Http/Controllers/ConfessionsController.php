@@ -5,8 +5,10 @@ namespace NUSWhispers\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use NUSWhispers\Models\ApiKey;
 use NUSWhispers\Models\Confession;
+use NUSWhispers\Rules\ReCaptcha;
 use NUSWhispers\Services\ConfessionService;
 use NUSWhispers\Services\FacebookBatchProcessor;
 
@@ -242,27 +244,22 @@ class ConfessionsController extends Controller
             'content' => 'required',
             'image' => 'url',
             'categories' => 'array',
-            'captcha' => 'required_without:api_key',
-            'api_key' => 'required_without:captcha',
+            'captcha' => [
+                'required_without:api_key',
+                new ReCaptcha(),
+            ],
+            'api_key' => [
+                'required_without:captcha',
+                Rule::exists('api_keys', 'key'),
+            ],
             $fingerprintKey => 'nullable|string',
+        ], [
+            'api_key.exists' => 'Invalid API key. Please try again or use reCAPTCHA.',
         ]);
 
-        // Check reCAPTCHA
-        if (! empty(request()->input('captcha'))) {
-            $captchaResponseJSON = file_get_contents(sprintf(config('services.reCAPTCHA.verify'), config('services.reCAPTCHA.key'), request()->input('captcha')));
-            $captchaResponse = json_decode($captchaResponseJSON);
-
-            if (! $captchaResponse->success) {
-                return response()->json(['success' => false, 'errors' => ['reCAPTCHA' => ['The reCAPTCHA was not entered correctly. Please try again.']]]);
-            }
-        } else {
-            $key = ApiKey::where('key', request()->input('api_key'))->first();
-            if (! $key) {
-                return response()->json(['success' => false, 'errors' => ['API key' => ['Invalid API key. Please try again or use reCAPTCHA.']]]);
-            }
-
-            $key->last_used_on = new \DateTime();
-            $key->save();
+        // Touch last_used_on timestamp.
+        if ($key = ApiKey::query()->where('key', request()->input('api_key'))->first()) {
+            $key->update(['last_used_on' => now()]);
         }
 
         $confession = $this->service->create([
@@ -300,14 +297,10 @@ class ConfessionsController extends Controller
                 ->orderBy('status_updated_at', 'DESC')
                 ->approved()
                 ->with('favourites')
-                ->with('categories');
+                ->with('categories')
+                ->distinct();
 
-            $query = $this->filterQuery($query, request()->all());
-
-            $confessions = $query->distinct()->get();
-            $confessions = $this->batchProcessor->processConfessions($confessions);
-
-            return ['data' => ['confessions' => $confessions]];
+            return $this->processList($query);
         });
 
         return response()->json($output);
