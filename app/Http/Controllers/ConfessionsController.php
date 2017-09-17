@@ -53,7 +53,9 @@ class ConfessionsController extends Controller
     /**
      * Display a listing of the resource. Get confessions under a specific category.
      *
-     * @return Response
+     * @param  \Illuminate\Http\Request
+     *
+     * @return \Illuminate\Http\Response
      */
     public function category(Request $request, $categoryId)
     {
@@ -66,12 +68,7 @@ class ConfessionsController extends Controller
                 ->with('favourites')
                 ->with('categories');
 
-            $query = $this->filterQuery($query, request()->all());
-
-            $confessions = $query->get();
-            $confessions = $this->batchProcessor->processConfessions($confessions);
-
-            return ['data' => ['confessions' => $confessions]];
+            return $this->processList($query);
         });
 
         return response()->json($output);
@@ -80,7 +77,9 @@ class ConfessionsController extends Controller
     /**
      * Display a listing of the resource. Get favourite confessions.
      *
-     * @return Response
+     * @param  \Illuminate\Http\Request
+     *
+     * @return \Illuminate\Http\Response
      */
     public function favourites(Request $request)
     {
@@ -99,12 +98,7 @@ class ConfessionsController extends Controller
                 ->with('favourites')
                 ->with('categories');
 
-            $query = $this->filterQuery($query, request()->all());
-
-            $confessions = $query->get();
-            $confessions = $this->batchProcessor->processConfessions($confessions);
-
-            return ['success' => true, 'data' => ['confessions' => $confessions]];
+            return $this->processList($query);
         });
 
         return response()->json($output);
@@ -113,7 +107,9 @@ class ConfessionsController extends Controller
     /**
      * Display a listing of the resource. Get featured confessions.
      *
-     * @return Response
+     * @param  \Illuminate\Http\Request
+     *
+     * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
@@ -124,12 +120,7 @@ class ConfessionsController extends Controller
                 ->featured()
                 ->orderBy('status_updated_at', 'DESC');
 
-            $query = $this->filterQuery($query, request()->all());
-
-            $confessions = $query->get();
-            $confessions = $this->batchProcessor->processConfessions($confessions);
-
-            return ['data' => ['confessions' => $confessions]];
+            return $this->processList($query);
         });
 
         return response()->json($output);
@@ -138,7 +129,9 @@ class ConfessionsController extends Controller
     /**
      * Display a listing of the resource. Get popular confessions.
      *
-     * @return Response
+     * @param  \Illuminate\Http\Request
+     *
+     * @return \Illuminate\Http\Response
      */
     public function popular(Request $request)
     {
@@ -152,12 +145,7 @@ class ConfessionsController extends Controller
                 ->with('favourites')
                 ->with('categories');
 
-            $query = $this->filterQuery($query, request()->all());
-
-            $confessions = $query->get();
-            $confessions = $this->batchProcessor->processConfessions($confessions);
-
-            return ['data' => ['confessions' => $confessions]];
+            return $this->processList($query);
         });
 
         return response()->json($output);
@@ -166,7 +154,9 @@ class ConfessionsController extends Controller
     /**
      * Display a listing of recent confessions.
      *
-     * @return Response
+     * @param  \Illuminate\Http\Request
+     *
+     * @return \Illuminate\Http\Response
      */
     public function recent(Request $request)
     {
@@ -177,12 +167,7 @@ class ConfessionsController extends Controller
                 ->approved()
                 ->orderBy('status_updated_at', 'DESC');
 
-            $query = $this->filterQuery($query, request()->all());
-
-            $confessions = $query->get();
-            $confessions = $this->batchProcessor->processConfessions($confessions);
-
-            return ['data' => ['confessions' => $confessions]];
+            return $this->processList($query);
         });
 
         return response()->json($output);
@@ -193,9 +178,10 @@ class ConfessionsController extends Controller
      * method: get
      * route: api/confessions/search/<searchString>?timestamp=<time>&offset=<offset>&count=<count>.
      *
-     * @param string $searchString - non-empty string (of length at least 5? - maybe at least 1)
+     * @param  \Illuminate\Http\Request
+     * @param  string $searchString - non-empty string (of length at least 5? - maybe at least 1)
      *
-     * @return Response
+     * @return \Illuminate\Http\Response
      */
     public function search(Request $request, $searchString)
     {
@@ -208,12 +194,7 @@ class ConfessionsController extends Controller
                 ->with('favourites')
                 ->with('categories');
 
-            $query = $this->filterQuery($query, request()->all());
-
-            $confessions = $query->get();
-            $confessions = $this->batchProcessor->processConfessions($confessions);
-
-            return ['data' => ['confessions' => $confessions]];
+            return $this->processList($query);
         });
 
         return response()->json($output);
@@ -224,7 +205,7 @@ class ConfessionsController extends Controller
      *
      * @param int $id
      *
-     * @return Response
+     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
@@ -249,7 +230,9 @@ class ConfessionsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return Response
+     * @param  \Illuminate\Http\Request
+     *
+     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
@@ -304,9 +287,10 @@ class ConfessionsController extends Controller
     /**
      * List confessions based on a specific tag.
      *
-     * @param string $tagName
+     * @param  \Illuminate\Http\Request
+     * @param  string $tagName
      *
-     * @return Response
+     * @return \Illuminate\Http\Response
      */
     public function tag(Request $request, $tagName)
     {
@@ -345,7 +329,7 @@ class ConfessionsController extends Controller
      */
     protected function filterQuery($query, $input = [])
     {
-        if (($timestamp = array_get($input, 'timestamp'))) {
+        if ($timestamp = array_get($input, 'timestamp')) {
             $timestamp = $this->normalizeTimestamp($timestamp);
             $query->whereRaw('UNIX_TIMESTAMP(status_updated_at) <= ?', [$timestamp]);
         }
@@ -355,7 +339,7 @@ class ConfessionsController extends Controller
 
         $query->take($count);
 
-        if (($offset = (int) array_get($input, 'offset'))) {
+        if ($offset = (int) array_get($input, 'offset')) {
             $query->skip($offset);
         }
 
@@ -369,11 +353,28 @@ class ConfessionsController extends Controller
      *
      * @return int
      */
-    protected function normalizeTimestamp($timestamp)
+    protected function normalizeTimestamp($timestamp): int
     {
         $seconds = self::CACHE_TIMEOUT * 60;
 
         return ceil($timestamp / $seconds) * $seconds;
+    }
+
+    /**
+     * Retrieve and transform the confessions list.
+     *
+     * @param  mixed $query
+     *
+     * @return array
+     */
+    protected function processList($query): array
+    {
+        $query = $this->filterQuery($query, request()->all());
+
+        $confessions = $query->get();
+        $confessions = $this->batchProcessor->processConfessions($confessions);
+
+        return ['data' => ['confessions' => $confessions]];
     }
 
     /**
@@ -383,7 +384,7 @@ class ConfessionsController extends Controller
      *
      * @return string
      */
-    protected function resolveCacheIdentifier(Request $request)
+    protected function resolveCacheIdentifier(Request $request): string
     {
         $url = $request->fullUrl();
 
