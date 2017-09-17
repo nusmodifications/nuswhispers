@@ -3,10 +3,10 @@
 namespace NUSWhispers\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use NUSWhispers\Models\ApiKey;
+use Illuminate\Support\Facades\DB;
 use NUSWhispers\Models\Confession;
+use Illuminate\Support\Facades\Cache;
 use NUSWhispers\Services\ConfessionService;
 use NUSWhispers\Services\FacebookBatchProcessor;
 

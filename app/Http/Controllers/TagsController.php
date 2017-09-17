@@ -2,8 +2,8 @@
 
 namespace NUSWhispers\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
 use NUSWhispers\Models\Tag;
+use Illuminate\Support\Facades\DB;
 
 class TagsController extends Controller
 {
