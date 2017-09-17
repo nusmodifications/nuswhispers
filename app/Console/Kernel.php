@@ -13,9 +13,19 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        'NUSWhispers\Console\Commands\UpdateConfessionFacebookInfo',
-        'NUSWhispers\Console\Commands\PostScheduledConfessions',
     ];
+
+    /**
+     * Register the commands for the application.
+     *
+     * @return void
+     */
+    protected function commands()
+    {
+        $this->load(__DIR__.'/Commands');
+
+        require base_path('routes/console.php');
+    }
 
     /**
      * Define the application's command schedule.

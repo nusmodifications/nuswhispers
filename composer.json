@@ -12,9 +12,11 @@
         "laravelcollective/html": "~5.5.0",
         "sammyk/laravel-facebook-sdk": "~3.0",
         "predis/predis": "^1.0",
-        "anlutro/l4-settings": "^0.4.9"
+        "anlutro/l4-settings": "^0.4.9",
+        "roave/security-advisories": "dev-master"
     },
     "require-dev": {
+        "filp/whoops": "~2.0",
         "phpunit/phpunit": "~6.0",
         "fzaninotto/faker": "^1.6",
         "mockery/mockery": "^0.9.6",
@@ -22,7 +24,8 @@
     },
     "autoload": {
         "classmap": [
-            "database"
+            "database/seeds",
+            "database/factories"
         ],
         "psr-4": {
             "NUSWhispers\\": "app/"
@@ -33,13 +36,27 @@
             "NUSWhispers\\Tests\\": "tests/"
         }
     },
+    "extra": {
+        "laravel": {
+            "dont-discover": [
+            ]
+        }
+    },
     "scripts": {
-        "post-root-package-install": ["php -r \"file_exists('.env') || copy('.env.example', '.env');\""],
-        "post-create-project-cmd": ["php artisan key:generate"],
-        "post-install-cmd": ["Illuminate\\Foundation\\ComposerScripts::postInstall", "php artisan optimize"],
-        "post-update-cmd": ["Illuminate\\Foundation\\ComposerScripts::postUpdate", "php artisan optimize"]
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate"
+        ],
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover"
+        ]
     },
     "config": {
-        "preferred-install": "dist"
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
     }
 }
