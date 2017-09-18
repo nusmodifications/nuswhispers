@@ -56,6 +56,7 @@ class ConfessionsController extends Controller
      * Display a listing of the resource. Get confessions under a specific category.
      *
      * @param  \Illuminate\Http\Request
+     * @param  mixed $categoryId
      *
      * @return \Illuminate\Http\Response
      */
@@ -63,12 +64,12 @@ class ConfessionsController extends Controller
     {
         $cacheId = $this->resolveCacheIdentifier($request);
         $output = Cache::remember($cacheId, self::CACHE_TIMEOUT, function () use ($categoryId) {
-            $query = Confession::orderBy('status_updated_at', 'DESC')
+            $query = Confession::query()
+                ->orderBy('status_updated_at', 'DESC')
                 ->join('confession_categories', 'confessions.confession_id', '=', 'confession_categories.confession_id')
                 ->where('confession_categories.confession_category_id', '=', $categoryId)
-                ->approved()
-                ->with('favourites')
-                ->with('categories');
+                ->with('favourites', 'categories')
+                ->approved();
 
             return $this->processList($query);
         });
@@ -93,12 +94,12 @@ class ConfessionsController extends Controller
 
         $cacheId = $fbUserId . '/' . $this->resolveCacheIdentifier($request);
         $output = Cache::remember($cacheId, self::CACHE_TIMEOUT, function () use ($fbUserId) {
-            $query = Confession::join('favourites', 'confessions.confession_id', '=', 'favourites.confession_id')
+            $query = Confession::query()
+                ->join('favourites', 'confessions.confession_id', '=', 'favourites.confession_id')
                 ->where('favourites.fb_user_id', '=', $fbUserId)
                 ->orderBy('status_updated_at', 'DESC')
-                ->approved()
-                ->with('favourites')
-                ->with('categories');
+                ->with('favourites', 'categories')
+                ->approved();
 
             return $this->processList($query);
         });
@@ -117,10 +118,10 @@ class ConfessionsController extends Controller
     {
         $cacheId = $this->resolveCacheIdentifier($request);
         $output = Cache::remember($cacheId, self::CACHE_TIMEOUT, function () {
-            $query = Confession::with('categories')
-                ->with('favourites')
-                ->featured()
-                ->orderBy('status_updated_at', 'DESC');
+            $query = Confession::query()
+                ->with('categories', 'favourites')
+                ->orderBy('status_updated_at', 'DESC')
+                ->featured();
 
             return $this->processList($query);
         });
@@ -139,13 +140,13 @@ class ConfessionsController extends Controller
     {
         $cacheId = $this->resolveCacheIdentifier($request);
         $output = Cache::remember($cacheId, self::CACHE_TIMEOUT, function () {
-            $query = Confession::select(DB::raw('confessions.*,
+            $query = Confession::query()
+                ->select(DB::raw('confessions.*,
                 (confessions.fb_like_count + (confessions.fb_comment_count * 2)) / POW(DATEDIFF(NOW(), confessions.status_updated_at) + 2, 1.8) AS popularity_rating'))
                 ->orderBy('popularity_rating', 'DESC')
                 ->orderBy('status_updated_at', 'DESC')
-                ->approved()
-                ->with('favourites')
-                ->with('categories');
+                ->with('favourites', 'categories')
+                ->approved();
 
             return $this->processList($query);
         });
@@ -164,10 +165,10 @@ class ConfessionsController extends Controller
     {
         $cacheId = $this->resolveCacheIdentifier($request);
         $output = Cache::remember($cacheId, self::CACHE_TIMEOUT, function () {
-            $query = Confession::with('categories')
-                ->with('favourites')
-                ->approved()
-                ->orderBy('status_updated_at', 'DESC');
+            $query = Confession::query()
+                ->with('favourites', 'categories')
+                ->orderBy('status_updated_at', 'DESC')
+                ->approved();
 
             return $this->processList($query);
         });
@@ -190,11 +191,11 @@ class ConfessionsController extends Controller
         $cacheId = $this->resolveCacheIdentifier($request);
         $output = Cache::remember($cacheId, self::CACHE_TIMEOUT, function () use ($searchString) {
             // Naive search ...
-            $query = Confession::orderBy('status_updated_at', 'DESC')
+            $query = Confession::query()
+                ->orderBy('status_updated_at', 'DESC')
                 ->where('content', 'LIKE', '%' . $searchString . '%')
-                ->approved()
-                ->with('favourites')
-                ->with('categories');
+                ->with('favourites', 'categories')
+                ->approved();
 
             return $this->processList($query);
         });
@@ -287,7 +288,8 @@ class ConfessionsController extends Controller
     {
         $cacheId = $this->resolveCacheIdentifier($request);
         $output = Cache::remember($cacheId, self::CACHE_TIMEOUT, function () use ($tagName) {
-            $query = Confession::select('confessions.*')
+            $query = Confession::query()
+                ->select('confessions.*')
                 ->leftJoin('confession_tags', 'confessions.confession_id', '=', 'confession_tags.confession_id')
                 ->leftJoin('tags', 'confession_tags.confession_tag_id', '=', 'tags.confession_tag_id')
                 ->where(function ($query) use ($tagName) {
@@ -295,10 +297,9 @@ class ConfessionsController extends Controller
                         ->orWhere('confessions.confession_id', '=', $tagName);
                 })
                 ->orderBy('status_updated_at', 'DESC')
-                ->approved()
-                ->with('favourites')
-                ->with('categories')
-                ->distinct();
+                ->with('favourites', 'categories')
+                ->distinct()
+                ->approved();
 
             return $this->processList($query);
         });
@@ -375,8 +376,8 @@ class ConfessionsController extends Controller
     {
         $url = $request->fullUrl();
 
-        if ($request->input('timestamp')) {
-            $url = str_replace($request->input('timestamp'), $this->normalizeTimestamp($request->input('timestamp')), $url);
+        if ($timestamp = $request->input('timestamp')) {
+            $url = str_replace($timestamp, $this->normalizeTimestamp($timestamp), $url);
         }
 
         return 'confessions/' . md5($url);
