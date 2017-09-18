@@ -80,7 +80,9 @@ class TagsController extends Controller
      */
     protected function getSortedTags()
     {
-        $tags = Tag::where('confession_tag', 'REGEXP', '#[a-z]+')->get()
+        $tags = Tag::query()
+            ->where('confession_tag', 'REGEXP', '#[a-z]+')
+            ->get()
             ->filter(function ($tag) {
                 return $tag->confessions()->approved()->count() > 0;
             })
