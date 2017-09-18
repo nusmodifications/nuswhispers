@@ -8,14 +8,16 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 class Kernel extends ConsoleKernel
 {
     /**
-     * The Artisan commands provided by your application.
+     * Register the commands for the application.
      *
-     * @var array
+     * @return void
      */
-    protected $commands = [
-        'NUSWhispers\Console\Commands\UpdateConfessionFacebookInfo',
-        'NUSWhispers\Console\Commands\PostScheduledConfessions',
-    ];
+    protected function commands()
+    {
+        $this->load(__DIR__ . '/Commands');
+
+        require base_path('routes/console.php');
+    }
 
     /**
      * Define the application's command schedule.

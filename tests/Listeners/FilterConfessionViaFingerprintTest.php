@@ -2,12 +2,12 @@
 
 namespace NUSWhispers\Tests\Listeners;
 
-use Mockery;
-use Carbon\Carbon;
-use NUSWhispers\Tests\TestCase;
-use NUSWhispers\Events\ConfessionWasCreated;
 use anlutro\LaravelSettings\Facade as Settings;
+use Carbon\Carbon;
+use Mockery;
+use NUSWhispers\Events\ConfessionWasCreated;
 use NUSWhispers\Listeners\FilterConfessionViaFingerprint;
+use NUSWhispers\Tests\TestCase;
 
 class FilterConfessionViaFingerprintTest extends TestCase
 {

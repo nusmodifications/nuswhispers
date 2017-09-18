@@ -1,4 +1,5 @@
 <?php
+
 /*
 |--------------------------------------------------------------------------
 | Create The Application
@@ -9,9 +10,11 @@
 | the IoC container for the system binding all of the various parts.
 |
 */
+
 $app = new Illuminate\Foundation\Application(
     realpath(__DIR__ . '/../')
 );
+
 /*
 |--------------------------------------------------------------------------
 | Bind Important Interfaces
@@ -22,18 +25,22 @@ $app = new Illuminate\Foundation\Application(
 | incoming requests to this application from both the web and CLI.
 |
 */
+
 $app->singleton(
     Illuminate\Contracts\Http\Kernel::class,
     NUSWhispers\Http\Kernel::class
 );
+
 $app->singleton(
     Illuminate\Contracts\Console\Kernel::class,
     NUSWhispers\Console\Kernel::class
 );
+
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
     NUSWhispers\Exceptions\Handler::class
 );
+
 /*
 |--------------------------------------------------------------------------
 | Return The Application
@@ -44,4 +51,5 @@ $app->singleton(
 | from the actual running of the application and sending responses.
 |
 */
+
 return $app;

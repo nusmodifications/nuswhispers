@@ -12,29 +12,29 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'NUSWhispers\Events\ConfessionWasCreated' => [
-            'NUSWhispers\Listeners\SyncConfessionTags',
-            'NUSWhispers\Listeners\FilterConfessionViaWordBlacklist',
-            'NUSWhispers\Listeners\FilterConfessionViaFingerprint',
+        \NUSWhispers\Events\ConfessionWasCreated::class => [
+            \NUSWhispers\Listeners\SyncConfessionTags::class,
+            \NUSWhispers\Listeners\FilterConfessionViaWordBlacklist::class,
+            \NUSWhispers\Listeners\FilterConfessionViaFingerprint::class,
         ],
-        'NUSWhispers\Events\ConfessionWasUpdated' => [
-            'NUSWhispers\Listeners\SyncConfessionTags',
+        \NUSWhispers\Events\ConfessionWasUpdated::class => [
+            \NUSWhispers\Listeners\SyncConfessionTags::class,
         ],
-        'NUSWhispers\Events\ConfessionWasDeleted' => [
-            'NUSWhispers\Listeners\DeleteConfessionFromFacebook',
+        \NUSWhispers\Events\ConfessionWasDeleted::class => [
+            \NUSWhispers\Listeners\DeleteConfessionFromFacebook::class,
         ],
-        'NUSWhispers\Events\ConfessionStatusWasChanged' => [
-            'NUSWhispers\Listeners\FlushConfessionQueue',
-            'NUSWhispers\Listeners\LogConfessionStatusChange',
+        \NUSWhispers\Events\ConfessionStatusWasChanged::class => [
+            \NUSWhispers\Listeners\FlushConfessionQueue::class,
+            \NUSWhispers\Listeners\LogConfessionStatusChange::class,
         ],
-        'NUSWhispers\Events\ConfessionWasApproved' => [
-            'NUSWhispers\Listeners\PostConfessionToFacebook',
+        \NUSWhispers\Events\ConfessionWasApproved::class => [
+            \NUSWhispers\Listeners\PostConfessionToFacebook::class,
         ],
-        'NUSWhispers\Events\ConfessionWasFeatured' => [
-            'NUSWhispers\Listeners\PostConfessionToFacebook',
+        \NUSWhispers\Events\ConfessionWasFeatured::class => [
+            \NUSWhispers\Listeners\PostConfessionToFacebook::class,
         ],
-        'NUSWhispers\Events\ConfessionWasRejected' => [
-            'NUSWhispers\Listeners\DeleteConfessionFromFacebook',
+        \NUSWhispers\Events\ConfessionWasRejected::class => [
+            \NUSWhispers\Listeners\DeleteConfessionFromFacebook::class,
         ],
     ];
 }

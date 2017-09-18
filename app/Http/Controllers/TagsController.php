@@ -2,9 +2,7 @@
 
 namespace NUSWhispers\Http\Controllers;
 
-use DB;
-use Cache;
-use Config;
+use Illuminate\Support\Facades\DB;
 use NUSWhispers\Models\Tag;
 
 class TagsController extends Controller
@@ -14,11 +12,11 @@ class TagsController extends Controller
      * method: get
      * route: api/tags.
      *
-     * @return json {"data": {"tags": [tag1, tag2, ...]}}
+     * @return mixed
      */
     public function index()
     {
-        $output = Cache::remember('tags', Config::get('cache.api.timeout'), function () {
+        $output = cache()->remember('tags', config('cache.api.timeout'), function () {
             return ['data' => ['tags' => $this->getSortedTags()]];
         });
 
@@ -32,12 +30,12 @@ class TagsController extends Controller
      *
      * @param int $tag_id
      *
-     * @return json {"success": true or false, "data": {"tag": tag}};
+     * @return mixed
      */
     public function show($tag_id)
     {
         $tag = Tag::find($tag_id);
-        if ($tag == null) {
+        if ($tag === null) {
             return response()->json(['success' => false]);
         }
 
@@ -51,13 +49,13 @@ class TagsController extends Controller
      *
      * @param int $num
      *
-     * @return json {"data": {"tags": [tag1, tag2, ...]}}
+     * @return mixed
      */
     public function topNTags($num = 5)
     {
         $num = ($num > 20) ? 5 : $num;
 
-        $output = Cache::remember('top_' . $num . '_tags', Config::get('cache.api.timeout'), function () use ($num) {
+        $output = cache()->remember('top_' . $num . '_tags', config('cache.api.timeout'), function () use ($num) {
             $tags = DB::table('tags')
                 ->join('confession_tags', 'tags.confession_tag_id', '=', 'confession_tags.confession_tag_id')
                 ->join('confessions', 'confessions.confession_id', '=', 'confession_tags.confession_id')
@@ -78,11 +76,13 @@ class TagsController extends Controller
     /**
      * Get all tags in sorted order according to number of posts a tag belongs to.
      *
-     * @return array [tag1, tag2, ...]
+     * @return mixed
      */
     protected function getSortedTags()
     {
-        $tags = Tag::where('confession_tag', 'REGEXP', '#[a-z]+')->get()
+        $tags = Tag::query()
+            ->where('confession_tag', 'REGEXP', '#[a-z]+')
+            ->get()
             ->filter(function ($tag) {
                 return $tag->confessions()->approved()->count() > 0;
             })

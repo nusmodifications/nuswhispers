@@ -2,9 +2,9 @@
 
 namespace NUSWhispers\Listeners;
 
-use NUSWhispers\Models\Confession;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use NUSWhispers\Events\BaseConfessionEvent;
+use NUSWhispers\Models\Confession;
 use SammyK\LaravelFacebookSdk\LaravelFacebookSdk;
 
 class PostConfessionToFacebook implements ShouldQueue
@@ -40,7 +40,7 @@ class PostConfessionToFacebook implements ShouldQueue
         $confession = $event->confession;
 
         // Someone might have changed his/her mind...
-        if (! in_array($confession->status, ['Approved', 'Featured'])) {
+        if (! in_array($confession->status, ['Approved', 'Featured'], true)) {
             return true;
         }
 

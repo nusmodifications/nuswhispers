@@ -3,9 +3,9 @@
 namespace NUSWhispers\Tests\Listeners;
 
 use Carbon\Carbon;
-use NUSWhispers\Tests\TestCase;
 use NUSWhispers\Events\ConfessionStatusWasChanged;
 use NUSWhispers\Listeners\LogConfessionStatusChange;
+use NUSWhispers\Tests\TestCase;
 
 class LogConfessionStatusChangeTest extends TestCase
 {

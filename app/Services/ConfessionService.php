@@ -3,14 +3,14 @@
 namespace NUSWhispers\Services;
 
 use Carbon\Carbon;
-use Ramsey\Uuid\Uuid;
 use InvalidArgumentException;
-use NUSWhispers\Models\Confession;
+use NUSWhispers\Events\ConfessionStatusWasChanged;
 use NUSWhispers\Events\ConfessionWasCreated;
 use NUSWhispers\Events\ConfessionWasDeleted;
-use NUSWhispers\Events\ConfessionWasUpdated;
 use NUSWhispers\Events\ConfessionWasScheduled;
-use NUSWhispers\Events\ConfessionStatusWasChanged;
+use NUSWhispers\Events\ConfessionWasUpdated;
+use NUSWhispers\Models\Confession;
+use Ramsey\Uuid\Uuid;
 
 class ConfessionService
 {
@@ -298,6 +298,7 @@ class ConfessionService
      * Resolves the user who modified the confession.
      *
      * @param  \NUSWhispers\Models\Confession $confession
+     *
      * @return \NUSWhispers\Models\User|null
      */
     protected function resolveUser(Confession $confession)
@@ -313,7 +314,7 @@ class ConfessionService
             ->first();
 
         if (! $lastLog) {
-            return;
+            return null;
         }
 
         return $lastLog->user;

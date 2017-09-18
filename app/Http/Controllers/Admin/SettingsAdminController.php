@@ -2,8 +2,8 @@
 
 namespace NUSWhispers\Http\Controllers\Admin;
 
-use Illuminate\Support\Facades\Redirect;
 use anlutro\LaravelSettings\Facade as Settings;
+use Illuminate\Support\Facades\Redirect;
 use NUSWhispers\Http\Requests\AdminSettingsRequest;
 
 class SettingsAdminController extends AdminController
@@ -32,7 +32,7 @@ class SettingsAdminController extends AdminController
         ]));
         Settings::save();
 
-        return Redirect::back()->withMessage('Settings successfully saved.')
+        return redirect()->back()->withMessage('Settings successfully saved.')
             ->with('alert-class', 'alert-success');
     }
 }

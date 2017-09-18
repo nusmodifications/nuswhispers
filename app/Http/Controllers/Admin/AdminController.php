@@ -2,7 +2,6 @@
 
 namespace NUSWhispers\Http\Controllers\Admin;
 
-use Session;
 use NUSWhispers\Http\Controllers\Controller;
 
 /**
@@ -10,9 +9,15 @@ use NUSWhispers\Http\Controllers\Controller;
  */
 abstract class AdminController extends Controller
 {
+    /**
+     * Flashes messages.
+     *
+     * @param string $message
+     * @param string $class
+     */
     protected function flashMessage($message, $class = 'alert-success')
     {
-        Session::flash('message', $message);
-        Session::flash('alert-class', $class);
+        session()->flash('message', $message);
+        session()->flash('alert-class', $class);
     }
 }

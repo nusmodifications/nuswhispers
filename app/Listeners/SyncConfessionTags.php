@@ -2,10 +2,10 @@
 
 namespace NUSWhispers\Listeners;
 
-use NUSWhispers\Models\Tag;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use NUSWhispers\Events\ConfessionWasCreated;
 use NUSWhispers\Events\ConfessionWasUpdated;
+use NUSWhispers\Models\Tag;
 
 class SyncConfessionTags implements ShouldQueue
 {

@@ -2,8 +2,8 @@
 
 namespace NUSWhispers\Http\Controllers\Auth;
 
-use NUSWhispers\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use NUSWhispers\Http\Controllers\Controller;
 
 class ResetPasswordController extends Controller
 {

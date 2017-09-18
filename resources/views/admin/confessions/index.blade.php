@@ -6,7 +6,7 @@
   <div class="page-header">
     <h1 class="page-title"><span class="typcn typcn-heart"></span>Confessions Management</h1>
     <div class="search-bar">
-      <input class="form-control input-sm" name="q" type="text" value="{{ \Input::get('q') }}">
+      <input class="form-control input-sm" name="q" type="text" value="{{ request()->input('q') }}">
       <button class="btn btn-primary btn-sm" type="submit">Search</button>
     </div>
   </div>
@@ -20,22 +20,22 @@
   @endif
 
   <ul class="nav nav-tabs">
-    <li class="{{ Request::is('admin/confessions/index/all') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/all">All</a></li>
-    <li class="{{ Request::is('admin/confessions/index/featured') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/featured">Featured</a></li>
-    <li class="{{ Request::is('admin/confessions') || Request::is('admin/confessions/index/pending') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/pending">Pending ({{ \NUSWhispers\Models\Confession::pending()->count() }})</a></li>
-    <li class="{{ Request::is('admin/confessions/index/scheduled') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/scheduled">Scheduled ({{ \NUSWhispers\Models\Confession::scheduled()->count() }})</a></li>
-    <li class="{{ Request::is('admin/confessions/index/approved') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/approved">Approved</a></li>
-    <li class="{{ Request::is('admin/confessions/index/rejected') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/rejected">Rejected</a></li>
+    <li class="{{ request()->is('admin/confessions/index/all') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/all">All</a></li>
+    <li class="{{ request()->is('admin/confessions/index/featured') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/featured">Featured</a></li>
+    <li class="{{ request()->is('admin/confessions') || request()->is('admin/confessions/index/pending') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/pending">Pending ({{ \NUSWhispers\Models\Confession::pending()->count() }})</a></li>
+    <li class="{{ request()->is('admin/confessions/index/scheduled') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/scheduled">Scheduled ({{ \NUSWhispers\Models\Confession::scheduled()->count() }})</a></li>
+    <li class="{{ request()->is('admin/confessions/index/approved') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/approved">Approved</a></li>
+    <li class="{{ request()->is('admin/confessions/index/rejected') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/rejected">Rejected</a></li>
   </ul>
 
   <div class="search-filters">
     <div class="form-group">
-      <?php echo Form::select('category', array_flip($categoryOptions), Request::input('category'), ['class' => 'input-sm form-control']) ?>
+      <?php echo Form::select('category', array_flip($categoryOptions), request()->input('category'), ['class' => 'input-sm form-control']) ?>
       <div class="date-range">
         <i class="typcn typcn-calendar-outline"></i>
         <span>Anytime</span> <strong class="caret"></strong>
-        <?php echo Form::hidden('start', Request::input('start')) ?>
-        <?php echo Form::hidden('end', Request::input('end')) ?>
+        <?php echo Form::hidden('start', request()->input('start')) ?>
+        <?php echo Form::hidden('end', request()->input('end')) ?>
         <div class="tz" style="display:none"><?php echo date('Z') ?></div>
       </div>
       <a style="display: none" class="clear-dates" href="#" title="Clear date filter"><i class="typcn typcn-delete"></i></a>

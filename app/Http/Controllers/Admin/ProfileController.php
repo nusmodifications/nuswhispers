@@ -2,6 +2,9 @@
 
 namespace NUSWhispers\Http\Controllers\Admin;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Laravel\Socialite\Facades\Socialite;
 use NUSWhispers\Models\UserProfile;
 
 class ProfileController extends AdminController
@@ -12,61 +15,56 @@ class ProfileController extends AdminController
 
         return view('admin.profile.index', [
             'providers' => $allowedProviders,
-            'user' => \Auth::user(),
-            'profiles' => \Auth::user()->profiles()->get()->keyBy('provider_name')->all(),
+            'user' => auth()->user(),
+            'profiles' => auth()->user()->profiles()->get()->keyBy('provider_name')->all(),
         ]);
     }
 
-    public function postEdit()
+    public function postEdit(Request $request)
     {
-        $validationRules = [
+        $request->validate([
             'email' => 'required|email',
             'name' => 'required|string',
             'new_password' => 'min:6|max:32|string',
             'repeat_password' => 'same:new_password',
-        ];
-
-        $validator = \Validator::make(\Input::all(), $validationRules);
-        if ($validator->fails()) {
-            return \Redirect::back()->withErrors($validator);
-        }
+        ]);
 
         try {
-            $res = \Auth::user()->update([
-                'email' => \Input::get('email'),
-                'name' => \Input::get('name'),
-                'password' => \Input::get('new_password') ? \Hash::make(\Input::get('new_password')) : \Auth::user()->password,
+            auth()->user()->update([
+                'email' => request()->input('email'),
+                'name' => request()->input('name'),
+                'password' => request()->input('new_password') ? Hash::make(request()->input('new_password')) : auth()->user()->password,
             ]);
 
-            return \Redirect::back()->withMessage('Profile successfully updated.')
+            return redirect()->back()->withMessage('Profile successfully updated.')
                 ->with('alert-class', 'alert-success');
         } catch (\Exception $e) {
-            return \Redirect::back()->withMessage('Failed updating profile: ' . $e->getMessage())
+            return redirect()->back()->withMessage('Failed updating profile: ' . $e->getMessage())
                 ->with('alert-class', 'alert-danger');
         }
     }
 
     public function getConnect($provider = 'facebook')
     {
-        if (\Input::all()) {
+        if (request()->all()) {
             try {
-                $this->addProfile($provider, \Auth::user(), \Socialize::with($provider)->user());
+                $this->addProfile($provider, auth()->user(), Socialite::with($provider)->user());
                 $this->flashMessage('Sucessfully connected to ' . ucfirst($provider) . '.');
             } catch (\Exception $e) {
                 $this->flashMessage('Error connecting to provider: ' . $e->getMessage(), 'alert-danger');
             }
 
             return redirect('/admin/profile');
-        } else {
-            $scopes = $provider == 'facebook' ? ['manage_pages', 'publish_pages'] : [];
-
-            return \Socialize::with($provider)->scopes($scopes)->redirect();
         }
+
+        $scopes = $provider === 'facebook' ? ['manage_pages', 'publish_pages'] : [];
+
+        return Socialite::with($provider)->scopes($scopes)->redirect();
     }
 
     public function getDelete($provider = 'facebook')
     {
-        $profile = UserProfile::where('user_id', '=', \Auth::user()->user_id)->where('provider_name', '=', $provider)->delete();
+        $profile = UserProfile::where('user_id', '=', auth()->user()->user_id)->where('provider_name', '=', $provider)->delete();
         $this->flashMessage('Sucessfully removed ' . ucfirst($provider) . '.');
 
         return redirect('/admin/profile');
@@ -84,7 +82,7 @@ class ProfileController extends AdminController
         $pageToken = $oauthUser->token;
         $token = $oauthUser->token;
 
-        if ($provider == 'facebook') {
+        if ($provider === 'facebook') {
             // Extend current token to long-lived access token
             $response = \Facebook::get('/oauth/access_token?client_id=' . urlencode(env('FACEBOOK_APP_ID')) . '&client_secret=' . urlencode(env('FACEBOOK_APP_SECRET')) . '&grant_type=fb_exchange_token&fb_exchange_token=' . urlencode($oauthUser->token), $token);
 

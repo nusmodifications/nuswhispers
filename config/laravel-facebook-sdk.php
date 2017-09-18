@@ -11,14 +11,17 @@ return [
      * You can add additional config options here that are
      * available on the main Facebook\Facebook super service.
      *
-     * https://github.com/facebook/facebook-php-sdk-v4/blob/master/src/Facebook/Facebook.php#L132
+     * https://developers.facebook.com/docs/php/Facebook/5.0.0#config
+     *
+     * Using environment variables is the recommended way of
+     * storing your app ID and app secret. Make sure to update
+     * your /.env file with your app ID and secret.
      */
     'facebook_config' => [
-        'app_id' => env('FACEBOOK_APP_ID', ''),
-        'app_secret' => env('FACEBOOK_APP_SECRET', ''),
-        'app_access_token' => env('FACEBOOK_APP_ID', '') . '|' . env('FACEBOOK_APP_SECRET'),
+        'app_id' => env('FACEBOOK_APP_ID'),
+        'app_secret' => env('FACEBOOK_APP_SECRET'),
         'page_access_token' => env('FACEBOOK_PAGE_TOKEN', ''),
-        'default_graph_version' => 'v2.2',
+        'default_graph_version' => 'v2.10',
         //'enable_beta_mode' => true,
         //'http_client_handler' => 'guzzle',
     ],
@@ -44,4 +47,4 @@ return [
      * an authentication attempt.
      */
     'default_redirect_uri' => '/facebook/callback',
-    ];
+];

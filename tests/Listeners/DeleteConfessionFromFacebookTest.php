@@ -3,9 +3,9 @@
 namespace NUSWhispers\Tests\Listeners;
 
 use Mockery;
-use NUSWhispers\Tests\TestCase;
 use NUSWhispers\Events\ConfessionWasDeleted;
 use NUSWhispers\Listeners\DeleteConfessionFromFacebook;
+use NUSWhispers\Tests\TestCase;
 
 class DeleteConfessionFromFacebookTest extends TestCase
 {

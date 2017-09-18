@@ -11,22 +11,19 @@ class RobotsController extends Controller
      *
      * @param int $id confession ID
      *
-     * @return void
+     * @return mixed
      */
     public function getConfession($id)
     {
         if ($this->isCrawler()) {
-            $confession = Confession::approved()->find($id);
-            if (! $confession) {
-                \App::abort(404);
-            }
+            $confession = Confession::approved()->findOrFail($id);
 
             return view('robots.confession', [
                 'confession' => $confession,
             ]);
-        } else {
-            return redirect(url('/confession', $id));
         }
+
+        return redirect(url('/confession', $id));
     }
 
     /**
@@ -35,9 +32,9 @@ class RobotsController extends Controller
      *
      * @return bool
      */
-    protected function isCrawler()
+    protected function isCrawler(): bool
     {
-        $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : null;
+        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? null;
         $botTypes = 'bot|crawl|slurp|spider|facebookexternalhit';
 
         return ! empty($userAgent) ? preg_match("/{$botTypes}/", $userAgent) > 0 : false;

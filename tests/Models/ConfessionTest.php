@@ -2,11 +2,11 @@
 
 namespace NUSWhispers\Tests\Models;
 
-use NUSWhispers\Tests\TestCase;
 use NUSWhispers\Models\Confession;
 use NUSWhispers\Models\ConfessionLog;
 use NUSWhispers\Models\ConfessionQueue;
 use NUSWhispers\Models\ModeratorComment;
+use NUSWhispers\Tests\TestCase;
 
 class ConfessionTest extends TestCase
 {

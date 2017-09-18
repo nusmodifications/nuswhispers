@@ -36,7 +36,7 @@ class UpdateConfessionFacebookInfo extends Command
         $facebookResponse = Facebook::get($facebookRequest, $accessToken)->getDecodedBody();
         foreach ($facebookResponse['data'] as $facebookPost) {
             $facebookPostId = explode('_', $facebookPost['id'])[1]; // get facebook post id
-            $confession = Confession::where('fb_post_id', '=', $facebookPostId)->first(); // get confession associated with fb post
+            $confession = Confession::query()->where('fb_post_id', '=', $facebookPostId)->first(); // get confession associated with fb post
             if ($confession) {
                 $confession->fb_like_count = $facebookPost['likes']['summary']['total_count'];
                 $confession->fb_comment_count = $facebookPost['comments']['summary']['total_count'];

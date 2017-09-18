@@ -3,8 +3,10 @@ preset: laravel
 risky: false
 
 enabled:
+  - alpha_ordered_imports
   - concat_with_spaces
   - unalign_double_arrow
 
 disabled:
   - concat_without_spaces
+  - length_ordered_imports

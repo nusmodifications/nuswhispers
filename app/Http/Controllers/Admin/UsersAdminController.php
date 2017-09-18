@@ -2,14 +2,14 @@
 
 namespace NUSWhispers\Http\Controllers\Admin;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use NUSWhispers\Models\User;
 
 class UsersAdminController extends AdminController
 {
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -25,94 +25,77 @@ class UsersAdminController extends AdminController
 
     public function getAdd()
     {
-        $user = new User();
-
         return view('admin.users.add', [
-            'user' => $user,
+            'user' => new User(),
         ]);
     }
 
-    public function postAdd()
+    public function postAdd(Request $request)
     {
-        $validationRules = [
+        $request->validate([
             'email' => 'required|email|unique:users,email',
             'name' => 'required|string',
             'password' => 'required|min:6',
             'repeat_password' => 'required|same:password',
             'role' => 'in:Moderator,Administrator',
-        ];
-
-        $validator = \Validator::make(\Input::all(), $validationRules);
-        if ($validator->fails()) {
-            return \Redirect::back()->withInput()->withErrors($validator);
-        }
+        ]);
 
         try {
             $user = new User([
-                'email' => \Input::get('email'),
-                'name' => \Input::get('name'),
-                'password' => \Hash::make(\Input::get('password')),
-                'role' => \Input::get('role'),
+                'email' => $request->input('email'),
+                'name' => $request->input('name'),
+                'password' => Hash::make($request->input('password')),
+                'role' => $request->input('role'),
             ]);
             $user->save();
 
             return redirect('/admin/users')->withMessage('User successfully added.')
                 ->with('alert-class', 'alert-success');
         } catch (\Exception $e) {
-            return \Redirect::back()->withMessage('Failed adding user: ' . $e->getMessage())
+            return redirect()->back()->withMessage('Failed adding user: ' . $e->getMessage())
                 ->with('alert-class', 'alert-danger');
         }
     }
 
     public function getEdit($id)
     {
-        $user = User::findOrFail($id);
-
         return view('admin.users.edit', [
-            'user' => $user,
+            'user' => User::findOrFail($id),
         ]);
     }
 
-    public function postEdit($id)
+    public function postEdit(Request $request, $id)
     {
         $user = User::findOrFail($id);
 
-        $validationRules = [
+        $request->validate([
             'email' => 'required|email|unique:users,email,' . $user->user_id . ',user_id',
             'name' => 'required|string',
             'password' => 'min:6',
             'repeat_password' => 'same:password',
-        ];
-
-        if (\Auth::user()->user_id != $user->user_id) {
-            $validationRules['role'] = 'in:Moderator,Administrator';
-        }
-
-        $validator = \Validator::make(\Input::all(), $validationRules);
-        if ($validator->fails()) {
-            return \Redirect::back()->withInput()->withErrors($validator);
-        }
+            'role' => auth()->user()->user_id !== $user->user_id ? 'in:Moderator,Administrator' : '',
+        ]);
 
         try {
             $user->update([
-                'email' => \Input::get('email'),
-                'name' => \Input::get('name'),
-                'password' => \Hash::make(\Input::get('password')),
-                'role' => \Auth::user()->user_id != $user->user_id ? \Input::get('role') : $user->role,
+                'email' => $request->input('email'),
+                'name' => $request->input('name'),
+                'password' => Hash::make($request->input('password')),
+                'role' => auth()->user()->user_id !== $user->user_id ? $request->input('role') : $user->role,
             ]);
 
             return redirect('/admin/users')->withMessage('User successfully updated.')
                 ->with('alert-class', 'alert-success');
         } catch (\Exception $e) {
-            return \Redirect::back()->withMessage('Failed updating user: ' . $e->getMessage())
+            return redirect()->back()->withMessage('Failed updating user: ' . $e->getMessage())
                 ->with('alert-class', 'alert-danger');
         }
     }
 
     public function getDelete($id)
     {
-        if (\Auth::user()->user_id == $id) {
-            return \Redirect::back()->withMessage('You cannnot delete yourself!')->with('alert-class', 'alert-danger');
+        if (auth()->user()->user_id === $id) {
+            return redirect()->back()->withMessage('You cannnot delete yourself!')->with('alert-class', 'alert-danger');
         }
 
         $user = User::findOrFail($id);
@@ -120,9 +103,9 @@ class UsersAdminController extends AdminController
         try {
             $user->delete();
 
-            return \Redirect::back()->withMessage('User successfully deleted.')->with('alert-class', 'alert-success');
+            return redirect()->back()->withMessage('User successfully deleted.')->with('alert-class', 'alert-success');
         } catch (\Exception $e) {
-            return \Redirect::back()->withMessage('Error deleting user: ' . $e->getMessage())->with('alert-class', 'alert-danger');
+            return redirect()->back()->withMessage('Error deleting user: ' . $e->getMessage())->with('alert-class', 'alert-danger');
         }
     }
 }

@@ -27,7 +27,7 @@
       @endif
     </div>
 
-    @if (\Auth::user()->user_id != $user->user_id)
+    @if (auth()->user()->user_id != $user->user_id)
     <div class="form-group {{$errors->first('role') ? 'has-error' : ''}}">
       <label for="role">Role <span class="text-danger">*</span></label>
       <?php echo \Form::select('role', ['Moderator' => 'Moderator', 'Administrator' => 'Administrator'], null, ['class' => 'form-control']) ?>

@@ -19,8 +19,6 @@ class CheckForMaintenanceMode
      * Create a new filter instance.
      *
      * @param \Illuminate\Contracts\Foundation\Application $app
-     *
-     * @return void
      */
     public function __construct(Application $app)
     {
@@ -38,7 +36,7 @@ class CheckForMaintenanceMode
     public function handle($request, Closure $next)
     {
         if ($this->app->isDownForMaintenance() &&
-            ! in_array($request->getClientIp(), ['127.0.0.1'])) {
+            $request->getClientIp() !== '127.0.0.1') {
             throw new HttpException(503);
         }
 
