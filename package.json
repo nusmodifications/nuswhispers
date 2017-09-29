@@ -1,7 +1,7 @@
 {
   "name": "nuswhispers",
   "version": "0.1.0",
-  "description": "Laravel 5 + AngularJS project.",
+  "description": "NUSWhispers source. Powered by Laravel.",
   "repository": "https://github.com/nusmodifications/nuswhispers",
   "dependencies": {
     "map-stream": "^0.1.0"
@@ -11,6 +11,7 @@
     "bower": "^1.7.1",
     "chalk": "^1.1.1",
     "connect-livereload": "^0.5.4",
+    "cross-env": "^5.0.5",
     "del": "^2.2.0",
     "gulp": "^3.9.0",
     "gulp-concat": "^2.6.0",
