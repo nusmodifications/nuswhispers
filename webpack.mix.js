@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const webpack = require('webpack');
 
 /*
  |--------------------------------------------------------------------------
@@ -10,4 +11,13 @@ const mix = require('laravel-mix');
  |
  */
 mix.js('resources/assets/js/admin.js', 'public/js')
-    .sass('resources/assets/sass/admin.scss', 'public/css');
+    .extract(['jquery', 'bootstrap-sass', 'moment'])
+    .sass('resources/assets/sass/admin.scss', 'public/css')
+    .autoload({
+        jquery: ['$', 'jQuery', 'jquery'],
+        moment: 'moment',
+    })
+    .webpackConfig({
+        plugins: [new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)],
+    })
+    .version();

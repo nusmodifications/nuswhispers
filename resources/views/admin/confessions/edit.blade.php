@@ -86,32 +86,18 @@ if ($confession->status == 'Scheduled') {
       <div class="panel-body">
         <p>
         <?php
-        $status = $confession->status == 'Scheduled' ? $queue->status_after : $confession->status;
-        echo \Form::select('status', array_combine(\NUSWhispers\Models\Confession::statuses(), \NUSWhispers\Models\Confession::statuses()), $status, ['class' => 'form-control'])
+        $status = $confession->status === 'Scheduled' ? $queue->status_after : $confession->status;
+        $statuses = collect(\NUSWhispers\Models\Confession::statuses())->filter(function ($status) {
+          return $status !== 'Scheduled';
+        })->all();
+        echo \Form::select('status', array_combine($statuses, $statuses), $status, ['class' => 'form-control'])
         ?>
         </p>
         <p style="text-align:center; color: #999">Latest status updated {{$confession->status_updated_at->diffForHumans()}}.</p>
-        @if (in_array($confession->status, ['Pending', 'Rejected', 'Scheduled'], true))
-        <div class="schedule-confession" @if ($confession->status === 'Pending' || $confession->status === 'Rejected')style="display: none" @endif>
-          @if ($confession->status === 'Pending')
-          Schedule confession to go public:
-          @else
-          Currently scheduled to go public at:
-          @endif
-          <div class="schedule-date">
-            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-            <span>Now</span> <strong class="caret"></strong>
-            <div class="tz" style="display:none"><?php echo date('Z') ?></div>
-            <?php
-            if (request()->input('schedule') !== '')
-              $schedule = request()->input('schedule');
-            elseif (isset($queue))
-              $schedule = $queue->update_status_at->format('c');
-            else
-              $schedule = '';
-            echo Form::hidden('schedule', $schedule)
-            ?>
-          </div>
+        @if ($confession->status === 'Scheduled')
+        <div class="schedule-confession">
+          Currently scheduled to go public: <br />
+          <strong>{{ $queue->update_status_at->diffForHumans() }}</strong>
         </div>
         @endif
 

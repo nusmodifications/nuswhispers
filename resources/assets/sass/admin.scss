@@ -1,0 +1,379 @@
+@import "bootstrap.scss";
+@import "node_modules/typicons.font/src/font/typicons";
+
+@import "mixins.scss";
+@import "variables.scss";
+
+@import "main.scss";
+
+#content {
+    width: 100%;
+    padding: 0 1em;
+}
+
+label {
+    font-weight: 400;
+    color: lighten($primary-text-color, 10%);
+    margin-bottom: 0.5em;
+}
+
+.btn {
+    background: #ddd;
+    color: $primary-text-color;
+    &:hover {
+        color: darken($primary-text-color, 20%);
+    }
+}
+.btn-primary {
+    background: $primary-color;
+    color: #fff;
+
+    &:hover, &:focus {
+        color: $highlight-color;
+        background: lighten($primary-color, 5%);
+    }
+}
+.open > .btn-primary.dropdown-toggle {
+    color: $highlight-color;
+    background: lighten($primary-color, 5%);
+}
+.btn-danger {
+    color: #c92e2c;
+
+    &:hover {
+        color: darken(#c92e2c, 10%);
+        background: #ddd;
+    }
+}
+
+.whispers-logo-text {
+    font-size: 85%;
+    font-weight: 600;
+    margin: .15em .4em;
+}
+
+.card {
+    background: #fff;
+    padding: 2em;
+    border: 1px solid #eee;
+}
+
+.card-logo {
+    &:before {
+        background: url('../img/card_logo.png') no-repeat;
+        background-size: 128px 128px;
+        content: ' ';
+        width: 128px;
+        height: 128px;
+        margin: 2em auto;
+        display: block;
+    }
+}
+
+.forgot-password {
+    margin: 1.5em 0 0;
+    text-align: center;
+}
+
+h1 {
+    font-size: 130%;
+    margin: 6px 0 14px;
+    font-weight: 400;
+}
+
+h2 {
+    font-size: 140%;
+    font-weight: 400;
+    color: $primary-color;
+    margin: 1em 0;
+}
+
+.page-header {
+    margin: 0 auto;
+    padding-bottom: 6px;
+    border-color: #ddd;
+
+    .typcn {
+        font-size: 125%;
+        margin-right: .25em;
+    }
+}
+
+#sidebar-wrapper {
+    .main-nav li a {
+        width: 99%;
+
+        &:hover .badge {
+            background: $highlight-color;
+        }
+    }
+    .badge {
+        float: right;
+        margin-top: .5em;
+        background: #fff;
+        color: $primary-color;
+        border-radius: 8px;
+    }
+    .active .badge {
+        background: $highlight-color;
+    }
+}
+
+.page-header {
+    width: 100%;
+    display: inline-block;
+    .page-title {
+        float: left;
+    }
+    .search-bar {
+        margin-top: .5em;
+        float: right;
+    }
+}
+
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover {
+    background: $background-color;
+}
+
+.search-filters {
+    margin: 1em 0;
+    .pagination {
+        float: right;
+        margin: .1em 0;
+
+        >li a {
+            color: $primary-color;
+        }
+
+        >.active span {
+            background: $primary-color;
+            border-color: $primary-color;
+        }
+    }
+}
+
+.clear-dates {
+    font-size: 125%;
+    margin-right: 1em;
+}
+
+.date-range {
+    display: inline-block;
+    padding: .325em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    vertical-align: middle;
+
+    span {
+        display: inline-block;
+        font-size: 12px;
+        vertical-align: top;
+        padding: 2px .25em;
+    }
+}
+
+.btn-filter {
+    margin-left: 1em;
+}
+
+.post-list {
+    .post-header {
+        margin: 1em;
+        border-bottom: 1px solid #eaeaea;
+        padding: 1em 0;
+    }
+    .post-meta {
+        display: inline-block;
+        color: lighten($primary-text-color, 30%);
+        font-size: 95%;
+    }
+    .post-actions {
+        display: inline-block;
+        float: right;
+    }
+    .post {
+        background: #fff;
+        line-height: 1.6em;
+        margin: 1em 0;
+        box-shadow: 0 0 1px 0 rgba(0,0,0,0.1);
+    }
+    .post-content {
+        padding: 0 1em 1em;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+
+    .post-image {
+        padding: 0 1em 1em;
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    }
+    .post-footer {
+        margin: 1em;
+        border-top: 1px solid #eaeaea;
+        padding: 1em 0;
+    }
+    .post-comments {
+        float: right;
+        span {
+            font-size: 125%;
+        }
+    }
+}
+
+.admin-content-wrapper {
+    padding: 0 1em;
+    line-height: 1.5em;
+}
+
+.user-profiles-list {
+
+    margin: 1.5em 0;
+
+    tbody > tr > td {
+        vertical-align: middle;
+    }
+
+    .typcn {
+        font-size: 120%;
+    }
+    .actions {
+        text-align: right;
+    }
+}
+
+.edit-confessions-col {
+    padding-right: 0;
+}
+
+.panel-photo img {
+    max-width: 100%;
+    height: auto;
+}
+
+.panel-status .label {
+    font-size: 100%;
+}
+
+.panel-body .alert, .form .alert {
+    margin: .5em 0 0;
+    padding: .5em .75em;
+}
+
+.panel-body .checkbox:first-child {
+    margin-top: 0;
+}
+
+.schedule-confession {
+    margin: 1em 0;
+    padding: 1em .5em;
+    border: solid #ddd;
+    border-width: 1px 0;
+    text-align: center;
+
+    .typcn {
+        font-size: 150%;
+    }
+
+    .time {
+        font-weight: 700;
+    }
+
+    .schedule {
+        display: block;
+        text-decoration: underline;
+    }
+
+    .schedule-date {
+        text-align: left;
+        display: inline-block;
+        width: 100%;
+        box-sizing: border-box;
+        padding: .5em 1em;
+        margin: .5em 0;
+        background: #efefef;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        cursor: default;
+
+        span {
+            padding-left: .25em;
+        }
+
+        .caret {
+            float: right;
+            margin-top: .5em;
+        }
+    }
+}
+
+.status-history-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 95%;
+
+    li {
+        padding: 1em 0;
+        border-bottom: 1px solid #efefef;
+
+        &:first-child {
+            padding-top: 0;
+        }
+    }
+
+    .status-meta {
+        display: block;
+        color: lighten($primary-text-color, 30%);
+    }
+}
+
+.profile-form {
+    margin: 0 0 1em;
+}
+.user-form {
+    margin: 1em 0;
+}
+
+.user-list > tbody > tr > td {
+    vertical-align: middle;
+}
+
+
+.comment-meta {
+    background: #f5f5f5;
+    padding: .75em 1em;
+    font-size: 95%;
+    color: #999;
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
+
+    p {
+        float: left;
+        margin: 0;
+    }
+}
+
+.comment-author {
+    font-weight: 400;
+    color: #333;
+}
+.comment-content {
+    padding: .75em 1em;
+    margin-bottom: 1em;
+}
+.delete-comment {
+    float: right;
+    font-size: 125%;
+    line-height: 0;
+    color: #999;
+
+    &:hover {
+        color: $primary-color;
+    }
+}
