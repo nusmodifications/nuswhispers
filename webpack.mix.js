@@ -11,13 +11,8 @@ const webpack = require('webpack');
  |
  */
 mix.js('resources/assets/js/admin.js', 'public/js')
-    .extract(['jquery', 'bootstrap-sass', 'moment'])
+    .extract(['jquery', 'bootstrap-sass'])
     .sass('resources/assets/sass/admin.scss', 'public/css')
     .autoload({
         jquery: ['$', 'jQuery', 'jquery'],
-        moment: 'moment',
-    })
-    .webpackConfig({
-        plugins: [new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)],
-    })
-    .version();
+    });

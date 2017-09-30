@@ -1,6 +1,6 @@
 {
-    "/js/vendor.js": "/js/vendor.js?id=95a2cb6b6992eda5e477",
-    "/js/admin.js": "/js/admin.js?id=f23445b66195e843d236",
-    "/css/admin.css": "/css/admin.css?id=8eb0dce41936ec3416f1",
-    "/js/manifest.js": "/js/manifest.js?id=ac33faec2dfdd91324ef"
+    "/js/vendor.js": "/js/vendor.js",
+    "/js/admin.js": "/js/admin.js",
+    "/css/admin.css": "/css/admin.css",
+    "/js/manifest.js": "/js/manifest.js"
 }
