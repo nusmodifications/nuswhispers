@@ -153,27 +153,6 @@ h2 {
     }
 }
 
-.clear-dates {
-    font-size: 125%;
-    margin-right: 1em;
-}
-
-.date-range {
-    display: inline-block;
-    padding: .325em;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background: #fff;
-    vertical-align: middle;
-
-    span {
-        display: inline-block;
-        font-size: 12px;
-        vertical-align: top;
-        padding: 2px .25em;
-    }
-}
-
 .btn-filter {
     margin-left: 1em;
 }
@@ -274,41 +253,6 @@ h2 {
     border: solid #ddd;
     border-width: 1px 0;
     text-align: center;
-
-    .typcn {
-        font-size: 150%;
-    }
-
-    .time {
-        font-weight: 700;
-    }
-
-    .schedule {
-        display: block;
-        text-decoration: underline;
-    }
-
-    .schedule-date {
-        text-align: left;
-        display: inline-block;
-        width: 100%;
-        box-sizing: border-box;
-        padding: .5em 1em;
-        margin: .5em 0;
-        background: #efefef;
-        border-radius: 4px;
-        border: 1px solid #ddd;
-        cursor: default;
-
-        span {
-            padding-left: .25em;
-        }
-
-        .caret {
-            float: right;
-            margin-top: .5em;
-        }
-    }
 }
 
 .status-history-list {

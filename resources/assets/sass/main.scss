@@ -28,42 +28,8 @@ a:focus {
     @include transition(padding-left, 0.5s, ease, 0s);
 }
 
-.likebox-wrapper {
-    text-align: center;
-}
-
 #main-content {
     margin-top: 15px;
-}
-
-footer {
-    margin-top: 1em;
-    border-top: 1px solid #ddd;
-    padding: 1em 0;
-    font-size: 90%;
-    color: #999;
-
-    a:link, a:visited {
-        color: #999;
-    }
-    a:hover {
-        color: #999;
-        text-decoration: underline;
-    }
-}
-
-.privacy-content {
-    padding: 1.5em 1.25em .5em;
-    background: #fff;
-    text-align: justify;
-    line-height: 1.5em;
-    font-size: 100%;
-
-    h2 {
-        font-size: 120%;
-        font-weight: 700;
-        margin: 1em 0 .75em;
-    }
 }
 
 .whispers-brand {
@@ -123,17 +89,6 @@ footer {
 
 .btn-alt-style {
     background-color: $alternate-color;
-}
-
-.btn-social-media {
-    background-color: transparent;
-    color: $secondary-text-color;
-    font-size: 185%;
-    padding: 0px;
-
-    &:hover {
-        color: $alternate-color;
-    }
 }
 
 #sidebar-wrapper {
