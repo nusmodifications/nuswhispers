@@ -43,5 +43,10 @@ php artisan db:seed
 gulp prod
 ```
 
+6) Compile admin assets via npm:
+```
+npm run prod
+```
+
 ## Credits
 - [generator-boom](https://www.npmjs.com/package/generator-boom)

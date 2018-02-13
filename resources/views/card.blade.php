@@ -6,9 +6,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>NUSWhispers</title>
 
-    <script src="//use.typekit.net/zog5enw.js"></script>
-    <script>try{Typekit.load({ async: true });}catch(e){}</script>
-	<link rel="stylesheet" href="/assets/css/admin.css">
+  <script src="//use.typekit.net/zog5enw.js"></script>
+  <script>try{Typekit.load({ async: true });}catch(e){}</script>
+  <link rel="stylesheet" href="{{ mix('css/admin.css') }}">
 </head>
 <body>
     <div class="card-logo"></div>
@@ -16,7 +16,8 @@
 	@yield('content')
 
 	<!-- Scripts -->
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
+  <script src="{{ mix('js/manifest.js') }}"></script>
+  <script src="{{ mix('js/vendor.js') }}"></script>
+	<script src="{{ mix('js/admin.js') }}"></script>
 </body>
 </html>
