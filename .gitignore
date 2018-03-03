@@ -58,8 +58,11 @@ bower_components
 phpunit.xml
 
 # Other folders
-/public/assets
 /build
 /zip
 /scss
 /.idea
+
+# Built files
+/public/*.html
+/public/assets
