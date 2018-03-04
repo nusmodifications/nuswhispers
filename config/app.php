@@ -142,6 +142,8 @@ return [
      */
 
     'providers' => [
+        Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
+
         /*
          * Laravel Framework Service Providers...
          */
