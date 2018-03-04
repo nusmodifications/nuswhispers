@@ -9,7 +9,7 @@
   <script src="//use.typekit.net/zog5enw.js"></script>
   <script>try{Typekit.load({ async: true });}catch(e){}</script>
   <link rel="stylesheet" href="/assets/css/admin.css">
-  <link rel="stylesheet" href="/assets/css/daterangepicker-bs3.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.27/daterangepicker.min.css">
 </head>
 <body>
 
@@ -59,8 +59,8 @@
   <!-- Scripts -->
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
-  <script src="/assets/js/moment.min.js"></script>
-  <script src="/assets/js/daterangepicker.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.27/moment.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.27/daterangepicker.min.js"></script>
   <script src="/assets/js/admin.js"></script>
 </body>
 </html>
