@@ -17,7 +17,7 @@ class ReCaptcha implements Rule
     public function passes($attribute, $value)
     {
         /** @var \ReCaptcha\ReCaptcha $recaptcha */
-        $recaptcha = app('recaptcha');
+        $recaptcha = app(\ReCaptcha\ReCaptcha::class);
 
         return $recaptcha->verify($value, request()->getClientIp())->isSuccess();
     }
