@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2141ad24a2082a9170976a766bc977ac",
+    "content-hash": "818a80ebcb7278c708a2d7334b7343eb",
     "packages": [
         {
             "name": "anlutro/l4-settings",
@@ -1095,16 +1095,16 @@
         },
         {
             "name": "laravelcollective/html",
-            "version": "v5.5.2",
+            "version": "v5.6.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/LaravelCollective/html.git",
-                "reference": "818efc2e160aa56e8475219faed24542e80ee25d"
+                "reference": "41cd9291a69bd24f2184e504be041348a87308a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/LaravelCollective/html/zipball/818efc2e160aa56e8475219faed24542e80ee25d",
-                "reference": "818efc2e160aa56e8475219faed24542e80ee25d",
+                "url": "https://api.github.com/repos/LaravelCollective/html/zipball/41cd9291a69bd24f2184e504be041348a87308a8",
+                "reference": "41cd9291a69bd24f2184e504be041348a87308a8",
                 "shasum": ""
             },
             "require": {
@@ -1159,7 +1159,7 @@
             ],
             "description": "HTML and Form Builders for the Laravel Framework",
             "homepage": "https://laravelcollective.com",
-            "time": "2018-02-08T18:38:44+00:00"
+            "time": "2018-02-12T14:19:42+00:00"
         },
         {
             "name": "league/flysystem",
