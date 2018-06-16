@@ -35,7 +35,7 @@ Route::group(['namespace' => 'Auth'], function () {
     $this->get('password/reset', 'ForgotPasswordController@showLinkRequestForm');
     $this->post('password/email', 'ForgotPasswordController@sendResetLinkEmail');
 
-    $this->get('password/reset/{token}', 'ResetPasswordController@showResetForm');
+    $this->get('password/reset/{token}', 'ResetPasswordController@showResetForm')->name('password.reset');
     $this->post('password/reset', 'ResetPasswordController@reset');
 });
 
