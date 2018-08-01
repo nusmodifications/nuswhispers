@@ -28,7 +28,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('confession:scheduled')->everyFiveMinutes();
-        $schedule->command('confession:facebook-update')->hourly();
+        if (! config('app.manual_mode')) {
+            $schedule->command('confession:scheduled')->everyFiveMinutes();
+            $schedule->command('confession:facebook-update')->hourly();
+        }
     }
 }
