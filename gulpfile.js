@@ -5,7 +5,7 @@ var gulp       = require('gulp'),
     del        = require('del'),
     stylish    = require('jshint-stylish'),
     path       = require('path'),
-    open       = require('open'),
+    opn       = require('opn'),
     fs         = require('fs'),
     chalk      = require('chalk'),
     args       = require('yargs').argv,
@@ -73,7 +73,7 @@ gulp.task('server', function () {
     gulpPlugins.connect.server(serverConfig);
 
     console.log('Started connect web server on http://nuswhispers.local:' + serverConfig.port + '.');
-    open('http://nuswhispers.local:' + serverConfig.port);
+    opn('http://nuswhispers.local:' + serverConfig.port);
 });
 
 gulp.task('tasks', gulpPlugins.taskListing);
