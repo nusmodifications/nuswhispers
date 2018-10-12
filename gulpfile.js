@@ -85,7 +85,7 @@ gulp.task('tasks', gulpPlugins.taskListing);
 gulp.task('js:hint', function () {
 
     console.log('-------------------------------------------------- JS - HINT');
-    var stream = gulp.src([SETTINGS.src.js + 'app.js', '!' + SETTINGS.src.js + 'plugins/*.js', SETTINGS.src.js + '**/*.js', 'resources/assets/js/*.js', 'gulpfile.js'])
+    var stream = gulp.src([SETTINGS.src.js + 'app.js', '!' + SETTINGS.src.js + 'plugins/*.js', SETTINGS.src.js + '**/*.js', 'resources/js/*.js', 'gulpfile.js'])
         .pipe(gulpPlugins.jshint(hintOptions))
         .pipe(gulpPlugins.jshint.reporter(stylish));
     return stream;
@@ -157,7 +157,7 @@ gulp.task('concat:js', ['js:hint'], function () {
         .pipe(gulp.dest(SETTINGS.build.js))
         .pipe(gulpPlugins.connect.reload());
 
-    gulp.src(['resources/assets/js/*.js', 'resources/assets/js/admin.js'])
+    gulp.src(['resources/js/*.js', 'resources/js/admin.js'])
         .pipe(gulpPlugins.concat('admin.js'))
         .pipe(gulpPlugins.if(isProduction, gulpPlugins.uglify()))
         .pipe(gulp.dest(SETTINGS.build.js))
@@ -293,7 +293,7 @@ gulp.task('watch', function () {
 
     watchedFiles.push(gulp.watch([SETTINGS.src.templates + '*.html', SETTINGS.src.templates + '**/*.html'], { interval: 500 }, ['copy:html']));
 
-    watchedFiles.push(gulp.watch(['resources/assets/js/*.js'], { interval: 500 }, ['concat:js']));
+    watchedFiles.push(gulp.watch(['resources/js/*.js'], { interval: 500 }, ['concat:js']));
 
 
     // Just to add log messages on Terminal, in case any file is changed

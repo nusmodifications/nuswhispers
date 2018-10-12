@@ -47,6 +47,7 @@ $RECYCLE.BIN/
 vendor
 node_modules
 bower_components
+yarn.lock
 
 # Log files
 *.log

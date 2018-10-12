@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Str;
+
 return [
 
     /*
@@ -10,6 +12,8 @@ return [
     | This option controls the default cache connection that gets used while
     | using this caching library. This connection is used when another is
     | not explicitly specified when executing a given caching function.
+    |
+    | Supported: "apc", "array", "database", "file", "memcached", "redis"
     |
     */
 
@@ -68,7 +72,7 @@ return [
 
         'redis' => [
             'driver' => 'redis',
-            'connection' => 'default',
+            'connection' => 'cache',
         ],
 
     ],
@@ -84,20 +88,6 @@ return [
     |
     */
 
-    'prefix' => 'laravel',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Cache API
-    |--------------------------------------------------------------------------
-    |
-    | Specify how many minutes should the API responses should expire in
-    | the cache.
-    |
-    */
-
-    'api' => [
-        'timeout' => env('CACHE_TIMEOUT', 30),
-    ],
+    'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_cache'),
 
 ];
