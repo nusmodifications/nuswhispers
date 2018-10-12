@@ -1,6 +1,5 @@
 # NUSWhispers
 
-[![Dependency Status](https://gemnasium.com/nusmodifications/nuswhispers.svg)](https://gemnasium.com/nusmodifications/nuswhispers)
 [![Build Status](https://travis-ci.org/nusmodifications/nuswhispers.svg)](https://travis-ci.org/nusmodifications/nuswhispers)
 [![Coverage Status](https://coveralls.io/repos/github/nusmodifications/nuswhispers/badge.svg)](https://coveralls.io/github/nusmodifications/nuswhispers)
 [![StyleCI Status](https://styleci.io/repos/31862595/shield)](https://styleci.io/repos/31862595)
