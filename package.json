@@ -8,6 +8,7 @@
     "bower": "^1.8.0",
     "chalk": "^2.4.0",
     "connect-livereload": "^0.6.0",
+    "cross-env": "^5.2.0",
     "del": "^3.0.0",
     "gulp": "^3.9.0",
     "gulp-concat": "^2.6.0",
@@ -27,6 +28,7 @@
     "gulp-zip": "^4.2.0",
     "jshint": "^2.9.0",
     "jshint-stylish": "^2.2.0",
+    "laravel-mix": "^2.1.14",
     "main-bower-files": "^2.13.0",
     "map-stream": "^0.1.0",
     "opn": "^5.4.0",
@@ -35,7 +37,12 @@
   },
   "scripts": {
     "postinstall": "bower install",
-    "start": "gulp",
-    "build": "gulp build:prod"
+    "build": "gulp build:prod && npm run production",
+    "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch": "npm run development -- --watch",
+    "watch-poll": "npm run watch -- --watch-poll",
+    "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "start": "gulp"
   }
 }

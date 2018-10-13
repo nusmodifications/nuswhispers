@@ -57,13 +57,18 @@ yarn.lock
 
 # PHPUnit
 phpunit.xml
+.phpunit.result.cache
 
 # Other folders
 /build
 /zip
 /scss
 /.idea
+/.vscode
 
 # Built files
 /public/*.html
 /public/assets
+/public/hot
+/public/storage
+/public/mix-manifest.json
