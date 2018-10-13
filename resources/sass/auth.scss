@@ -1,0 +1,28 @@
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  align-items: center;
+  background: #f5f5f5;
+  display: grid;
+  height: 100vh;
+  justify-content: center;
+  margin: 0;
+  place-items: center center;
+}
+
+.auth {
+  background: #fff;
+  margin: 5rem 0;
+  max-width: 420px;
+  padding: 2rem 2.5rem;
+  width: 100%;
+}
