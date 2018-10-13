@@ -72,3 +72,7 @@ phpunit.xml
 /public/hot
 /public/storage
 /public/mix-manifest.json
+
+/public/js
+/public/css
+/public/fonts
