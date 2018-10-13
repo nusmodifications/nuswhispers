@@ -7,7 +7,7 @@
 <form method="POST" action="{{ route('login') }}">
   @csrf
 
-  @if ($errors)
+  @if ($errors->isNotEmpty())
   <div class="alert alert-danger">
     Oops, we can't seem to log you in. Please check your username and password, or try again later.
   </div>
