@@ -4,7 +4,7 @@
 
 @section('content')
 
-<form method="POST" action="{{ url('login') }}">
+<form method="POST" action="{{ route('login') }}">
   @csrf
 
   @if ($errors)
@@ -37,7 +37,7 @@
   </div>
 
   <div class="form-group text-center">
-    <a href="{{ url('password/reset') }}">Forgot your password?</a>
+    <a href="{{ route('password.request') }}">Forgot your password?</a>
   </div>
 </form>
 
