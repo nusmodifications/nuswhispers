@@ -3,3 +3,126 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+// Typicons
+@import '~typicons.font/src/font/typicons';
+
+.sidebar,
+.main {
+  padding: 1rem 1.25rem;
+}
+
+.sidebar {
+  backface-visibility: hidden;
+  background: $primary;
+  height: 100%;
+  overflow-y: hidden;
+  position: absolute;
+  width: $sidebar-width;
+  z-index: 11;
+}
+
+.main {
+  box-sizing: border-box;
+  margin-left: $sidebar-width;
+  width: calc(100% - #{$sidebar-width});
+}
+
+@media (max-width: map-get($container-max-widths, 'md')) {
+  .sidebar {
+    display: none;
+  }
+
+  .main {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+.whispers {
+  align-items: center;
+  color: $white;
+  display: flex;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+
+  span {
+    color: $yellow;
+  }
+
+  &:before {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30'%3E%3Cpath fill='%23fff' d='M28 22.5c-.3 1.2-.3 3 1.5 4.7-1 0-1.8.2-4.7-1C22 28.6 18.6 30 15 30 6.7 30 0 23.2 0 15 0 6.7 6.7 0 15 0s15 6.7 15 15c0 2.6-.7 5.2-2 7.5z'/%3E%3Cpath fill='%23f55260' d='M15.2 10.2s1.3-2.2 4.3-1.6c3 .7 3.5 3.3 3.5 3.3s.7 2.6-1 5c-2.3 3-4.8 4.8-5.5 5.4-.7.5-1 .6-1.4.6-.5 0-3-2.2-4.8-4-2-2-3-4-3-6 0-1.8 1.2-3.5 3-4.2 2-.8 4 .2 5 1.4z'/%3E%3C/svg%3E%0A")
+      no-repeat;
+    content: ' ';
+    display: inline-block;
+    height: 30px;
+    margin-right: 0.25rem;
+    width: 30px;
+  }
+
+  &:hover {
+    color: $white;
+    text-decoration: none;
+  }
+}
+
+.sidebar {
+  hr {
+    border-top-color: rgba(255, 255, 255, 0.5);
+    margin: 0.5rem 0;
+  }
+}
+
+.sidebar-nav {
+  .typcn {
+    font-size: 1.25rem;
+    margin-right: 0.5rem;
+  }
+
+  li {
+    padding: 0.25rem 0.5rem;
+  }
+
+  a {
+    color: $white;
+    font-size: 1rem;
+    transition: color 0.3s;
+
+    &:hover {
+      color: $yellow;
+      text-decoration: none;
+    }
+  }
+
+  .active {
+    position: relative;
+
+    a {
+      color: $yellow;
+    }
+
+    &:after {
+      border-bottom: 0.6em solid transparent;
+      border-right: 0.6em solid $body-bg;
+      border-top: 0.6em solid transparent;
+      content: ' ';
+      margin-top: -0.3em;
+      pointer-events: none;
+      position: absolute;
+      right: -10%;
+      top: 50%;
+    }
+  }
+
+  .badge-warning {
+    color: #d50c1e;
+  }
+}
+
+.sidebar-nav-category {
+  color: #d50c1e;
+  font-size: 0.675rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}

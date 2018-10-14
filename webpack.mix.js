@@ -34,14 +34,7 @@ mix
   .js('resources/js/admin.js', 'public/js')
   .extract(['bootstrap', 'jquery', 'flatpickr'])
   .sass('resources/sass/auth.scss', 'public/css')
-  .sass('resources/sass/admin.scss', 'public/css')
-  .styles(
-    [
-      'node_modules/typicons.font/src/font/typicons.css',
-      'public/css/admin.css',
-    ],
-    'public/css/admin.css'
-  );
+  .sass('resources/sass/admin.scss', 'public/css');
 
 if (mix.inProduction()) {
   mix.sourceMaps().version();
