@@ -1,47 +1,36 @@
-@extends('card')
+@extends('layouts.auth')
+
+@section('title', 'Reset Password')
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-4 col-md-offset-4">
-            @if (count($errors) > 0)
-                <div class="alert alert-danger">
-                    <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
 
-            <form class="card form" role="form" method="POST" action="{{ url('/password/reset') }}">
-                {{ csrf_field() }}
+@include('alert')
 
-                <input type="hidden" name="token" value="{{ $token }}">
+<form method="POST" action="{{ route('password.update') }}">
+    @csrf
 
-                <div class="form-group">
-                    <label class="control-label">E-Mail Address</label>
-                    <input type="email" class="input-lg form-control" name="email" value="{{ old('email') }}">
-                </div>
+    <input type="hidden" name="token" value="{{ $token }}">
 
-                <div class="form-group">
-                    <label class="control-label">Password</label>
-                    <input type="password" class="input-lg form-control" name="password">
-                </div>
-
-                <div class="form-group">
-                    <label class="control-label">Confirm Password</label>
-                    <input type="password" class="input-lg form-control" name="password_confirmation">
-                </div>
-
-                <div class="form-group">
-                    <button type="submit" class="btn btn-block btn-lg btn-primary">
-                        Reset Password
-                    </button>
-                </div>
-            </form>
-        </div>
+    <div class="form-group">
+        <label for="email">Email Address</label>
+        <input name="email" type="email" id="email" class="form-control" placeholder="foo@nuswhispers.com" value="{{ old('email') }}"
+            required>
     </div>
-</div>
+
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input name="password" type="password" id="password" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="password_confirmation">Confirm Password</label>
+        <input name="password_confirmation" type="password" id="password_confirmation" class="form-control" required>
+    </div>
+
+    <div class="
+            form-group">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Reset Password</button>
+    </div>
+</form>
+
 @endsection
