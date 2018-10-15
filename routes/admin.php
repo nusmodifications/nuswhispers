@@ -11,37 +11,47 @@
 */
 
 // Redirect default admin to confessions dashboard.
-Route::get('/', function () {
-    return redirect('admin/confessions');
+Route::redirect('', 'admin/confessions');
+
+Route::prefix('api-keys')->group(function () {
+    Route::get('', 'ApiKeysAdminController@getIndex');
+    Route::get('add', 'ApiKeysAdminController@getAdd');
+    Route::get('delete/{id}', 'ApiKeysAdminController@getDelete');
 });
 
-Route::get('api-keys', 'ApiKeysAdminController@getIndex');
-Route::get('api-keys/add', 'ApiKeysAdminController@getAdd');
-Route::get('api-keys/delete/{id}', 'ApiKeysAdminController@getDelete');
+Route::prefix('settings')->group(function () {
+    Route::get('', 'SettingsAdminController@getIndex');
+    Route::post('', 'SettingsAdminController@postIndex');
+});
 
-Route::get('settings', 'SettingsAdminController@getIndex');
-Route::post('settings', 'SettingsAdminController@postIndex');
+Route::prefix('users')->group(function () {
+    Route::get('', 'UsersAdminController@getIndex');
+    Route::get('add', 'UsersAdminController@getAdd');
+    Route::post('add', 'UsersAdminController@postAdd');
+    Route::get('edit/{id}', 'UsersAdminController@getEdit');
+    Route::post('edit/{id}', 'UsersAdminController@postEdit');
+    Route::get('delete/{id}', 'UsersAdminController@getDelete');
+});
 
-Route::get('users', 'UsersAdminController@getIndex');
-Route::get('users/add', 'UsersAdminController@getAdd');
-Route::post('users/add', 'UsersAdminController@postAdd');
-Route::get('users/edit/{id}', 'UsersAdminController@getEdit');
-Route::post('users/edit/{id}', 'UsersAdminController@postEdit');
-Route::get('users/delete/{id}', 'UsersAdminController@getDelete');
+Route::prefix('profile')->group(function () {
+    Route::get('', 'ProfileController@getIndex');
+    Route::post('edit', 'ProfileController@postEdit');
+    Route::get('connect/{provider}', 'ProfileController@getConnect');
+    Route::get('delete/{provider}', 'ProfileController@getDelete');
+});
 
-Route::get('profile', 'ProfileController@getIndex');
-Route::post('profile/edit', 'ProfileController@postEdit');
-Route::get('profile/connect/{provider}', 'ProfileController@getConnect');
-Route::get('profile/delete/{provider}', 'ProfileController@getDelete');
+Route::prefix('confessions')->group(function () {
+    Route::get('comments/delete/{id}', 'ModeratorCommentsAdminController@getDelete');
 
-Route::get('confessions/comments/delete/{id}', 'ModeratorCommentsAdminController@getDelete');
+    Route::get('edit/{id}', 'ConfessionsAdminController@getEdit');
+    Route::post('edit/{id}', 'ConfessionsAdminController@postEdit');
 
-Route::get('confessions', 'ConfessionsAdminController@getIndex');
-Route::get('confessions/index/{status?}', 'ConfessionsAdminController@getIndex');
-Route::get('confessions/edit/{id}', 'ConfessionsAdminController@getEdit');
-Route::post('confessions/edit/{id}', 'ConfessionsAdminController@postEdit');
-Route::get('confessions/approve/{id}/{hours?}', 'ConfessionsAdminController@getApprove');
-Route::get('confessions/feature/{id}/{hours?}', 'ConfessionsAdminController@getFeature');
-Route::get('confessions/unfeature/{id}', 'ConfessionsAdminController@getUnfeature');
-Route::get('confessions/reject/{id}', 'ConfessionsAdminController@getReject');
-Route::get('confessions/delete/{id}', 'ConfessionsAdminController@getDelete');
+    Route::get('approve/{id}/{hours?}', 'ConfessionsAdminController@getApprove');
+    Route::get('feature/{id}/{hours?}', 'ConfessionsAdminController@getFeature');
+
+    Route::get('unfeature/{id}', 'ConfessionsAdminController@getUnfeature');
+    Route::get('reject/{id}', 'ConfessionsAdminController@getReject');
+    Route::get('delete/{id}', 'ConfessionsAdminController@getDelete');
+
+    Route::get('', 'ConfessionsAdminController@getIndex');
+});
