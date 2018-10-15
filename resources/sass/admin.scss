@@ -7,6 +7,13 @@
 // Typicons
 @import '~typicons.font/src/font/typicons';
 
+// Daterangepicker
+@import '~daterangepicker/daterangepicker';
+
+a:hover {
+  text-decoration: none;
+}
+
 .sidebar,
 .main {
   padding: 1rem 1.25rem;
@@ -17,7 +24,7 @@
   background: $primary;
   height: 100%;
   overflow-y: hidden;
-  position: absolute;
+  position: fixed;
   width: $sidebar-width;
   z-index: 11;
 }
@@ -26,6 +33,21 @@
   box-sizing: border-box;
   margin-left: $sidebar-width;
   width: calc(100% - #{$sidebar-width});
+
+  select,
+  .date-picker {
+    background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg%20version%3D%221.1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%220px%22%20y%3D%220px%22%20fill%3D%22%23555555%22%20%0A%09%20width%3D%2224px%22%20height%3D%2224px%22%20viewBox%3D%22-261%20145.2%2024%2024%22%20style%3D%22enable-background%3Anew%20-261%20145.2%2024%2024%3B%22%20xml%3Aspace%3D%22preserve%22%3E%0A%3Cpath%20d%3D%22M-245.3%2C156.1l-3.6-6.5l-3.7%2C6.5%20M-252.7%2C159l3.7%2C6.5l3.6-6.5%22%2F%3E%0A%3C%2Fsvg%3E');
+    padding-right: 25px;
+    background-repeat: no-repeat;
+    background-position: right center;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    ::-ms-expand {
+      display: none;
+    }
+  }
 }
 
 @media (max-width: map-get($container-max-widths, 'md')) {
@@ -69,7 +91,7 @@
 
 .sidebar {
   hr {
-    border-top-color: rgba(255, 255, 255, 0.5);
+    border-top-color: rgba(255, 255, 255, 0.25);
     margin: 0.5rem 0;
   }
 }
@@ -81,7 +103,7 @@
   }
 
   li {
-    padding: 0.25rem 0.5rem;
+    padding: 0.25rem 0rem;
   }
 
   a {
@@ -125,4 +147,59 @@
   font-size: 0.675rem;
   font-weight: 600;
   text-transform: uppercase;
+}
+
+.page-header {
+  border-bottom: 1px solid $gray-300;
+  display: flex;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+
+  h1 {
+    color: $gray-600;
+    flex: 1;
+    font-size: 1.25rem;
+
+    .typcn {
+      font-size: 1.5rem;
+      margin-right: 0.25rem;
+    }
+  }
+}
+
+.date-picker {
+  cursor: default;
+
+  .typcn {
+    margin-right: 0.25rem;
+  }
+}
+
+.date-picker-focused {
+  color: $input-focus-color;
+  background-color: $input-focus-bg;
+  border-color: $input-focus-border-color;
+  outline: 0;
+  // Avoid using mixin so we can pass custom focus shadow properly
+  @if $enable-shadows {
+    box-shadow: $input-box-shadow, $input-focus-box-shadow;
+  } @else {
+    box-shadow: $input-focus-box-shadow;
+  }
+}
+
+.daterangepicker {
+  td.in-range {
+    background-color: $gray-100;
+  }
+
+  td.active,
+  td.active:hover {
+    background-color: $primary;
+  }
+}
+
+.confession-content {
+  white-space: pre-wrap;
+  word-break: break-word;
 }

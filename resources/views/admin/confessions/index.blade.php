@@ -1,58 +1,87 @@
-@extends('admin')
+@php
+use NUSWhispers\Models\Confession;
+@endphp
+
+@extends('layouts.admin')
+
+@section('title', 'Manage Confessions')
 
 @section('content')
-<form id="confessions-search-form" class="search-form form-inline" method="get">
 
-  <div class="page-header">
-    <h1 class="page-title"><span class="typcn typcn-heart"></span>Confessions Management</h1>
-    <div class="search-bar">
-      <input class="form-control input-sm" name="q" type="text" value="{{ request()->input('q') }}">
-      <button class="btn btn-primary btn-sm" type="submit">Search</button>
+<form method="get">
+    <div class="page-header">
+        <h1>
+            <span class="typcn typcn-heart"></span> Manage Confessions
+        </h1>
+        <div class="form-inline">
+            <input class="form-control form-control-sm mr-sm-2" type="search" name="q" size="30" value="{{ request('q') }}"
+                placeholder="Search" aria-label="Search">
+            <button class="btn btn-sm btn-primary">Search</button>
+        </div>
     </div>
-  </div>
 
-  @include('message')
-
-  @if (!$hasPageToken)
-  <div class="alert alert-danger">
-  <strong>Warning:</strong> You have not <a href="/admin/profile">connected your Facebook account</a>. You will not be able to approve any confessions until you do so.
-  </div>
-  @endif
-
-  <ul class="nav nav-tabs">
-    <li class="{{ request()->is('admin/confessions/index/all') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/all">All</a></li>
-    <li class="{{ request()->is('admin/confessions/index/featured') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/featured">Featured</a></li>
-    <li class="{{ request()->is('admin/confessions') || request()->is('admin/confessions/index/pending') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/pending">Pending ({{ \NUSWhispers\Models\Confession::pending()->count() }})</a></li>
-    <li class="{{ request()->is('admin/confessions/index/scheduled') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/scheduled">Scheduled ({{ \NUSWhispers\Models\Confession::scheduled()->count() }})</a></li>
-    <li class="{{ request()->is('admin/confessions/index/approved') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/approved">Approved</a></li>
-    <li class="{{ request()->is('admin/confessions/index/rejected') ? 'active' : '' }}" role="presentation"><a href="/admin/confessions/index/rejected">Rejected</a></li>
-  </ul>
-
-  <div class="search-filters">
-    <div class="form-group">
-      <?php echo Form::select('category', array_flip($categoryOptions), request()->input('category'), ['class' => 'input-sm form-control']) ?>
-      <div class="date-range">
-        <i class="typcn typcn-calendar-outline"></i>
-        <span>Anytime</span> <strong class="caret"></strong>
-        <?php echo Form::hidden('start', request()->input('start')) ?>
-        <?php echo Form::hidden('end', request()->input('end')) ?>
-        <div class="tz" style="display:none"><?php echo date('Z') ?></div>
-      </div>
-      <a style="display: none" class="clear-dates" href="#" title="Clear date filter"><i class="typcn typcn-delete"></i></a>
+    @if (! $hasPageToken)
+    <div class="alert alert-danger">
+        <strong>Warning:</strong> You have not <a href="{{ url('admin/profile') }}">connected your Facebook account</a>.
+        You will not be able to approve any confessions until you do so.
     </div>
-    <button class="btn btn-primary btn-sm btn-filter" type="submit">Filter</button>
-    <?php echo str_replace('pagination', 'pagination pagination-sm', $confessions->render()); ?>
-  </div>
+    @endif
 
-  <div id="post-list" class="post-list">
+    <ul class="nav nav-tabs">
+        @component('admin.confessions.tab', ['status' => 'all'])
+        All
+        @endcomponent
+
+        @component('admin.confessions.tab', ['status' => 'featured'])
+        Featured
+        @endcomponent
+
+        @component('admin.confessions.tab', ['status' => 'pending'])
+        Pending ({{ Confession::pending()->count() }})
+        @endcomponent
+
+        @component('admin.confessions.tab', ['status' => 'scheduled'])
+        Scheduled ({{ Confession::scheduled()->count() }})
+        @endcomponent
+
+        @component('admin.confessions.tab', ['status' => 'approved'])
+        Approved
+        @endcomponent
+
+        @component('admin.confessions.tab', ['status' => 'rejected'])
+        Rejected
+        @endcomponent
+    </ul>
+
+    <div class="d-flex my-4">
+        <div class="form-inline flex-grow-1">
+            <select name="category" class="form-control form-control-sm">
+                @foreach ($categories as $label => $value)
+                <option value="{{ $value }}">{{ $label }}</option>
+                @endforeach
+            </select>
+
+            <div class="d-flex date-picker mx-2 form-control form-control-sm">
+                <i class="typcn typcn-calendar-outline"></i>
+                <div class="label">Anytime</div>
+                <input type="hidden" name="start" value="{{ request('start') }}">
+                <input type="hidden" name="end" value="{{ request('end') }}">
+            </div>
+
+            <button class="clear btn btn-sm btn-secondary mr-2">Clear Dates</button>
+
+            <button class="btn btn-sm btn-primary mx-2" type="submit">Filter</button>
+        </div>
+        {{ $confessions->links('admin.pagination') }}
+    </div>
+
     @foreach ($confessions as $confession)
-      @include('admin.confessions.item', ['confession' => $confession])
+    @include('admin.confessions.item', ['confession' => $confession])
     @endforeach
-  </div>
 
-  <div class="search-filters">
-    <?php echo str_replace('pagination', 'pagination pagination-sm', $confessions->render()); ?>
-  </div>
+    <div class="d-flex my-4 justify-content-end">
+        {{ $confessions->links('admin.pagination') }}
+    </div>
+</form>
 
-</form><!-- #confessions-search-form -->
 @endsection

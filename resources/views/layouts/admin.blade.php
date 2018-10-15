@@ -61,9 +61,14 @@ use NUSWhispers\Models\Confession;
                     @endcomponent
                 </ul>
             </nav>
-            <main class="main" role="main">@yield('content')</main>
+            <main class="main" role="main">
+                @include('message')
+                @yield('content')
+            </main>
         </div>
     </div>
+    <script src="{{ mix('js/manifest.js') }}"></script>
+    <script src="{{ mix('js/vendor.js') }}"></script>
     <script src="{{ mix('js/admin.js') }}"></script>
 </body>
 

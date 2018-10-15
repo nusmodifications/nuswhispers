@@ -14,25 +14,41 @@ class ConfessionsAdminController extends AdminController
 {
     use ResolvesFacebookPageToken;
 
+    /**
+     * @var \NUSWhispers\Services\ConfessionService
+     */
     protected $service;
 
+    /**
+     * Constructs an instance of the controller.
+     *
+     * @param \NUSWhispers\Services\ConfessionService $service
+     */
     public function __construct(ConfessionService $service)
     {
         $this->service = $service;
     }
 
-    public function getIndex(Request $request, $status = 'Pending')
+    /**
+     * Retrieves a list of confessions.
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return mixed
+     */
+    public function getIndex(Request $request)
     {
-        $status = ucfirst($status);
+        $status = ucfirst($request->input('status', 'Pending'));
+
         if ($status !== 'Pending') {
             $query = Confession::orderBy('created_at', 'desc');
         } else {
             $query = Confession::orderBy('created_at', 'asc');
         }
 
-        if ($request->input('category')) {
-            $query->whereHas('categories', function ($query) use ($request) {
-                $query->where('confession_categories.confession_category_id', '=', (int) $request->input('category'));
+        if ($category = $request->input('category')) {
+            $query->whereHas('categories', function ($query) use ($category) {
+                $query->where('confession_categories.confession_category_id', '=', (int) $category);
             });
         }
 
@@ -44,9 +60,9 @@ class ConfessionsAdminController extends AdminController
             });
         }
 
-        if ($request->input('start') && $request->input('end')) {
-            $start = Carbon::createFromFormat('U', strtotime($request->input('start')))->startOfDay();
-            $end = Carbon::createFromFormat('U', strtotime($request->input('end')))->startOfDay();
+        if (($start = $request->input('start')) && ($end = $request->input('end'))) {
+            $start = Carbon::createFromFormat('U', $start)->startOfDay();
+            $end = Carbon::createFromFormat('U', $end)->startOfDay();
 
             if ($start > $end) {
                 return redirect()->back()->withMessage('Start date cannot be later than end date.')
@@ -57,22 +73,22 @@ class ConfessionsAdminController extends AdminController
             $query->where('created_at', '<', $end->toDateTimeString());
         }
 
-        if ($request->input('fingerprint')) {
-            $query->where('fingerprint', $request->input('fingerprint'));
+        if ($fingerprint = $request->input('fingerprint')) {
+            $query->where('fingerprint', $fingerprint);
         }
 
         if ($status !== 'All') {
-            $query->where('status', '=', ucfirst($status));
+            $query->where('status', '=', $status);
         }
 
-        $confessions = $query->with('moderatorComments')->paginate(10);
-        $confessions->appends($request->input());
+        /** @var \Illuminate\Pagination\LengthAwarePaginator $confessions */
+        $confessions = $query->with('moderatorComments')->paginate(10)->appends($request->input());
 
-        $categories = Category::orderBy('confession_category', 'asc')->pluck('confession_category_id', 'confession_category')->all();
+        $categories = Category::orderBy('confession_category', 'asc')->pluck('confession_category_id', 'confession_category');
 
         return view('admin.confessions.index', [
             'confessions' => $confessions,
-            'categoryOptions' => array_merge(['All Categories' => 0], $categories),
+            'categories' => collect(['All Categories' => '0'])->merge($categories),
             'hasPageToken' => $this->userHasPageToken(),
         ]);
     }

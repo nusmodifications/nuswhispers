@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const { IgnorePlugin } = require('webpack');
 
 /**
  |--------------------------------------------------------------------------
@@ -30,9 +31,10 @@ mix
         jquery: 'jquery/dist/jquery.slim.js',
       },
     },
+    plugins: [new IgnorePlugin(/^\.\/locale$/, /moment$/)],
   })
   .js('resources/js/admin.js', 'public/js')
-  .extract(['bootstrap', 'jquery', 'flatpickr'])
+  .extract(['bootstrap', 'jquery', 'moment', 'daterangepicker'])
   .sass('resources/sass/auth.scss', 'public/css')
   .sass('resources/sass/admin.scss', 'public/css');
 
