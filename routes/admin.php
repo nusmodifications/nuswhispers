@@ -11,7 +11,7 @@
 */
 
 // Redirect default admin to confessions dashboard.
-Route::redirect('', 'admin/confessions');
+Route::redirect('', 'confessions');
 
 Route::prefix('api-keys')->group(function () {
     Route::get('', 'ApiKeysAdminController@getIndex');
