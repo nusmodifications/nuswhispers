@@ -1,4 +1,5 @@
 @php
+use Illuminate\Http\Request;
 use NUSWhispers\Models\Confession;
 @endphp
 
@@ -29,12 +30,20 @@ use NUSWhispers\Models\Confession;
                 <ul class="nav flex-column sidebar-nav">
                     <li class="sidebar-nav-category">Manage Confessions</li>
 
-                    @component('link', ['url' => 'admin/confessions'])
+                    @component('link', [
+                    'url' => 'admin/confessions',
+                    'is_active' => function (Request $request) {
+                    return $request->is('admin/confessions') && $request->query('status', 'pending') === 'pending';
+                    }])
                     <span class="typcn typcn-warning"></span>Pending
                     <span class="badge badge-warning mt-2 float-right">{{ Confession::pending()->count() }}</span>
                     @endcomponent
 
-                    @component('link', ['url' => 'admin/confessions?status=approved'])
+                    @component('link', [
+                    'url' => 'admin/confessions?status=approved',
+                    'is_active' => function (Request $request) {
+                    return $request->is('admin/confessions') && $request->query('status', 'pending') === 'approved';
+                    }])
                     <span class="typcn typcn-tick"></span>Approved
                     @endcomponent
                 </ul>
