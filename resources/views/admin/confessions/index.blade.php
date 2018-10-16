@@ -56,7 +56,7 @@ use NUSWhispers\Models\Confession;
         <div class="form-inline flex-grow-1">
             <select name="category" class="form-control form-control-sm custom-select">
                 @foreach ($categories as $label => $value)
-                <option value="{{ $value }}">{{ $label }}</option>
+                <option value="{{ $value }}" {{ request('category') === $value ? 'selected' : '' }}>{{ $label }}</option>
                 @endforeach
             </select>
 
