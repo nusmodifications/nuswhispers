@@ -33,6 +33,8 @@ mix
     },
     plugins: [new IgnorePlugin(/^\.\/locale$/, /moment$/)],
   })
+  .js('resources/js/confessions/index.js', 'public/js/confessions/index.js')
+  .js('resources/js/confessions/edit.js', 'public/js/confessions/edit.js')
   .js('resources/js/admin.js', 'public/js')
   .extract(['bootstrap', 'jquery', 'moment', 'daterangepicker'])
   .sass('resources/sass/auth.scss', 'public/css')

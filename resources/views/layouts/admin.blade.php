@@ -70,6 +70,7 @@ use NUSWhispers\Models\Confession;
     <script src="{{ mix('js/manifest.js') }}"></script>
     <script src="{{ mix('js/vendor.js') }}"></script>
     <script src="{{ mix('js/admin.js') }}"></script>
+    @stack('scripts')
 </body>
 
 </html>

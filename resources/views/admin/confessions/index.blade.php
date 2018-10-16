@@ -7,7 +7,6 @@ use NUSWhispers\Models\Confession;
 @section('title', 'Manage Confessions')
 
 @section('content')
-
 <form method="get">
     <div class="page-header">
         <h1>
@@ -83,5 +82,8 @@ use NUSWhispers\Models\Confession;
         {{ $confessions->links('admin.pagination') }}
     </div>
 </form>
-
 @endsection
+
+@push('scripts')
+<script src="{{ mix('js/confessions/index.js') }}"></script>
+@endpush

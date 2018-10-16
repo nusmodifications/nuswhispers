@@ -111,5 +111,8 @@ use NUSWhispers\Models\Confession;
         </div>
     </div>
 </form>
-
 @endsection
+
+@push('scripts')
+<script src="{{ mix('js/confessions/edit.js') }}"></script>
+@endpush
