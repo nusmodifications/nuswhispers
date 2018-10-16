@@ -55,13 +55,13 @@ use NUSWhispers\Models\Confession;
 
     <div class="d-flex my-4">
         <div class="form-inline flex-grow-1">
-            <select name="category" class="form-control form-control-sm">
+            <select name="category" class="form-control form-control-sm custom-select">
                 @foreach ($categories as $label => $value)
                 <option value="{{ $value }}">{{ $label }}</option>
                 @endforeach
             </select>
 
-            <div class="d-flex date-picker mx-2 form-control form-control-sm">
+            <div class="d-flex date-picker mx-2 form-control form-control-sm custom-select">
                 <i class="typcn typcn-calendar-outline"></i>
                 <div class="label">Anytime</div>
                 <input type="hidden" name="start" value="{{ request('start') }}">

@@ -93,29 +93,32 @@ class ConfessionsAdminController extends AdminController
         ]);
     }
 
-    public function getEdit($id)
+    public function getEdit(Confession $confession)
     {
-        $confession = Confession::with('moderatorComments', 'queue')->findOrFail($id);
-
         return view('admin.confessions.edit', [
-            'confession' => $confession,
+            'categories' => Category::categoryAsc()->get(),
+            'confession' => $confession->load([
+                'moderatorComments',
+                'moderatorComments.user',
+                'logs',
+                'logs.user',
+            ]),
         ]);
     }
 
-    public function postEdit(Request $request, $id)
+    public function postEdit(Request $request, Confession $confession)
     {
-        if ($request->input('action') === 'Post Comment') {
+        if ($request->input('action') === 'post_comment') {
             $request->validate([
                 'comment' => 'required',
             ]);
 
             $comment = new ModeratorComment([
                 'content' => $request->input('comment'),
-                'user_id' => auth()->user()->getAuthIdentifier(),
+                'user_id' => $request->user()->getAuthIdentifier(),
                 'created_at' => new \DateTime(),
             ]);
 
-            $confession = Confession::with('moderatorComments')->findOrFail($id);
             $confession->moderatorComments()->save($comment);
 
             return redirect()->back()->withMessage('Comment successfully added.')
@@ -133,10 +136,10 @@ class ConfessionsAdminController extends AdminController
             $data['categories'] = $request->input('categories', []);
 
             if (env('MANUAL_MODE', false) && request()->input('fb_post_id')) {
-                $data['fb_post_id'] = request()->input('fb_post_id');
+                $data['fb_post_id'] = $request->input('fb_post_id');
             }
 
-            $this->service->update($id, $data);
+            $this->service->update($confession->getKey(), $data);
 
             return redirect()->back()->withMessage('Confession successfully updated.')
                 ->with('alert-class', 'alert-success');

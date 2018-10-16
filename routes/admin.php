@@ -40,18 +40,30 @@ Route::prefix('profile')->group(function () {
     Route::get('delete/{provider}', 'ProfileController@getDelete');
 });
 
-Route::prefix('confessions')->group(function () {
-    Route::get('comments/delete/{id}', 'ModeratorCommentsAdminController@getDelete');
+Route::name('admin.confessions.')->prefix('confessions')->group(function () {
+    Route::get('comments/delete/{id}', 'ModeratorCommentsAdminController@getDelete')
+        ->name('comments.delete');
 
-    Route::get('edit/{id}', 'ConfessionsAdminController@getEdit');
-    Route::post('edit/{id}', 'ConfessionsAdminController@postEdit');
+    Route::get('edit/{confession}', 'ConfessionsAdminController@getEdit')
+        ->name('edit');
 
-    Route::get('approve/{id}/{hours?}', 'ConfessionsAdminController@getApprove');
-    Route::get('feature/{id}/{hours?}', 'ConfessionsAdminController@getFeature');
+    Route::post('edit/{confession}', 'ConfessionsAdminController@postEdit')
+        ->name('update');
 
-    Route::get('unfeature/{id}', 'ConfessionsAdminController@getUnfeature');
-    Route::get('reject/{id}', 'ConfessionsAdminController@getReject');
-    Route::get('delete/{id}', 'ConfessionsAdminController@getDelete');
+    Route::get('approve/{id}/{hours?}', 'ConfessionsAdminController@getApprove')
+        ->name('approve');
 
-    Route::get('', 'ConfessionsAdminController@getIndex');
+    Route::get('feature/{id}/{hours?}', 'ConfessionsAdminController@getFeature')
+        ->name('feature');
+
+    Route::get('unfeature/{id}', 'ConfessionsAdminController@getUnfeature')
+        ->name('unfeature');
+
+    Route::get('reject/{id}', 'ConfessionsAdminController@getReject')
+        ->name('reject');
+
+    Route::get('delete/{id}', 'ConfessionsAdminController@getDelete')
+        ->name('delete');
+
+    Route::get('', 'ConfessionsAdminController@getIndex')->name('index');
 });

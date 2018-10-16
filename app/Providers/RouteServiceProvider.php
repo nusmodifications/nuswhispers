@@ -17,21 +17,11 @@ class RouteServiceProvider extends ServiceProvider
     protected $namespace = 'NUSWhispers\Http\Controllers';
 
     /**
-     * Define your route model bindings, pattern filters, etc.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        parent::boot();
-    }
-
-    /**
      * Define the routes for the application.
      *
      * @return void
      */
-    public function map()
+    public function map(): void
     {
         $this->mapAdminRoutes();
         $this->mapApiRoutes();
@@ -45,10 +35,10 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function mapAdminRoutes()
+    protected function mapAdminRoutes(): void
     {
         Route::group([
-            'middleware' => 'auth',
+            'middleware' => 'admin',
             'namespace' => $this->namespace . '\Admin',
             'prefix' => 'admin',
         ], function () {
@@ -63,7 +53,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function mapApiRoutes()
+    protected function mapApiRoutes(): void
     {
         Route::group([
             'middleware' => 'api',
@@ -81,7 +71,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function mapWebRoutes()
+    protected function mapWebRoutes(): void
     {
         Route::group([
             'namespace' => $this->namespace,

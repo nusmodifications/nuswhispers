@@ -9,7 +9,7 @@ use NUSWhispers\Models\Confession;
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>NUSWhispers &ndash; @yield('title')</title>
+    <title>@yield('title') &ndash; NUSWhispers Admin</title>
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="{{ mix('css/admin.css') }}">
 </head>
@@ -34,7 +34,7 @@ use NUSWhispers\Models\Confession;
                     <span class="badge badge-warning mt-2 float-right">{{ Confession::pending()->count() }}</span>
                     @endcomponent
 
-                    @component('link', ['url' => 'admin/confessions/approved'])
+                    @component('link', ['url' => 'admin/confessions?status=approved'])
                     <span class="typcn typcn-tick"></span>Approved
                     @endcomponent
                 </ul>
