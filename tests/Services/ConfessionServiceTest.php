@@ -2,6 +2,7 @@
 
 namespace NUSWhispers\Tests\Services;
 
+use Carbon\Carbon;
 use NUSWhispers\Services\ConfessionService;
 use NUSWhispers\Tests\TestCase;
 
@@ -245,14 +246,16 @@ class ConfessionServiceTest extends TestCase
             \NUSWhispers\Events\ConfessionWasScheduled::class,
         ]);
 
+        $schedule = Carbon::create(2018, 1, 1);
+
         $confession = factory(\NUSWhispers\Models\Confession::class)->states('pending')->create();
         $confession = $this->service->update($confession, [
-            'schedule' => '2017-01-30T11:01:09+00:00',
+            'schedule' => (string) $schedule->timestamp,
             'status' => 'Approved',
         ]);
 
         $this->assertEquals($confession->status, 'Scheduled');
-        $this->assertEquals('2017-01-30T11:01:09+00:00', $confession->queue()->first()->update_status_at->toW3cString());
+        $this->assertEquals($schedule, $confession->queue()->first()->update_status_at);
     }
 
     public function testUpdateStatus()
