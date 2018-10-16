@@ -1,7 +1,7 @@
 @php
 use NUSWhispers\Models\Confession;
 
-$queue = $confession->queue->first();
+$queue = $confession->queue;
 $nextStatus = $queue ? $queue->status_after : $confession->status;
 @endphp
 

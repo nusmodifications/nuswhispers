@@ -19,10 +19,12 @@ $('.date-picker')
     $picker = $(picker);
 
     const $label = $picker.children('.label');
-    const $input = $picker.children('input');
+    const value = $picker.children('input').val();
 
-    $label.html(moment.unix($input.val()).format(format));
-    $scheduled.removeClass('d-none');
+    if (value) {
+      $label.html(moment.unix(value).format(format));
+      $scheduled.removeClass('d-none');
+    }
   })
   .daterangepicker({
     singleDatePicker: true,
