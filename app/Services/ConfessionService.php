@@ -246,7 +246,7 @@ class ConfessionService
             $attributes['status'] = 'Scheduled';
 
             $attributes['schedule'] = is_string($attributes['schedule']) ?
-                Carbon::parse($attributes['schedule']) :
+                Carbon::createFromTimestamp($attributes['schedule']) :
                 Carbon::now()->addHours($attributes['schedule']);
         }
 

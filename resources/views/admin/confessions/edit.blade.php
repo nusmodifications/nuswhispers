@@ -1,5 +1,8 @@
 @php
 use NUSWhispers\Models\Confession;
+
+$queue = $confession->queue->first();
+$nextStatus = $queue ? $queue->status_after : $confession->status;
 @endphp
 
 @extends('layouts.admin')
@@ -27,7 +30,7 @@ use NUSWhispers\Models\Confession;
             <div class="card-header">Content</div>
             <div class="card-body">
                 <textarea rows="10" name="content" class="form-control {{ $errors->first('content') ? 'is-invalid' : '' }}"
-                    required>{{ $confession->content }}</textarea>
+                    required>{{ old('content') ?? $confession->content }}</textarea>
                 <div class="invalid-feedback">{{ $errors->first('content') }}</div>
             </div>
         </div>
@@ -45,7 +48,7 @@ use NUSWhispers\Models\Confession;
             <div class="card-img-top"><img class="mw-100" src="{{ $confession->images }}" alt="Confession Photo"></div>
             @endif
             <div class="card-body">
-                <input type="url" name="images" placeholder="URL to photo" class="form-control" value="{{ $confession->images }}">
+                <input type="url" name="images" placeholder="URL to photo" class="form-control" value="{{ old('images') ?? $confession->images }}">
             </div>
         </div>
         <a name="comments"></a>
@@ -73,12 +76,30 @@ use NUSWhispers\Models\Confession;
                 <div class="form-group">
                     <select name="status" class="form-select custom-select">
                         @foreach (Confession::statuses() as $status)
-                        <option value="{{ $status }}" {{ $confession->status === $status ? 'selected' : '' }}
-                            {{ $status === 'Scheduled' ? 'disabled' : '' }}>{{
-                            $status }}</option>
+                        @if ($status !== 'Scheduled')
+                        <option value="{{ $status }}" {{ $nextStatus === $status ? 'selected' : '' }}>
+                            {{ $status }}
+                        </option>
+                        @endif
                         @endforeach
                     </select>
                 </div>
+
+                <div class="scheduled-form-group mb-3 d-none">
+                    Scheduled Date / Time
+                    @php
+                    if (! ($schedule = old('schedule')) && $queue) {
+                    $schedule = $queue->update_status_at->timestamp;
+                    }
+                    @endphp
+                    <div class="mt-2 d-flex date-picker form-control custom-select">
+                        <i class="typcn typcn-calendar-outline"></i>
+                        <div class="label"></div>
+                        <input type="hidden" name="schedule" value="{{ $schedule }}">
+                    </div>
+                </div>
+
+                <hr>
 
                 <p class="text-muted text-center">Latest status updated {{
                     $confession->status_updated_at->diffForHumans() }}.</p>

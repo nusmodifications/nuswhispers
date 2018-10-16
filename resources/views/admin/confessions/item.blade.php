@@ -12,8 +12,9 @@
             <span class="badge badge-success">Featured</span>
             @endif
             @if ($confession->status === 'Scheduled')
-            <span class="badge badge-warning">Scheduled: {{
-                $confession->queue()->first()->update_status_at->diffForHumans() }}</span>
+            @php $queue = $confession->queue->first() @endphp
+            <span class="badge badge-warning">{{ $queue->status_after }}: {{
+                $queue->update_status_at->diffForHumans() }}</span>
             @endif
             @if ($confession->status === 'Approved')
             <span class="badge badge-info">Approved</span>
