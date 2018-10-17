@@ -2,14 +2,15 @@
 
 namespace NUSWhispers\Http\Controllers\Admin;
 
+use Illuminate\Http\Request;
 use NUSWhispers\Models\ApiKey;
 
 class ApiKeysAdminController extends AdminController
 {
-    public function getDelete($id)
+    public function getDelete(ApiKey $key)
     {
         try {
-            ApiKey::findOrFail($id)->delete();
+            $key->delete();
 
             return redirect()->back()->withMessage('API key successfully deleted.')->with('alert-class', 'alert-success');
         } catch (\Exception $e) {
@@ -24,11 +25,11 @@ class ApiKeysAdminController extends AdminController
         ]);
     }
 
-    public function getAdd()
+    public function getAdd(Request $request)
     {
         try {
             $key = new ApiKey([
-                'user_id' => (int) auth()->user()->getKey(),
+                'user_id' => (int) $request->user()->getKey(),
                 'last_used_on' => new \DateTime(),
                 'created_on' => new \DateTime(),
                 'key' => ApiKey::generateKey(),

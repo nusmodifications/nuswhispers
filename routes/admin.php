@@ -17,7 +17,7 @@ Route::name('api-keys.')->prefix('api-keys')->group(function () {
     Route::get('', 'ApiKeysAdminController@getIndex')->name('index');
     Route::get('add', 'ApiKeysAdminController@getAdd')->name('add');
 
-    Route::get('delete/{id}', 'ApiKeysAdminController@getDelete')
+    Route::get('delete/{key}', 'ApiKeysAdminController@getDelete')
         ->name('delete');
 });
 
