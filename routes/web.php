@@ -27,6 +27,7 @@ Route::get('/confession/{id}', function ($id) {
 
 // Auth Routes
 Auth::routes(['register' => false]);
+Route::get('logout', 'Auth\LoginController@logout');
 
 // Mobile submit page
 Route::get('/mobile_submit', function () {
