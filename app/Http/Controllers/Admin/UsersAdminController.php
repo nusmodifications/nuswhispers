@@ -3,6 +3,7 @@
 namespace NUSWhispers\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use NUSWhispers\Models\User;
 
@@ -90,9 +91,9 @@ class UsersAdminController extends AdminController
         }
     }
 
-    public function getDelete(Request $request, User $user)
+    public function getDelete(User $user)
     {
-        if ($request->user()->getKey() === $user->getKey()) {
+        if (Gate::denies($user, 'delete')) {
             return redirect()->back()->withMessage('You cannnot delete yourself!')->with('alert-class', 'alert-danger');
         }
 

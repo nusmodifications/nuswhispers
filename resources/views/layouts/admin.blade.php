@@ -1,6 +1,7 @@
 @php
 use Illuminate\Http\Request;
 use NUSWhispers\Models\Confession;
+use NUSWhispers\Models\User;
 @endphp
 
 <!DOCTYPE html>
@@ -50,19 +51,21 @@ use NUSWhispers\Models\Confession;
                 <hr>
                 <ul class="nav flex-column sidebar-nav">
                     @if (auth()->user()->role === 'Administrator')
-
                     @component('link', ['url' => 'admin/api-keys'])
                     <span class="typcn typcn-key"></span>API Keys
                     @endcomponent
+                    @endif
 
+                    @can('manage', User::class)
                     @component('link', ['url' => 'admin/users'])
                     <span class="typcn typcn-group"></span>Users
                     @endcomponent
+                    @endcan
 
+                    @if (auth()->user()->role === 'Administrator')
                     @component('link', ['url' => 'admin/settings'])
                     <span class="typcn typcn-spanner"></span>Settings
                     @endcomponent
-
                     @endif
 
                     @component('link', ['url' => 'logout'])

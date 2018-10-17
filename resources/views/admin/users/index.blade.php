@@ -33,11 +33,11 @@
                 <a class="btn btn-secondary btn-sm" href="/admin/users/edit/{{ $user->user_id }}">
                     Edit
                 </a>
-                @if (auth()->user()->user_id !== $user->user_id)
+                @can('delete', $user)
                 <a class="btn btn-sm btn-danger" href="/admin/users/delete/{{ $user->user_id }}">
                     Delete
                 </a>
-                @endif
+                @endcan
             </td>
         </tr>
         @endforeach

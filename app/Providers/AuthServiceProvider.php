@@ -3,6 +3,8 @@
 namespace NUSWhispers\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use NUSWhispers\Models;
+use NUSWhispers\Policies;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -12,6 +14,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
+        Models\User::class => Policies\UserPolicy::class,
     ];
 
     /**
@@ -19,7 +22,7 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->registerPolicies();
     }
