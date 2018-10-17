@@ -57,23 +57,21 @@ class UsersAdminController extends AdminController
         }
     }
 
-    public function getEdit($id)
+    public function getEdit(User $user)
     {
         return view('admin.users.edit', [
-            'user' => User::findOrFail($id),
+            'user' => $user,
         ]);
     }
 
-    public function postEdit(Request $request, $id)
+    public function postEdit(Request $request, User $user)
     {
-        $user = User::findOrFail($id);
-
         $request->validate([
             'email' => 'required|email|unique:users,email,' . $user->user_id . ',user_id',
             'name' => 'required|string',
             'password' => 'min:6',
             'repeat_password' => 'same:password',
-            'role' => auth()->user()->user_id !== $user->user_id ? 'in:Moderator,Administrator' : '',
+            'role' => $request->user()->user_id !== $user->user_id ? 'in:Moderator,Administrator' : '',
         ]);
 
         try {
@@ -81,7 +79,7 @@ class UsersAdminController extends AdminController
                 'email' => $request->input('email'),
                 'name' => $request->input('name'),
                 'password' => Hash::make($request->input('password')),
-                'role' => auth()->user()->user_id !== $user->user_id ? $request->input('role') : $user->role,
+                'role' => $request->user()->user_id !== $user->user_id ? $request->input('role') : $user->role,
             ]);
 
             return redirect('/admin/users')->withMessage('User successfully updated.')
@@ -92,13 +90,11 @@ class UsersAdminController extends AdminController
         }
     }
 
-    public function getDelete($id)
+    public function getDelete(Request $request, User $user)
     {
-        if (auth()->user()->user_id === $id) {
+        if ($request->user()->getKey() === $user->getKey()) {
             return redirect()->back()->withMessage('You cannnot delete yourself!')->with('alert-class', 'alert-danger');
         }
-
-        $user = User::findOrFail($id);
 
         try {
             $user->delete();
