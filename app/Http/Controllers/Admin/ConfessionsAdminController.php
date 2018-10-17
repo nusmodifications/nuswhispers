@@ -149,20 +149,18 @@ class ConfessionsAdminController extends AdminController
         }
     }
 
-    public function getApprove($id, $hours = 0)
+    public function getApprove(Confession $confession, $hours = 0)
     {
-        return $this->switchOrScheduleConfession($id, 'Approved', (int) $hours);
+        return $this->switchOrScheduleConfession($confession, 'Approved', (int) $hours);
     }
 
-    public function getFeature($id, $hours = 0)
+    public function getFeature(Confession $confession, $hours = 0)
     {
-        return $this->switchOrScheduleConfession($id, 'Featured', (int) $hours);
+        return $this->switchOrScheduleConfession($confession, 'Featured', (int) $hours);
     }
 
-    protected function switchOrScheduleConfession($id, $status, $hours)
+    protected function switchOrScheduleConfession(Confession $confession, $status, $hours)
     {
-        $confession = Confession::findOrFail($id);
-
         if (! $this->userHasPageToken()) {
             return redirect()->back()->withMessage('You have not connected your account with Facebook.')->with('alert-class', 'alert-danger');
         }
@@ -181,11 +179,8 @@ class ConfessionsAdminController extends AdminController
         }
     }
 
-    public function getUnfeature($id)
+    public function getUnfeature(Confession $confession)
     {
-        // @TODO: Move this to a repository
-        $confession = Confession::findOrFail($id);
-
         if (! $this->userHasPageToken()) {
             return redirect()->back()->withMessage('You have not connected your account with Facebook.')->with('alert-class', 'alert-danger');
         }
@@ -199,11 +194,8 @@ class ConfessionsAdminController extends AdminController
         }
     }
 
-    public function getReject($id)
+    public function getReject(Confession $confession)
     {
-        // @TODO: Move this to a repository
-        $confession = Confession::findOrFail($id);
-
         if (! $this->userHasPageToken()) {
             return redirect()->back()->withMessage('You have not connected your account with Facebook.')->with('alert-class', 'alert-danger');
         }
@@ -217,10 +209,10 @@ class ConfessionsAdminController extends AdminController
         }
     }
 
-    public function getDelete($id)
+    public function getDelete(Confession $confession)
     {
         try {
-            $this->service->delete($id);
+            $this->service->delete($confession);
 
             return redirect()->back()->withMessage('Confession successfully deleted.')->with('alert-class', 'alert-success');
         } catch (\Exception $e) {

@@ -63,13 +63,13 @@ Route::name('confessions.')->prefix('confessions')->group(function () {
     Route::get('feature/{id}/{hours?}', 'ConfessionsAdminController@getFeature')
         ->name('feature');
 
-    Route::get('unfeature/{id}', 'ConfessionsAdminController@getUnfeature')
+    Route::get('unfeature/{confession}', 'ConfessionsAdminController@getUnfeature')
         ->name('unfeature');
 
-    Route::get('reject/{id}', 'ConfessionsAdminController@getReject')
+    Route::get('reject/{confession}', 'ConfessionsAdminController@getReject')
         ->name('reject');
 
-    Route::get('delete/{id}', 'ConfessionsAdminController@getDelete')
+    Route::get('delete/{confession}', 'ConfessionsAdminController@getDelete')
         ->name('delete');
 
     Route::get('', 'ConfessionsAdminController@getIndex')->name('index');
