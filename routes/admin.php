@@ -13,26 +13,28 @@
 // Redirect default admin to confessions dashboard.
 Route::redirect('', '/admin/confessions')->name('index');
 
-Route::name('api-keys.')->prefix('api-keys')->group(function () {
-    Route::get('', 'ApiKeysAdminController@getIndex')->name('index');
-    Route::get('add', 'ApiKeysAdminController@getAdd')->name('add');
+Route::group(['middleware' => ['auth.admin']], function () {
+    Route::name('api-keys.')->prefix('api-keys')->group(function () {
+        Route::get('', 'ApiKeysAdminController@getIndex')->name('index');
+        Route::get('add', 'ApiKeysAdminController@getAdd')->name('add');
 
-    Route::get('delete/{key}', 'ApiKeysAdminController@getDelete')
-        ->name('delete');
-});
+        Route::get('delete/{key}', 'ApiKeysAdminController@getDelete')
+            ->name('delete');
+    });
 
-Route::name('settings.')->prefix('settings')->group(function () {
-    Route::get('', 'SettingsAdminController@getIndex')->name('index');
-    Route::post('', 'SettingsAdminController@postIndex')->name('update');
-});
+    Route::name('settings.')->prefix('settings')->group(function () {
+        Route::get('', 'SettingsAdminController@getIndex')->name('index');
+        Route::post('', 'SettingsAdminController@postIndex')->name('update');
+    });
 
-Route::name('users.')->prefix('users')->group(function () {
-    Route::get('', 'UsersAdminController@getIndex')->name('index');
-    Route::get('add', 'UsersAdminController@getAdd')->name('create');
-    Route::post('add', 'UsersAdminController@postAdd')->name('store');
-    Route::get('edit/{user}', 'UsersAdminController@getEdit')->name('edit');
-    Route::post('edit/{user}', 'UsersAdminController@postEdit')->name('update');
-    Route::get('delete/{user}', 'UsersAdminController@getDelete')->name('delete');
+    Route::name('users.')->prefix('users')->group(function () {
+        Route::get('', 'UsersAdminController@getIndex')->name('index');
+        Route::get('add', 'UsersAdminController@getAdd')->name('create');
+        Route::post('add', 'UsersAdminController@postAdd')->name('store');
+        Route::get('edit/{user}', 'UsersAdminController@getEdit')->name('edit');
+        Route::post('edit/{user}', 'UsersAdminController@postEdit')->name('update');
+        Route::get('delete/{user}', 'UsersAdminController@getDelete')->name('delete');
+    });
 });
 
 Route::name('profile.')->prefix('profile')->group(function () {

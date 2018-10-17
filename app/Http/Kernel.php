@@ -46,7 +46,7 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         'auth' => \NUSWhispers\Http\Middleware\Authenticate::class,
-        'adminAuth' => \NUSWhispers\Http\Middleware\AuthenticateAdmin::class,
+        'auth.admin' => \NUSWhispers\Http\Middleware\AuthenticateAdmin::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'cors' => \NUSWhispers\Http\Middleware\Cors::class,
         'guest' => \NUSWhispers\Http\Middleware\RedirectIfAuthenticated::class,

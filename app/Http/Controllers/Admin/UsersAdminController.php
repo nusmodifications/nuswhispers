@@ -9,14 +9,6 @@ use NUSWhispers\Models\User;
 
 class UsersAdminController extends AdminController
 {
-    /**
-     * Create a new controller instance.
-     */
-    public function __construct()
-    {
-        $this->middleware('adminAuth');
-    }
-
     public function getIndex()
     {
         return view('admin.users.index', [
