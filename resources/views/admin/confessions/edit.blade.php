@@ -94,7 +94,7 @@ $nextStatus = $queue ? $queue->status_after : $confession->status;
                     @endphp
                     <div class="mt-2 d-flex date-picker form-control custom-select">
                         <i class="typcn typcn-calendar-outline"></i>
-                        <div class="label"></div>
+                        <div class="label"><span class="text-muted">Select Date</span></div>
                         <input type="hidden" name="schedule" value="{{ $schedule }}">
                     </div>
                 </div>
