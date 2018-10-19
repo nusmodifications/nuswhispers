@@ -13,7 +13,7 @@ trait ResolvesFacebookPageToken
      *
      * @return string
      */
-    public function resolvePageToken($user)
+    public function resolvePageToken($user): string
     {
         if (! $user instanceof User) {
             return config('laravel-facebook-sdk.facebook_config.page_access_token');

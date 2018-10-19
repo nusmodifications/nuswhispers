@@ -59,10 +59,10 @@ Route::name('confessions.')->prefix('confessions')->group(function () {
     Route::post('edit/{confession}', 'ConfessionsAdminController@postEdit')
         ->name('update');
 
-    Route::get('approve/{id}/{hours?}', 'ConfessionsAdminController@getApprove')
+    Route::get('approve/{confession}/{hours?}', 'ConfessionsAdminController@getApprove')
         ->name('approve');
 
-    Route::get('feature/{id}/{hours?}', 'ConfessionsAdminController@getFeature')
+    Route::get('feature/{confession}/{hours?}', 'ConfessionsAdminController@getFeature')
         ->name('feature');
 
     Route::get('unfeature/{confession}', 'ConfessionsAdminController@getUnfeature')
