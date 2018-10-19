@@ -50,7 +50,7 @@ Route::name('profile.')->prefix('profile')->group(function () {
 });
 
 Route::name('confessions.')->prefix('confessions')->group(function () {
-    Route::get('comments/delete/{id}', 'ModeratorCommentsAdminController@getDelete')
+    Route::get('comments/delete/{comment}', 'ModeratorCommentsAdminController@getDelete')
         ->name('comments.delete');
 
     Route::get('edit/{confession}', 'ConfessionsAdminController@getEdit')

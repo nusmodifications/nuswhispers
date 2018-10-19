@@ -2,15 +2,14 @@
 
 namespace NUSWhispers\Http\Controllers\Admin;
 
+use Illuminate\Http\Request;
 use NUSWhispers\Models\ModeratorComment;
 
 class ModeratorCommentsAdminController extends AdminController
 {
-    public function getDelete($id)
+    public function getDelete(Request $request, ModeratorComment $comment)
     {
-        $comment = ModeratorComment::findOrFail($id);
-
-        if (auth()->user()->role === 'Administrator' || auth()->user()->user_id !== $comment->user_id) {
+        if ($request->user()->role === 'Administrator' || $request->user()->user_id !== $comment->user_id) {
             try {
                 $comment->delete();
 
