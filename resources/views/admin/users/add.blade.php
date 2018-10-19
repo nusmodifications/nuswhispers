@@ -1,62 +1,66 @@
-@extends('admin')
+@php
+$roles = ['Moderator', 'Administrator']
+@endphp
+
+@extends('layouts.admin')
+
+@section('title', 'Add User')
 
 @section('content')
-  <div class="page-header">
-    <h1 class="page-title"><span class="typcn typcn-heart"></span>Add New User <small><a href="/admin/users/">(Back to Users Listing)</a></small></h1>
-  </div>
+<div class="page-header">
+    <h1>
+        <span class="typcn typcn-group"></span>
+        Add User
+    </h1>
+    <div>
+        <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.users.index') }}">
+            Back to Users
+        </a>
+    </div>
+</div>
 
-  @include('message')
+<form method="post" action="{{ route('admin.users.store') }}">
+    @csrf
 
-  <div class="admin-content-wrapper">
-
-    <?php echo \Form::model($user, ['url' => url('admin/users/add'), 'class' => 'user-form form']) ?>
-
-    <div class="form-group {{$errors->first('email') ? 'has-error' : ''}}">
-      <label for="email">E-mail Address <span class="text-danger">*</span></label>
-      <?php echo \Form::text('email', null, ['class' => 'form-control']) ?>
-      @if ($errors->first('email'))
-      <p class="alert alert-danger">{{$errors->first('email')}}</p>
-      @endif
+    <div class="form-group">
+        <label for="email">Email Address <span class="text-danger">*</span></label>
+        <input id="email" name="email" type="email" class="form-control {{ $errors->first('email') ? 'is-invalid' : '' }}"
+            value="{{ old('email') }}" placeholder="foo@nuswhispers.com" required autofocus>
+        <div class="invalid-feedback">{{ $errors->first('email') }}</div>
     </div>
 
-    <div class="form-group {{$errors->first('name') ? 'has-error' : ''}}">
-      <label for="name">Display Name <span class="text-danger">*</span></label>
-      <?php echo \Form::text('name', null, ['class' => 'form-control']) ?>
-      @if ($errors->first('name'))
-      <p class="alert alert-danger">{{$errors->first('name')}}</p>
-      @endif
+    <div class="form-group">
+        <label for="name">Display Name <span class="text-danger">*</span></label>
+        <input id="name" name="name" type="text" class="form-control {{ $errors->first('name') ? 'is-invalid' : '' }}"
+            value="{{ old('name') }}" required>
+        <div class="invalid-feedback">{{ $errors->first('name') }}</div>
     </div>
 
-    <div class="form-group {{$errors->first('role') ? 'has-error' : ''}}">
-      <label for="role">Role <span class="text-danger">*</span></label>
-      <?php echo \Form::select('role', ['Moderator' => 'Moderator', 'Administrator' => 'Administrator'], null, ['class' => 'form-control']) ?>
-      @if ($errors->first('role'))
-      <p class="alert alert-danger">{{$errors->first('role')}}</p>
-      @endif
+    <div class="form-group">
+        <label for="role">Role <span class="text-danger">*</span></label>
+        <select id="role" name="role" class="form-control custom-select" required>
+            @foreach ($roles as $role)
+            <option value="{{ $role }}" {{ $role === old('role') ? 'selected' : '' }}>{{ $role }}</option>
+            @endforeach
+        </select>
+        <div class="invalid-feedback">{{ $errors->first('role') }}</div>
     </div>
 
-    <div class="form-group {{$errors->first('password') ? 'has-error' : ''}}">
-      <label for="password">Password <span class="text-danger">*</span></label>
-      <?php echo \Form::password('password', ['class' => 'form-control', 'autocomplete' => 'off']) ?>
-      @if ($errors->first('password'))
-      <p class="alert alert-danger">{{$errors->first('password')}}</p>
-      @endif
+    <div class="form-group">
+        <label for="password">Password <span class="text-danger">*</span></label>
+        <input id="password" name="password" type="password" class="form-control {{ $errors->first('password') ? 'is-invalid' : '' }}"
+            required autofocus>
+        <div class="invalid-feedback">{{ $errors->first('password') }}</div>
     </div>
 
-    <div class="form-group {{$errors->first('repeat_password') ? 'has-error' : ''}}">
-      <label for="repeat_password">Repeat Password <span class="text-danger">*</span></label>
-      <?php echo \Form::password('repeat_password', ['class' => 'form-control', 'autocomplete' => 'off']) ?>
-      @if ($errors->first('repeat_password'))
-      <p class="alert alert-danger">{{$errors->first('repeat_password')}}</p>
-      @endif
+    <div class="form-group">
+        <label for="repeat_password">Repeat Password <span class="text-danger">*</span></label>
+        <input id="repeat_password" name="repeat_password" type="password" class="form-control {{ $errors->first('repeat_password') ? 'is-invalid' : '' }}"
+            required autofocus>
+        <div class="invalid-feedback">{{ $errors->first('repeat_password') }}</div>
     </div>
 
-    <p class="form-actions">
-    <?php echo \Form::submit('Add User', ['class' => 'btn btn-primary']) ?>
-    </p>
-
-    <?php echo \Form::close() ?>
-
-  </div>
+    <button type="submit" class="btn btn-primary">Add User</button>
+</form>
 
 @endsection

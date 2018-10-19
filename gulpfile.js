@@ -156,12 +156,6 @@ gulp.task('concat:js', ['js:hint'], function () {
         .pipe(gulpPlugins.if(isProduction, gulpPlugins.uglify({ mangle: false })))
         .pipe(gulp.dest(SETTINGS.build.js))
         .pipe(gulpPlugins.connect.reload());
-
-    gulp.src(['resources/js/*.js', 'resources/js/admin.js'])
-        .pipe(gulpPlugins.concat('admin.js'))
-        .pipe(gulpPlugins.if(isProduction, gulpPlugins.uglify()))
-        .pipe(gulp.dest(SETTINGS.build.js))
-        .pipe(gulpPlugins.connect.reload());
 });
 
 gulp.task('convert:scss', function () {
@@ -173,7 +167,7 @@ gulp.task('convert:scss', function () {
         console.log(errorLog(err));
     };
 
-    var stream = gulp.src([SETTINGS.src.css + 'application.scss', SETTINGS.src.css + 'admin.scss'])
+    var stream = gulp.src([SETTINGS.src.css + 'application.scss'])
        .pipe(gulpPlugins.sass({includePaths: [SETTINGS.src.css], onError: showError}))
        .pipe(gulp.dest(SETTINGS.scss))
        .pipe(gulpPlugins.connect.reload());
@@ -186,12 +180,6 @@ gulp.task('concat:css', ['convert:scss'], function () {
     gulp.src([SETTINGS.src.css + 'fonts.css', SETTINGS.scss + 'application.css', SETTINGS.src.css + '*.css'])
         .pipe(gulpPlugins.concat('styles.css'))
         .pipe(gulpPlugins.if(isProduction, gulpPlugins.cssnano()))
-        .pipe(gulp.dest(SETTINGS.build.css))
-        .pipe(gulpPlugins.connect.reload());
-
-    // Copy over admin.css to public folder (no need for concat)
-    gulp.src([SETTINGS.scss + 'admin.css'])
-    //    .pipe(gulpPlugins.if(isProduction, gulpPlugins.cssnano()))
         .pipe(gulp.dest(SETTINGS.build.css))
         .pipe(gulpPlugins.connect.reload());
 });

@@ -13,10 +13,6 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         \NUSWhispers\Http\Middleware\CheckForMaintenanceMode::class,
-        \Illuminate\Cookie\Middleware\EncryptCookies::class,
-        \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-        \Illuminate\Session\Middleware\StartSession::class,
-        \Illuminate\View\Middleware\ShareErrorsFromSession::class,
     ];
 
     /**
@@ -25,6 +21,18 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middlewareGroups = [
+        'web' => [
+            \Illuminate\Cookie\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \NUSWhispers\Http\Middleware\VerifyCsrfToken::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        ],
+        'admin' => [
+            'web',
+            'auth',
+        ],
         'api' => [
             'cors',
             'throttle:120,1',
@@ -38,7 +46,7 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         'auth' => \NUSWhispers\Http\Middleware\Authenticate::class,
-        'adminAuth' => \NUSWhispers\Http\Middleware\AuthenticateAdmin::class,
+        'auth.admin' => \NUSWhispers\Http\Middleware\AuthenticateAdmin::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'cors' => \NUSWhispers\Http\Middleware\Cors::class,
         'guest' => \NUSWhispers\Http\Middleware\RedirectIfAuthenticated::class,

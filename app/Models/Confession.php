@@ -2,7 +2,9 @@
 
 namespace NUSWhispers\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations;
 
 class Confession extends Model
 {
@@ -31,6 +33,8 @@ class Confession extends Model
 
     /**
      * Attributes should be mass-assignable.
+     *
+     * @var array
      */
     protected $fillable = [
         'content',
@@ -41,7 +45,94 @@ class Confession extends Model
         'status_updated_at',
     ];
 
-    public function getFacebookInformation()
+    /**
+     * List of available statuses.
+     *
+     * @return array
+     */
+    public static function statuses(): array
+    {
+        return ['Featured', 'Scheduled', 'Pending', 'Approved', 'Rejected'];
+    }
+
+    /**
+     * Defines confession categories relationship to model.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function categories(): Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Category::class, 'confession_categories', 'confession_id', 'confession_category_id');
+    }
+
+    /**
+     * Defines confession tags relationship to model.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function tags(): Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class, 'confession_tags', 'confession_id', 'confession_tag_id');
+    }
+
+    /**
+     * Defines confession favourites relationship to model.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function favourites(): Relations\BelongsToMany
+    {
+        return $this->belongsToMany(FbUser::class, 'favourites', 'confession_id', 'fb_user_id');
+    }
+
+    /**
+     * Defines confession logs relationship to model.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function logs(): Relations\HasMany
+    {
+        return $this->hasMany(ConfessionLog::class, 'confession_id', 'confession_id')
+            ->orderByDesc('created_on');
+    }
+
+    /**
+     * Defines moderator comments relationship to model.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function moderatorComments(): Relations\HasMany
+    {
+        return $this->hasMany(ModeratorComment::class, 'confession_id', 'confession_id')
+            ->orderByDesc('created_at');
+    }
+
+    /**
+     * Defines queue relationship to model.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function queue(): Relations\HasOne
+    {
+        return $this->hasOne(ConfessionQueue::class, 'confession_id', 'confession_id');
+    }
+
+    /**
+     * Automatically mutate the date fields.
+     *
+     * @return array
+     */
+    public function getDates(): array
+    {
+        return ['created_at', 'updated_at', 'status_updated_at'];
+    }
+
+    /**
+     * Retrieve Facebook information.
+     *
+     * @return void
+     */
+    public function getFacebookInformation(): void
     {
         if ($this->fb_post_id) {
             $accessToken = config('laravel-facebook-sdk.facebook_config.page_access_token');
@@ -54,154 +145,21 @@ class Confession extends Model
     }
 
     /**
-     * Defines confession categories relationship to model.
+     * Returns the content that is sent to Facebook.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return string
      */
-    public function categories()
-    {
-        return $this->belongsToMany(Category::class, 'confession_categories', 'confession_id', 'confession_category_id');
-    }
-
-    /**
-     * Defines confession tags relationship to model.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function tags()
-    {
-        return $this->belongsToMany(Tag::class, 'confession_tags', 'confession_id', 'confession_tag_id');
-    }
-
-    /**
-     * Defines confession favourites relationship to model.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function favourites()
-    {
-        return $this->belongsToMany(FbUser::class, 'favourites', 'confession_id', 'fb_user_id');
-    }
-
-    /**
-     * Defines confession logs relationship to model.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function logs()
-    {
-        return $this->hasMany(ConfessionLog::class, 'confession_id', 'confession_id');
-    }
-
-    /**
-     * Defines moderator comments relationship to model.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function moderatorComments()
-    {
-        return $this->hasMany(ModeratorComment::class, 'confession_id', 'confession_id');
-    }
-
-    /**
-     * Defines queue relationship to model.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function queue()
-    {
-        return $this->hasOne(ConfessionQueue::class, 'confession_id', 'confession_id');
-    }
-
-    public function isApproved()
-    {
-        return $this->status === 'Featured' || $this->status === 'Approved';
-    }
-
-    /**
-     * Query scope for pending confessions.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopePending($query)
-    {
-        return $query->whereStatus('Pending');
-    }
-
-    /**
-     * Query scope for featured confessions.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeFeatured($query)
-    {
-        return $query->whereStatus('Featured');
-    }
-
-    /**
-     * Query scope for scheduled confessions.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeScheduled($query)
-    {
-        return $query->whereStatus('Scheduled');
-    }
-
-    /**
-     * Query scope for approved confessions.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeApproved($query)
-    {
-        return $query->where(function ($query) {
-            $query->where('status', '=', 'Approved')
-                    ->orWhere('status', '=', 'Featured');
-        });
-    }
-
-    /**
-     * Automatically mutate the date fields.
-     *
-     * @return array
-     */
-    public function getDates()
-    {
-        return ['created_at', 'updated_at', 'status_updated_at'];
-    }
-
-    /**
-     * Query scope for rejected confessions.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeRejected($query)
-    {
-        return $query->whereStatus('Rejected');
-    }
-
-    public static function statuses()
-    {
-        return ['Featured', 'Scheduled', 'Pending', 'Approved', 'Rejected'];
-    }
-
-    public function getFacebookMessage()
+    public function getFacebookMessage(): string
     {
         return $this->content . "\n-\n#" . $this->confession_id . ': ' . url('/confession/' . $this->confession_id);
     }
 
-    public function getFormattedContent()
+    /**
+     * Returns formatted content.
+     *
+     * @return string
+     */
+    public function getFormattedContent(): string
     {
         // Encode HTML entities
         $content = htmlentities($this->content);
@@ -217,5 +175,78 @@ class Confession extends Model
         }
 
         return $content;
+    }
+
+    /**
+     * Checks whether the confession is approved or featured.
+     *
+     * @return bool
+     */
+    public function isApproved(): bool
+    {
+        return $this->status === 'Featured' || $this->status === 'Approved';
+    }
+
+    /**
+     * Query scope for pending confessions.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopePending($query): Builder
+    {
+        return $query->whereStatus('Pending');
+    }
+
+    /**
+     * Query scope for featured confessions.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeFeatured($query): Builder
+    {
+        return $query->whereStatus('Featured');
+    }
+
+    /**
+     * Query scope for scheduled confessions.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeScheduled($query): Builder
+    {
+        return $query->whereStatus('Scheduled');
+    }
+
+    /**
+     * Query scope for approved confessions.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeApproved($query): Builder
+    {
+        return $query->where(function ($query) {
+            $query->where('status', '=', 'Approved')
+                    ->orWhere('status', '=', 'Featured');
+        });
+    }
+
+    /**
+     * Query scope for rejected confessions.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeRejected($query): Builder
+    {
+        return $query->whereStatus('Rejected');
     }
 }

@@ -1,75 +1,85 @@
-@extends('admin')
+@extends('layouts.admin')
+
+@section('title', 'My Profile')
 
 @section('content')
+
 <div class="page-header">
-  <h1 class="page-title"><span class="typcn typcn-user"></span>My Profile</h1>
+    <h1>
+        <span class="typcn typcn-user"></span> Manage User
+    </h1>
 </div>
 
-@include('message')
+<h4>Connected Accounts</h4>
 
-<div class="admin-content-wrapper">
-  <h2>Connected Accounts</h2>
-  <p class="description"><strong>Facebook:</strong> you will need to connect to a Facebook account with editor or admin access to the Facebook page so that newly approved confessions can be automatically submitted to that page.</p>
+<p>
+    <b>Facebook:</b> you will need to connect to a Facebook account with editor or admin access to the
+    Facebook page so that newly approved confessions can be automatically submitted to that page.
+</p>
 
-  <table class="table table-striped table-hover user-profiles-list">
+<table class="table table-bordered table-hover">
     <tbody>
-      @foreach ($providers as $id => $name)
-      <tr>
-        <td><span class="typcn typcn-social-{{$id}}"></span> {{$name}}</td>
-        <td class="actions">
-          @if (isset($profiles[$id]))
-            <?php $linkedData = json_decode($profiles[$id]['data']); ?>
-            Connected as {{$linkedData->name ? $linkedData->name : $linkedData->first_name}} <a href="/admin/profile/delete/{{$id}}"><span class="typcn typcn-delete"></span></a>
-          @else
-            <a href="/admin/profile/connect/{{$id}}">Login with {{$name}}</a>
-          @endif
-        </td>
-      </tr>
-      @endforeach
+        @foreach ($providers as $id => $name)
+        <tr>
+            <td style="width: 60%">
+                <span class="typcn typcn-social-{{$id}}"></span> {{$name}}
+            </td>
+            <td class="actions">
+                @if (isset($profiles[$id]))
+                @php $linkedData = json_decode($profiles[$id]['data']) @endphp
+                Connected as {{ $linkedData->name ? $linkedData->name : $linkedData->first_name }} <a href="{{ route('admin.profile.unconnect', $id) }}"><span
+                        class="typcn typcn-delete"></span></a>
+                @else
+                <a href="{{ route('admin.profile.connect', $id) }}">Login with {{$name}}</a>
+                @endif
+            </td>
+        </tr>
+        @endforeach
     </tbody>
-  </table>
+</table>
 
-  <h2>Edit My Profile</h2>
-  <?php echo \Form::model($user, ['url' => url('admin/profile/edit'), 'class' => 'profile-form form']) ?>
 
-  <div class="form-group {{$errors->first('email') ? 'has-error' : ''}}">
-    <label for="email">E-mail Address <span class="text-danger">*</span></label>
-    <?php echo \Form::text('email', null, ['class' => 'form-control']) ?>
-    @if ($errors->first('email'))
-    <p class="alert alert-danger">{{$errors->first('email')}}</p>
-    @endif
-  </div>
 
-  <div class="form-group {{$errors->first('name') ? 'has-error' : ''}}">
-    <label for="name">Display Name <span class="text-danger">*</span></label>
-    <?php echo \Form::text('name', null, ['class' => 'form-control']) ?>
-    @if ($errors->first('name'))
-    <p class="alert alert-danger">{{$errors->first('name')}}</p>
-    @endif
-  </div>
+<form action="{{ route('admin.profile.update') }}">
+    @csrf
 
-  <h2>Change Password</h2>
+    <div class="my-3 py-3">
+        <h4>Edit Profile</h4>
 
-  <div class="form-group {{$errors->first('new_password') ? 'has-error' : ''}}">
-    <label for="new_password">New Password</label>
-    <?php echo \Form::password('new_password', ['class' => 'form-control', 'autocomplete' => 'off']) ?>
-    @if ($errors->first('new_password'))
-    <p class="alert alert-danger">{{$errors->first('new_password')}}</p>
-    @endif
-  </div>
+        <div class="form-group">
+            <label for="email">Email Address <span class="text-danger">*</span></label>
+            <input id="email" name="email" type="email" class="form-control {{ $errors->first('email') ? 'is-invalid' : '' }}"
+                value="{{ old('email') ?? $user->email }}" placeholder="foo@nuswhispers.com" required autofocus>
+            <div class="invalid-feedback">{{ $errors->first('email') }}</div>
+        </div>
 
-  <div class="form-group {{$errors->first('repeat_password') ? 'has-error' : ''}}">
-    <label for="repeat_password">Repeat Password</label>
-    <?php echo \Form::password('repeat_password', ['class' => 'form-control', 'autocomplete' => 'off']) ?>
-    @if ($errors->first('repeat_password'))
-    <p class="alert alert-danger">{{$errors->first('repeat_password')}}</p>
-    @endif
-  </div>
+        <div class="form-group">
+            <label for="name">Display Name <span class="text-danger">*</span></label>
+            <input id="name" name="name" type="text" class="form-control {{ $errors->first('name') ? 'is-invalid' : '' }}"
+                value="{{ old('name') ?? $user->name }}" required>
+            <div class="invalid-feedback">{{ $errors->first('name') }}</div>
+        </div>
+    </div>
 
-  <p class="form-actions">
-  <?php echo \Form::submit('Update Profile', ['class' => 'btn btn-primary']) ?>
-  </p>
+    <div class="my-3 py-3">
+        <h4>Change Password</h4>
 
-  <?php echo \Form::close() ?>
-</div>
+        <div class="form-group">
+            <label for="password">New Password <span class="text-danger">*</span></label>
+            <input id="password" name="password" type="password" class="form-control {{ $errors->first('password') ? 'is-invalid' : '' }}"
+                required autofocus>
+            <div class="invalid-feedback">{{ $errors->first('password') }}</div>
+        </div>
+
+        <div class="form-group">
+            <label for="repeat_password">Repeat New Password <span class="text-danger">*</span></label>
+            <input id="repeat_password" name="repeat_password" type="password" class="form-control {{ $errors->first('repeat_password') ? 'is-invalid' : '' }}"
+                required autofocus>
+            <div class="invalid-feedback">{{ $errors->first('repeat_password') }}</div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update Profile</button>
+</form>
+
 @endsection

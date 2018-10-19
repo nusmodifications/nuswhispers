@@ -3,6 +3,7 @@
 namespace NUSWhispers\Http\Controllers\Admin;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use NUSWhispers\Listeners\ResolvesFacebookPageToken;
 use NUSWhispers\Models\Category;
@@ -14,204 +15,286 @@ class ConfessionsAdminController extends AdminController
 {
     use ResolvesFacebookPageToken;
 
+    /**
+     * @var \NUSWhispers\Services\ConfessionService
+     */
     protected $service;
 
+    /**
+     * Constructs an instance of the controller.
+     *
+     * @param \NUSWhispers\Services\ConfessionService $service
+     */
     public function __construct(ConfessionService $service)
     {
         $this->service = $service;
     }
 
-    public function getIndex(Request $request, $status = 'Pending')
+    /**
+     * Retrieves a list of confessions.
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return mixed
+     */
+    public function getIndex(Request $request)
     {
-        $status = ucfirst($status);
-        if ($status !== 'Pending') {
-            $query = Confession::orderBy('created_at', 'desc');
-        } else {
-            $query = Confession::orderBy('created_at', 'asc');
-        }
+        $query = $this->buildQueryFromRequest($request);
 
-        if ($request->input('category')) {
-            $query->whereHas('categories', function ($query) use ($request) {
-                $query->where('confession_categories.confession_category_id', '=', (int) $request->input('category'));
-            });
-        }
+        /** @var \Illuminate\Pagination\LengthAwarePaginator $confessions */
+        $confessions = $query->with('moderatorComments')
+            ->paginate(10)
+            ->appends($request->input());
 
-        if ($request->input('q')) {
-            $search = stripslashes($request->input('q'));
-            $query->where(function ($q) use ($search) {
-                $q->where('content', 'LIKE', "%$search%");
-                $q->orWhere('confession_id', (int) $search);
-            });
-        }
-
-        if ($request->input('start') && $request->input('end')) {
-            $start = Carbon::createFromFormat('U', strtotime($request->input('start')))->startOfDay();
-            $end = Carbon::createFromFormat('U', strtotime($request->input('end')))->startOfDay();
-
-            if ($start > $end) {
-                return redirect()->back()->withMessage('Start date cannot be later than end date.')
-                    ->with('alert-class', 'alert-danger');
-            }
-
-            $query->where('created_at', '>=', $start->toDateTimeString());
-            $query->where('created_at', '<', $end->toDateTimeString());
-        }
-
-        if ($request->input('fingerprint')) {
-            $query->where('fingerprint', $request->input('fingerprint'));
-        }
-
-        if ($status !== 'All') {
-            $query->where('status', '=', ucfirst($status));
-        }
-
-        $confessions = $query->with('moderatorComments')->paginate(10);
-        $confessions->appends($request->input());
-
-        $categories = Category::orderBy('confession_category', 'asc')->pluck('confession_category_id', 'confession_category')->all();
+        $categories = Category::query()
+            ->orderBy('confession_category', 'asc')
+            ->pluck('confession_category_id', 'confession_category');
 
         return view('admin.confessions.index', [
             'confessions' => $confessions,
-            'categoryOptions' => array_merge(['All Categories' => 0], $categories),
-            'hasPageToken' => $this->userHasPageToken(),
+            'categories' => collect(['All Categories' => '0'])->merge($categories),
+            'hasPageToken' => $this->userHasPageToken($request),
         ]);
     }
 
-    public function getEdit($id)
+    /**
+     * Displays the form to edit an existing confession.
+     *
+     * @param \NUSWhispers\Models\Confession $confession
+     *
+     * @return mixed
+     */
+    public function getEdit(Confession $confession)
     {
-        $confession = Confession::with('moderatorComments', 'queue')->findOrFail($id);
-
         return view('admin.confessions.edit', [
-            'confession' => $confession,
+            'categories' => Category::categoryAsc()->get(),
+            'confession' => $confession->load([
+                'moderatorComments',
+                'moderatorComments.user',
+                'logs',
+                'logs.user',
+            ]),
         ]);
     }
 
-    public function postEdit(Request $request, $id)
+    /**
+     * Updates an existing confession.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \NUSWhispers\Models\Confession $confession
+     *
+     * @return mixed
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function postEdit(Request $request, Confession $confession)
     {
-        if ($request->input('action') === 'Post Comment') {
-            $request->validate([
+        if ($request->input('action') === 'post_comment') {
+            $this->validate($request, [
                 'comment' => 'required',
             ]);
 
-            $comment = new ModeratorComment([
-                'content' => $request->input('comment'),
-                'user_id' => auth()->user()->getAuthIdentifier(),
-                'created_at' => new \DateTime(),
-            ]);
+            return $this->withErrorHandling(function () use ($confession, $request) {
+                $confession->moderatorComments()->save(new ModeratorComment([
+                    'content' => $request->input('comment'),
+                    'user_id' => $request->user()->getAuthIdentifier(),
+                    'created_at' => new \DateTime(),
+                ]));
 
-            $confession = Confession::with('moderatorComments')->findOrFail($id);
-            $confession->moderatorComments()->save($comment);
-
-            return redirect()->back()->withMessage('Comment successfully added.')
-                    ->with('alert-class', 'alert-success');
+                return $this->backWithSuccess('Comment successfully added.');
+            });
         }
 
-        $request->validate([
+        $this->validate($request, [
             'content' => 'required',
             'categories' => 'array',
             'status' => 'in:Featured,Pending,Approved,Rejected',
         ]);
 
-        try {
+        return $this->withErrorHandling(function () use ($confession, $request) {
             $data = $request->only(['content', 'status', 'images', 'schedule']);
             $data['categories'] = $request->input('categories', []);
 
             if (env('MANUAL_MODE', false) && request()->input('fb_post_id')) {
-                $data['fb_post_id'] = request()->input('fb_post_id');
+                $data['fb_post_id'] = $request->input('fb_post_id');
             }
 
-            $this->service->update($id, $data);
+            $this->service->update($confession->getKey(), $data);
 
-            return redirect()->back()->withMessage('Confession successfully updated.')
-                ->with('alert-class', 'alert-success');
-        } catch (\Exception $e) {
-            return redirect()->back()->withMessage('Failed updating confession: ' . $e->getMessage())
-                ->with('alert-class', 'alert-danger');
+            return $this->backWithSuccess('Confession successfully updated.');
+        });
+    }
+
+    /**
+     * Approves a confession.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \NUSWhispers\Models\Confession $confession
+     * @param mixed $hours
+     *
+     * @return mixed
+     */
+    public function getApprove(Request $request, Confession $confession, $hours = 0)
+    {
+        return $this->switchOrScheduleConfession($request, $confession, 'Approved', (int) $hours);
+    }
+
+    /**
+     * Features a confession.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \NUSWhispers\Models\Confession $confession
+     * @param mixed $hours
+     *
+     * @return mixed
+     */
+    public function getFeature(Request $request, Confession $confession, $hours = 0)
+    {
+        return $this->switchOrScheduleConfession($request, $confession, 'Featured', (int) $hours);
+    }
+
+    /**
+     * Switch or schedule a confession.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \NUSWhispers\Models\Confession $confession
+     * @param string $status
+     * @param int $hours
+     *
+     * @return mixed
+     */
+    protected function switchOrScheduleConfession(Request $request, Confession $confession, string $status, int $hours)
+    {
+        if (! $this->userHasPageToken($request)) {
+            return $this->backWithError('You have not connected your account with Facebook.');
         }
-    }
 
-    public function getApprove($id, $hours = 0)
-    {
-        return $this->switchOrScheduleConfession($id, 'Approved', (int) $hours);
-    }
-
-    public function getFeature($id, $hours = 0)
-    {
-        return $this->switchOrScheduleConfession($id, 'Featured', (int) $hours);
-    }
-
-    protected function switchOrScheduleConfession($id, $status, $hours)
-    {
-        $confession = Confession::findOrFail($id);
-
-        if (! $this->userHasPageToken()) {
-            return redirect()->back()->withMessage('You have not connected your account with Facebook.')->with('alert-class', 'alert-danger');
-        }
-
-        try {
+        return $this->withErrorHandling(function () use ($confession, $status, $hours) {
             if ($hours > 0) {
                 $this->service->updateStatus($confession, $status, $hours);
 
-                return redirect()->back()->withMessage('Confession has been scheduled to be ' . strtolower($status) . ' in ' . $hours . ' hour(s).')->with('alert-class', 'alert-success');
+                return $this->backWithSuccess('Confession has been scheduled to be ' . strtolower($status) . ' in ' . $hours . ' hour(s).');
             }
+
             $this->service->updateStatus($confession, $status);
 
-            return redirect()->back()->withMessage('Confession successfully ' . strtolower($status) . ' and posted.')->with('alert-class', 'alert-success');
-        } catch (\Exception $e) {
-            return redirect()->back()->withMessage('Error switching status of confession: ' . $e->getMessage())->with('alert-class', 'alert-danger');
-        }
+            return $this->backWithSuccess('Confession successfully ' . strtolower($status) . ' and posted.');
+        });
     }
 
-    public function getUnfeature($id)
+    /**
+     * Removes a confession from Featured.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \NUSWhispers\Models\Confession $confession
+     *
+     * @return mixed
+     */
+    public function getUnfeature(Request $request, Confession $confession)
     {
-        // @TODO: Move this to a repository
-        $confession = Confession::findOrFail($id);
-
-        if (! $this->userHasPageToken()) {
-            return redirect()->back()->withMessage('You have not connected your account with Facebook.')->with('alert-class', 'alert-danger');
+        if (! $this->userHasPageToken($request)) {
+            return $this->backWithError('You have not connected your account with Facebook.');
         }
 
-        try {
+        return $this->withErrorHandling(function () use ($confession) {
             $this->service->updateStatus($confession, 'Approved');
 
-            return redirect()->back()->withMessage('Confession successfully removed from featured.')->with('alert-class', 'alert-success');
-        } catch (\Exception $e) {
-            return redirect()->back()->withMessage('Error removing confession from featured: ' . $e->getMessage())->with('alert-class', 'alert-danger');
-        }
+            return $this->backWithSuccess('Confession successfully removed from featured.');
+        });
     }
 
-    public function getReject($id)
+    /**
+     * Rejects a confession.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \NUSWhispers\Models\Confession $confession
+     *
+     * @return mixed
+     */
+    public function getReject(Request $request, Confession $confession)
     {
-        // @TODO: Move this to a repository
-        $confession = Confession::findOrFail($id);
-
-        if (! $this->userHasPageToken()) {
-            return redirect()->back()->withMessage('You have not connected your account with Facebook.')->with('alert-class', 'alert-danger');
+        if (! $this->userHasPageToken($request)) {
+            return $this->backWithError('You have not connected your account with Facebook.');
         }
 
-        try {
+        return $this->withErrorHandling(function () use ($confession) {
             $this->service->updateStatus($confession, 'Rejected');
 
-            return redirect()->back()->withMessage('Confession successfully rejected.')->with('alert-class', 'alert-success');
-        } catch (\Exception $e) {
-            return redirect()->back()->withMessage('Error rejecting confession: ' . $e->getMessage())->with('alert-class', 'alert-danger');
-        }
+            return $this->backWithSuccess('Confession successfully rejected.');
+        });
     }
 
-    public function getDelete($id)
+    /**
+     * Deletes a confession.
+     *
+     * @param \NUSWhispers\Models\Confession $confession
+     *
+     * @return mixed
+     */
+    public function getDelete(Confession $confession)
     {
-        try {
-            $this->service->delete($id);
+        return $this->withErrorHandling(function () use ($confession) {
+            $this->service->delete($confession);
 
-            return redirect()->back()->withMessage('Confession successfully deleted.')->with('alert-class', 'alert-success');
-        } catch (\Exception $e) {
-            return redirect()->back()->withMessage('Error deleting confession: ' . $e->getMessage())->with('alert-class', 'alert-danger');
-        }
+            return $this->backWithSuccess('Confession successfully deleted.');
+        });
     }
 
-    protected function userHasPageToken()
+    /**
+     * Builds query from request.
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function buildQueryFromRequest(Request $request): Builder
     {
-        $profile = auth()->user()->profiles()->where('provider_name', 'facebook')->first();
+        $status = ucfirst($request->input('status', 'Pending'));
+
+        $query = Confession::query()->orderBy('created_at', $status !== 'Pending' ? 'desc' : 'asc');
+
+        if ($category = $request->input('category')) {
+            $query->whereHas('categories', function (Builder $query) use ($category) {
+                $query->where('confession_categories.confession_category_id', '=', (int) $category);
+            });
+        }
+
+        if ($request->input('q')) {
+            $search = stripslashes($request->input('q'));
+            $query->where(function (Builder $q) use ($search) {
+                return $q->where('content', 'LIKE', "%$search%")
+                    ->orWhere('confession_id', (int) $search);
+            });
+        }
+
+        if (($start = $request->input('start')) && ($end = $request->input('end'))) {
+            $start = Carbon::createFromFormat('U', $start)->startOfDay();
+            $end = Carbon::createFromFormat('U', $end)->startOfDay();
+
+            $query->where('created_at', '>=', $start->toDateTimeString());
+            $query->where('created_at', '<', $end->toDateTimeString());
+        }
+
+        if ($fingerprint = $request->input('fingerprint')) {
+            $query->where('fingerprint', $fingerprint);
+        }
+
+        if ($status !== 'All') {
+            $query->where('status', '=', $status);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Checks if the user has page token.
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return bool
+     */
+    protected function userHasPageToken(Request $request): bool
+    {
+        $profile = $request->user()->profiles()->where('provider_name', 'facebook')->first();
 
         return $profile && $profile->page_token;
     }

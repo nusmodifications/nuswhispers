@@ -53,13 +53,15 @@ class ConfessionService
     /**
      * Deletes a confession by its ID.
      *
-     * @param $id
+     * @param mixed $id
      *
      * @return bool
      */
-    public function delete($id)
+    public function delete($confession)
     {
-        $confession = Confession::findOrFail($id);
+        $confession = $confession instanceof Confession ?
+            $confession :
+            Confession::findOrFail($confession);
 
         $result = $confession->delete();
 
@@ -246,7 +248,7 @@ class ConfessionService
             $attributes['status'] = 'Scheduled';
 
             $attributes['schedule'] = is_string($attributes['schedule']) ?
-                Carbon::parse($attributes['schedule']) :
+                Carbon::createFromTimestamp($attributes['schedule']) :
                 Carbon::now()->addHours($attributes['schedule']);
         }
 

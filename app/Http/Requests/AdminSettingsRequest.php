@@ -11,9 +11,9 @@ class AdminSettingsRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return true;
+        return $this->user()->role === 'Administrator';
     }
 
     /**
@@ -21,7 +21,7 @@ class AdminSettingsRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'word_blacklist' => 'string',

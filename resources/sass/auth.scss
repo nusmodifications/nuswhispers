@@ -1,0 +1,36 @@
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+@import '~bootstrap/scss/root';
+@import '~bootstrap/scss/reboot';
+@import '~bootstrap/scss/type';
+@import '~bootstrap/scss/forms';
+@import '~bootstrap/scss/buttons';
+@import '~bootstrap/scss/alert';
+@import '~bootstrap/scss/utilities';
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  align-items: center;
+  background: #f5f5f5;
+  display: grid;
+  height: 100vh;
+  margin: 0;
+  place-items: center center;
+}
+
+.auth {
+  background: #fff;
+  margin: 5rem 0;
+  max-width: 420px;
+  padding: 2rem 2.5rem;
+  width: 100%;
+}

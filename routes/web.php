@@ -26,18 +26,8 @@ Route::get('/confession/{id}', function ($id) {
 });
 
 // Auth Routes
-Route::group(['namespace' => 'Auth'], function () {
-    $this->get('login', 'LoginController@showLoginForm')->name('login');
-    $this->post('login', 'LoginController@login');
-    $this->get('logout', 'LoginController@logout');
-    $this->post('logout', 'LoginController@logout');
-
-    $this->get('password/reset', 'ForgotPasswordController@showLinkRequestForm');
-    $this->post('password/email', 'ForgotPasswordController@sendResetLinkEmail');
-
-    $this->get('password/reset/{token}', 'ResetPasswordController@showResetForm')->name('password.reset');
-    $this->post('password/reset', 'ResetPasswordController@reset');
-});
+Auth::routes(['register' => false]);
+Route::get('logout', 'Auth\LoginController@logout');
 
 // Mobile submit page
 Route::get('/mobile_submit', function () {

@@ -1,160 +1,140 @@
-<?php
-if ($confession->status == 'Scheduled') {
-  $queue = $confession->queue()->get()->get(0);
-}
-?>
+@php
+use NUSWhispers\Models\Confession;
 
-@extends('admin')
+$queue = $confession->queue;
+$nextStatus = $queue ? $queue->status_after : $confession->status;
+@endphp
+
+@extends('layouts.admin')
+
+@section('title', 'Edit Confession #' . $confession->getKey())
 
 @section('content')
-  <div class="page-header">
-    <h1 class="page-title"><span class="typcn typcn-heart"></span>Edit Confession #{{ $confession->confession_id }} <small><a href="/admin/confessions/">(Back to Confessions Listing)</a></small></h1>
-  </div>
-
-  @include('message')
-
-  <?php echo \Form::model($confession, ['url' => url('admin/confessions/edit', $confession->confession_id), 'class' => 'form row']) ?>
-
-  <div class="col-md-12 col-lg-8 edit-confessions-col">
-    <div class="panel panel-default">
-      <div class="panel-heading">Confession Content</div>
-      <div class="panel-body {{$errors->first('content') ? 'has-error' : ''}}">
-        <?php echo \Form::textarea('content', null, ['id' => '', 'class' => 'form-control']) ?>
-        @if ($errors->first('content'))
-        <p class="alert alert-danger">{{$errors->first('content')}}</p>
-        @endif
-      </div>
+<div class="page-header">
+    <h1>
+        <span class="typcn typcn-heart"></span>
+        Edit Confession #{{ $confession->getKey() }}
+    </h1>
+    <div>
+        <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.confessions.index') }}">
+            Back to Confessions
+        </a>
     </div>
+</div>
 
-    @if (env('MANUAL_MODE', false) && ($confession->status === 'Approved' || $confession->status === 'Featured'))
-    <div class="panel panel-default">
-      <div class="panel-heading">Copy and paste in Facebook!</div>
-      <div class="panel-body">
-      <?php echo \Form::textarea('fb_content', $confession->getFacebookMessage(), ['id' => '', 'class' => 'form-control', 'readonly' => 'readonly', 'onfocus' => 'this.select()']) ?>
-      </div>
-    </div>
-    @endif
+<form class="row" method="POST" action="{{ route('admin.confessions.update', $confession) }}">
+    @csrf
 
-    <div class="panel panel-default panel-photo">
-      <div class="panel-heading">Photo</div>
-      <div class="panel-body">
-        <p><?php echo \Form::text('images', null, ['id' => '', 'class' => 'form-control', 'placeholder' => 'URL to photo']) ?></p>
-        @if ($confession->images)
-        <img src="{{$confession->images}}" alt="Confession Photo">
-        @endif
-      </div>
-    </div>
-
-    <a name="comments"></a>
-    <div class="panel panel-default">
-      <div class="panel-heading">Moderator Comments</div>
-      <div class="panel-body">
-        @if ($confession->moderatorComments()->count() == 0)
-        <p class="no-comments">No comments available.</p>
-        @else
-          @foreach ($confession->moderatorComments()->with('user')->orderBy('created_at', 'desc')->get() as $comment)
-          <div class="comment" id="comment-{{ $comment->comment_id }}">
-            <div class="comment-meta">
-              <p><span class="comment-author">{{!empty($comment->user->name) ? $comment->user->name : $comment->user->email}}</span> commented {{$comment->created_at->diffForHumans()}}</p>
-              @if (auth()->user()->user_id == $comment->user_id || auth()->user()->role == 'Administrator')
-              <a class="delete-comment" href="/admin/confessions/comments/delete/{{ $comment->comment_id }}" title="Delete Comment"><span class="typcn typcn-times"></span></a>
-              @endif
+    <div class="col-12 col-lg-8">
+        <div class="card mb-3">
+            <div class="card-header">Content</div>
+            <div class="card-body">
+                <textarea rows="10" name="content" class="form-control {{ $errors->first('content') ? 'is-invalid' : '' }}"
+                    required>{{ old('content') ?? $confession->content }}</textarea>
+                <div class="invalid-feedback">{{ $errors->first('content') }}</div>
             </div>
-            <div class="comment-content">
-              {{$comment->content}}
+        </div>
+        @if (config('app.manual_mode') && in_array($confession->status, ['Approved', 'Featured'], true))
+        <div class="card mb-3">
+            <div class="card-header">Copy and paste in Facebook!</div>
+            <div class="card-body">
+                <textarea rows="10" name="fb_content" readonly onfocus="this.select()" class="form-control" required>{{ $confession->getFacebookMessage() }}</textarea>
             </div>
-          </div>
-          @endforeach
-        @endif
-      </div>
-    </div>
-    <div class="panel panel-default">
-      <div class="panel-heading">Leave a Comment</div>
-      <div class="panel-body comments-form {{$errors->first('comment') ? 'has-error' : ''}}">
-        <p><?php echo \Form::textarea('comment', null, ['class' => 'form-control', 'placeholder' => 'Leave a comment here for other moderators to see.', 'rows' => 5]) ?></p>
-        <p><?php echo \Form::submit('Post Comment', ['name' => 'action', 'class' => 'btn btn-primary']) ?></p>
-        @if ($errors->first('comment'))
-          <p class="alert alert-danger">{{$errors->first('comment')}}</p>
-        @endif
-      </div>
-    </div>
-  </div>
-
-  <div class="col-md-12 col-lg-4">
-    <div class="panel panel-default panel-status">
-      <div class="panel-heading">Status</div>
-      <div class="panel-body">
-        <p>
-        <?php
-        $status = $confession->status == 'Scheduled' ? $queue->status_after : $confession->status;
-        echo \Form::select('status', array_combine(\NUSWhispers\Models\Confession::statuses(), \NUSWhispers\Models\Confession::statuses()), $status, ['class' => 'form-control'])
-        ?>
-        </p>
-        <p style="text-align:center; color: #999">Latest status updated {{$confession->status_updated_at->diffForHumans()}}.</p>
-        @if (in_array($confession->status, ['Pending', 'Rejected', 'Scheduled'], true))
-        <div class="schedule-confession" @if ($confession->status === 'Pending' || $confession->status === 'Rejected')style="display: none" @endif>
-          @if ($confession->status === 'Pending')
-          Schedule confession to go public:
-          @else
-          Currently scheduled to go public at:
-          @endif
-          <div class="schedule-date">
-            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-            <span>Now</span> <strong class="caret"></strong>
-            <div class="tz" style="display:none"><?php echo date('Z') ?></div>
-            <?php
-            if (request()->input('schedule') !== '')
-              $schedule = request()->input('schedule');
-            elseif (isset($queue))
-              $schedule = $queue->update_status_at->format('c');
-            else
-              $schedule = '';
-            echo Form::hidden('schedule', $schedule)
-            ?>
-          </div>
         </div>
         @endif
-
-        <p>
-          <?php echo \Form::label('fb_post_id', 'Facebook #ID:') ?>
-          <?php echo \Form::text('fb_post_id', null, ['class' => 'form-control']) ?>
-        </p>
-
-        <hr>
-        <?php echo \Form::submit('Update Confession', ['name' => 'action', 'class' => 'btn btn-block btn-primary']) ?>
-      </div>
-    </div>
-    <div class="panel panel-default">
-      <div class="panel-heading">Status History (Last 5)</div>
-      <div class="panel-body">
-        <ul class="status-history-list">
-          @foreach ($confession->logs()->with('user')->orderBy('created_on', 'desc')->take(5)->get() as $log)
-          <li>
-            Changed from <strong>{{$log->status_before}}</strong> to <strong>{{$log->status_after}}</strong>
-            <span class="status-meta">
-              {{$log->created_on->diffForHumans()}} by {{!empty($log->user->name) ? $log->user->name : $log->user->email}}
-            </span>
-          </li>
-          @endforeach
-        </ul>
-      </div>
-    </div>
-    <div class="panel panel-default">
-      <div class="panel-heading">Categories</div>
-      <div class="panel-body">
-        <?php $categories = $confession->categories()->get()->keyBy('confession_category_id'); ?>
-        @foreach (\NUSWhispers\Models\Category::categoryAsc()->get() as $cat)
-        <div class="checkbox">
-          <label>
-          <?php echo \Form::checkbox('categories[]', $cat->confession_category_id, isset($categories[$cat->confession_category_id])) ?>
-          {{$cat->confession_category}}
-          </label>
+        <div class="card mb-3">
+            <div class="card-header">Photo</div>
+            @if ($confession->images)
+            <div class="card-img-top"><img class="mw-100" src="{{ $confession->images }}" alt="Confession Photo"></div>
+            @endif
+            <div class="card-body">
+                <input type="url" name="images" placeholder="URL to photo" class="form-control" value="{{ old('images') ?? $confession->images }}">
+            </div>
         </div>
-        @endforeach
-      </div>
+        <a name="comments"></a>
+        <div class="card mb-3">
+            <div class="card-header">Moderator Comments</div>
+            <div class="card-body">
+                @each('admin.confessions.comments.item', $confession->moderatorComments, 'comment',
+                'admin.confessions.comments.empty')
+
+                <hr>
+
+                <textarea rows="5" name="comment" class="form-control {{ $errors->first('comment') ? 'is-invalid' : '' }}"
+                    placeholder="Leave a comment here for other moderators to see."></textarea>
+                <div class="invalid-feedback">{{ $errors->first('comment') }}</div>
+                <div class="mt-3">
+                    <button type="submit" name="action" class="btn btn-primary" value="post_comment">Post Comment</button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
+    <div class="col-12 col-lg-4 pl-0">
+        <div class="card mb-3">
+            <div class="card-header">Status</div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="status">Next Status</label>
+                    <select id="status" name="status" class="form-select custom-select">
+                        @foreach (Confession::statuses() as $status)
+                        @if ($status !== 'Scheduled')
+                        <option value="{{ $status }}" {{ $nextStatus === $status ? 'selected' : '' }}>
+                            {{ $status }}
+                        </option>
+                        @endif
+                        @endforeach
+                    </select>
+                </div>
 
-  <?php echo \Form::close() ?>
+                <div class="scheduled-form-group mb-3 d-none">
+                    Scheduled Date / Time
+                    @php
+                    if (! ($schedule = old('schedule')) && $queue) {
+                    $schedule = $queue->update_status_at->timestamp;
+                    }
+                    @endphp
+                    <div class="mt-2 d-flex date-picker form-control custom-select">
+                        <i class="typcn typcn-calendar-outline"></i>
+                        <div class="label"><span class="text-muted">Select Date</span></div>
+                        <input type="hidden" name="schedule" value="{{ $schedule }}">
+                    </div>
+                </div>
 
+                <hr>
+
+                <p class="text-muted text-center">Latest status updated {{
+                    $confession->status_updated_at->diffForHumans() }}.</p>
+
+                <hr>
+
+                <div class="form-group">
+                    <label for="fb_post_id">Facebook #ID</label>
+                    <input type="text" class="form-control" id="fb_post_id" name="fb_post_id" value="{{ $confession->fb_post_id }}">
+                </div>
+
+                <button name="action" class="btn btn-block btn-primary" type="submit">
+                    Update Confession
+                </button>
+            </div>
+        </div>
+        <div class="card mb-3">
+            <div class="card-header">Status History (Last 5)</div>
+            <div class="card-body">
+                @each('admin.confessions.logs.item', $confession->logs, 'log', 'admin.confessions.logs.empty')
+            </div>
+        </div>
+        <div class="card mb-3">
+            <div class="card-header">Categories</div>
+            <div class="card-body">
+                @foreach ($categories as $category)
+                @include('admin.confessions.category')
+                @endforeach
+            </div>
+        </div>
+    </div>
+</form>
 @endsection
+
+@push('scripts')
+<script src="{{ mix('js/confessions/edit.js') }}"></script>
+@endpush

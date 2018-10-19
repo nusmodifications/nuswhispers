@@ -2,44 +2,57 @@
 
 namespace NUSWhispers\Http\Controllers\Admin;
 
+use Illuminate\Http\Request;
 use NUSWhispers\Models\ApiKey;
 
 class ApiKeysAdminController extends AdminController
 {
-    public function getDelete($id)
+    /**
+     * Deletes an API key.
+     *
+     * @param \NUSWhispers\Models\ApiKey $key
+     *
+     * @return mixed
+     */
+    public function getDelete(ApiKey $key)
     {
-        try {
-            ApiKey::findOrFail($id)->delete();
+        return $this->withErrorHandling(function () use ($key) {
+            $key->delete();
 
-            return redirect()->back()->withMessage('API key successfully deleted.')->with('alert-class', 'alert-success');
-        } catch (\Exception $e) {
-            return redirect()->back()->withMessage('Error deleting API key: ' . $e->getMessage())->with('alert-class', 'alert-danger');
-        }
+            return $this->backWithSuccess("API key '$key' successfully deleted.");
+        });
     }
 
+    /**
+     * Manage API keys page.
+     *
+     * @return mixed
+     */
     public function getIndex()
     {
         return view('admin.api-keys.index', [
-            'keys' => ApiKey::orderBy('last_used_on', 'desc')->paginate(10),
+            'keys' => ApiKey::query()->orderBy('last_used_on', 'desc')->paginate(10),
         ]);
     }
 
-    public function getAdd()
+    /**
+     * Adds a new API key.
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return mixed
+     */
+    public function getAdd(Request $request)
     {
-        try {
-            $key = new ApiKey([
-                'user_id' => (int) auth()->user()->getKey(),
+        return $this->withErrorHandling(function () use ($request) {
+            (new ApiKey([
+                'user_id' => (int) $request->user()->getKey(),
                 'last_used_on' => new \DateTime(),
                 'created_on' => new \DateTime(),
                 'key' => ApiKey::generateKey(),
-            ]);
-            $key->save();
+            ]))->save();
 
-            return redirect('/admin/api-keys')->withMessage('API key successfully added.')
-                ->with('alert-class', 'alert-success');
-        } catch (\Exception $e) {
-            return redirect()->back()->withMessage('Failed adding API key: ' . $e->getMessage())
-                ->with('alert-class', 'alert-danger');
-        }
+            return $this->backWithSuccess('API key successfully added.');
+        });
     }
 }

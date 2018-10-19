@@ -2,24 +2,43 @@
 
 namespace NUSWhispers\Http\Controllers\Admin;
 
+use Illuminate\Http\Request;
 use NUSWhispers\Models\ModeratorComment;
 
 class ModeratorCommentsAdminController extends AdminController
 {
-    public function getDelete($id)
+    /**
+     * Deletes a moderator comment.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \NUSWhispers\Models\ModeratorComment $comment
+     *
+     * @return mixed
+     */
+    public function getDelete(Request $request, ModeratorComment $comment)
     {
-        $comment = ModeratorComment::findOrFail($id);
-
-        if (auth()->user()->role === 'Administrator' || auth()->user()->user_id !== $comment->user_id) {
-            try {
+        if ($this->canDeleteComment($request, $comment)) {
+            return $this->withErrorHandling(function () use ($comment) {
                 $comment->delete();
 
-                return redirect()->back()->withMessage('Comment successfully deleted.')->with('alert-class', 'alert-success');
-            } catch (\Exception $e) {
-                return redirect()->back()->withMessage('Error deleting comment: ' . $e->getMessage())->with('alert-class', 'alert-danger');
-            }
+                return $this->backWithSuccess('Comment successfully deleted.');
+            });
         }
 
-        return redirect()->back()->withMessage('Only administrators and comment owners are allowed to delete moderator comments.')->with('alert-class', 'alert-danger');
+        return $this->backWithError('Only administrators and comment owners are allowed to delete moderator comments.');
+    }
+
+    /**
+     * Checks whether the existing user can delete the comment.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \NUSWhispers\Models\ModeratorComment $comment
+     *
+     * @return bool
+     */
+    protected function canDeleteComment(Request $request, ModeratorComment $comment): bool
+    {
+        return $request->user()->role === 'Administrator' ||
+            $request->user()->user_id !== $comment->user_id;
     }
 }
