@@ -27,10 +27,10 @@
             <td class="actions">
                 @if (isset($profiles[$id]))
                 @php $linkedData = json_decode($profiles[$id]['data']) @endphp
-                Connected as {{ $linkedData->name ? $linkedData->name : $linkedData->first_name }} <a href="{{ url('admin/profile/delete', $id) }}"><span
+                Connected as {{ $linkedData->name ? $linkedData->name : $linkedData->first_name }} <a href="{{ route('admin.profile.unconnect', $id) }}"><span
                         class="typcn typcn-delete"></span></a>
                 @else
-                <a href="{{ url('admin/profile/connect', $id) }}">Login with {{$name}}</a>
+                <a href="{{ route('admin.profile.connect', $id) }}">Login with {{$name}}</a>
                 @endif
             </td>
         </tr>
@@ -40,21 +40,23 @@
 
 
 
-<form action="{{ url('admin/profile/edit') }}">
+<form action="{{ route('admin.profile.update') }}">
+    @csrf
+
     <div class="my-3 py-3">
         <h4>Edit Profile</h4>
 
         <div class="form-group">
             <label for="email">Email Address <span class="text-danger">*</span></label>
-            <input name="email" type="email" class="form-control {{ $errors->first('email') ? 'is-invalid' : '' }}"
+            <input id="email" name="email" type="email" class="form-control {{ $errors->first('email') ? 'is-invalid' : '' }}"
                 value="{{ old('email') ?? $user->email }}" placeholder="foo@nuswhispers.com" required autofocus>
             <div class="invalid-feedback">{{ $errors->first('email') }}</div>
         </div>
 
         <div class="form-group">
             <label for="name">Display Name <span class="text-danger">*</span></label>
-            <input name="name" type="text" class="form-control {{ $errors->first('name') ? 'is-invalid' : '' }}" value="{{ old('name') ?? $user->name }}"
-                required>
+            <input id="name" name="name" type="text" class="form-control {{ $errors->first('name') ? 'is-invalid' : '' }}"
+                value="{{ old('name') ?? $user->name }}" required>
             <div class="invalid-feedback">{{ $errors->first('name') }}</div>
         </div>
     </div>
@@ -64,14 +66,14 @@
 
         <div class="form-group">
             <label for="password">New Password <span class="text-danger">*</span></label>
-            <input name="password" type="password" class="form-control {{ $errors->first('password') ? 'is-invalid' : '' }}"
+            <input id="password" name="password" type="password" class="form-control {{ $errors->first('password') ? 'is-invalid' : '' }}"
                 required autofocus>
             <div class="invalid-feedback">{{ $errors->first('password') }}</div>
         </div>
 
         <div class="form-group">
             <label for="repeat_password">Repeat New Password <span class="text-danger">*</span></label>
-            <input name="repeat_password" type="password" class="form-control {{ $errors->first('repeat_password') ? 'is-invalid' : '' }}"
+            <input id="repeat_password" name="repeat_password" type="password" class="form-control {{ $errors->first('repeat_password') ? 'is-invalid' : '' }}"
                 required autofocus>
             <div class="invalid-feedback">{{ $errors->first('repeat_password') }}</div>
         </div>

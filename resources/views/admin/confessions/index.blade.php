@@ -21,7 +21,8 @@ use NUSWhispers\Models\Confession;
 
     @if (! $hasPageToken)
     <div class="alert alert-danger">
-        <strong>Warning:</strong> You have not <a href="{{ url('admin/profile') }}">connected your Facebook account</a>.
+        <strong>Warning:</strong> You have not <a href="{{ route('admin.profile.index') }}">connected your Facebook
+            account</a>.
         You will not be able to approve any confessions until you do so.
     </div>
     @endif

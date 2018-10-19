@@ -16,7 +16,7 @@ $nextStatus = $queue ? $queue->status_after : $confession->status;
         Edit Confession #{{ $confession->getKey() }}
     </h1>
     <div>
-        <a class="btn btn-sm btn-outline-primary" href="{{ url('admin/confessions') }}">
+        <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.confessions.index') }}">
             Back to Confessions
         </a>
     </div>
@@ -74,7 +74,8 @@ $nextStatus = $queue ? $queue->status_after : $confession->status;
             <div class="card-header">Status</div>
             <div class="card-body">
                 <div class="form-group">
-                    <select name="status" class="form-select custom-select">
+                    <label for="status">Next Status</label>
+                    <select id="status" name="status" class="form-select custom-select">
                         @foreach (Confession::statuses() as $status)
                         @if ($status !== 'Scheduled')
                         <option value="{{ $status }}" {{ $nextStatus === $status ? 'selected' : '' }}>

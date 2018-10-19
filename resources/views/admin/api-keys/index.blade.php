@@ -9,7 +9,7 @@
         <span class="typcn typcn-key"></span> Manage API Keys
     </h1>
     <div>
-        <a class="btn btn-sm btn-primary" href="{{ url('admin/api-keys/add') }}">
+        <a class="btn btn-sm btn-primary" href="{{ route('admin.api-keys.add') }}">
             Generate New Key
         </a>
     </div>
@@ -40,7 +40,7 @@
             <td>{{ $key->last_used_on->diffForHumans() }}</td>
             <td>{{ $key->created_on->diffForHumans() }}</td>
             <td>
-                <a class="btn btn-sm btn-danger" href="{{ url('admin/api-keys/delete', $key->getKey()) }}">
+                <a class="btn btn-sm btn-danger" href="{{ route('admin.api-keys.delete', $key->getKey()) }}">
                     Delete
                 </a>
             </td>
