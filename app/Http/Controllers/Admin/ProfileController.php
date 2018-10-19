@@ -2,13 +2,13 @@
 
 namespace NUSWhispers\Http\Controllers\Admin;
 
+use Facebook\Exceptions\FacebookResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 use NUSWhispers\Models\UserProfile;
-use SammyK\LaravelFacebookSdk\FacebookFacade as Facebook;
-use Facebook\Exceptions\FacebookResponseException;
 use RuntimeException;
+use SammyK\LaravelFacebookSdk\FacebookFacade as Facebook;
 
 class ProfileController extends AdminController
 {

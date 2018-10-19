@@ -17,9 +17,9 @@ class ApiKeysAdminController extends AdminController
     public function getDelete(ApiKey $key)
     {
         return $this->withErrorHandling(function () use ($key) {
-           $key->delete();
+            $key->delete();
 
-           return $this->backWithSuccess("API key '$key' successfully deleted.");
+            return $this->backWithSuccess("API key '$key' successfully deleted.");
         });
     }
 
@@ -36,7 +36,7 @@ class ApiKeysAdminController extends AdminController
     }
 
     /**
-     * Adds a new API key
+     * Adds a new API key.
      *
      * @param \Illuminate\Http\Request $request
      *
