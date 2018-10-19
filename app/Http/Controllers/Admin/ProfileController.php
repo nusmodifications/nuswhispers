@@ -9,14 +9,14 @@ use NUSWhispers\Models\UserProfile;
 
 class ProfileController extends AdminController
 {
-    public function getIndex()
+    public function getIndex(Request $request)
     {
         $allowedProviders = ['facebook' => 'Facebook'];
 
         return view('admin.profile.index', [
             'providers' => $allowedProviders,
-            'user' => auth()->user(),
-            'profiles' => auth()->user()->profiles()->get()->keyBy('provider_name')->all(),
+            'user' => $request->user(),
+            'profiles' => $request->user()->profiles->keyBy('provider_name')->all(),
         ]);
     }
 
@@ -30,10 +30,10 @@ class ProfileController extends AdminController
         ]);
 
         try {
-            auth()->user()->update([
+            $request->user()->update([
                 'email' => request()->input('email'),
                 'name' => request()->input('name'),
-                'password' => request()->input('new_password') ? Hash::make(request()->input('new_password')) : auth()->user()->password,
+                'password' => request()->input('new_password') ? Hash::make(request()->input('new_password')) : $request->user()->password,
             ]);
 
             return redirect()->back()->withMessage('Profile successfully updated.')
@@ -44,11 +44,11 @@ class ProfileController extends AdminController
         }
     }
 
-    public function getConnect($provider = 'facebook')
+    public function getConnect(Request $request, $provider = 'facebook')
     {
-        if (request()->all()) {
+        if ($request->all()) {
             try {
-                $this->addProfile($provider, auth()->user(), Socialite::with($provider)->user());
+                $this->addProfile($provider, $request->user(), Socialite::with($provider)->user());
                 $this->flashMessage('Sucessfully connected to ' . ucfirst($provider) . '.');
             } catch (\Exception $e) {
                 $this->flashMessage('Error connecting to provider: ' . $e->getMessage(), 'alert-danger');
@@ -64,7 +64,7 @@ class ProfileController extends AdminController
 
     public function getDelete($provider = 'facebook')
     {
-        $profile = UserProfile::where('user_id', '=', auth()->user()->user_id)->where('provider_name', '=', $provider)->delete();
+        UserProfile::where('user_id', '=', auth()->user()->user_id)->where('provider_name', '=', $provider)->delete();
         $this->flashMessage('Sucessfully removed ' . ucfirst($provider) . '.');
 
         return redirect('/admin/profile');
