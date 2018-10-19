@@ -20,7 +20,7 @@ use NUSWhispers\Models\User;
     <div class="container-fluid">
         <div class="row">
             <nav class="sidebar">
-                <a class="whispers" href="{{ url('admin') }}">NUS<span>Whispers</span>Admin</a>
+                <a class="whispers" href="{{ route('admin.index') }}">NUS<span>Whispers</span>Admin</a>
                 <hr>
                 <ul class="nav flex-column sidebar-nav">
                     @component('link', ['url' => 'admin/profile'])
