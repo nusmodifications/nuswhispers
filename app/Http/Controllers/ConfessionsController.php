@@ -17,13 +17,13 @@ class ConfessionsController extends Controller
     /**
      * Refresh cache every 5 minutes.
      */
-    const CACHE_TIMEOUT = 5;
+    public const CACHE_TIMEOUT = 5;
 
     /**
      * Maximum confessions allowed in API.
      * We can't go any higher or Facebook will not allow it.
      */
-    const MAX_CONFESSION_COUNT = 10;
+    public const MAX_CONFESSION_COUNT = 10;
 
     /**
      * Facebook batch processor.

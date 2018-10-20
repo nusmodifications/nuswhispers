@@ -32,7 +32,7 @@ class UpdateConfessionFacebookInfo extends Command
         $accessToken = config('laravel-facebook-sdk.facebook_config.page_access_token');
 
         // Get the latest 250 facebook posts and record likes/comments
-        $facebookRequest = sprintf('/%s/feed?limit=100&oauth_token=%s&fields=comments.limit(1).summary(true),likes.limit(1).summary(true)', config('services.facebook.page_id'), $accessToken);
+        $facebookRequest = sprintf('/%s/feed?limit=100&oauth_token=%s&fields=comments.summary(true),likes.summary(true)', config('services.facebook.page_id'), $accessToken);
         $facebookResponse = Facebook::get($facebookRequest, $accessToken)->getDecodedBody();
         foreach ($facebookResponse['data'] as $facebookPost) {
             $facebookPostId = explode('_', $facebookPost['id'])[1]; // get facebook post id
