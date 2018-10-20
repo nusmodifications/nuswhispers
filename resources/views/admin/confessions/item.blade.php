@@ -101,22 +101,22 @@
             </a>
             @if ($confession->fingerprint)
             &nbsp;
-            <a title="Featured confessions by the same fingerprint" href="/admin/confessions/index/featured?fingerprint={{ urlencode($confession->fingerprint) }}">
+            <a title="Featured confessions by the same fingerprint" href="/admin/confessions?status=featured&fingerprint={{ urlencode($confession->fingerprint) }}">
                 <span class="typcn typcn-pin"></span>
                 {{ $confessionService->countByFingerprint($confession, 'Featured') }}
             </a>
             &nbsp;
-            <a title="Approved confessions by the same fingerprint" href="/admin/confessions/index/approved?fingerprint={{ urlencode($confession->fingerprint) }}">
+            <a title="Approved confessions by the same fingerprint" href="/admin/confessions?status=approved&fingerprint={{ urlencode($confession->fingerprint) }}">
                 <span class="typcn typcn-arrow-up-thick"></span>
                 {{ $confessionService->countByFingerprint($confession, 'Approved') }}
             </a>
             &nbsp;
-            <a title="Pending confessions by the same fingerprint" href="/admin/confessions/index/pending?fingerprint={{ urlencode($confession->fingerprint) }}">
+            <a title="Pending confessions by the same fingerprint" href="/admin/confessions?status=pending&fingerprint={{ urlencode($confession->fingerprint) }}">
                 <span class="typcn typcn-media-record"></span>
                 {{ $confessionService->countByFingerprint($confession, 'Pending') }}
             </a>
             &nbsp;
-            <a title="Rejected confessions by the same fingerprint" href="/admin/confessions/index/rejected?fingerprint={{ urlencode($confession->fingerprint) }}">
+            <a title="Rejected confessions by the same fingerprint" href="/admin/confessions?status=rejected&fingerprint={{ urlencode($confession->fingerprint) }}">
                 <span class="typcn typcn-arrow-down-thick"></span>
                 {{ $confessionService->countByFingerprint($confession, 'Rejected') }}
             </a>
