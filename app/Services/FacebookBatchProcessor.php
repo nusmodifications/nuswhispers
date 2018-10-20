@@ -2,6 +2,7 @@
 
 namespace NUSWhispers\Services;
 
+use Illuminate\Support\Collection;
 use NUSWhispers\Models\Confession;
 use SammyK\LaravelFacebookSdk\LaravelFacebookSdk as Facebook;
 
@@ -40,8 +41,9 @@ class FacebookBatchProcessor
      * @param \NUSWhispers\Models\Confession $confession
      *
      * @return \NUSWhispers\Models\Confession $confession
+     * @throws \Facebook\Exceptions\FacebookSDKException
      */
-    public function processConfession($confession)
+    public function processConfession(Confession $confession): Confession
     {
         $confessions = collect([$confession]);
         $confessions = $this->processConfessions($confessions);
@@ -53,11 +55,12 @@ class FacebookBatchProcessor
      * Batch requests information from Facebook about the confessions.
      * This is faster than individually sending a request per confession.
      *
-     * @param \Illuminate\Database\Eloquent\Collection $confessions List of confessions.
+     * @param \Illuminate\Support\Collection $confessions List of confessions.
      *
-     * @return \Illuminate\Database\Eloquent\Collection List of processed confessions.
+     * @return \Illuminate\Support\Collection List of processed confessions.
+     * @throws \Facebook\Exceptions\FacebookSDKException
      */
-    public function processConfessions($confessions)
+    public function processConfessions(Collection $confessions): Collection
     {
         $batchRequests = [];
 
@@ -67,7 +70,7 @@ class FacebookBatchProcessor
 
         foreach ($confessions as $confession) {
             $requestUrl = sprintf(
-                '/%s?oauth_token=%s&fields=%scomments.summary(true).filter(toplevel).fields(parent.fields(id),comments.summary(true),message,from,created_time),likes.summary(true)',
+                '/%s?oauth_token=%s&fields=%sfields=comments.summary(true),likes.summary(true)',
                 $this->parseFacebookPostId($confession),
                 $this->accessToken,
                 ! empty($confession->getAttribute('images')) ? 'images,' : ''
@@ -78,14 +81,13 @@ class FacebookBatchProcessor
 
         $responses = $this->fb->sendBatchRequest($batchRequests);
 
-        $confessions->map(function ($confession) use ($responses) {
-            $facebookResponse = $responses[$confession->getAttribute('confession_id')]->getDecodedBody();
+        $confessions->map(function (Confession $confession) use ($responses) {
+            $fbResponse = $responses[$confession->getAttribute('confession_id')]->getDecodedBody();
             $confession->setAttribute('status_updated_at_timestamp', $confession->status_updated_at->timestamp);
-            $confession->setAttribute('facebook_information', $facebookResponse);
+            $confession->setAttribute('facebook_information', $fbResponse);
 
             // Update image field with Facebook's image URL.
-            $facebookImage = array_get($facebookResponse, 'images.0.source');
-            if ($facebookImage) {
+            if ($facebookImage = array_get($fbResponse, 'images.0.source')) {
                 $confession->setAttribute('images', $facebookImage);
             }
         });

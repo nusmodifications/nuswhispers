@@ -5,6 +5,7 @@ namespace NUSWhispers\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
+use SammyK\LaravelFacebookSdk\FacebookFacade as Facebook;
 
 class Confession extends Model
 {
@@ -138,9 +139,10 @@ class Confession extends Model
             $accessToken = config('laravel-facebook-sdk.facebook_config.page_access_token');
             $pageId = config('services.facebook.page_id');
 
-            $facebookRequest = sprintf('/%s?oauth_token=%s&fields=comments.summary(true).filter(toplevel).fields(parent.fields(id),comments.summary(true),message,from,created_time),likes.summary(true)', $pageId . '_' . $this->fb_post_id, $accessToken);
-            $facebookResponse = \Facebook::get($facebookRequest, $accessToken)->getDecodedBody();
-            $this->facebook_information = $facebookResponse;
+            $fbRequest = sprintf('/%s?oauth_token=%s&fields=comments.summary(true).filter(toplevel).fields(parent.fields(id),comments.summary(true),message,from,created_time,is_hidden),likes.summary(true)', $pageId . '_' . $this->fb_post_id, $accessToken);
+            $fbResponse = Facebook::get($fbRequest, $accessToken)->getDecodedBody();
+
+            $this->facebook_information = $fbResponse;
         }
     }
 
