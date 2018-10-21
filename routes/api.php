@@ -24,6 +24,8 @@ Route::name('confessions.')->prefix('confessions')->group(function () {
 
 Route::resource('categories', 'CategoriesController', ['only' => ['index', 'show']]);
 
+Route::resource('images', 'ImagesController', ['only' => ['store']]);
+
 Route::name('tags.')->prefix('tags')->group(function () {
     Route::get('top/{num}', 'TagsController@topNTags')->name('top');
 
