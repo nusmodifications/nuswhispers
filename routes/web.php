@@ -35,6 +35,6 @@ Route::get('/mobile_submit', function () {
 });
 
 // Reroute everything else to angular
-Route::get('/{getEverything?}/{all?}', function () {
+Route::fallback(function () {
     return File::get(public_path() . '/app.html');
 });
