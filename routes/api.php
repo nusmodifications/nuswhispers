@@ -18,9 +18,9 @@ Route::name('confessions.')->prefix('confessions')->group(function () {
     Route::get('tag/{tag}', 'ConfessionsController@tag')->name('tag');
     Route::get('search/{searchString}', 'ConfessionsController@search')->name('search');
     Route::get('favourites', 'ConfessionsController@favourites')->name('favourites');
-
-    Route::resource('', 'ConfessionsController', ['only' => ['index', 'store', 'show']]);
 });
+
+Route::resource('confessions', 'ConfessionsController', ['only' => ['index', 'store', 'show']]);
 
 Route::resource('categories', 'CategoriesController', ['only' => ['index', 'show']]);
 
@@ -28,9 +28,9 @@ Route::resource('images', 'ImagesController', ['only' => ['store']]);
 
 Route::name('tags.')->prefix('tags')->group(function () {
     Route::get('top/{num}', 'TagsController@topNTags')->name('top');
-
-    Route::resource('', 'TagsController', ['only' => ['index', 'show']]);
 });
+
+Route::resource('tags', 'TagsController', ['only' => ['index', 'show']]);
 
 Route::name('fbuser.')->prefix('fbuser')->group(function () {
     Route::post('login', 'FbUsersController@postLogin')->name('login');
