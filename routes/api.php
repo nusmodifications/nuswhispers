@@ -11,25 +11,30 @@
 |
 */
 
-Route::get('confessions/popular', 'ConfessionsController@popular');
-Route::get('confessions/recent', 'ConfessionsController@recent');
-Route::get('confessions/category/{categoryId}', 'ConfessionsController@category');
-Route::get('confessions/tag/{tag}', 'ConfessionsController@tag');
-Route::get('confessions/search/{searchString}', 'ConfessionsController@search');
-Route::get('confessions/favourites', 'ConfessionsController@favourites');
-Route::resource('confessions', 'ConfessionsController',
-    ['only' => ['index', 'store', 'show']]);
+Route::name('confessions.')->prefix('confessions')->group(function () {
+    Route::get('popular', 'ConfessionsController@popular')->name('popular');
+    Route::get('recent', 'ConfessionsController@recent')->name('recent');
+    Route::get('category/{categoryId}', 'ConfessionsController@category')->name('category');
+    Route::get('tag/{tag}', 'ConfessionsController@tag')->name('tag');
+    Route::get('search/{searchString}', 'ConfessionsController@search')->name('search');
+    Route::get('favourites', 'ConfessionsController@favourites')->name('favourites');
 
-Route::resource('categories', 'CategoriesController',
-    ['only' => ['index', 'show']]);
+    Route::resource('', 'ConfessionsController', ['only' => ['index', 'store', 'show']]);
+});
 
-Route::get('tags/top/{num}', 'TagsController@topNTags');
-Route::resource('tags', 'TagsController',
-    ['only' => ['index', 'show']]);
+Route::resource('categories', 'CategoriesController', ['only' => ['index', 'show']]);
 
-Route::post('fbuser/login', 'FbUsersController@postLogin');
-Route::post('fbuser/logout', 'FbUsersController@postLogout');
-Route::post('fbuser/favourite', 'FbUsersController@postFavourite');
-Route::post('fbuser/unfavourite', 'FbUsersController@postUnfavourite');
+Route::name('tags.')->prefix('tags')->group(function () {
+    Route::get('top/{num}', 'TagsController@topNTags')->name('top');
 
-Route::options('{all?}', 'ApiController@index');
+    Route::resource('', 'TagsController', ['only' => ['index', 'show']]);
+});
+
+Route::name('fbuser.')->prefix('fbuser')->group(function () {
+    Route::post('login', 'FbUsersController@postLogin')->name('login');
+    Route::post('logout', 'FbUsersController@postLogout')->name('logout');
+    Route::post('favourite', 'FbUsersController@postFavourite')->name('favourite');
+    Route::post('unfavourite', 'FbUsersController@postUnfavourite')->name('unfavourite');
+});
+
+Route::fallback('ApiController@index')->name('index');
