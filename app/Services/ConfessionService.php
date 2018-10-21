@@ -3,13 +3,11 @@
 namespace NUSWhispers\Services;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use InvalidArgumentException;
-use NUSWhispers\Events\ConfessionStatusWasChanged;
-use NUSWhispers\Events\ConfessionWasCreated;
-use NUSWhispers\Events\ConfessionWasDeleted;
-use NUSWhispers\Events\ConfessionWasScheduled;
-use NUSWhispers\Events\ConfessionWasUpdated;
+use NUSWhispers\Events;
 use NUSWhispers\Models\Confession;
+use NUSWhispers\Models\User;
 use Ramsey\Uuid\Uuid;
 
 class ConfessionService
@@ -34,7 +32,7 @@ class ConfessionService
      *
      * @return \NUSWhispers\Models\Confession
      */
-    public function create(array $attributes)
+    public function create(array $attributes): Confession
     {
         $attributes['status'] = 'Pending';
 
@@ -44,7 +42,7 @@ class ConfessionService
         $confession = Confession::create($attributes);
         $confession = $this->sync($confession, $attributes);
 
-        event(new ConfessionWasCreated($confession));
+        event(new Events\ConfessionWasCreated($confession));
         $this->dispatchStatusEvents($confession);
 
         return $confession;
@@ -53,19 +51,21 @@ class ConfessionService
     /**
      * Deletes a confession by its ID.
      *
-     * @param mixed $id
+     * @param mixed $confession
      *
-     * @return bool
+     * @return mixed
+     *
+     * @throws \Exception
      */
     public function delete($confession)
     {
         $confession = $confession instanceof Confession ?
             $confession :
-            Confession::findOrFail($confession);
+            Confession::query()->findOrFail($confession);
 
         $result = $confession->delete();
 
-        event(new ConfessionWasDeleted($confession, $this->resolveUser($confession)));
+        event(new Events\ConfessionWasDeleted($confession, $this->resolveUser($confession)));
 
         return $result;
     }
@@ -92,7 +92,7 @@ class ConfessionService
      *
      * @return \NUSWhispers\Models\Confession
      */
-    public function updateStatus($confession, $status = 'Approved', $hours = null)
+    public function updateStatus($confession, $status = 'Approved', $hours = null): Confession
     {
         return $this->update($confession, ['status' => $status, 'schedule' => $hours]);
     }
@@ -105,7 +105,7 @@ class ConfessionService
      *
      * @return \NUSWhispers\Models\Confession
      */
-    public function update($confession, array $attributes = [])
+    public function update($confession, array $attributes = []): Confession
     {
         $attributes = $this->normalize($attributes);
 
@@ -121,7 +121,7 @@ class ConfessionService
         $confession->update($attributes);
         $confession = $this->sync($confession, $attributes);
 
-        event(new ConfessionWasUpdated($confession, $this->resolveUser($confession)));
+        event(new Events\ConfessionWasUpdated($confession, $this->resolveUser($confession)));
         $this->dispatchStatusEvents($confession, $originalStatus);
 
         return $confession;
@@ -135,7 +135,7 @@ class ConfessionService
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    protected function buildFingerprintQuery($confession, $status = null)
+    protected function buildFingerprintQuery($confession, $status = null): Builder
     {
         /** @var \Illuminate\Database\Eloquent\Builder $builder */
         $builder = Confession::where('fingerprint', $confession->fingerprint);
@@ -154,7 +154,7 @@ class ConfessionService
      *
      * @return array
      */
-    protected function checkFingerprint(array $attributes = [])
+    protected function checkFingerprint(array $attributes = []): array
     {
         $attributes['fingerprint'] = ! empty($attributes['token']) ?
             $attributes['token'] :
@@ -173,13 +173,13 @@ class ConfessionService
      *
      * @return void
      */
-    protected function dispatchStatusEvents(Confession $confession, $originalStatus = '')
+    protected function dispatchStatusEvents(Confession $confession, $originalStatus = ''): void
     {
         $newStatus = $confession->status;
 
         // Status change event should not trigger when confession is created.
         if (! empty($originalStatus) && $originalStatus !== $newStatus) {
-            event(new ConfessionStatusWasChanged(
+            event(new Events\ConfessionStatusWasChanged(
                 $confession,
                 $originalStatus,
                 $this->resolveUser($confession)
@@ -188,7 +188,7 @@ class ConfessionService
 
         // Call scheduled event even though the status is the same.
         if ($newStatus === 'Scheduled') {
-            event(new ConfessionWasScheduled($confession, auth()->user()));
+            event(new Events\ConfessionWasScheduled($confession, auth()->user()));
 
             return;
         }
@@ -206,7 +206,7 @@ class ConfessionService
      *
      * @return string
      */
-    protected function generateFingerprint()
+    protected function generateFingerprint(): string
     {
         return Uuid::uuid4()->toString();
     }
@@ -220,7 +220,7 @@ class ConfessionService
      *
      * @return \NUSWhispers\Models\Confession
      */
-    protected function schedule($confession, $status, $updateAt)
+    protected function schedule($confession, $status, $updateAt): Confession
     {
         $confession = $this->resolveConfession($confession);
 
@@ -239,7 +239,7 @@ class ConfessionService
      * @param array $attributes
      * @return array
      */
-    protected function normalize(array $attributes)
+    protected function normalize(array $attributes): array
     {
         $attributes['status_updated_at'] = Carbon::now();
 
@@ -263,7 +263,7 @@ class ConfessionService
      *
      * @return \NUSWhispers\Models\Confession
      */
-    protected function sync(Confession $confession, array $attributes = [])
+    protected function sync(Confession $confession, array $attributes = []): Confession
     {
         if (isset($attributes['categories']) && is_array($attributes['categories'])) {
             $confession->categories()->sync($attributes['categories']);
@@ -290,7 +290,7 @@ class ConfessionService
     protected function resolveConfession($confession)
     {
         if (! $confession instanceof Confession) {
-            return Confession::findOrFail($confession);
+            return Confession::query()->findOrFail($confession);
         }
 
         return $confession;
@@ -303,7 +303,7 @@ class ConfessionService
      *
      * @return \NUSWhispers\Models\User|null
      */
-    protected function resolveUser(Confession $confession)
+    protected function resolveUser(Confession $confession): ?User
     {
         if (auth()->check()) {
             return auth()->user();
@@ -315,10 +315,6 @@ class ConfessionService
             ->with(['user'])
             ->first();
 
-        if (! $lastLog) {
-            return null;
-        }
-
-        return $lastLog->user;
+        return $lastLog ? $lastLog->user : null;
     }
 }
