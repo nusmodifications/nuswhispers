@@ -70,7 +70,7 @@ class FacebookBatchProcessor
 
         foreach ($confessions as $confession) {
             $requestUrl = sprintf(
-                '/%s?oauth_token=%s&fields=%sfields=comments.summary(true),likes.summary(true)',
+                '/%s?oauth_token=%s&fields=%scomments.summary(true),likes.summary(true)',
                 $this->parseFacebookPostId($confession),
                 $this->accessToken,
                 ! empty($confession->getAttribute('images')) ? 'images,' : ''
