@@ -67,8 +67,6 @@ phpunit.xml
 /.vscode
 
 # Built files
-/public/*.html
-/public/assets
 /public/hot
 /public/storage
 /public/mix-manifest.json

@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/nusmodifications/nuswhispers/badge.svg)](https://coveralls.io/github/nusmodifications/nuswhispers)
 [![StyleCI Status](https://styleci.io/repos/31862595/shield)](https://styleci.io/repos/31862595)
 
-> Laravel 5 + AngularJS setup.
+> Source code for NUSWhispers website.
 
 ## Requirements
 
@@ -30,7 +30,6 @@ composer install
 ```
 cd /path/to/current/directory
 npm install
-bower install
 ```
 
 4. Run database migrations and seed data via command line:
@@ -46,7 +45,3 @@ php artisan db:seed
 ```
 npm run build
 ```
-
-## Credits
-
-- [generator-boom](https://www.npmjs.com/package/generator-boom)
