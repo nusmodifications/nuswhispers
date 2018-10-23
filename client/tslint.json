@@ -6,13 +6,8 @@
     "tslint-config-prettier"
   ],
   "rules": {
-    "interface-name": [
-      true,
-      "never-prefix"
-    ],
+    "interface-name": [true, "never-prefix"],
     "no-empty-interface": false,
-    "quotemark": [
-      true,
-      "single"
-    ]
+    "quotemark": [true, "single"]
+  }
 }
