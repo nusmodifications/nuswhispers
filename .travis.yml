@@ -1,7 +1,7 @@
 matrix:
   include:
     - language: php
-      php: 7.1
+      php: 7.2
       before_script:
         - cd core
         - cp .env.travis .env
@@ -20,7 +20,7 @@ matrix:
           - core/vendor
           - core/node_modules
       addons:
-        mariadb: '10.1'
+        mariadb: '10.3'
     - language: node_js
       node_js: stable
       before_install: export TZ=UTC
