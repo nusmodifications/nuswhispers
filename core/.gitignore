@@ -1,0 +1,13 @@
+# Environment files
+.env
+
+# PHPUnit
+phpunit.xml
+.phpunit.result.cache
+
+# Built files
+build
+public/*
+!public/favicon.ico
+!public/index.php
+!public/robots.txt

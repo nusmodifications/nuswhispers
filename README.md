@@ -16,32 +16,4 @@ For a development environment, using [docker-nuswhispers](https://github.com/nus
 
 ## Installation
 
-1. Rename `.env.example` to `.env`
-
-2. Install PHP dependencies via composer:
-
-```
-cd /path/to/current/directory
-composer install
-```
-
-3. Install JS dependencies via npm and bower:
-
-```
-cd /path/to/current/directory
-npm install
-```
-
-4. Run database migrations and seed data via command line:
-
-```
-cd /path/to/current/directory
-php artisan migrate
-php artisan db:seed
-```
-
-5. Compile front-end assets using the following command:
-
-```
-npm run build
-```
+TODO

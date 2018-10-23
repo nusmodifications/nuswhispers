@@ -1,26 +1,34 @@
-language: php
-
-php:
-  - '7.1'
-
-before_script:
-  - cp .env.travis .env
-  - mysql -e 'create database homestead_test;'
-  - composer self-update
-  - composer install --dev --no-interaction
-  - php artisan key:generate
-  - php artisan migrate --database=testing
-
-script:
-  - mkdir -p build/logs
-  - vendor/bin/phpunit -c phpunit.xml.dist
-
-after_success:
-  - travis_retry php vendor/bin/coveralls
-
-cache:
-  directories:
-    - vendor
-
-addons:
-  mariadb: '10.1'
+matrix:
+  include:
+    - language: php
+      php: 7.1
+      before_script:
+        - cd core
+        - cp .env.travis .env
+        - mysql -e 'create database homestead_test;'
+        - composer self-update
+        - composer install --dev --no-interaction
+        - php artisan key:generate
+        - php artisan migrate --database=testing
+      script:
+        - mkdir -p core/build/logs
+        - vendor/bin/phpunit -c phpunit.xml.dist
+      after_success:
+        - travis_retry php vendor/bin/coveralls
+      cache:
+        directories:
+          - core/vendor
+          - core/node_modules
+      addons:
+        mariadb: '10.1'
+    - language: node_js
+      node_js: stable
+      before_install: export TZ=UTC
+      install:
+        - cd client
+        - npm install
+      script:
+        - npm run test
+notifications:
+  slack:
+    secure: ZeqNGAZf9pgPpzYVqxN/2W/nuOEsCPHkbZWvF2RaKrcaT/QR8qFoyxNg+DWIfzjmGy4pEIq7+atF0my3WaM9FS96fCr+pZWMZUWgl48EUR5aQCSOyCoiPNoetpeDK27/UkrtX32fF47Gi9CTs1IaAzGJf8qROlEmB9oWhWMLIZdoFAEBAsHh8udhjKJVDOvZLrPeQW6YW1I9GG16rthA3YseaDJUGkdpDfc1POawJWr5Qz5e/oKQArr6Y5VuzJ8eAmikPbN1/Xzf5IwCLW+Bg88SgvONjwK7pyf06qlanKEFDzQfmLj1q6x1fY41TinqJfR6GyKmbuKPDXNgNmxrjMpPZYo2ZLLnef4qEmrDS4CmFagkDX9WX4mBqTBIa5XdSIuiWK/ZL078b4rGXliGfMkvthqAppJH2bgEk8f8fIZdpI5+0cx0RT/jh6ZiOiTmXpGN09oVZLp+8miFlOBVBkNsw9B0awn7KCm09+u8iKK/mzUgGWN+8PpqzoKdIybaLShPCbBAwe+jHPYxEFuQCe7GDz7+qlz9rB8Qs/0pJk+9VeQTO5aGgMk/jVdeDK+WZeKmBlcMQghAuPr2wzpJWZ/KjLwcDbIaeJhc8uhGzuTL358rTIT/L/1D0Vq918jbchmy3nqfnO1trNKcySkkeJnqv3iyOBnNm5CVpIaUKbw=
