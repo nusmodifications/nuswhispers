@@ -23,4 +23,4 @@ cache:
     - vendor
 
 addons:
-  mariadb: '10.1'
+  mariadb: '10.3'
