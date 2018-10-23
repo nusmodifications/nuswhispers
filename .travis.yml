@@ -1,7 +1,7 @@
 language: php
 
 php:
-  - '7.1'
+  - '7.2'
 
 before_script:
   - cp .env.travis .env
@@ -23,4 +23,4 @@ cache:
     - vendor
 
 addons:
-  mariadb: '10.1'
+  mariadb: '10.3'
