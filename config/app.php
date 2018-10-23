@@ -189,6 +189,7 @@ return [
         NUSWhispers\Providers\EventServiceProvider::class,
         NUSWhispers\Providers\ReCaptchaServiceProvider::class,
         NUSWhispers\Providers\RouteServiceProvider::class,
+        NUSWhispers\Providers\TelescopeServiceProvider::class,
 
         anlutro\LaravelSettings\ServiceProvider::class,
 
