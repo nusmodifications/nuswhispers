@@ -19,7 +19,7 @@ $('.date-picker')
       $label.html(
         `${moment.unix(start).format('D MMM YYYY')} - ${moment
           .unix(end)
-          .format('D MMM YYYY')}`
+          .format('D MMM YYYY')}`,
       );
     } else {
       $label.html('Anytime');
@@ -50,8 +50,8 @@ $('.date-picker')
       .children('.label')
       .html(
         `${picker.startDate.format('D MMM YYYY')} - ${picker.endDate.format(
-          'D MMM YYYY'
-        )}`
+          'D MMM YYYY',
+        )}`,
       );
 
     $picker.children('input[name="start"]').val(picker.startDate.unix());
