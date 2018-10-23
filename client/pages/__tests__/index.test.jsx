@@ -1,7 +1,7 @@
 /* eslint-env jest */
-import React from 'react';
 import { shallow } from 'enzyme';
-import Index from '../index';
+import React from 'react';
+import Index from '../index.tsx';
 
 describe('Index', () => {
   it('works', () => {
