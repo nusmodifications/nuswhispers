@@ -11,10 +11,10 @@ matrix:
         - php artisan key:generate
         - php artisan migrate --database=testing
       script:
-        - mkdir -p core/build/logs
+        - mkdir -p build/logs
         - vendor/bin/phpunit -c phpunit.xml.dist
       after_success:
-        - travis_retry php vendor/bin/coveralls
+        - travis_retry php core/vendor/bin/coveralls
       cache:
         directories:
           - core/vendor
