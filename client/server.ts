@@ -1,4 +1,4 @@
-import { createServer } from 'http';
+import express from 'express';
 import * as next from 'next';
 
 const port = parseInt(process.env.PORT || '', 10) || 3000;
@@ -6,12 +6,16 @@ const app = next({ dev: process.env.NODE_ENV !== 'production' });
 const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
-  createServer(handle).listen(port, (err: Error) => {
+  const server = express();
+
+  server.listen(port, (err: Error) => {
     if (err) {
       throw err;
     }
 
+    server.get('*', (req, res) => handle(req, res));
+
     // tslint:disable-next-line
-    console.log(`> Ready on http://127.0.0.1:${port}`);
+    console.log(`> Ready on http://localhost:${port}`);
   });
 });
