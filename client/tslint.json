@@ -6,8 +6,11 @@
     "tslint-config-prettier"
   ],
   "rules": {
+    "import-blacklist": [true, "lodash"],
     "interface-name": [true, "never-prefix"],
+    "member-access": [true, "no-public"],
     "no-empty-interface": false,
+    "no-submodule-imports": [true, "lodash", "next"],
     "quotemark": [true, "single"]
   }
 }
