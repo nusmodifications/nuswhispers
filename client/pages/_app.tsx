@@ -1,5 +1,5 @@
 import withRedux from 'next-redux-wrapper';
-import BaseApp, { Container } from 'next/app';
+import BaseApp, { Container, NextAppContext } from 'next/app';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
@@ -11,9 +11,16 @@ interface AppProps {
 }
 
 class App extends BaseApp<AppProps> {
+  static async getInitialProps({ Component, ctx }: NextAppContext) {
+    return {
+      pageProps: Component.getInitialProps
+        ? await Component.getInitialProps(ctx)
+        : {},
+    };
+  }
+
   render() {
     const { Component, store } = this.props;
-
     return (
       <Container>
         <Provider store={store}>
