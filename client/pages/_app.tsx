@@ -6,8 +6,8 @@ import { Store } from 'redux';
 import { makeStore } from '../store';
 
 interface AppProps {
-  Component: React.Component,
-  store: Store
+  Component: React.Component;
+  store: Store;
 }
 
 class App extends BaseApp<AppProps> {
