@@ -11,6 +11,6 @@
     "member-access": [true, "no-public"],
     "no-empty-interface": false,
     "no-submodule-imports": [true, "lodash", "next"],
-    "quotemark": [true, "single"]
+    "quotemark": [true, "single", "jsx-double"]
   }
 }
