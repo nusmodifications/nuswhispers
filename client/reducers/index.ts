@@ -8,5 +8,3 @@ export default combineReducers({
   confessions,
   tags,
 });
-
-
