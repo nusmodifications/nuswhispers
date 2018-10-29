@@ -1,5 +1,7 @@
-import * as express from 'express';
-import * as next from 'next';
+import express from 'express';
+import next from 'next';
+import { join } from 'path';
+import favicon from 'serve-favicon';
 
 const port = parseInt(process.env.PORT || '', 10) || 3000;
 const app = next({ dev: process.env.NODE_ENV !== 'production' });
@@ -12,6 +14,10 @@ app.prepare().then(() => {
     if (err) {
       throw err;
     }
+
+    server.use(favicon(join(__dirname, 'static/icons', 'favicon.ico')));
+
+    server.use(express.static('static'));
 
     server.get('/', (req, res) => app.render(req, res, '/featured'));
 
