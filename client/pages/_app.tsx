@@ -20,11 +20,11 @@ class App extends BaseApp<AppProps> {
   }
 
   render() {
-    const { Component, store } = this.props;
+    const { Component, pageProps, store } = this.props;
     return (
       <Container>
         <Provider store={store}>
-          <Component />
+          <Component {...pageProps} />
         </Provider>
       </Container>
     );
