@@ -3,6 +3,8 @@ import BaseApp, { Container, NextAppContext } from 'next/app';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
+import GlobalStyles from '../components/GlobalStyles';
+import Layout from '../components/Layout';
 import { makeStore } from '../store';
 
 interface AppProps {
@@ -23,8 +25,11 @@ class App extends BaseApp<AppProps> {
     const { Component, pageProps, store } = this.props;
     return (
       <Container>
+        <GlobalStyles />
         <Provider store={store}>
-          <Component {...pageProps} />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </Provider>
       </Container>
     );

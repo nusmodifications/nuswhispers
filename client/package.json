@@ -16,6 +16,7 @@
     "npm": ">=5.0.0"
   },
   "dependencies": {
+    "@types/styled-jsx": "^2.2.7",
     "@zeit/next-typescript": "^1.1.1",
     "express": "^4.16.4",
     "next": "^7.0.2",
