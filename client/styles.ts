@@ -12,7 +12,7 @@ export const gray900 = '#212529';
 export const black = '#000';
 
 export const primaryColor = '#0063c8';
-export const secondaryColor = '#ef7c00';
+export const secondaryColor = '#009ce6';
 
 export const columnPadding = '0.75rem';
 export const maxBreakpoint = '767px';
