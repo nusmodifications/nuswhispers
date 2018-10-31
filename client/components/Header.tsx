@@ -1,11 +1,20 @@
 import React from 'react';
+import { columnPadding } from '../styles';
+import Brand from './Brand';
 
 export default () => (
   <header>
-    Header
+    <div className="container">
+      <Brand />
+    </div>
     <style jsx>{`
       header {
-        background: #fff;
+        background-color: #fff;
+      }
+
+      .container {
+        box-sizing: border-box;
+        padding: 1.25rem ${columnPadding};
       }
     `}</style>
   </header>

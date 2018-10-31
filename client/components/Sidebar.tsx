@@ -3,7 +3,6 @@ import { columnPadding } from '../styles';
 
 export default () => (
   <div>
-    Sidebar
     <style jsx>{`
       div {
         flex: 1;

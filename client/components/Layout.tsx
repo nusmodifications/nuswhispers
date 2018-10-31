@@ -10,16 +10,10 @@ interface LayoutProps {
 export default ({ children }: LayoutProps) => (
   <Fragment>
     <Header />
-    <div>
+    <div className="container">
       <main>{children}</main>
       <Sidebar />
       <style jsx>{`
-        div {
-          display: flex;
-          margin: 1rem auto;
-          max-width: 1000px;
-        }
-
         main {
           flex: 2;
           padding: ${columnPadding};

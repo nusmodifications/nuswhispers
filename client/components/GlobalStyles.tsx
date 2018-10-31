@@ -1,11 +1,11 @@
 import React from 'react';
-import { primaryColor } from '../styles';
+import { maxContainerWidth, primaryColor } from '../styles';
 
 export default () => (
   <style jsx global>{`
     body {
-      background-color: #f5f5f5;
-      color: #111;
+      background-color: #f8f9fa;
+      color: #343a40;
       font-family: -apple-system, BlinkMacSystemFont, 'Open Sans', 'Segoe UI',
         'Helvetica Neue', Helvetica, Arial, sans-serif;
       font-size: 0.9375rem;
@@ -23,6 +23,13 @@ export default () => (
 
     a:hover {
       text-decoration: underline;
+    }
+
+    .container {
+      display: flex;
+      margin: 0 auto;
+      max-width: ${maxContainerWidth};
+      width: 100%;
     }
   `}</style>
 );
