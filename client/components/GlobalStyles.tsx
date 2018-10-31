@@ -8,8 +8,8 @@ export default () => (
       color: #343a40;
       font-family: 'Rubik', -apple-system, BlinkMacSystemFont, 'Open Sans',
         'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      font-size: 0.9375rem;
-      line-height: 1.4rem;
+      font-size: 1rem;
+      line-height: 1.5rem;
       margin: 0;
       padding: 0;
       -webkit-font-smoothing: subpixel-antialiased;
@@ -25,6 +25,11 @@ export default () => (
 
     a:hover {
       text-decoration: underline;
+    }
+
+    b,
+    strong {
+      font-weight: 500;
     }
 
     .container {
