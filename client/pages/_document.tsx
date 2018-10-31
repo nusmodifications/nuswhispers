@@ -90,6 +90,10 @@ export default class Document extends BaseDocument {
             sizes="16x16"
             href="/icons/favicon-16x16.png"
           />
+          <link
+            href="https://fonts.googleapis.com/css?family=Rubik:400,500"
+            rel="stylesheet"
+          />
           <link rel="manifest" href="/icons/manifest.json" />
           <meta name="msapplication-TileColor" content="#ffffff" />
           <meta

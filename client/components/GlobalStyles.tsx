@@ -6,8 +6,8 @@ export default () => (
     body {
       background-color: #f8f9fa;
       color: #343a40;
-      font-family: -apple-system, BlinkMacSystemFont, 'Open Sans', 'Segoe UI',
-        'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-family: 'Rubik', -apple-system, BlinkMacSystemFont, 'Open Sans',
+        'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       font-size: 0.9375rem;
       line-height: 1.4rem;
       margin: 0;
@@ -16,8 +16,10 @@ export default () => (
       -moz-osx-font-smoothing: greyscale;
     }
 
-    a:link {
+    a,
+    a:visited {
       color: ${primaryColor};
+      cursor: pointer;
       text-decoration: none;
     }
 
