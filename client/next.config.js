@@ -4,6 +4,9 @@ const withTypescript = require('@zeit/next-typescript');
 const resolveModule = dir => path.join(__dirname, '../node_modules', dir);
 
 module.exports = withTypescript({
+  publicRuntimeConfig: {
+    apiRoot: process.env.API_ROOT || 'https://www.nuswhispers.com/api/',
+  },
   webpack: (config, { defaultLoaders }) => {
     // Transpile Node dependencies.
     config.module.rules.push({
