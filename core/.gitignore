@@ -11,3 +11,5 @@ public/*
 !public/favicon.ico
 !public/index.php
 !public/robots.txt
+
+.vscode

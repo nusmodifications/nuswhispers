@@ -1,0 +1,5 @@
+{
+  "editor.formatOnSave": true,
+  "typescript.tsdk": "client/node_modules/typescript/lib",
+  "jest.rootPath": "client"
+}
