@@ -9,8 +9,8 @@ export default () => (
         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32">
           <defs>
             <linearGradient id="a" x1="50%" x2="50%" y1="0%" y2="100%">
-              <stop offset="0%" stop-color="#009CE6" />
-              <stop offset="100%" stop-color="#0063C8" />
+              <stop offset="0%" stopColor="#009CE6" />
+              <stop offset="100%" stopColor="#0063C8" />
             </linearGradient>
           </defs>
           <path
