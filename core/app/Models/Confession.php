@@ -139,10 +139,14 @@ class Confession extends Model
             $accessToken = config('laravel-facebook-sdk.facebook_config.page_access_token');
             $pageId = config('services.facebook.page_id');
 
-            $fbRequest = sprintf('/%s?oauth_token=%s&fields=comments.summary(true).filter(toplevel).fields(parent.fields(id),comments.summary(true),message,from,created_time,is_hidden),likes.summary(true)', $pageId . '_' . $this->fb_post_id, $accessToken);
-            $fbResponse = Facebook::get($fbRequest, $accessToken)->getDecodedBody();
+            $fbRequest = sprintf(
+                '/%s?oauth_token=%s&fields=comments.summary(true).filter(toplevel).fields(%s),likes.summary(true)',
+                $pageId . '_' . $this->fb_post_id,
+                $accessToken,
+                'parent.fields(id),comments.summary(true),message,from,created_time,is_hidden'
+            );
 
-            $this->facebook_information = $fbResponse;
+            $this->setAttribute('facebook_information', Facebook::get($fbRequest, $accessToken)->getDecodedBody());
         }
     }
 
