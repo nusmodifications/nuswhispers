@@ -44,7 +44,6 @@ $RECYCLE.BIN
 *.lnk
 
 # Package managers
-/vendor
 node_modules
 bower_components
 yarn.lock

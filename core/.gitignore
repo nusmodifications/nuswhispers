@@ -6,6 +6,7 @@ phpunit.xml
 .phpunit.result.cache
 
 # Built files
+/vendor
 build
 public/*
 !public/favicon.ico
