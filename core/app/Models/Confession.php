@@ -33,6 +33,17 @@ class Confession extends Model
     protected $primaryKey = 'confession_id';
 
     /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'status_updated_at',
+    ];
+
+    /**
      * Attributes should be mass-assignable.
      *
      * @var array
@@ -119,29 +130,19 @@ class Confession extends Model
     }
 
     /**
-     * Automatically mutate the date fields.
-     *
-     * @return array
-     */
-    public function getDates(): array
-    {
-        return ['created_at', 'updated_at', 'status_updated_at'];
-    }
-
-    /**
      * Retrieve Facebook information.
      *
      * @return void
      */
     public function getFacebookInformation(): void
     {
-        if ($this->fb_post_id) {
+        if ($fbPostId = $this->getAttribute('fb_post_id')) {
             $accessToken = config('laravel-facebook-sdk.facebook_config.page_access_token');
             $pageId = config('services.facebook.page_id');
 
             $fbRequest = sprintf(
                 '/%s?oauth_token=%s&fields=comments.summary(true).filter(toplevel).fields(%s),likes.summary(true)',
-                $pageId . '_' . $this->fb_post_id,
+                $pageId . '_' . $fbPostId,
                 $accessToken,
                 'parent.fields(id),comments.summary(true),message,from,created_time,is_hidden'
             );
@@ -157,7 +158,7 @@ class Confession extends Model
      */
     public function getFacebookMessage(): string
     {
-        return $this->content . "\n-\n#" . $this->confession_id . ': ' . url('/confession/' . $this->confession_id);
+        return $this->getAttribute('content') . "\n-\n#" . $this->getKey() . ': ' . url('/confession/' . $this->getKey());
     }
 
     /**
@@ -168,7 +169,7 @@ class Confession extends Model
     public function getFormattedContent(): string
     {
         // Encode HTML entities
-        $content = htmlentities($this->content);
+        $content = htmlentities($this->getAttribute('content'));
 
         // Wrap URLs with <a>
         $content = preg_replace('/(\b(https?|ftp):\/\/[A-Z0-9+&@#\/%?=~_|!:,.;-]*[-A-Z0-9+&@#\/%=~_|])/im', '<a href="$1" target="_blank">$1</a>', $content);
@@ -190,7 +191,23 @@ class Confession extends Model
      */
     public function isApproved(): bool
     {
-        return $this->status === 'Featured' || $this->status === 'Approved';
+        return \in_array($this->getAttribute('status'), ['Featured', 'Approved'], true);
+    }
+
+    /**
+     * Query scope for popular confessions.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopePopular($query): Builder
+    {
+        return $query->orderByRaw('
+            LOG10( views + fb_like_count + ( fb_comment_count * 2 ) ) * 
+            SIGN( views + fb_like_count + ( fb_comment_count * 2 ) ) + 
+            ( UNIX_TIMESTAMP( status_updated_at ) / 300000 ) DESC
+        ');
     }
 
     /**
@@ -202,7 +219,7 @@ class Confession extends Model
      */
     public function scopePending($query): Builder
     {
-        return $query->whereStatus('Pending');
+        return $query->where('status', 'Pending');
     }
 
     /**
@@ -214,7 +231,7 @@ class Confession extends Model
      */
     public function scopeFeatured($query): Builder
     {
-        return $query->whereStatus('Featured');
+        return $query->where('status', 'Featured');
     }
 
     /**
@@ -226,7 +243,7 @@ class Confession extends Model
      */
     public function scopeScheduled($query): Builder
     {
-        return $query->whereStatus('Scheduled');
+        return $query->where('status', 'Scheduled');
     }
 
     /**
@@ -238,9 +255,10 @@ class Confession extends Model
      */
     public function scopeApproved($query): Builder
     {
-        return $query->where(function ($query) {
-            $query->where('status', '=', 'Approved')
-                    ->orWhere('status', '=', 'Featured');
+        return $query->where(function (Builder $query) {
+            return $query
+                ->where('status', 'Approved')
+                ->orWhere('status', 'Featured');
         });
     }
 
@@ -253,6 +271,6 @@ class Confession extends Model
      */
     public function scopeRejected($query): Builder
     {
-        return $query->whereStatus('Rejected');
+        return $query->where('status', 'Rejected');
     }
 }

@@ -141,11 +141,7 @@ class ConfessionsController extends Controller
         $output = Cache::remember($cacheId, self::CACHE_TIMEOUT, function () {
             // Adapted from http://thisinterestsme.com/creating-whats-hot-algorithm-php-mysql/.
             $query = Confession::query()
-                ->orderByRaw('
-                    LOG10( views + fb_like_count + ( fb_comment_count * 2 ) ) * 
-                    SIGN( views + fb_like_count + ( fb_comment_count * 2 ) ) + 
-                    ( UNIX_TIMESTAMP( status_updated_at ) / 300000 ) DESC
-                ')
+                ->popular()
                 ->orderBy('status_updated_at', 'DESC')
                 ->with('favourites', 'categories')
                 ->approved();
