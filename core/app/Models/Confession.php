@@ -152,16 +152,6 @@ class Confession extends Model
     }
 
     /**
-     * Returns the content that is sent to Facebook.
-     *
-     * @return string
-     */
-    public function getFacebookMessage(): string
-    {
-        return $this->getAttribute('content') . "\n-\n#" . $this->getKey() . ': ' . url('/confession/' . $this->getKey());
-    }
-
-    /**
      * Returns formatted content.
      *
      * @return string
@@ -189,7 +179,7 @@ class Confession extends Model
      *
      * @return bool
      */
-    public function isApproved(): bool
+    public function approved(): bool
     {
         return \in_array($this->getAttribute('status'), ['Featured', 'Approved'], true);
     }

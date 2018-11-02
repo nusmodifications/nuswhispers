@@ -30,6 +30,8 @@ class PostConfessionToFacebook implements ShouldQueue
      * @param  \NUSWhispers\Events\BaseConfessionEvent $event
      *
      * @return mixed
+     *
+     * @throws \Facebook\Exceptions\FacebookSDKException
      */
     public function handle(BaseConfessionEvent $event)
     {
@@ -40,7 +42,7 @@ class PostConfessionToFacebook implements ShouldQueue
         $confession = $event->confession;
 
         // Someone might have changed his/her mind...
-        if (! in_array($confession->status, ['Approved', 'Featured'], true)) {
+        if (! \in_array($confession->status, ['Approved', 'Featured'], true)) {
             return true;
         }
 
@@ -58,8 +60,10 @@ class PostConfessionToFacebook implements ShouldQueue
      * @param mixed $user
      *
      * @return string
+     *
+     * @throws \Facebook\Exceptions\FacebookSDKException
      */
-    protected function createOrUpdatePhoto(Confession $confession, $user)
+    protected function createOrUpdatePhoto(Confession $confession, $user): string
     {
         $fbPostId = $confession->getAttribute('fb_post_id');
 
@@ -70,7 +74,7 @@ class PostConfessionToFacebook implements ShouldQueue
         $response = $this->fb->post(
             $endpoint,
             [
-                'message' => $confession->getFacebookMessage(),
+                'message' => $this->formatMessage($confession),
                 'url' => $confession->images,
             ],
             $this->resolvePageToken($user)
@@ -86,8 +90,10 @@ class PostConfessionToFacebook implements ShouldQueue
      * @param mixed $user
      *
      * @return string
+     *
+     * @throws \Facebook\Exceptions\FacebookSDKException
      */
-    protected function createOrUpdateStatus(Confession $confession, $user)
+    protected function createOrUpdateStatus(Confession $confession, $user): string
     {
         $fbPostId = $confession->getAttribute('fb_post_id');
 
@@ -98,11 +104,24 @@ class PostConfessionToFacebook implements ShouldQueue
         $response = $this->fb->post(
             $endpoint,
             [
-                'message' => $confession->getFacebookMessage(),
+                'message' => $this->formatMessage($confession),
             ],
             $this->resolvePageToken($user)
         )->getGraphNode();
 
         return $fbPostId ?: last(explode('_', $response['id']));
+    }
+
+    /**
+     * Formats the confession to a readable format for Facebook.
+     *
+     * @param \NUSWhispers\Models\Confession $confession
+     *
+     * @return string
+     */
+    protected function formatMessage(Confession $confession): string
+    {
+        return $confession->getAttribute('content') . "\n-\n#" .
+            $confession->getKey() . ': ' . url('/confession/' . $confession->getKey());
     }
 }

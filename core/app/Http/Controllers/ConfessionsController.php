@@ -212,7 +212,7 @@ class ConfessionsController extends Controller
     {
         $output = Cache::remember('confessions/' . $id, self::CACHE_TIMEOUT, function () use ($id) {
             $confession = Confession::with('categories')->with('favourites')->find($id);
-            if ($confession && $confession->isApproved()) {
+            if ($confession && $confession->approved()) {
                 // increment number of views
                 $confession->views++;
                 $confession->save();
