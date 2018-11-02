@@ -4,7 +4,6 @@ namespace NUSWhispers\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use NUSWhispers\Models\ApiKey;
 use NUSWhispers\Models\Confession;
@@ -140,10 +139,13 @@ class ConfessionsController extends Controller
     {
         $cacheId = $this->resolveCacheIdentifier($request);
         $output = Cache::remember($cacheId, self::CACHE_TIMEOUT, function () {
+            // Adapted from http://thisinterestsme.com/creating-whats-hot-algorithm-php-mysql/.
             $query = Confession::query()
-                ->select(DB::raw('confessions.*,
-                (confessions.fb_like_count + (confessions.fb_comment_count * 2)) / POW(DATEDIFF(NOW(), confessions.status_updated_at) + 2, 1.8) AS popularity_rating'))
-                ->orderBy('popularity_rating', 'DESC')
+                ->orderByRaw('
+                    LOG10( views + fb_like_count + ( fb_comment_count * 2 ) ) * 
+                    SIGN( views + fb_like_count + ( fb_comment_count * 2 ) ) + 
+                    ( UNIX_TIMESTAMP( status_updated_at ) / 300000 ) DESC
+                ')
                 ->orderBy('status_updated_at', 'DESC')
                 ->with('favourites', 'categories')
                 ->approved();
