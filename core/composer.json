@@ -20,7 +20,9 @@
         "sammyk/laravel-facebook-sdk": "^3.5"
     },
     "require-dev": {
+        "barryvdh/laravel-ide-helper": "^2.5",
         "beyondcode/laravel-dump-server": "^1.0",
+        "doctrine/dbal": "^2.8",
         "filp/whoops": "^2.0",
         "fzaninotto/faker": "^1.4",
         "mockery/mockery": "^1.0",
@@ -59,6 +61,11 @@
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
+        ],
+        "post-update-cmd": [
+          "Illuminate\\Foundation\\ComposerScripts::postUpdate",
+          "@php artisan ide-helper:generate",
+          "@php artisan ide-helper:meta"
         ]
     },
     "config": {
