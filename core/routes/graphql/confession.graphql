@@ -1,5 +1,6 @@
 type Confession {
-  id: ID! @rename(attribute: "confession_id")
+  id: ID! @rename(attribute: "confession_id") @globalId
+  confessionId: ID! @rename(attribute: "confession_id")
   content: String!
   images: String
   status: ConfessionStatus!
@@ -12,10 +13,12 @@ type Confession {
   tags: [Tag!]! @belongsToMany
 }
 
+enum ConfessionOrderField {
+  LATEST
+  POPULAR
+}
+
 enum ConfessionStatus {
-  PENDING @enum(value: Pending)
-  SCHEDULED @enum(value: Scheduled)
   FEATURED @enum(value: Featured)
   APPROVED @enum(value: Approved)
-  REJECTED @enum(value: Rejected)
 }

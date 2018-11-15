@@ -1,4 +1,5 @@
 type Tag {
-  id: ID! @rename(attribute: "confession_tag_id")
+  id: ID! @rename(attribute: "confession_tag_id") @globalId
+  tagId: ID! @rename(attribute: "confession_tag_id")
   name: String! @rename(attribute: "confession_tag")
 }

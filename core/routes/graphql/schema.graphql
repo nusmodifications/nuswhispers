@@ -2,8 +2,23 @@
 #import confession.graphql
 #import tag.graphql
 
-scalar DateTime @scalar(class: "NUSWhispers\\Http\\GraphQL\\Scalars\\DateTimeType")
+scalar DateTime @scalar(class: "DateTimeType")
 
 type Query {
-  allCategories: [Category!]! @paginate(type: "connection")
+  confessions(
+    featuredOnly: Boolean
+    includeCategories: [ID!]
+    includeTags: [ID!]
+    orderBy: ConfessionOrderField
+    searchContent: String
+  ): [Confession!]!
+    @paginate(type: "connection", builder: "NUSWhispers\\Http\\GraphQL\\Queries\\GetConfessions@resolve")
+
+  confession(id: ID! @eq): Confession @field(resolver: "FindConfession@resolve")
+
+  categories: [Category!]! @paginate(type: "connection")
+  category(id: ID! @eq): Category @field(resolver: "FindCategory@resolve")
+
+  tags: [Tag!]! @paginate(type: "connection", builder: "NUSWhispers\\Http\\GraphQL\\Queries\\GetTags@resolve")
+  tag(id: ID! @eq): Tag @field(resolver: "FindTag@resolve")
 }

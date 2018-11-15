@@ -1,4 +1,5 @@
 type Category {
-  id: ID! @rename(attribute: "confession_category_id")
+  id: ID! @rename(attribute: "confession_category_id") @globalId
+  categoryId: ID! @rename(attribute: "confession_category_id")
   name: String! @rename(attribute: "confession_category")
 }
