@@ -1,0 +1,9 @@
+#import category.graphql
+#import confession.graphql
+#import tag.graphql
+
+scalar DateTime @scalar(class: "NUSWhispers\\Http\\GraphQL\\Scalars\\DateTimeType")
+
+type Query {
+  allCategories: [Category!]! @paginate(type: "connection")
+}

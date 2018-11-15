@@ -1,0 +1,21 @@
+type Confession {
+  id: ID! @rename(attribute: "confession_id")
+  content: String!
+  images: String
+  status: ConfessionStatus!
+  views: Int!
+  likeCount: Int! @rename(attribute: "fb_like_count")
+  commentCount: Int! @rename(attribute: "fb_comment_count")
+  fbPostId: ID @rename(attribute: "fb_post_id")
+  createdAt: DateTime! @rename(attribute: "created_at")
+  categories: [Category!]! @belongsToMany
+  tags: [Tag!]! @belongsToMany
+}
+
+enum ConfessionStatus {
+  PENDING @enum(value: Pending)
+  SCHEDULED @enum(value: Scheduled)
+  FEATURED @enum(value: Featured)
+  APPROVED @enum(value: Approved)
+  REJECTED @enum(value: Rejected)
+}

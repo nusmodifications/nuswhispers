@@ -13,3 +13,6 @@ trim_trailing_whitespace = false
 
 [*.php]
 indent_size = 4
+
+[*.graphql]
+insert_final_newline = false
