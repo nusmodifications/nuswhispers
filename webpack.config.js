@@ -14,10 +14,12 @@ const webpack = require('webpack');
 const webConfig = (env = {}, argv = {}) => ({
   name: 'web',
   devtool: argv.production ? '' : 'cheap-eval-source-map',
-  entry: path.resolve(__dirname, './angular/js/app.js'),
+  entry: {
+    app: path.resolve(__dirname, './angular/js/app.js'),
+  },
   output: {
     path: path.resolve(__dirname, './public/assets/web'),
-    filename: 'app.js',
+    filename: '[name].js',
   },
   module: {
     rules: [
@@ -35,7 +37,12 @@ const webConfig = (env = {}, argv = {}) => ({
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
+        use: {
+          loader: 'babel-loader',
+          options: {
+            cacheDirectory: true,
+          },
+        },
       },
       {
         test: /\.(sa|sc|c)ss$/,
@@ -113,9 +120,9 @@ const webConfig = (env = {}, argv = {}) => ({
       ),
     }),
     new MiniCssExtractPlugin({
-      filename: 'app.css',
-      chunkFilename: '[id].css',
+      filename: '[name].css',
     }),
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     !argv.production ? new webpack.HotModuleReplacementPlugin() : '',
   ].filter(v => v),
   devServer: {

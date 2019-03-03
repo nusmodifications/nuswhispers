@@ -28,7 +28,6 @@ import ngInfiniteScroll from 'ng-infinite-scroll';
 import uiBootstrap from 'angular-ui-bootstrap';
 import uiRouter from '@uirouter/angularjs';
 import vcRecaptcha from 'angular-recaptcha';
-import momentTimezone from 'moment-timezone';
 
 import controllersModuleName from './controllers';
 import filters from './filters';
@@ -106,6 +105,5 @@ angular
     uiRouter,
     vcRecaptcha,
   ])
-  .constant('moment', momentTimezone)
   .config(config)
   .run();
