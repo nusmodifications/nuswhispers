@@ -68,8 +68,8 @@ scss
 
 # Built files
 public/*.html
-public/admin
-public/web
+public/assets
+public/fonts
 public/hot
 public/storage
 public/mix-manifest.json

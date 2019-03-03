@@ -3,6 +3,7 @@
 namespace NUSWhispers\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -14,11 +15,6 @@ use NUSWhispers\Services\FacebookBatchProcessor;
 
 class ConfessionsController extends Controller
 {
-    /**
-     * Refresh cache every 5 minutes.
-     */
-    public const CACHE_TIMEOUT = 5;
-
     /**
      * Maximum confessions allowed in API.
      * We can't go any higher or Facebook will not allow it.
@@ -63,7 +59,7 @@ class ConfessionsController extends Controller
     public function category(Request $request, $categoryId)
     {
         $cacheId = $this->resolveCacheIdentifier($request);
-        $output = Cache::remember($cacheId, self::CACHE_TIMEOUT, function () use ($categoryId) {
+        $output = Cache::remember($cacheId, now()->addSeconds(config('cache.api.timeout')), function () use ($categoryId) {
             $query = Confession::query()
                 ->orderBy('status_updated_at', 'DESC')
                 ->join('confession_categories', 'confessions.confession_id', '=', 'confession_categories.confession_id')
@@ -93,7 +89,7 @@ class ConfessionsController extends Controller
         }
 
         $cacheId = $fbUserId . '/' . $this->resolveCacheIdentifier($request);
-        $output = Cache::remember($cacheId, self::CACHE_TIMEOUT, function () use ($fbUserId) {
+        $output = Cache::remember($cacheId, now()->addSeconds(config('cache.api.timeout')), function () use ($fbUserId) {
             $query = Confession::query()
                 ->join('favourites', 'confessions.confession_id', '=', 'favourites.confession_id')
                 ->where('favourites.fb_user_id', '=', $fbUserId)
@@ -117,7 +113,7 @@ class ConfessionsController extends Controller
     public function index(Request $request)
     {
         $cacheId = $this->resolveCacheIdentifier($request);
-        $output = Cache::remember($cacheId, self::CACHE_TIMEOUT, function () {
+        $output = Cache::remember($cacheId, now()->addSeconds(config('cache.api.timeout')), function () {
             $query = Confession::query()
                 ->with('categories', 'favourites')
                 ->orderBy('status_updated_at', 'DESC')
@@ -139,7 +135,7 @@ class ConfessionsController extends Controller
     public function popular(Request $request)
     {
         $cacheId = $this->resolveCacheIdentifier($request);
-        $output = Cache::remember($cacheId, self::CACHE_TIMEOUT, function () {
+        $output = Cache::remember($cacheId, now()->addSeconds(config('cache.api.timeout')), function () {
             $query = Confession::query()
                 ->select(DB::raw('confessions.*,
                 (confessions.fb_like_count + (confessions.fb_comment_count * 2)) / POW(DATEDIFF(NOW(), confessions.status_updated_at) + 2, 1.8) AS popularity_rating'))
@@ -164,7 +160,7 @@ class ConfessionsController extends Controller
     public function recent(Request $request)
     {
         $cacheId = $this->resolveCacheIdentifier($request);
-        $output = Cache::remember($cacheId, self::CACHE_TIMEOUT, function () {
+        $output = Cache::remember($cacheId, now()->addSeconds(config('cache.api.timeout')), function () {
             $query = Confession::query()
                 ->with('favourites', 'categories')
                 ->orderBy('status_updated_at', 'DESC')
@@ -189,7 +185,7 @@ class ConfessionsController extends Controller
     public function search(Request $request, $searchString)
     {
         $cacheId = $this->resolveCacheIdentifier($request);
-        $output = Cache::remember($cacheId, self::CACHE_TIMEOUT, function () use ($searchString) {
+        $output = Cache::remember($cacheId, now()->addSeconds(config('cache.api.timeout')), function () use ($searchString) {
             // Naive search ...
             $query = Confession::query()
                 ->orderBy('status_updated_at', 'DESC')
@@ -212,7 +208,7 @@ class ConfessionsController extends Controller
      */
     public function show($id)
     {
-        $output = Cache::remember('confessions/' . $id, self::CACHE_TIMEOUT, function () use ($id) {
+        $output = Cache::remember('confessions/' . $id, now()->addSeconds(config('cache.api.timeout')), function () use ($id) {
             $confession = Confession::with('categories')->with('favourites')->find($id);
             if ($confession && $confession->isApproved()) {
                 // increment number of views
@@ -287,7 +283,7 @@ class ConfessionsController extends Controller
     public function tag(Request $request, $tagName)
     {
         $cacheId = $this->resolveCacheIdentifier($request);
-        $output = Cache::remember($cacheId, self::CACHE_TIMEOUT, function () use ($tagName) {
+        $output = Cache::remember($cacheId, now()->addSeconds(config('cache.api.timeout')), function () use ($tagName) {
             $query = Confession::query()
                 ->select('confessions.*')
                 ->leftJoin('confession_tags', 'confessions.confession_id', '=', 'confession_tags.confession_id')
@@ -317,17 +313,17 @@ class ConfessionsController extends Controller
      */
     protected function filterQuery($query, $input = [])
     {
-        if ($timestamp = array_get($input, 'timestamp')) {
+        if ($timestamp = Arr::get($input, 'timestamp')) {
             $timestamp = $this->normalizeTimestamp($timestamp);
             $query->whereRaw('UNIX_TIMESTAMP(status_updated_at) <= ?', [$timestamp]);
         }
 
-        $count = (int) array_get($input, 'count');
+        $count = (int) Arr::get($input, 'count');
         $count = ! $count ? self::MAX_CONFESSION_COUNT : min($count, self::MAX_CONFESSION_COUNT);
 
         $query->take($count);
 
-        if ($offset = (int) array_get($input, 'offset')) {
+        if ($offset = (int) Arr::get($input, 'offset')) {
             $query->skip($offset);
         }
 
@@ -343,7 +339,7 @@ class ConfessionsController extends Controller
      */
     protected function normalizeTimestamp($timestamp): int
     {
-        $seconds = self::CACHE_TIMEOUT * 60;
+        $seconds = config('cache.api.timeout', 5 * 60);
 
         return ceil($timestamp / $seconds) * $seconds;
     }

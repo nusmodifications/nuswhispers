@@ -16,7 +16,7 @@ const webConfig = (env = {}, argv = {}) => ({
   devtool: argv.production ? '' : 'cheap-eval-source-map',
   entry: path.resolve(__dirname, './angular/js/app.js'),
   output: {
-    path: path.resolve(__dirname, './public/web'),
+    path: path.resolve(__dirname, './public/assets/web'),
     filename: 'app.js',
   },
   module: {

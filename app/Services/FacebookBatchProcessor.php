@@ -2,6 +2,7 @@
 
 namespace NUSWhispers\Services;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use NUSWhispers\Models\Confession;
 use SammyK\LaravelFacebookSdk\LaravelFacebookSdk as Facebook;
@@ -87,7 +88,7 @@ class FacebookBatchProcessor
             $confession->setAttribute('facebook_information', $fbResponse);
 
             // Update image field with Facebook's image URL.
-            if ($facebookImage = array_get($fbResponse, 'images.0.source')) {
+            if ($facebookImage = Arr::get($fbResponse, 'images.0.source')) {
                 $confession->setAttribute('images', $facebookImage);
             }
         });

@@ -64,7 +64,7 @@
   },
   "scripts": {
     "build": "npm run production",
-    "clean": "rimraf public/web/* public/admin/*",
+    "clean": "rimraf public/assets/*",
     "watch": "npm run development -- --watch",
     "watch-poll": "npm run watch -- --watch-poll",
     "development": "npm run clean && webpack --mode=development",

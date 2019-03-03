@@ -33,12 +33,12 @@ mix
     },
     plugins: [new IgnorePlugin(/^\.\/locale$/, /moment$/)],
   })
-  .js('resources/js/confessions/index.js', 'public/admin/confessions/index.js')
-  .js('resources/js/confessions/edit.js', 'public/admin/confessions/edit.js')
-  .js('resources/js/admin.js', 'public/admin')
+  .js('resources/js/confessions/index.js', 'public/assets/admin/confessions/index.js')
+  .js('resources/js/confessions/edit.js', 'public/assets/admin/confessions/edit.js')
+  .js('resources/js/admin.js', 'public/assets/admin')
   .extract(['bootstrap', 'jquery', 'moment', 'daterangepicker'])
-  .sass('resources/sass/auth.scss', 'public/admin')
-  .sass('resources/sass/admin.scss', 'public/admin');
+  .sass('resources/sass/auth.scss', 'public/assets/admin')
+  .sass('resources/sass/admin.scss', 'public/assets/admin');
 
 if (mix.inProduction()) {
   mix.sourceMaps().version();

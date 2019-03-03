@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>NUSWhispers &ndash; @yield('title')</title>
     <link rel="icon" href="favicon.ico">
-    <link rel="stylesheet" href="{{ mix('css/auth.css') }}">
+    <link rel="stylesheet" href="{{ mix('assets/admin/auth.css') }}">
 </head>
 
 <body>
