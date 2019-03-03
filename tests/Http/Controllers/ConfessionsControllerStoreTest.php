@@ -17,7 +17,7 @@ class ConfessionsControllerStoreTest extends TestCase
     /** @var \ReCaptcha\Response */
     protected $response;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

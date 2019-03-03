@@ -11,7 +11,7 @@ class SyncConfessionTagsTest extends TestCase
 {
     protected $listener;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->listener = new SyncConfessionTags();

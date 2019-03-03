@@ -8,7 +8,7 @@ class ResolvesFacebookPageTokenTest extends TestCase
 {
     protected $stub;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

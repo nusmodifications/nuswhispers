@@ -11,7 +11,7 @@ abstract class ConfessionsControllerTestCase extends TestCase
     /** @var \NUSWhispers\Services\FacebookBatchProcessor */
     protected $batchProcessor;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

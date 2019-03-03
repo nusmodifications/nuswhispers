@@ -12,7 +12,7 @@ class ConfessionTest extends TestCase
 {
     protected $confession;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->confession = factory(Confession::class)->create();
