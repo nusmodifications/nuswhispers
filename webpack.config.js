@@ -13,7 +13,7 @@ const webpack = require('webpack');
 /** @type {(env: {}, argv: {}) => Configuration} */
 const webConfig = (env = {}, argv = {}) => ({
   name: 'web',
-  devtool: argv.production ? '' : 'cheap-eval-source-mapValues',
+  devtool: argv.production ? '' : 'cheap-eval-source-map',
   entry: path.resolve(__dirname, './angular/js/app.js'),
   output: {
     path: path.resolve(__dirname, './public/web'),
