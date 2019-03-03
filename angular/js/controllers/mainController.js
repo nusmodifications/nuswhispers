@@ -1,71 +1,96 @@
-angular.module('nuswhispersApp.controllers')
-.controller('MainController', function ($scope, $location, $route, Facebook, FacebookUser, Tag, Category) {
-    'use strict';
+class MainController {
+  constructor(
+    $location,
+    Facebook,
+    FacebookUserService,
+    TagService,
+    CategoryService
+  ) {
+    this.$location = $location;
+    this.Facebook = Facebook;
+    this.FacebookUserService = FacebookUserService;
+    this.TagService = TagService;
+    this.CategoryService = CategoryService;
 
-    $scope.sidebarOpenedClass = '';
-    $scope.isLoggedIn = false;
-    $scope.fbUser = FacebookUser;
+    this.sidebarOpenedClass = '';
+    this.isLoggedIn = false;
+
+    this.categories = [];
+    this.tags = [];
+    this.fbUser = {};
 
     // Load all categories onto sidebar
-    Category.getAll().success(function (response) {
-        $scope.categories = response.data.categories;
+    this.CategoryService.getAll().then(({ data }) => {
+      this.categories = data.data.categories;
     });
 
     // Load all tags onto sidebar
-    Tag.getTop(5).success(function (response) {
-        $scope.tags = response.data.tags;
+    this.TagService.getTop(5).then(({ data }) => {
+      this.tags = data.data.tags;
     });
 
-    $scope.toggleSidebar = function () {
-        if ($scope.sidebarOpenedClass === '') {
-            $scope.sidebarOpenedClass = 'sidebar-opened';
-        } else {
-            $scope.sidebarOpenedClass = '';
-        }
-    };
+    this.getLoginStatus();
+  }
 
-    $scope.isActivePage = function (pageName) {
-        return (pageName === $location.path());
-    };
+  isActivePage(pageName) {
+    return pageName === this.$location.path();
+  }
 
-    $scope.login = function () {
-        Facebook.login(function (response) {
-            $scope.getLoginStatus();
-        }, {
-            scope: 'publish_actions'
-        });
-    };
+  login() {
+    this.Facebook.login(
+      () => {
+        this.getLoginStatus();
+      },
+      {
+        scope: 'publish_actions',
+      }
+    );
+  }
 
-    $scope.logout = function () {
-        Facebook.logout(function (response) {
-            FacebookUser.logout();
-            $scope.getLoginStatus();
-        });
-    };
+  logout() {
+    this.Facebook.logout(() => {
+      this.FacebookUserService.logout();
+      this.getLoginStatus();
+    });
+  }
 
-    $scope.getLoginStatus = function () {
-        Facebook.getLoginStatus(function (response) {
-            FacebookUser.setAccessToken('');
-            if (response.status === 'connected') {
-                FacebookUser.setAccessToken(response.authResponse.accessToken);
-                FacebookUser.setUserID(response.authResponse.userID);
-                FacebookUser.login()
-                    .success(function (response) {
-                        $scope.isLoggedIn = true;
-                    })
-                    .error(function (response) {
-                        $scope.isLoggedIn = false;
-                    });
-            } else {
-                $scope.isLoggedIn = false;
-            }
-        });
-    };
+  getLoginStatus() {
+    this.Facebook.getLoginStatus(response => {
+      this.FacebookUserService.setAccessToken('');
+      if (response.status === 'connected') {
+        this.FacebookUserService.accessToken =
+          response.authResponse.accessToken;
+        this.FacebookUserService.userId = response.authResponse.userID;
 
-    $scope.searchConfessions = function (query) {
-        // console.log('/search/' + query);
-        $location.path('/search/' + query);
-    };
+        this.FacebookUserService.login(this.FacebookUserService.accessToken)
+          .success(() => (this.isLoggedIn = true))
+          .error(() => (this.isLoggedIn = false));
+      } else {
+        this.isLoggedIn = false;
+      }
+    });
+  }
 
-    $scope.getLoginStatus();
-});
+  searchConfessions(query) {
+    this.$location.path(`/search/${query}`);
+  }
+
+  static controllerFactory(
+    $location,
+    Facebook,
+    FacebookUserService,
+    TagService,
+    CategoryService
+  ) {
+    MainController.instance = new MainController(
+      $location,
+      Facebook,
+      FacebookUserService,
+      TagService,
+      CategoryService
+    );
+    return MainController.instance;
+  }
+}
+
+export default MainController;

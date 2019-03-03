@@ -1,125 +1,188 @@
-angular.module('nuswhispersApp.controllers')
-.controller('SubmitController', function ($scope, $http, Confession, Category, localStorageService, vcRecaptchaService) {
-    'use strict';
+import { escapeHtml } from '../utils';
+import { init } from 'filestack-js';
 
-    var FINGERPRINT_API_KEY = 'EW5AnBNC5YauIxLW<tN';
-    var FINGERPRINT_STORAGE_KEY = '7pF4ZPxJEE';
+class SubmitController {
+  constructor(
+    $scope,
+    $http,
+    ConfessionService,
+    CategoryService,
+    localStorageService
+  ) {
+    this.$scope = $scope;
+    this.$http = $http;
+    this.ConfessionService = ConfessionService;
+    this.CategoryService = CategoryService;
+    this.localStorageService = localStorageService;
 
-    // functions for controlling confession submission limit
-    function getConfessionLimit() {
-        var doResetLimit = !localStorageService.get('confessionLimit.date') ||
-            localStorageService.get('confessionLimit.date') !== (new Date()).toDateString();
-        if (doResetLimit) {
-            localStorageService.set('confessionLimit.count', 3);
-            localStorageService.set('confessionLimit.date', (new Date()).toDateString());
-        }
-        return localStorageService.get('confessionLimit.count');
-    }
+    this.categories = [];
+    this.confessionData = {};
+    this.contentTagHighlights = '';
 
-    $scope.hasConfessionLimitExceeded = function () {
-        var confessionLimit = getConfessionLimit();
-        return (confessionLimit <= 0);
+    this.form = {
+      imageSelected: false,
+      selectedCategoryIDs: [],
+      errors: [],
+      submitSuccess: false,
+      submitButtonDisabled: this.hasConfessionLimitExceeded(),
     };
 
-    function decreaseConfessionLimit() {
-        var confessionLimit = getConfessionLimit();
-        confessionLimit--;
-        localStorageService.set('confessionLimit.count', confessionLimit);
-    }
-
-    // Load all categories onto form
-    Category.getAll().success(function (response) {
-        $scope.categories = response.data.categories;
+    // Load all categories onto form.
+    this.CategoryService.getAll().then(({ data }) => {
+      this.categories = data.data.categories;
     });
 
-    $scope.confessionData = {};
-    $scope.form = {
-        imageSelected: false,
-        selectedCategoryIDs: [],
-        errors: [],
-        submitSuccess: false,
-        submitButtonDisabled: $scope.hasConfessionLimitExceeded()
-    };
+    // Init filestack.
+    this.filestack = init(FILESTACK_KEY || '');
+  }
 
-    $scope.setRecaptchaResponse = function (response) {
-        $scope.confessionData.captcha = response;
-    };
+  getConfessionLimit() {
+    var doResetLimit =
+      !this.localStorageService.get('confessionLimit.date') ||
+      this.localStorageService.get('confessionLimit.date') !==
+        new Date().toDateString();
+    if (doResetLimit) {
+      this.localStorageService.set('confessionLimit.count', 3);
+      this.localStorageService.set(
+        'confessionLimit.date',
+        new Date().toDateString()
+      );
+    }
+    return this.localStorageService.get('confessionLimit.count');
+  }
 
-    $scope.submitConfession = function () {
-        $scope.form.submitButtonDisabled = true;
-        $scope.confessionData.categories = $scope.form.selectedCategoryIDs;
-        $scope.confessionData[FINGERPRINT_API_KEY] = localStorageService.get(FINGERPRINT_STORAGE_KEY);
+  hasConfessionLimitExceeded() {
+    return this.getConfessionLimit() <= 0;
+  }
 
-        if ($scope.hasConfessionLimitExceeded()) {
-            return;
+  decreaseConfessionLimit() {
+    this.localStorageService.set(
+      'confessionLimit.count',
+      this.getConfessionLimit - 1
+    );
+  }
+
+  setRecaptchaResponse(response) {
+    this.confessionData.captcha = response;
+  }
+
+  submitConfession() {
+    this.form.submitButtonDisabled = true;
+    this.confessionData.categories = this.form.selectedCategoryIDs;
+    this.confessionData[FINGERPRINT_API_KEY] = this.localStorageService.get(
+      FINGERPRINT_STORAGE_KEY
+    );
+
+    if (this.hasConfessionLimitExceeded()) {
+      return;
+    }
+
+    this.confessionData.content = this.confessionData.content
+      .replace(/nus\s*whispers?\b/gi, 'NUSWhispers')
+      .replace(/nus\s*mods?\b/gi, 'NUSMods');
+
+    this.ConfessionService.submit(this.confessionData)
+      .then(({ data }) => {
+        this.form.submitSuccess = data.success;
+
+        if (!data.success) {
+          this.form.submitButtonDisabled = false;
+
+          if (data.data && data.data.errors) {
+            this.processErrors(data.data.errors);
+          }
         }
-        $scope.confessionData.content = $scope.confessionData.content
-            .replace(/nus\s*whispers?\b/gi, 'NUSWhispers')
-            .replace(/nus\s*mods?\b/gi, 'NUSMods');
-        Confession.submit($scope.confessionData)
-            .success(function (response) {
-                $scope.form.submitSuccess = response.success;
-                if (!response.success) {
-                    $scope.form.submitButtonDisabled = false;
-                    $scope.form.errors = [];
-                    for (var error in response.errors) {
-                        for (var msg in response.errors[error]) {
-                            console.log(response.errors[error][msg]);
-                            $scope.form.errors.push(response.errors[error][msg]);
-                        }
-                    }
-                }
-                decreaseConfessionLimit();
-                localStorageService.set(FINGERPRINT_STORAGE_KEY, response[FINGERPRINT_API_KEY]);
-            })
-            .error(function (response) {
-                $scope.form.submitButtonDisabled = false;
-                console.log(response);
-            });
-    };
+        this.decreaseConfessionLimit();
+        this.localStorageService.set(
+          FINGERPRINT_STORAGE_KEY,
+          data[FINGERPRINT_API_KEY]
+        );
+      })
+      .catch(err => {
+        this.form.submitButtonDisabled = false;
+        if (err.data && err.data.errors) {
+          this.processErrors(err.data.errors);
+        }
+      });
+  }
 
-    $scope.uploadConfessionImage = function () {
-        filepicker.pick({
-            extensions: ['.png', '.jpg', '.jpeg'],
-            container: 'window'
+  processErrors(errors) {
+    this.form.errors = [];
+
+    for (let error in errors) {
+      for (let msg in errors[error]) {
+        this.form.errors.push(errors[error][msg]);
+      }
+    }
+  }
+
+  uploadConfessionImage() {
+    this.filestack
+      .picker({
+        accept: 'image/*',
+        onFileUploadFinished: file => {
+          this.confessionData.image = file.url;
+          this.form.imageSelected = true;
+          this.$scope.$apply();
         },
-        function (fp) {
-            $scope.confessionData.image = fp.url;
-            $scope.form.imageSelected = true;
-            $scope.$apply();
-        },
-        function (fpError) {
-            console.log(fpError.toString());
-        });
-    };
+      })
+      .open();
+  }
 
-    $scope.toggleCategorySelection = function (category) {
-        var index = $scope.form.selectedCategoryIDs.indexOf(category.confession_category_id);
+  toggleCategorySelection(category) {
+    const index = this.form.selectedCategoryIDs.indexOf(
+      category.confession_category_id
+    );
 
-        // if category is selected
-        if (index > -1) {
-            // deselect it by removing it from the selection
-            $scope.form.selectedCategoryIDs.splice(index, 1);
-        } else {
-            // add it to the selection
-            $scope.form.selectedCategoryIDs.push(category.confession_category_id);
-        }
-    };
+    // if category is selected
+    if (index > -1) {
+      // deselect it by removing it from the selection
+      this.form.selectedCategoryIDs.splice(index, 1);
+    } else {
+      // add it to the selection
+      this.form.selectedCategoryIDs.push(category.confession_category_id);
+    }
+  }
 
-    $scope.highlightTags = function () {
-        $scope.contentTagHighlights = '';
-        if ($scope.confessionData.content === undefined) {
-            return;
-        }
-        var splitContentTags = escapeHTML($scope.confessionData.content).split(/(#\w+)/);
-        for (var i in splitContentTags) {
-            if (/(#\w+)/.test(splitContentTags[i])) {
-                $scope.contentTagHighlights += '<b>' + splitContentTags[i] + '</b>';
-            } else {
-                $scope.contentTagHighlights += splitContentTags[i];
-            }
-        }
-        $scope.contentTagHighlights = $scope.contentTagHighlights.replace(/(?:\r\n|\r|\n)/g, '<br>');
-    };
+  highlightTags() {
+    if (this.confessionData.content === undefined) {
+      return;
+    }
 
-});
+    const splitContentTags = escapeHtml(this.confessionData.content).split(
+      /(#\w+)/
+    );
+
+    for (let i in splitContentTags) {
+      if (/(#\w+)/.test(splitContentTags[i])) {
+        this.contentTagHighlights += '<b>' + splitContentTags[i] + '</b>';
+      } else {
+        this.contentTagHighlights += splitContentTags[i];
+      }
+    }
+
+    this.contentTagHighlights = this.contentTagHighlights.replace(
+      /(?:\r\n|\r|\n)/g,
+      '<br>'
+    );
+  }
+
+  static controllerFactory(
+    $scope,
+    $http,
+    ConfessionService,
+    CategoryService,
+    localStorageService
+  ) {
+    SubmitController.instance = new SubmitController(
+      $scope,
+      $http,
+      ConfessionService,
+      CategoryService,
+      localStorageService
+    );
+    return SubmitController.instance;
+  }
+}
+
+export default SubmitController;

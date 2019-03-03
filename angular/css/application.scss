@@ -1,24 +1,56 @@
+// Core variables and mixins
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/variables';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/mixins';
 
-/*======================================================================
-=            Import all your .scss files, order is very important
+// Reset and dependencies
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/normalize';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/print';
 
-	(The file which is not imported will not be include in final build )
+// Core CSS
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/scaffolding';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/type';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/code';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/grid';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/tables';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/forms';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/buttons';
 
-	CSS - All the css files will be loaded in the order they appear
-		in the app/css directory
-========================================================================*/
+// Components
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/component-animations';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/dropdowns';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/button-groups';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/input-groups';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/navs';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/navbar';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/breadcrumbs';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/pagination';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/pager';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/labels';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/badges';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/jumbotron';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/thumbnails';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/alerts';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/progress-bars';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/media';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/list-group';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/panels';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/responsive-embed';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/wells';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/close';
 
+// Components w/ JavaScript
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/modals';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/tooltip';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/popovers';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/carousel';
 
-// @import "somefile"
+// Utility classes
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/utilities';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/responsive-utilities';
 
-// import bootstrap-sass-official
-$icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/" !default;
-@import "../../bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
-
-// import sass files
-@import "variables.scss";
-@import "mixins.scss";
-@import "main.scss";
-@import "post.scss";
-@import "loading-bar.scss";
-@import "submit.scss";
+@import 'variables';
+@import 'mixins';
+@import 'main';
+@import 'post';
+@import 'loading-bar';
+@import 'submit';

@@ -1,9 +1,16 @@
-angular.module('nuswhispersApp.services')
-.factory('Tag', function ($http) {
-    'use strict';
-    return {
-        getTop: function (n) {
-            return $http.get('/api/tags/top/' + n);
-        }
-    };
-});
+class TagService {
+  constructor($http) {
+    this.$http = $http;
+  }
+
+  getTop(n) {
+    return this.$http.get(`${API_URL}/tags/top/${n}`);
+  }
+
+  static serviceFactory($http) {
+    TagService.instance = new TagService($http);
+    return TagService.instance;
+  }
+}
+
+export default TagService;

@@ -1,114 +1,133 @@
-angular.module('nuswhispersApp.services')
-.factory('Confession', function ($http) {
-    'use strict';
+import forEach from 'lodash/forEach';
 
-    function Confession(confessionData) {
-        if (confessionData) {
-            this.setData(confessionData);
-        }
-    }
+class Confession {
+  constructor(ConfessionService, data = {}) {
+    this.ConfessionService = ConfessionService;
+    this.setData(data);
+  }
 
-    Confession.submit = function (confessionData) {
-        return $http({
-            method: 'POST',
-            url: '/api/confessions',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            data: $.param(confessionData)
-        });
-    };
+  setData(data) {
+    forEach(data, (value, key) => (this[key] = value));
+  }
 
-    Confession.getConfessionById = function (confessionID) {
-        return $http({
-            method: 'GET',
-            url: '/api/confessions/' + confessionID
-        });
-    };
+  load() {
+    this.ConfessionService.getConfessionById(this.confession_id).then(
+      ({ data }) => this.setData(data.data.confession)
+    );
+  }
 
-    Confession.getFeatured = function (timestamp, offset, count) {
-        return $http({
-            method: 'GET',
-            url: '/api/confessions',
-            params: {timestamp: timestamp, offset: offset, count: count}
-        });
-    };
+  favourite() {
+    return this.ConfessionService.favourite(this.confession_id);
+  }
 
-    Confession.getPopular = function (timestamp, offset, count) {
-        return $http({
-            method: 'GET',
-            url: '/api/confessions/popular',
-            params: {timestamp: timestamp, offset: offset, count: count}
-        });
-    };
+  unfavourite() {
+    return this.ConfessionService.unfavourite(this.confession_id);
+  }
+}
 
-    Confession.getRecent = function (timestamp, offset, count) {
-        return $http({
-            method: 'GET',
-            url: '/api/confessions/recent',
-            params: {timestamp: timestamp, offset: offset, count: count}
-        });
-    };
+class ConfessionService {
+  constructor($http) {
+    this.$http = $http;
+  }
 
-    Confession.getCategory = function (categoryID, timestamp, offset, count) {
-        return $http({
-            method: 'GET',
-            url: '/api/confessions/category/' + categoryID,
-            params: {timestamp: timestamp, offset: offset, count: count}
-        });
-    };
+  hydrate(confession) {
+    return new Confession(this, confession);
+  }
 
-    Confession.getTag = function (tag, timestamp, offset, count) {
-        return $http({
-            method: 'GET',
-            url: '/api/confessions/tag/' + tag,
-            params: {timestamp: timestamp, offset: offset, count: count}
-        });
-    };
+  submit(confessionData) {
+    return this.$http({
+      method: 'POST',
+      url: `${API_URL}/confessions`,
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      data: $.param(confessionData),
+    });
+  }
 
-    Confession.search = function (query, timestamp, offset, count) {
-        return $http({
-            method: 'GET',
-            url: '/api/confessions/search/' + encodeURIComponent(query),
-            params: {timestamp: timestamp, offset: offset, count: count}
-        });
-    };
+  getConfessionById(confessionID) {
+    return this.$http({
+      method: 'GET',
+      url: `${API_URL}/confessions/${confessionID}`,
+    });
+  }
 
-    Confession.getFavourites = function (timestamp, offset, count) {
-        return $http({
-            method: 'GET',
-            url: '/api/confessions/favourites/',
-            params: {timestamp: timestamp, offset: offset, count: count}
-        });
-    };
+  getFeatured(timestamp, offset, count) {
+    return this.$http({
+      method: 'GET',
+      url: `${API_URL}/confessions`,
+      params: { timestamp, offset, count },
+    });
+  }
 
-    Confession.prototype = {
-        setData: function (confessionData) {
-            angular.extend(this, confessionData);
-        },
-        load: function () {
-            var confession = this;
-            $http.get('/api/confessions/' + confession.confession_id).success(function (response) {
-                if (response.success) {
-                    confession.setData(response.data.confession);
-                }
-            });
-        },
-        favourite: function () {
-            return $http({
-                method: 'POST',
-                url: '/api/fbuser/favourite',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                data: $.param({'confession_id': this.confession_id})
-            });
-        },
-        unfavourite: function () {
-            return $http({
-                method: 'POST',
-                url: '/api/fbuser/unfavourite',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                data: $.param({'confession_id': this.confession_id})
-            });
-        }
-    };
+  getPopular(timestamp, offset, count) {
+    return this.$http({
+      method: 'GET',
+      url: `${API_URL}/confessions/popular`,
+      params: { timestamp, offset, count },
+    });
+  }
 
-    return Confession;
-});
+  getRecent(timestamp, offset, count) {
+    return this.$http({
+      method: 'GET',
+      url: `${API_URL}/confessions/recent`,
+      params: { timestamp, offset, count },
+    });
+  }
+
+  getCategory(categoryID, timestamp, offset, count) {
+    return this.$http({
+      method: 'GET',
+      url: `${API_URL}/confessions/category/${categoryID}`,
+      params: { timestamp, offset, count },
+    });
+  }
+
+  getTag(tag, timestamp, offset, count) {
+    return this.$http({
+      method: 'GET',
+      url: `${API_URL}/confessions/tag/${tag}`,
+      params: { timestamp, offset, count },
+    });
+  }
+
+  search(query, timestamp, offset, count) {
+    return this.$http({
+      method: 'GET',
+      url: `${API_URL}/confessions/search/${encodeURIComponent(query)}`,
+      params: { timestamp, offset, count },
+    });
+  }
+
+  getFavourites(timestamp, offset, count) {
+    return this.$http({
+      method: 'GET',
+      url: `${API_URL}/confessions/favourites`,
+      params: { timestamp, offset, count },
+    });
+  }
+
+  favourite(confessionId) {
+    return this.$http({
+      method: 'POST',
+      url: `${API_URL}/fbuser/favourite`,
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      data: $.param({ confession_id: confessionId }),
+    });
+  }
+
+  unfavourite(confessionId) {
+    return this.$http({
+      method: 'POST',
+      url: `${API_URL}/fbuser/unfavourite`,
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      data: $.param({ confession_id: confessionId }),
+    });
+  }
+
+  static serviceFactory($http) {
+    ConfessionService.instance = new ConfessionService($http);
+    return ConfessionService.instance;
+  }
+}
+
+export default ConfessionService;

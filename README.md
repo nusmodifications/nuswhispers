@@ -44,9 +44,5 @@ php artisan db:seed
 5. Compile front-end assets using the following command:
 
 ```
-npm run build
+yarn run build
 ```
-
-## Credits
-
-- [generator-boom](https://www.npmjs.com/package/generator-boom)
