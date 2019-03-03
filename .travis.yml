@@ -27,6 +27,8 @@ matrix:
         mariadb: "10.3"
 
     - language: node_js
+      node_js:
+        - "11"
 
       cache: npm
 
@@ -34,4 +36,4 @@ matrix:
         - npm install
 
       script:
-        - npm build production
+        - npm run production
