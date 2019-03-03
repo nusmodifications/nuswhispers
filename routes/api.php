@@ -45,4 +45,3 @@ Route::options('{any}', 'ApiController@index')
     ->name('index');
 
 Route::fallback('ApiController@index')->name('index');
-
