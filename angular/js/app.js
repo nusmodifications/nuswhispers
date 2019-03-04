@@ -6,10 +6,14 @@ window.Popper = Popper;
 
 window.$ = window.jQuery = $;
 
-import 'bootstrap-sass';
+// Import Bootstrap scripts.
+import 'bootstrap-sass/assets/javascripts/bootstrap/affix';
+import 'bootstrap-sass/assets/javascripts/bootstrap/alert';
+import 'bootstrap-sass/assets/javascripts/bootstrap/button';
+import 'bootstrap-sass/assets/javascripts/bootstrap/transition';
 
 // Import application stylesheet.
-import '../css/application.scss';
+import '../scss/application.scss';
 import 'typicons.font/src/font/typicons.css';
 import 'angular-loading-bar/build/loading-bar.min.css';
 

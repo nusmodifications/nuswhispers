@@ -62,7 +62,6 @@ phpunit.xml
 # Other folders
 build
 zip
-scss
 .idea
 .vscode
 
