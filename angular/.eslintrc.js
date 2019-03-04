@@ -3,7 +3,7 @@ module.exports = {
     ecmaVersion: 10,
     sourceType: 'module',
   },
-  extends: ['plugin:prettier/recommended', 'eslint:recommended'],
+  extends: ['eslint:recommended', 'plugin:prettier/recommended', 'prettier'],
   env: {
     browser: true,
     jquery: true,
