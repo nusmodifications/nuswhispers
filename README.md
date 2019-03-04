@@ -25,12 +25,11 @@ cd /path/to/current/directory
 composer install
 ```
 
-3. Install JS dependencies via npm and bower:
+3. Install JS dependencies via npm:
 
 ```
 cd /path/to/current/directory
 npm install
-bower install
 ```
 
 4. Run database migrations and seed data via command line:
@@ -44,5 +43,5 @@ php artisan db:seed
 5. Compile front-end assets using the following command:
 
 ```
-yarn run build
+npm run development
 ```
