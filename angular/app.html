@@ -102,7 +102,7 @@
             >
           </li>
           <li
-            ng-show="isLoggedIn"
+            ng-show="mainVm.isLoggedIn"
             ng-class="{active: mainVm.isActivePage('/favourites/')}"
           >
             <a href="/#!favourites"
@@ -158,12 +158,21 @@
                 >&nbsp;Confession</span
               >
             </a>
-            <a ng-show="!isLoggedIn" ng-click="mainVm.login()" class="btn"
-              ><span class="typcn typcn-social-facebook"></span> Login
+            <a
+              ng-show="!mainVm.isLoggedIn"
+              ng-click="mainVm.login()"
+              class="btn"
+            >
+              <span class="typcn typcn-social-facebook"></span> Login
               <span class="hidden-sm hidden-xs">with Facebook</span></a
             >
-            <a ng-show="isLoggedIn" ng-click="mainVm.logout()" class="btn">
-              <span class="typcn typcn-social-facebook"></span> Logout<img
+            <a
+              ng-show="mainVm.isLoggedIn"
+              ng-click="mainVm.logout()"
+              class="btn"
+            >
+              <span class="typcn typcn-social-facebook"></span> Logout
+              <img
                 ng-src="//graph.facebook.com/{{ mainVm.fbUser.userId }}/picture"
               />
             </a>
@@ -171,7 +180,7 @@
           <form
             class="search-form"
             role="search"
-            ng-submit="mainVm.searchConfessions(searchQuery)"
+            ng-submit="mainVm.searchConfessions(mainVm.searchQuery)"
           >
             <div class="input-group">
               <span id="search-input-addon" class="input-group-addon">
@@ -179,7 +188,7 @@
               </span>
               <input
                 type="text"
-                ng-model="searchQuery"
+                ng-model="mainVm.searchQuery"
                 class="search-input form-control"
                 aria-describedby="search-input-addon"
                 placeholder="Search"
@@ -207,11 +216,11 @@
               </blockquote>
             </div>
             <footer>
-              NUSWhispers &copy; 2015 &ndash; 2018 &bull;
+              NUSWhispers &copy; 2015 &ndash; {{ mainVm.currentYear }} &bull;
               <a href="/policy/">Privacy Policy</a> &bull;
-              <a href="mailto:nuswhispers@googlegroups.com" target="_blank"
-                >Feedback</a
-              >
+              <a href="mailto:nuswhispers@googlegroups.com" target="_blank">
+                Feedback
+              </a>
             </footer>
           </div>
         </div>

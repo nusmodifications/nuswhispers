@@ -19,6 +19,8 @@ class MainController {
     this.tags = [];
     this.fbUser = {};
 
+    this.currentYear = new Date().getFullYear();
+
     // Load all categories onto sidebar
     this.CategoryService.getAll().then(({ data }) => {
       this.categories = data.data.categories;
