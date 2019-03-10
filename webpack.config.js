@@ -1,6 +1,6 @@
+const forEach = require('lodash/forEach');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const mixWebpackConfig = require('laravel-mix/setup/webpack.config');
-const mapValues = require('lodash/mapValues');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const path = require('path');
@@ -9,6 +9,38 @@ const webpack = require('webpack');
 /**
  * @typedef {import('webpack').Configuration} Configuration
  */
+
+const buildDefinitions = env => {
+  const defineMap = {
+    API_URL: { key: 'api', default: '/api' },
+    FB_PAGE_ID: { key: 'fbpage', default: '' },
+    FB_APP_ID: { key: 'fbapp', default: '' },
+    FILESTACK_KEY: { key: 'filestack', default: '' },
+    FINGERPRINT_API_KEY: { key: 'fingerprint-api', default: '' },
+    FINGERPRINT_STORAGE_KEY: { key: 'fingerprint-storage', default: '' },
+    RECAPTCHA_KEY: { key: 'recaptcha', default: null },
+  };
+
+  let definitions = {
+    'process.env.NODE_ENV': JSON.stringify(
+      process.env.NODE_ENV || 'development'
+    ),
+  };
+
+  forEach(defineMap, (config, variable) => {
+    let value = config.default;
+
+    if (env[config.key]) {
+      value = env[config.key];
+    } else if (process.env[variable]) {
+      value = process.env[variable];
+    }
+
+    definitions[variable] = JSON.stringify(value);
+  });
+
+  return definitions;
+};
 
 /** @type {(env: {}, argv: {}) => Configuration} */
 const webConfig = (env = {}, argv = {}) => ({
@@ -92,21 +124,7 @@ const webConfig = (env = {}, argv = {}) => ({
   },
   resolve: {},
   plugins: [
-    new webpack.DefinePlugin(
-      mapValues(
-        {
-          'process.env.NODE_ENV': process.env.NODE_ENV || 'development',
-          API_URL: env.api || '/api',
-          FB_PAGE_ID: env.fbpage || '',
-          FB_APP_ID: env.fbapp || '',
-          FILESTACK_KEY: env.filestack || '',
-          FINGERPRINT_API_KEY: env['fingerprint-api'] || '',
-          FINGERPRINT_STORAGE_KEY: env['fingerprint-storage'] || '',
-          RECAPTCHA_KEY: env.recaptcha || '',
-        },
-        value => JSON.stringify(value)
-      )
-    ),
+    new webpack.DefinePlugin(buildDefinitions(env)),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
