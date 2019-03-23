@@ -1,7 +1,3 @@
-const moment = require('moment');
-
-require('daterangepicker');
-
 const $scheduled = $('.scheduled-form-group');
 
 const format = 'D MMM YYYY h:mm A';
@@ -16,7 +12,7 @@ $('select[name="status"]').on('change', evt => {
 
 $('.date-picker')
   .each((idx, picker) => {
-    $picker = $(picker);
+    const $picker = $(picker);
 
     const $label = $picker.children('.label');
     const value = $picker.children('input').val();
@@ -34,7 +30,7 @@ $('.date-picker')
     timePickerIncrement: 30,
   })
   .on('apply.daterangepicker', (evt, picker) => {
-    $picker = $(evt.currentTarget);
+    const $picker = $(evt.currentTarget);
 
     $picker.children('.label').html(picker.startDate.format(format));
     $picker.children('input').val(picker.startDate.unix());

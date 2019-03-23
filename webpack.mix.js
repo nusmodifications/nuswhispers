@@ -13,9 +13,6 @@ const { IgnorePlugin } = require('webpack');
  */
 
 mix
-  .autoload({
-    jquery: ['$', 'window.jQuery'],
-  })
   .options({
     hmrOptions: {
       host: 'localhost',
@@ -28,7 +25,7 @@ mix
   .webpackConfig({
     resolve: {
       alias: {
-        jquery: 'jquery/dist/jquery.slim.js',
+        jquery: 'jquery/src/jquery.js',
       },
     },
     plugins: [new IgnorePlugin(/^\.\/locale$/, /moment$/)],
@@ -43,6 +40,7 @@ mix
   )
   .js('resources/js/admin.js', 'public/assets/admin')
   .extract([
+    'popper.js',
     'bootstrap',
     'jquery',
     'moment',
