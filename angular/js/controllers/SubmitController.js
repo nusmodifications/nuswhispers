@@ -79,7 +79,8 @@ class SubmitController {
 
     this.confessionData.content = this.confessionData.content
       .replace(/nus\s*whispers?\b/gi, 'NUSWhispers')
-      .replace(/nus\s*mods?\b/gi, 'NUSMods');
+      .replace(/nus\s*mods?\b/gi, 'NUSMods')
+      .trim();
 
     this.ConfessionService.submit(this.confessionData)
       .then(({ data }) => {
