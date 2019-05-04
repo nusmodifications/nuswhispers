@@ -31,7 +31,7 @@ class MainController {
       this.tags = data.data.tags;
     });
 
-    this.getLoginStatus();
+    // this.getLoginStatus();
   }
 
   isActivePage(pageName) {
