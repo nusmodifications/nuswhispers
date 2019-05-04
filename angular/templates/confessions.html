@@ -82,8 +82,7 @@
     <div class="post-footer">
       <span class="typcn typcn-watch"></span
       ><span
-        am-time-ago="confession.status_updated_at_timestamp || confession.status_updated_at"
-        am-preprocess="unix"
+        am-time-ago="confession.status_updated_at_timestamp | amFromUnix"
         class="post-time"
       ></span>
       <div class="post-media-summary">
