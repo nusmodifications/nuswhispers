@@ -13,7 +13,8 @@ return [
     | using this caching library. This connection is used when another is
     | not explicitly specified when executing a given caching function.
     |
-    | Supported: "apc", "array", "database", "file", "memcached", "redis"
+    | Supported: "apc", "array", "database", "file",
+    |            "memcached", "redis", "dynamodb"
     |
     */
 
@@ -75,6 +76,14 @@ return [
             'connection' => 'cache',
         ],
 
+        'dynamodb' => [
+            'driver' => 'dynamodb',
+            'key' => env('AWS_ACCESS_KEY_ID'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            'region' => env('AWS_REGION', 'us-east-1'),
+            'table' => env('DYNAMODB_CACHE_TABLE', 'cache'),
+        ],
+
     ],
 
     /*
@@ -89,5 +98,18 @@ return [
     */
 
     'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_cache'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | API Cache Timeout
+    |--------------------------------------------------------------------------
+    |
+    | Sets the timeout in seconds on when cached API responses should expire.
+    |
+    */
+
+    'api' => [
+        'timeout' => env('API_CACHE_TIMEOUT', 5 * 60),
+    ],
 
 ];

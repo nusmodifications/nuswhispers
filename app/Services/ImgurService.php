@@ -5,6 +5,7 @@ namespace NUSWhispers\Services;
 use GuzzleHttp;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Arr;
 
 class ImgurService
 {
@@ -47,6 +48,6 @@ class ImgurService
 
         $payload = json_decode((string) $response->getBody(), true);
 
-        return array_get($payload, 'data.link');
+        return Arr::get($payload, 'data.link');
     }
 }

@@ -39,4 +39,9 @@ Route::name('fbuser.')->prefix('fbuser')->group(function () {
     Route::post('unfavourite', 'FbUsersController@postUnfavourite')->name('unfavourite');
 });
 
+Route::options('{any}', 'ApiController@index')
+    ->where('any', '.*')
+    ->fallback()
+    ->name('index');
+
 Route::fallback('ApiController@index')->name('index');

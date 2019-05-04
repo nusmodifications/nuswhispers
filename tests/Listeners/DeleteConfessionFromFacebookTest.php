@@ -13,7 +13,7 @@ class DeleteConfessionFromFacebookTest extends TestCase
 
     protected $listener;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -23,7 +23,7 @@ class DeleteConfessionFromFacebookTest extends TestCase
         $this->app['config']->set('services.facebook.page_id', 'nuswhispers');
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         Mockery::close();

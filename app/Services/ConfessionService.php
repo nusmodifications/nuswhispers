@@ -4,6 +4,7 @@ namespace NUSWhispers\Services;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 use InvalidArgumentException;
 use NUSWhispers\Events;
 use NUSWhispers\Models\Confession;
@@ -114,7 +115,7 @@ class ConfessionService
         $originalStatus = $confession->status;
 
         // Do not allow switching status back to "Pending".
-        if ($originalStatus !== 'Pending' && array_get($attributes, 'status', '') === 'Pending') {
+        if ($originalStatus !== 'Pending' && Arr::get($attributes, 'status', '') === 'Pending') {
             throw new InvalidArgumentException('Switching a non-pending confession back to "pending" status is not allowed.');
         }
 

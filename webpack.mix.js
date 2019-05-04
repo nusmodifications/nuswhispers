@@ -13,9 +13,6 @@ const { IgnorePlugin } = require('webpack');
  */
 
 mix
-  .autoload({
-    jquery: ['$', 'window.jQuery'],
-  })
   .options({
     hmrOptions: {
       host: 'localhost',
@@ -28,17 +25,30 @@ mix
   .webpackConfig({
     resolve: {
       alias: {
-        jquery: 'jquery/dist/jquery.slim.js',
+        jquery: 'jquery/src/jquery.js',
       },
     },
     plugins: [new IgnorePlugin(/^\.\/locale$/, /moment$/)],
   })
-  .js('resources/js/confessions/index.js', 'public/js/confessions/index.js')
-  .js('resources/js/confessions/edit.js', 'public/js/confessions/edit.js')
-  .js('resources/js/admin.js', 'public/js')
-  .extract(['bootstrap', 'jquery', 'moment', 'daterangepicker'])
-  .sass('resources/sass/auth.scss', 'public/css')
-  .sass('resources/sass/admin.scss', 'public/css');
+  .js(
+    'resources/js/confessions/index.js',
+    'public/assets/admin/confessions/index.js'
+  )
+  .js(
+    'resources/js/confessions/edit.js',
+    'public/assets/admin/confessions/edit.js'
+  )
+  .js('resources/js/admin.js', 'public/assets/admin')
+  .extract([
+    'popper.js',
+    'bootstrap',
+    'jquery',
+    'moment',
+    'daterangepicker',
+    'typicons.font',
+  ])
+  .sass('resources/sass/auth.scss', 'public/assets/admin')
+  .sass('resources/sass/admin.scss', 'public/assets/admin');
 
 if (mix.inProduction()) {
   mix.sourceMaps().version();

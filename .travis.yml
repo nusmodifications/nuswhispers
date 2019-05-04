@@ -1,26 +1,38 @@
-language: php
+matrix:
+  include:
+    - language: php
+      php:
+        - "7.2"
 
-php:
-  - '7.2'
+      before_script:
+        - cp .env.travis .env
+        - mysql -e 'create database homestead_test;'
+        - composer self-update
+        - composer install --dev --no-interaction
+        - php artisan key:generate
+        - php artisan migrate --database=testing
 
-before_script:
-  - cp .env.travis .env
-  - mysql -e 'create database homestead_test;'
-  - composer self-update
-  - composer install --dev --no-interaction
-  - php artisan key:generate
-  - php artisan migrate --database=testing
+      script:
+        - mkdir -p build/logs
+        - vendor/bin/phpunit -c phpunit.xml.dist
 
-script:
-  - mkdir -p build/logs
-  - vendor/bin/phpunit -c phpunit.xml.dist
+      after_success:
+        - travis_retry php vendor/bin/coveralls
 
-after_success:
-  - travis_retry php vendor/bin/coveralls
+      cache:
+        directories:
+          - vendor
 
-cache:
-  directories:
-    - vendor
+      addons:
+        mariadb: "10.3"
 
-addons:
-  mariadb: '10.3'
+    - language: node_js
+      node_js:
+        - "11"
+
+      cache: npm
+
+      install:
+        - npm install
+        - npm run production
+

@@ -1,10 +1,6 @@
-const moment = require('moment');
-
-require('daterangepicker');
-
 $('.date-picker')
   .each((idx, picker) => {
-    $picker = $(picker);
+    const $picker = $(picker);
     const $label = $picker.children('.label');
 
     const $start = $picker.children('input[name="start"]');
@@ -42,7 +38,7 @@ $('.date-picker')
     locale: { format: 'D MMM YYYY' },
   })
   .on('apply.daterangepicker', (evt, picker) => {
-    $picker = $(evt.currentTarget);
+    const $picker = $(evt.currentTarget);
 
     $picker.next('.clear').removeClass('d-none');
 

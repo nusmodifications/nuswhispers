@@ -1,170 +1,113 @@
+import Popper from 'popper.js';
+import $ from 'jquery';
 
-/*================================================================
-=>                  App = nuswhispersApp
-==================================================================*/
-/*global angular*/
-filepicker.setKey('AnsmRtYIsR9qh79Hxxrpez');
+// Import bootstrap-sass + dependencies.
+window.Popper = Popper;
 
-angular.module('nuswhispersApp.services', ['facebook']).config(
-    function (FacebookProvider) {
-        'use strict';
-        // @if NODE_ENV = 'development'
-        FacebookProvider.init('563666707081891');
-        // @endif
-        // @if NODE_ENV = 'production'
-        FacebookProvider.init('1577825682475577');
-        // @endif
-    }
-);
-angular.module('nuswhispersApp.controllers', ['nuswhispersApp.services', 'vcRecaptcha']);
+window.$ = window.jQuery = $;
 
-var app = angular.module('nuswhispersApp', ['nuswhispersApp.controllers', 'filters', 'LocalStorageModule', 'angular-loading-bar', 'monospaced.elastic', 'angularMoment', 'infinite-scroll', 'ngCookies', 'ngResource', 'ngSanitize', 'ngRoute', 'ngAnimate', 'ui.utils', 'ui.bootstrap', 'ui.router']);
+// Import Bootstrap scripts.
+import 'bootstrap-sass/assets/javascripts/bootstrap/affix';
+import 'bootstrap-sass/assets/javascripts/bootstrap/alert';
+import 'bootstrap-sass/assets/javascripts/bootstrap/button';
+import 'bootstrap-sass/assets/javascripts/bootstrap/transition';
 
-app.config(['$routeProvider', '$locationProvider', '$httpProvider', 'localStorageServiceProvider', function ($routeProvider, $locationProvider, $httpProvider, localStorageServiceProvider) {
-    'use strict';
+// Import application stylesheet.
+import '../scss/application.scss';
+import 'typicons.font/src/font/typicons.css';
+import 'angular-loading-bar/build/loading-bar.min.css';
 
-    localStorageServiceProvider.setPrefix('nuswhispers');
+// Bootstrap AngularJS stuffs.
+import angular from 'angular';
+import LocalStorageModule from 'angular-local-storage';
+import ngCookies from 'angular-cookies';
+import ngRoute from 'angular-route';
+import ngResource from 'angular-resource';
+import ngSanitize from 'angular-sanitize';
+import ngAnimate from 'angular-animate';
+import angularLoadingBar from 'angular-loading-bar';
+import angularElastic from 'angular-elastic';
+import angularMoment from 'angular-moment';
+import ngInfiniteScroll from 'ng-infinite-scroll';
+import uiBootstrap from 'angular-ui-bootstrap';
+import uiRouter from '@uirouter/angularjs';
+import vcRecaptcha from 'angular-recaptcha';
 
-    $routeProvider
-        .when('/home/', {
-            templateUrl: 'assets/templates/confessions.html',
-            controller: 'ConfessionsController',
-            resolve: {
-                controllerOptions: function () {
-                    return {
-                        view: 'featured',
-                    };
-                }
-            }
-        })
-        .when('/popular/', {
-            templateUrl: 'assets/templates/confessions.html',
-            controller: 'ConfessionsController',
-            resolve: {
-                controllerOptions: function () {
-                    return {
-                        view: 'popular',
-                    };
-                }
-            }
-        })
-        .when('/latest/', {
-            templateUrl: 'assets/templates/confessions.html',
-            controller: 'ConfessionsController',
-            resolve: {
-                controllerOptions: function () {
-                    return {
-                        view: 'recent',
-                    };
-                }
-            }
-        })
-        .when('/category/:category', {
-            templateUrl: 'assets/templates/confessions.html',
-            controller: 'ConfessionsController',
-            resolve: {
-                controllerOptions: function () {
-                    return {
-                        view: 'category'
-                    };
-                }
-            }
-        })
-        .when('/tag/:tag', {
-            templateUrl: 'assets/templates/confessions.html',
-            controller: 'ConfessionsController',
-            resolve: {
-                controllerOptions: function () {
-                    return {
-                        view: 'tag'
-                    };
-                }
-            }
-        })
-        .when('/confession/:confession', {
-            templateUrl: 'assets/templates/confessions.html',
-            controller: 'ConfessionsController',
-            resolve: {
-                controllerOptions: function () {
-                    return {
-                        view: 'single'
-                    };
-                }
-            }
-        })
-        .when('/search/:query', {
-            templateUrl: 'assets/templates/confessions.html',
-            controller: 'ConfessionsController',
-            resolve: {
-                controllerOptions: function () {
-                    return {
-                        view: 'search'
-                    };
-                }
-            }
-        })
-        .when('/favourites/', {
-            templateUrl: 'assets/templates/confessions.html',
-            controller: 'ConfessionsController',
-            resolve: {
-                controllerOptions: function () {
-                    return {
-                        view: 'favourites'
-                    };
-                }
-            }
-        })
-        .when('/submit/', {
-            templateUrl: 'assets/templates/submit.html',
-            controller: 'SubmitController'
-        })
-        .when('/mobile_submit/', {
-            templateUrl: 'assets/templates/submit.html',
-            controller: 'SubmitController'
-        })
-        .when('/policy/', {
-            templateUrl: 'assets/templates/policy.html',
-        })
-        .otherwise({
-            redirectTo: '/home/'
-        });
+import controllersModuleName from './controllers';
+import filters from './filters';
 
-    $locationProvider.hashPrefix('!');
-    $locationProvider.html5Mode(true);
+const moduleName = 'nuswhispersApp';
 
-    // This is required for Browser Sync to work poperly
-    $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-}]);
+const config = (
+  $routeProvider,
+  $locationProvider,
+  $httpProvider,
+  localStorageServiceProvider,
+  vcRecaptchaServiceProvider
+) => {
+  localStorageServiceProvider.setPrefix('nuswhispers');
 
+  const confessionsRouteViewMap = {
+    '/home/': 'featured',
+    '/popular/': 'popular',
+    '/latest/': 'latest',
+    '/category/:category': 'category',
+    '/tag/:tag': 'tag',
+    '/confession/:confession': 'single',
+    '/search/:query': 'search',
+    '/favourites/': 'favourites',
+  };
 
-/*================================================================
-=>                  nuswhispersApp App Run()
-==================================================================*/
-
-app.run(['$rootScope', function ($rootScope) {
-
-    'use strict';
-
-    // console.log('Angular.js run() function...');
-}]);
-
-function escapeHTML(content) {
-    'use strict';
-    return content.replace(/[&<"']/g, function (m) {
-        switch (m) {
-            case '&':
-                return '&amp;';
-            case '<':
-                return '&lt;';
-            case '"':
-                return '&quot;';
-            default:
-                return m;
-        }
+  Object.keys(confessionsRouteViewMap).forEach(route => {
+    $routeProvider.when(route, {
+      controller: 'ConfessionsController',
+      controllerAs: 'vm',
+      template: require('../templates/confessions.html'),
+      resolve: {
+        controllerOptions: () => ({ view: confessionsRouteViewMap[route] }),
+      },
     });
-}
+  });
 
+  $routeProvider
+    .when('/submit/', {
+      controller: 'SubmitController',
+      controllerAs: 'vm',
+      template: require('../templates/submit.html'),
+    })
+    .when('/policy/', {
+      template: require('../templates/policy.html'),
+    })
+    .otherwise({
+      redirectTo: '/home/',
+    });
 
-/* ---> Do not delete this comment (Values) <--- */
+  $locationProvider.hashPrefix('!');
+  $locationProvider.html5Mode(true);
 
-/* ---> Do not delete this comment (Constants) <--- */
+  $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+  vcRecaptchaServiceProvider.setSiteKey(RECAPTCHA_KEY || '');
+};
+
+// Run the AngularJS application!
+angular
+  .module(moduleName, [
+    controllersModuleName,
+    filters,
+    LocalStorageModule,
+    angularLoadingBar,
+    angularElastic,
+    angularMoment,
+    ngCookies,
+    ngResource,
+    ngSanitize,
+    ngRoute,
+    ngAnimate,
+    ngInfiniteScroll,
+    uiBootstrap,
+    uiRouter,
+    vcRecaptcha,
+  ])
+  .config(config)
+  .run();

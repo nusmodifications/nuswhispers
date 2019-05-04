@@ -11,3 +11,4 @@ try {
 } catch (e) {}
 
 require('bootstrap');
+require('imports-loader?define=>false!daterangepicker');

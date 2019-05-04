@@ -60,20 +60,16 @@ phpunit.xml
 .phpunit.result.cache
 
 # Other folders
-/build
-/zip
-/scss
-/.idea
-/.vscode
+build
+zip
+.idea
+.vscode
 
 # Built files
-/public/*.html
-/public/assets
-/public/hot
-/public/storage
-/public/mix-manifest.json
-
-/public/js
-/public/css
-/public/images
-/public/fonts
+public/*.html
+public/assets
+public/fonts
+public/hot
+public/storage
+public/mix-manifest.json
+/stats.json
