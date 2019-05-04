@@ -70,6 +70,7 @@
     "watch-poll": "npm run watch -- --watch-poll",
     "development": "npm run clean && webpack --mode=development",
     "production": "npm run clean && webpack --mode=production",
-    "start": "webpack-dev-server --open --env.devserver"
+    "start": "webpack-dev-server --open --env.devserver",
+    "stats": "webpack --mode=production --json > stats.json"
   }
 }
