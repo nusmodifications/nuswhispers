@@ -87,7 +87,7 @@ const config = (
 
   $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-  vcRecaptchaServiceProvider.setSiteKey(`'${RECAPTCHA_KEY || ''}'`);
+  vcRecaptchaServiceProvider.setSiteKey(RECAPTCHA_KEY || '');
 };
 
 // Run the AngularJS application!
