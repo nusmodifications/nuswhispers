@@ -158,24 +158,6 @@
                 >&nbsp;Confession</span
               >
             </a>
-            <a
-              ng-show="!mainVm.isLoggedIn"
-              ng-click="mainVm.login()"
-              class="btn"
-            >
-              <span class="typcn typcn-social-facebook"></span> Login
-              <span class="hidden-sm hidden-xs">with Facebook</span></a
-            >
-            <a
-              ng-show="mainVm.isLoggedIn"
-              ng-click="mainVm.logout()"
-              class="btn"
-            >
-              <span class="typcn typcn-social-facebook"></span> Logout
-              <img
-                ng-src="//graph.facebook.com/{{ mainVm.fbUser.userId }}/picture"
-              />
-            </a>
           </div>
           <form
             class="search-form"
