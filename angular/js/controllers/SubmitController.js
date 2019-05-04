@@ -48,7 +48,7 @@ class SubmitController {
         new Date().toDateString()
       );
     }
-    return this.localStorageService.get('confessionLimit.count');
+    return this.localStorageService.get('confessionLimit.count', 0);
   }
 
   hasConfessionLimitExceeded() {
@@ -58,7 +58,7 @@ class SubmitController {
   decreaseConfessionLimit() {
     this.localStorageService.set(
       'confessionLimit.count',
-      this.getConfessionLimit - 1
+      this.getConfessionLimit() - 1
     );
   }
 
