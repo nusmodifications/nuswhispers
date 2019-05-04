@@ -39,14 +39,9 @@ class MainController {
   }
 
   login() {
-    this.Facebook.login(
-      () => {
-        this.getLoginStatus();
-      },
-      {
-        scope: 'publish_actions',
-      }
-    );
+    this.Facebook.login(() => {
+      this.getLoginStatus();
+    });
   }
 
   logout() {
