@@ -12,13 +12,13 @@ const webpack = require('webpack');
 
 const buildDefinitions = env => {
   const defineMap = {
-    API_URL: { key: 'api', default: '/api' },
-    FB_PAGE_ID: { key: 'fbpage', default: '' },
-    FB_APP_ID: { key: 'fbapp', default: '' },
-    FILESTACK_KEY: { key: 'filestack', default: '' },
-    FINGERPRINT_API_KEY: { key: 'fingerprint-api', default: '' },
-    FINGERPRINT_STORAGE_KEY: { key: 'fingerprint-storage', default: '' },
-    RECAPTCHA_KEY: { key: 'recaptcha', default: null },
+    API_URL: '/api',
+    FB_PAGE_ID: '',
+    FB_APP_ID: '',
+    FILESTACK_KEY: '',
+    FINGERPRINT_API_KEY: '',
+    FINGERPRINT_STORAGE_KEY: '',
+    RECAPTCHA_KEY: '',
   };
 
   let definitions = {
@@ -27,16 +27,8 @@ const buildDefinitions = env => {
     ),
   };
 
-  forEach(defineMap, (config, variable) => {
-    let value = config.default;
-
-    if (env[config.key]) {
-      value = env[config.key];
-    } else if (process.env[variable]) {
-      value = process.env[variable];
-    }
-
-    definitions[variable] = JSON.stringify(value);
+  forEach(defineMap, (defaultVariable, name) => {
+    definitions[name] = JSON.stringify(env[name] || defaultVariable);
   });
 
   return definitions;
