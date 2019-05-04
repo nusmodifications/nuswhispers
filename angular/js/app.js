@@ -50,7 +50,7 @@ const config = (
   const confessionsRouteViewMap = {
     '/home/': 'featured',
     '/popular/': 'popular',
-    '/latest/': 'latest',
+    '/latest/': 'recent',
     '/category/:category': 'category',
     '/tag/:tag': 'tag',
     '/confession/:confession': 'single',
