@@ -50,11 +50,10 @@ class ConfessionsController {
         this.ConfessionService.getConfessionById(
           this.$routeParams.confession
         ).then(({ data }) => {
-          if (data.data.success) {
+          if (data.success) {
             processConfessionResponse([data.data.confession]);
           }
           this.doLoadMoreConfessions = false;
-          this.loadingConfessions = false;
         });
         break;
       case 'recent':
