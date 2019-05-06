@@ -72,6 +72,14 @@ class MainController {
     this.$location.path(`/search/${query}`);
   }
 
+  toggleSidebar() {
+    if (this.sidebarOpenedClass === '') {
+      this.sidebarOpenedClass = 'sidebar-opened';
+    } else {
+      this.sidebarOpenedClass = '';
+    }
+  }
+
   static controllerFactory(
     $location,
     Facebook,
