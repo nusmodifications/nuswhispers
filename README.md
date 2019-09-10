@@ -45,3 +45,11 @@ php artisan db:seed
 ```
 npm run development
 ```
+
+## Sponsors
+
+Many thanks to those who have supported us in the operation of the platform:
+
+[![Bugsnag](/bugsnag_logo_navy.svg)](https://www.bugsnag.com)
+
+
