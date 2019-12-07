@@ -6,7 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "@uirouter/angularjs": "^1.0.22",
-    "angular": "^1.7.7",
+    "angular": "^1.7.9",
     "angular-animate": "^1.7.7",
     "angular-cookies": "^1.7.7",
     "angular-elastic": "^2.5.1",
