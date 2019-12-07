@@ -154,6 +154,8 @@ class SubmitController {
       /(#\w+)/
     );
 
+    this.contentTagHighlights = '';
+
     for (let i in splitContentTags) {
       if (/(#\w+)/.test(splitContentTags[i])) {
         this.contentTagHighlights += '<b>' + splitContentTags[i] + '</b>';
