@@ -16,7 +16,7 @@ trait ResolvesFacebookPageToken
     public function resolvePageToken($user): string
     {
         if (! $user instanceof User) {
-            return config('laravel-facebook-sdk.facebook_config.page_access_token');
+            return config('services.facebook.page_access_token');
         }
 
         $profile = $user->profiles()->where('provider_name', 'facebook')->first();
@@ -25,6 +25,6 @@ trait ResolvesFacebookPageToken
             return $profile->page_token;
         }
 
-        return config('laravel-facebook-sdk.facebook_config.page_access_token');
+        return config('services.facebook.page_access_token');
     }
 }
