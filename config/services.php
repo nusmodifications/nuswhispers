@@ -56,6 +56,8 @@ return [
         'client_id' => env('FACEBOOK_APP_ID', ''),
         'client_secret' => env('FACEBOOK_APP_SECRET', ''),
         'page_id' => env('FACEBOOK_PAGE_ID', ''),
+        'page_access_token' => env('FACEBOOK_PAGE_TOKEN', ''),
+        'default_graph_version' => 'v2.10',
         'redirect' => env('APP_URL', 'http://www.nuswhispers.com') . '/admin/profile/connect/facebook',
     ],
 

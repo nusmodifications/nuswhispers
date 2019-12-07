@@ -2,6 +2,7 @@
 
 namespace NUSWhispers\Tests\Listeners;
 
+use Facebook\Facebook;
 use Mockery;
 use NUSWhispers\Events\ConfessionWasDeleted;
 use NUSWhispers\Listeners\DeleteConfessionFromFacebook;
@@ -17,7 +18,7 @@ class DeleteConfessionFromFacebookTest extends TestCase
     {
         parent::setUp();
 
-        $this->fb = Mockery::mock('\SammyK\LaravelFacebookSdk\LaravelFacebookSdk');
+        $this->fb = Mockery::mock(Facebook::class);
         $this->listener = new DeleteConfessionFromFacebook($this->fb);
 
         $this->app['config']->set('services.facebook.page_id', 'nuswhispers');

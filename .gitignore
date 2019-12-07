@@ -73,3 +73,7 @@ public/hot
 public/storage
 public/mix-manifest.json
 /stats.json
+
+# IDE Metadata
+.phpstorm.meta.php
+_ide_helper.php

@@ -187,6 +187,7 @@ return [
          */
         NUSWhispers\Providers\AuthServiceProvider::class,
         NUSWhispers\Providers\EventServiceProvider::class,
+        NUSWhispers\Providers\FacebookServiceProvider::class,
         NUSWhispers\Providers\ReCaptchaServiceProvider::class,
         NUSWhispers\Providers\RouteServiceProvider::class,
 
@@ -221,7 +222,6 @@ return [
         'Eloquent' => Illuminate\Database\Eloquent\Model::class,
         'Event' => Illuminate\Support\Facades\Event::class,
         'File' => Illuminate\Support\Facades\File::class,
-        'Facebook' => SammyK\LaravelFacebookSdk\FacebookFacade::class,
         'Gate' => Illuminate\Support\Facades\Gate::class,
         'Hash' => Illuminate\Support\Facades\Hash::class,
         'Lang' => Illuminate\Support\Facades\Lang::class,

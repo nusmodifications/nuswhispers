@@ -2,9 +2,12 @@
 
 namespace NUSWhispers\Tests\Listeners;
 
+use Facebook\Facebook;
+use Facebook\FacebookResponse;
 use Mockery;
 use NUSWhispers\Events\ConfessionWasApproved;
 use NUSWhispers\Listeners\PostConfessionToFacebook;
+use NUSWhispers\Models\Confession;
 use NUSWhispers\Tests\TestCase;
 
 class PostConfessionToFacebookTest extends TestCase
@@ -17,7 +20,7 @@ class PostConfessionToFacebookTest extends TestCase
     {
         parent::setUp();
 
-        $this->fb = Mockery::mock('\SammyK\LaravelFacebookSdk\LaravelFacebookSdk');
+        $this->fb = Mockery::mock(Facebook::class);
         $this->listener = new PostConfessionToFacebook($this->fb);
 
         $this->app['config']->set('services.facebook.page_id', 'nuswhispers');
@@ -34,7 +37,7 @@ class PostConfessionToFacebookTest extends TestCase
     {
         $this->app['config']->set('app.manual_mode', true);
 
-        $confession = factory(\NUSWhispers\Models\Confession::class)->create();
+        $confession = factory(Confession::class)->create();
 
         $this->fb->shouldNotReceive('post');
 
@@ -44,7 +47,7 @@ class PostConfessionToFacebookTest extends TestCase
     /** @test */
     public function testHandleRejected()
     {
-        $confession = factory(\NUSWhispers\Models\Confession::class)->states('rejected')->create();
+        $confession = factory(Confession::class)->states('rejected')->create();
 
         $this->fb->shouldNotReceive('post');
 
@@ -54,14 +57,14 @@ class PostConfessionToFacebookTest extends TestCase
     /** @test */
     public function testHandleCreatePhoto()
     {
-        $confession = factory(\NUSWhispers\Models\Confession::class)->create([
+        $confession = factory(Confession::class)->create([
             'content' => 'Hello world!',
             'images' => 'abc.jpg',
             'status' => 'Approved',
             'fb_post_id' => '',
         ]);
 
-        $responseMock = Mockery::mock('\Facebook\FacebookResponse');
+        $responseMock = Mockery::mock(FacebookResponse::class);
         $responseMock->shouldReceive('getGraphNode')->andReturn(['id' => 123]);
 
         $this->fb->shouldReceive('post')
@@ -79,14 +82,14 @@ class PostConfessionToFacebookTest extends TestCase
     /** @test */
     public function testHandleUpdatePhoto()
     {
-        $confession = factory(\NUSWhispers\Models\Confession::class)->create([
+        $confession = factory(Confession::class)->create([
             'content' => 'Hello world!',
             'images' => 'abc.jpg',
             'status' => 'Approved',
             'fb_post_id' => '123',
         ]);
 
-        $responseMock = Mockery::mock('\Facebook\FacebookResponse');
+        $responseMock = Mockery::mock(FacebookResponse::class);
         $responseMock->shouldReceive('getGraphNode')->andReturn(['id' => 123]);
 
         $this->fb->shouldReceive('post')
@@ -104,14 +107,14 @@ class PostConfessionToFacebookTest extends TestCase
     /** @test */
     public function testHandleCreateStatus()
     {
-        $confession = factory(\NUSWhispers\Models\Confession::class)->create([
+        $confession = factory(Confession::class)->create([
             'content' => 'Hello world!',
             'images' => '',
             'status' => 'Approved',
             'fb_post_id' => '',
         ]);
 
-        $responseMock = Mockery::mock('\Facebook\FacebookResponse');
+        $responseMock = Mockery::mock(FacebookResponse::class);
         $responseMock->shouldReceive('getGraphNode')->andReturn(['id' => 'nuswhispers_123']);
 
         $this->fb->shouldReceive('post')
@@ -128,14 +131,14 @@ class PostConfessionToFacebookTest extends TestCase
     /** @test */
     public function testHandleUpdateStatus()
     {
-        $confession = factory(\NUSWhispers\Models\Confession::class)->create([
+        $confession = factory(Confession::class)->create([
             'content' => 'Hello world!',
             'images' => '',
             'status' => 'Approved',
             'fb_post_id' => '123',
         ]);
 
-        $responseMock = Mockery::mock('\Facebook\FacebookResponse');
+        $responseMock = Mockery::mock(FacebookResponse::class);
         $responseMock->shouldReceive('getGraphNode')->andReturn(['id' => 'nuswhispers_123']);
 
         $this->fb->shouldReceive('post')

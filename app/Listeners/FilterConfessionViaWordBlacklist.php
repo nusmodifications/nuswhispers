@@ -4,6 +4,7 @@ namespace NUSWhispers\Listeners;
 
 use anlutro\LaravelSettings\Facade as Settings;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Str;
 use NUSWhispers\Events\ConfessionWasCreated;
 
 class FilterConfessionViaWordBlacklist implements ShouldQueue
@@ -19,7 +20,7 @@ class FilterConfessionViaWordBlacklist implements ShouldQueue
         $blacklist = strtolower(Settings::get('word_blacklist', ''));
         $confession = $event->confession;
 
-        if (str_contains(strtolower($confession->content), explode(',', $blacklist))) {
+        if (Str::contains(strtolower($confession->content), explode(',', $blacklist))) {
             $confession->update(['status' => 'Rejected']);
         }
     }
