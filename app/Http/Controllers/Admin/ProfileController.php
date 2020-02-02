@@ -3,15 +3,30 @@
 namespace NUSWhispers\Http\Controllers\Admin;
 
 use Facebook\Exceptions\FacebookResponseException;
+use Facebook\Facebook;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 use NUSWhispers\Models\UserProfile;
 use RuntimeException;
-use SammyK\LaravelFacebookSdk\FacebookFacade as Facebook;
 
 class ProfileController extends AdminController
 {
+    /**
+     * @var \Facebook\Facebook
+     */
+    protected $fb;
+
+    /**
+     * Constructs an instance of the controller.
+     *
+     * @param \Facebook\Facebook $fb
+     */
+    public function __construct(Facebook $fb)
+    {
+        $this->fb = $fb;
+    }
+
     /**
      * Displays the current user's profile page.
      *
@@ -54,7 +69,7 @@ class ProfileController extends AdminController
                 'password' => request()->input('new_password') ? Hash::make(request()->input('new_password')) : $request->user()->password,
             ]);
 
-            return $this->backWithSuccess('Profile succesfully updated.');
+            return $this->backWithSuccess('Profile successfully updated.');
         });
     }
 
@@ -99,7 +114,7 @@ class ProfileController extends AdminController
             ->where('provider_name', '=', $provider)
             ->delete();
 
-        $this->flashMessage('Sucessfully removed ' . ucfirst($provider) . '.');
+        $this->flashMessage('Successfully removed ' . ucfirst($provider) . '.');
 
         return redirect('/admin/profile');
     }
@@ -107,11 +122,13 @@ class ProfileController extends AdminController
     /**
      * Adds a provider to the profile.
      *
-     * TODO: Refactor to somewehere better; somewhere like a UserRepository.
+     * TODO: Refactor to somewhere better; somewhere like a UserRepository.
      *
      * @param string $provider provider name
      * @param \NUSWhispers\Models\User user model
      * @param \Laravel\Socialite\Two\User $oauthUser oAuth user object
+     *
+     * @throws \Facebook\Exceptions\FacebookSDKException
      */
     protected function addProfile($provider, $user, $oauthUser): void
     {
@@ -121,7 +138,7 @@ class ProfileController extends AdminController
         if ($provider === 'facebook') {
             // Extend current token to long-lived access token.
             /** @var \Facebook\FacebookResponse $response */
-            $response = Facebook::get('/oauth/access_token?client_id=' . urlencode(env('FACEBOOK_APP_ID')) . '&client_secret=' . urlencode(env('FACEBOOK_APP_SECRET')) . '&grant_type=fb_exchange_token&fb_exchange_token=' . urlencode($oauthUser->token), $token);
+            $response = $this->fb->get('/oauth/access_token?client_id=' . urlencode(env('FACEBOOK_APP_ID')) . '&client_secret=' . urlencode(env('FACEBOOK_APP_SECRET')) . '&grant_type=fb_exchange_token&fb_exchange_token=' . urlencode($oauthUser->token), $token);
 
             if (! isset($response->getDecodedBody()['access_token'])) {
                 throw new RuntimeException('User is not a page admin of Facebook page #' . env('FACEBOOK_PAGE_ID', '') . '.');
@@ -131,7 +148,7 @@ class ProfileController extends AdminController
 
             // Get page token (never expires)
             try {
-                $response = Facebook::get('/' . env('FACEBOOK_PAGE_ID', '') . '?fields=access_token', $token)->getGraphObject();
+                $response = $this->fb->get('/' . env('FACEBOOK_PAGE_ID', '') . '?fields=access_token', $token)->getGraphNode();
             } catch (FacebookResponseException $e) {
                 throw new RuntimeException('User is not a page admin of Facebook page #' . env('FACEBOOK_PAGE_ID', '') . '.');
             }

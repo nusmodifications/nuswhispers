@@ -2,10 +2,10 @@
 
 namespace NUSWhispers\Models;
 
+use Facebook\Facebook;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
-use SammyK\LaravelFacebookSdk\FacebookFacade as Facebook;
 
 class Confession extends Model
 {
@@ -132,17 +132,21 @@ class Confession extends Model
      * Retrieve Facebook information.
      *
      * @return void
+     *
+     * @throws \Facebook\Exceptions\FacebookSDKException
      */
     public function getFacebookInformation(): void
     {
         if ($this->fb_post_id) {
-            $accessToken = config('laravel-facebook-sdk.facebook_config.page_access_token');
+            $accessToken = config('services.facebook.page_access_token');
             $pageId = config('services.facebook.page_id');
 
-            $fbRequest = sprintf('/%s?oauth_token=%s&fields=comments.summary(true).filter(toplevel).fields(parent.fields(id),comments.summary(true),message,from,created_time,is_hidden),likes.summary(true)', $pageId . '_' . $this->fb_post_id, $accessToken);
-            $fbResponse = Facebook::get($fbRequest, $accessToken)->getDecodedBody();
+            /** @var Facebook $facebook */
+            $facebook = app(Facebook::class);
 
-            $this->facebook_information = $fbResponse;
+            $endpoint = sprintf('/%s?oauth_token=%s&fields=comments.summary(true).filter(toplevel).fields(parent.fields(id),comments.summary(true),message,from,created_time,is_hidden),likes.summary(true)', $pageId . '_' . $this->fb_post_id, $accessToken);
+
+            $this->facebook_information = $facebook->get($endpoint, $accessToken)->getDecodedBody();
         }
     }
 

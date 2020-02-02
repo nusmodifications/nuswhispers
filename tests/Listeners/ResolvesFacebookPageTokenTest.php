@@ -13,7 +13,7 @@ class ResolvesFacebookPageTokenTest extends TestCase
         parent::setUp();
 
         $this->stub = new ResolvesFacebookPageTokenStub();
-        $this->app['config']->set('laravel-facebook-sdk.facebook_config.page_access_token', 'foobar');
+        $this->app['config']->set('services.facebook.page_access_token', 'foobar');
     }
 
     /** @test */

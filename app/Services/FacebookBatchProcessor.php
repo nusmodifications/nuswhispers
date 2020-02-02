@@ -2,10 +2,10 @@
 
 namespace NUSWhispers\Services;
 
+use Facebook\Facebook;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use NUSWhispers\Models\Confession;
-use SammyK\LaravelFacebookSdk\LaravelFacebookSdk as Facebook;
 
 class FacebookBatchProcessor
 {
@@ -19,21 +19,18 @@ class FacebookBatchProcessor
     /**
      * Facebook object.
      *
-     * @var \SammyK\LaravelFacebookSdk\LaravelFacebookSdk
+     * @var \Facebook\Facebook
      */
     protected $fb;
 
     /**
      * Creates a new FacebookBatchProcessor instance.
      *
-     * @param Facebook $fb
+     * @param \Facebook\Facebook $fb
      */
     public function __construct(Facebook $fb)
     {
-        $this->accessToken = config('laravel-facebook-sdk.facebook_config.page_access_token');
         $this->fb = $fb;
-
-        $this->fb->setDefaultAccessToken($this->accessToken);
     }
 
     /**
@@ -82,7 +79,7 @@ class FacebookBatchProcessor
 
         $responses = $this->fb->sendBatchRequest($batchRequests);
 
-        $confessions->map(function (Confession $confession) use ($responses) {
+        $confessions->map(static function (Confession $confession) use ($responses) {
             $fbResponse = $responses[$confession->getAttribute('confession_id')]->getDecodedBody();
             $confession->setAttribute('status_updated_at_timestamp', $confession->status_updated_at->timestamp);
             $confession->setAttribute('facebook_information', $fbResponse);

@@ -2,24 +2,24 @@
 
 namespace NUSWhispers\Listeners;
 
+use Facebook\Facebook;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use NUSWhispers\Events\BaseConfessionEvent;
 use NUSWhispers\Models\Confession;
-use SammyK\LaravelFacebookSdk\LaravelFacebookSdk;
 
 class PostConfessionToFacebook implements ShouldQueue
 {
     use ResolvesFacebookPageToken;
 
-    /** @var \SammyK\LaravelFacebookSdk\LaravelFacebookSdk */
+    /** @var \Facebook\Facebook */
     protected $fb;
 
     /**
      * Constructs an instance of the event listener.
      *
-     * @param \SammyK\LaravelFacebookSdk\LaravelFacebookSdk $fb
+     * @param \Facebook\Facebook $fb
      */
-    public function __construct(LaravelFacebookSdk $fb)
+    public function __construct(Facebook $fb)
     {
         $this->fb = $fb;
     }
@@ -27,9 +27,11 @@ class PostConfessionToFacebook implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  \NUSWhispers\Events\BaseConfessionEvent $event
+     * @param \NUSWhispers\Events\BaseConfessionEvent $event
      *
      * @return mixed
+     *
+     * @throws \Facebook\Exceptions\FacebookSDKException
      */
     public function handle(BaseConfessionEvent $event)
     {
@@ -58,6 +60,8 @@ class PostConfessionToFacebook implements ShouldQueue
      * @param mixed $user
      *
      * @return string
+     *
+     * @throws \Facebook\Exceptions\FacebookSDKException
      */
     protected function createOrUpdatePhoto(Confession $confession, $user)
     {
@@ -86,6 +90,8 @@ class PostConfessionToFacebook implements ShouldQueue
      * @param mixed $user
      *
      * @return string
+     *
+     * @throws \Facebook\Exceptions\FacebookSDKException
      */
     protected function createOrUpdateStatus(Confession $confession, $user)
     {

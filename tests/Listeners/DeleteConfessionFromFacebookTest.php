@@ -2,9 +2,11 @@
 
 namespace NUSWhispers\Tests\Listeners;
 
+use Facebook\Facebook;
 use Mockery;
 use NUSWhispers\Events\ConfessionWasDeleted;
 use NUSWhispers\Listeners\DeleteConfessionFromFacebook;
+use NUSWhispers\Models\Confession;
 use NUSWhispers\Tests\TestCase;
 
 class DeleteConfessionFromFacebookTest extends TestCase
@@ -17,7 +19,7 @@ class DeleteConfessionFromFacebookTest extends TestCase
     {
         parent::setUp();
 
-        $this->fb = Mockery::mock('\SammyK\LaravelFacebookSdk\LaravelFacebookSdk');
+        $this->fb = Mockery::mock(Facebook::class);
         $this->listener = new DeleteConfessionFromFacebook($this->fb);
 
         $this->app['config']->set('services.facebook.page_id', 'nuswhispers');
@@ -32,7 +34,7 @@ class DeleteConfessionFromFacebookTest extends TestCase
     /** @test */
     public function testHandleUnpublishedConfession()
     {
-        $confession = factory(\NUSWhispers\Models\Confession::class)->create([
+        $confession = factory(Confession::class)->create([
             'fb_post_id' => '',
         ]);
 
@@ -46,7 +48,7 @@ class DeleteConfessionFromFacebookTest extends TestCase
     {
         $this->app['config']->set('app.manual_mode', true);
 
-        $confession = factory(\NUSWhispers\Models\Confession::class)->create([
+        $confession = factory(Confession::class)->create([
             'fb_post_id' => '123',
         ]);
 
@@ -58,7 +60,7 @@ class DeleteConfessionFromFacebookTest extends TestCase
     /** @test */
     public function testHandleApproved()
     {
-        $confession = factory(\NUSWhispers\Models\Confession::class)->create([
+        $confession = factory(Confession::class)->create([
             'fb_post_id' => '123',
             'status' => 'Approved',
         ]);
@@ -71,7 +73,7 @@ class DeleteConfessionFromFacebookTest extends TestCase
     /** @test */
     public function testHandlePhoto()
     {
-        $confession = factory(\NUSWhispers\Models\Confession::class)->create([
+        $confession = factory(Confession::class)->create([
             'images' => 'foobar.jpg',
             'fb_post_id' => '123',
             'status' => 'Rejected',
@@ -87,7 +89,7 @@ class DeleteConfessionFromFacebookTest extends TestCase
     /** @test */
     public function testHandleStatus()
     {
-        $confession = factory(\NUSWhispers\Models\Confession::class)->create([
+        $confession = factory(Confession::class)->create([
             'images' => '',
             'fb_post_id' => '123',
             'status' => 'Rejected',

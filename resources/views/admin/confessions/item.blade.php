@@ -36,7 +36,7 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-right">
                     @for ($i = 1; $i < 13; $i++) <a class="dropdown-item" href="/admin/confessions/feature/{{ $confession->confession_id }}/{{ $i }}">
-                        Feature in {{ $i }} {{ str_plural('hour', $i) }}
+                        Feature in {{ $i }} {{ Str::plural('hour', $i) }}
                         </a>
                         @endfor
                 </div>
@@ -57,7 +57,7 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-right">
                     @for ($i = 1; $i < 13; $i++) <a class="dropdown-item" href="/admin/confessions/approve/{{ $confession->confession_id }}/{{ $i }}">
-                        Approve in {{ $i }} {{ str_plural('hour', $i) }}
+                        Approve in {{ $i }} {{ Str::plural('hour', $i) }}
                         </a>
                         @endfor
                 </div>

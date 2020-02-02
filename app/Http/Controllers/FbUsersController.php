@@ -2,20 +2,36 @@
 
 namespace NUSWhispers\Http\Controllers;
 
+use Facebook\Exceptions\FacebookSDKException;
+use Facebook\Facebook;
 use NUSWhispers\Models\Confession;
 use NUSWhispers\Models\FbUser;
-use SammyK\LaravelFacebookSdk\FacebookFacade as Facebook;
 
 class FbUsersController extends Controller
 {
+    /**
+     * @var \Facebook\Facebook
+     */
+    protected $fb;
+
+    /**
+     * Constructs an instance of the controller.
+     *
+     * @param \Facebook\Facebook $fb
+     */
+    public function __construct(Facebook $fb)
+    {
+        $this->fb = $fb;
+    }
+
     // use Facebook access token to login user
     public function postLogin()
     {
         if (request()->input('fb_access_token')) {
             $accessToken = request()->input('fb_access_token');
             try {
-                $response = Facebook::get('/me?fields=id', $accessToken);
-                $fbUserId = $response->getGraphUser()->getProperty('id');
+                $response = $this->fb->get('/me?fields=id', $accessToken);
+                $fbUserId = $response->getGraphUser()->getField('id');
                 $fbUser = FbUser::firstOrNew(['fb_user_id' => $fbUserId]);
 
                 if ($fbUser->save()) {
@@ -23,7 +39,7 @@ class FbUsersController extends Controller
 
                     return response()->json(['success' => true]);
                 }
-            } catch (\Facebook\Exceptions\FacebookSDKException $e) {
+            } catch (FacebookSDKException $e) {
                 return response()->json(['success' => false, 'errors' => [$e->getMessage()]]);
             }
         }
