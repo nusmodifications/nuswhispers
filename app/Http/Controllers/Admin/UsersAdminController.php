@@ -119,7 +119,7 @@ class UsersAdminController extends AdminController
      */
     public function getDelete(User $user)
     {
-        if (Gate::denies($user, 'delete')) {
+        if (Gate::denies('delete', $user)) {
             return $this->backWithError('You are not allowed to delete the user.');
         }
 
