@@ -21,7 +21,7 @@ class SyncConfessionTagsTest extends TestCase
     public function testHandle()
     {
         $confession = factory(\NUSWhispers\Models\Confession::class)->create([
-           'content' => 'Hello World #firstworldproblems',
+            'content' => 'Hello World #firstworldproblems',
         ]);
 
         $this->listener->handle(new ConfessionWasCreated($confession));
