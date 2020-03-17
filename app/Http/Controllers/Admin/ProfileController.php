@@ -2,13 +2,13 @@
 
 namespace NUSWhispers\Http\Controllers\Admin;
 
-use Facebook\Exceptions\FacebookResponseException;
 use Facebook\Facebook;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 use NUSWhispers\Models\UserProfile;
 use RuntimeException;
+use Throwable;
 
 class ProfileController extends AdminController
 {
@@ -128,7 +128,7 @@ class ProfileController extends AdminController
      * @param \NUSWhispers\Models\User user model
      * @param \Laravel\Socialite\Two\User $oauthUser oAuth user object
      *
-     * @throws \Facebook\Exceptions\FacebookSDKException
+     * @throws \Throwable
      */
     protected function addProfile($provider, $user, $oauthUser): void
     {
@@ -136,24 +136,28 @@ class ProfileController extends AdminController
         $token = $oauthUser->token;
 
         if ($provider === 'facebook') {
-            // Extend current token to long-lived access token.
-            /** @var \Facebook\FacebookResponse $response */
-            $response = $this->fb->get('/oauth/access_token?client_id=' . urlencode(env('FACEBOOK_APP_ID')) . '&client_secret=' . urlencode(env('FACEBOOK_APP_SECRET')) . '&grant_type=fb_exchange_token&fb_exchange_token=' . urlencode($oauthUser->token), $token);
-
-            if (! isset($response->getDecodedBody()['access_token'])) {
-                throw new RuntimeException('User is not a page admin of Facebook page #' . env('FACEBOOK_PAGE_ID', '') . '.');
-            }
-
-            $token = $response->getDecodedBody()['access_token'];
-
-            // Get page token (never expires)
             try {
-                $response = $this->fb->get('/' . env('FACEBOOK_PAGE_ID', '') . '?fields=access_token', $token)->getGraphNode();
-            } catch (FacebookResponseException $e) {
-                throw new RuntimeException('User is not a page admin of Facebook page #' . env('FACEBOOK_PAGE_ID', '') . '.');
-            }
+                // Extend current token to long-lived access token.
+                /** @var \Facebook\FacebookResponse $response */
+                $response = $this->fb->get('/oauth/access_token?client_id=' . urlencode(env('FACEBOOK_APP_ID')) . '&client_secret=' . urlencode(env('FACEBOOK_APP_SECRET')) . '&grant_type=fb_exchange_token&fb_exchange_token=' . urlencode($oauthUser->token), $token);
 
-            $pageToken = $response['access_token'];
+                if (! isset($response->getDecodedBody()['access_token'])) {
+                    throw new RuntimeException('User is not a page admin of Facebook page #' . env('FACEBOOK_PAGE_ID', '') . '.');
+                }
+
+                $token = $response->getDecodedBody()['access_token'];
+
+                // Get page token (never expires)
+                $response = $this->fb->get('/' . env('FACEBOOK_PAGE_ID', '') . '?fields=access_token', $token)->getGraphNode();
+
+                $pageToken = $response['access_token'];
+            } catch (Throwable $e) {
+                logger()->error('Error trying to connect to Facebook', [
+                    'message' => $e->getMessage(),
+                    'error' => $e,
+                ]);
+                throw $e;
+            }
         }
 
         $user->profiles()->save(new UserProfile([
