@@ -82,8 +82,7 @@ class FacebookBatchProcessor
         $confessions->map(static function (Confession $confession) use ($responses) {
             $fbResponse = $responses[$confession->getAttribute('confession_id')]->getDecodedBody();
             $confession->setAttribute('status_updated_at_timestamp', $confession->status_updated_at->timestamp);
-            $confession->setAttribute('facebook_information', $fbResponse);
-
+            
             // Update image field with Facebook's image URL.
             if ($facebookImage = Arr::get($fbResponse, 'images.0.source')) {
                 $confession->setAttribute('images', $facebookImage);
