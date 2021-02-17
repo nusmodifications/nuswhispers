@@ -94,9 +94,13 @@ class ProfileController extends AdminController
             return redirect('/admin/profile');
         }
 
-        $scopes = $provider === 'facebook' ? ['manage_pages', 'publish_pages'] : [];
+        $socialite = Socialite::with($provider);
 
-        return Socialite::with($provider)->scopes($scopes)->redirect();
+        if ($provider === 'facebook') {
+            $socialite = $socialite->usingGraphVersion('v9.0')->scopes(['pages_manage_posts']);
+        }
+
+        return $socialite->redirect();
     }
 
     /**
