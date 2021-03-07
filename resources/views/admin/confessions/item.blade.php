@@ -24,7 +24,6 @@
             @endif
         </div>
         <div class="post-actions">
-            @if ($hasPageToken)
             @if ($confession->status !== 'Featured')
             <div class="btn-group">
                 <a class="btn btn-sm btn-primary" href="/admin/confessions/feature/{{ $confession->confession_id }}">
@@ -67,7 +66,6 @@
             <a class="btn btn-secondary btn-sm" href="/admin/confessions/reject/{{ $confession->confession_id }}">
                 Reject
             </a>
-            @endif
             @endif
             <a class="btn btn-secondary btn-sm" href="/admin/confessions/edit/{{ $confession->confession_id }}">
                 Edit
