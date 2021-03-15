@@ -164,9 +164,10 @@ class ConfessionsAdminController extends AdminController
      */
     protected function switchOrScheduleConfession(Request $request, Confession $confession, string $status, int $hours)
     {
-        if (! $this->userHasPageToken($request)) {
-            return $this->backWithError('You have not connected your account with Facebook.');
-        }
+        // Commenting out for now until we FB allows us to post to the page again.
+        // if (!$this->userHasPageToken($request)) {
+        //     return $this->backWithError('You have not connected your account with Facebook.');
+        // }
 
         return $this->withErrorHandling(function () use ($confession, $status, $hours) {
             if ($hours > 0) {
@@ -191,9 +192,10 @@ class ConfessionsAdminController extends AdminController
      */
     public function getUnfeature(Request $request, Confession $confession)
     {
-        if (! $this->userHasPageToken($request)) {
-            return $this->backWithError('You have not connected your account with Facebook.');
-        }
+        // Commenting out for now until we FB allows us to post to the page again.
+        // if (!$this->userHasPageToken($request)) {
+        //     return $this->backWithError('You have not connected your account with Facebook.');
+        // }
 
         return $this->withErrorHandling(function () use ($confession) {
             $this->service->updateStatus($confession, 'Approved');
@@ -212,9 +214,10 @@ class ConfessionsAdminController extends AdminController
      */
     public function getReject(Request $request, Confession $confession)
     {
-        if (! $this->userHasPageToken($request)) {
-            return $this->backWithError('You have not connected your account with Facebook.');
-        }
+        // Commenting out for now until we FB allows us to post to the page again.
+        // if (!$this->userHasPageToken($request)) {
+        //     return $this->backWithError('You have not connected your account with Facebook.');
+        // }
 
         return $this->withErrorHandling(function () use ($confession) {
             $this->service->updateStatus($confession, 'Rejected');
