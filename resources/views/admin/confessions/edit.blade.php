@@ -136,5 +136,5 @@ $nextStatus = $queue ? $queue->status_after : $confession->status;
 @endsection
 
 @push('scripts')
-<script src="{{ mix('assets/admin/confessions/edit.js') }}"></script>
+@vite('resources/js/confessions/edit.js')
 @endpush

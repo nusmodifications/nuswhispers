@@ -1,0 +1,10 @@
+{
+  "singleQuote": true,
+  "ignorePatterns": [
+    "**/dist/**",
+    "**/.void/**",
+    "**/node_modules/**",
+    "**/test-results/**",
+    "**/playwright-report/**"
+  ]
+}

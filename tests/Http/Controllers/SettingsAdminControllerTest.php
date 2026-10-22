@@ -10,7 +10,7 @@ class SettingsAdminControllerTest extends TestCase
 {
     public function testAdministratorCanViewExistingSettings(): void
     {
-        $this->withoutMix();
+        $this->withoutVite();
 
         Settings::set([
             'word_blacklist' => 'blocked, forbidden',

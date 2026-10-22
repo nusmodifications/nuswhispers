@@ -12,7 +12,7 @@ use NUSWhispers\Models\User;
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>@yield('title') &ndash; NUSWhispers Admin</title>
     <link rel="icon" href="favicon.ico"/>
-    <link rel="stylesheet" href="{{ mix('assets/admin/admin.css') }}"/>
+    @vite(['resources/sass/admin.scss', 'resources/js/admin.js'])
 </head>
 
 <body>
@@ -79,9 +79,6 @@ use NUSWhispers\Models\User;
     </div>
 </div>
 
-<script src="{{ mix('assets/admin/manifest.js') }}"></script>
-<script src="{{ mix('assets/admin/vendor.js') }}"></script>
-<script src="{{ mix('assets/admin/admin.js') }}"></script>
 
 @stack('scripts')
 

@@ -1,0 +1,35 @@
+{
+  "name": "@nuswhispers/web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build && node scripts/publish.mjs",
+    "dev": "vite --host 127.0.0.1",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --config vitest.config.ts",
+    "test:browser": "playwright test"
+  },
+  "dependencies": {
+    "@base-ui/react": "1.9.0",
+    "@hono/node-server": "2.1.5",
+    "@nkzw/fate": "1.11.0",
+    "filestack-js": "4.3.9",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "react-fate": "1.11.0",
+    "typicons.font": "2.1.2"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1",
+    "@tailwindcss/vite": "4.3.3",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@void/react": "1.2.1",
+    "tailwindcss": "4.3.3",
+    "typescript": "7.0.2",
+    "vite": "8.3.5",
+    "vitest": "5.0.5",
+    "void": "1.2.1"
+  }
+}

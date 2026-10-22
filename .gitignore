@@ -74,6 +74,15 @@ public/hot
 public/storage
 public/mix-manifest.json
 /stats.json
+/public/build
+/public/_void
+/frontend/dist
+/frontend/.void
+/frontend/.void-wrangler.jsonc
+/frontend/test-results
+/frontend/playwright-report
+.env.local
+.env.*.local
 
 # IDE Metadata
 .phpstorm.meta.php

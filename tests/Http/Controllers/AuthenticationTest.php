@@ -12,7 +12,7 @@ class AuthenticationTest extends TestCase
 {
     public function testExistingAdminAuthenticationStillWorks(): void
     {
-        $this->withoutMix();
+        $this->withoutVite();
 
         $user = User::factory()->admin()->create(['password' => Hash::make('existing-password')]);
 

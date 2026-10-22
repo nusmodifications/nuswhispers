@@ -86,5 +86,5 @@ use NUSWhispers\Models\Confession;
 @endsection
 
 @push('scripts')
-<script src="{{ mix('assets/admin/confessions/index.js') }}"></script>
+@vite('resources/js/confessions/index.js')
 @endpush

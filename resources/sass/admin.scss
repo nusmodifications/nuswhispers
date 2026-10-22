@@ -2,13 +2,13 @@
 @import 'variables';
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+@import 'bootstrap/scss/bootstrap';
 
 // Typicons
-@import '~typicons.font/src/font/typicons';
+@import 'typicons.font/src/font/typicons';
 
 // Daterangepicker
-@import '~daterangepicker/daterangepicker';
+@import 'daterangepicker/daterangepicker';
 
 a:hover {
   text-decoration: none;

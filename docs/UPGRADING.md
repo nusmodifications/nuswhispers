@@ -24,8 +24,8 @@ composer audit --locked
 php artisan migrate --database=testing --force
 composer analyse
 composer test
-npm ci --no-audit
-npm run production
+pnpm install --frozen-lockfile
+pnpm build
 ```
 
 Use an isolated database for testing. Fresh migrations were verified on MariaDB 10.3, and the upgraded application was also checked against a copy of the local Laravel 6 schema and seed data. This is not verification against a production database dump. No database migrations were added or changed for this upgrade.

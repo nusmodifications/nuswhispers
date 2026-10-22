@@ -21,7 +21,7 @@ Route::get('/confession/{id}', function ($id) {
     if ($isCrawler) {
         return App::make('NUSWhispers\Http\Controllers\RobotsController')->getConfession($id);
     } else {
-        return File::get(public_path() . '/app.html');
+        return App::make('NUSWhispers\Http\Controllers\FrontendController')->index(request());
     }
 });
 
@@ -29,12 +29,8 @@ Route::get('/confession/{id}', function ($id) {
 Auth::routes(['register' => false]);
 Route::get('logout', 'Auth\LoginController@logout');
 
-// Mobile submit page
-Route::get('/mobile_submit', function () {
-    return File::get(public_path() . '/mobile_submit.html');
-});
+// Static Void navigation data for dynamic category, tag, search and confession URLs.
+Route::get('/_void/pages/{path}', 'FrontendController@pageData')->where('path', '.*');
 
-// Reroute everything else to angular
-Route::fallback(function () {
-    return File::get(public_path() . '/app.html');
-});
+// Nginx serves generated assets directly; Laravel serves the public application shell.
+Route::fallback('FrontendController@index');

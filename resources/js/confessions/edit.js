@@ -1,8 +1,12 @@
+import $ from 'jquery';
+import moment from 'moment';
+import '../admin';
+
 const $scheduled = $('.scheduled-form-group');
 
 const format = 'D MMM YYYY h:mm A';
 
-$('select[name="status"]').on('change', evt => {
+$('select[name="status"]').on('change', (evt) => {
   if (['Featured', 'Approved'].indexOf($(evt.currentTarget).val()) !== -1) {
     $scheduled.removeClass('d-none');
   } else {

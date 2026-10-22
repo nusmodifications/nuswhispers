@@ -1,0 +1,19 @@
+packages:
+  - frontend
+
+allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true
+  workerd: true
+
+minimumReleaseAgeExclude:
+  - '@void/deploy-cloudflare@1.2.1'
+  - '@void/deploy-core@1.2.1'
+  - '@void/edge@1.2.1'
+  - '@void/isr@1.2.1'
+  - '@void/platform@1.2.1'
+  - '@void/react@1.2.1'
+  - 'void@1.2.1'
+  - '@nkzw/fate@1.11.0'
+  - react-fate@1.11.0
+  - sass@1.106.1
