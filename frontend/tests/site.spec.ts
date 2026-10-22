@@ -78,26 +78,54 @@ test('renders safe content, shares, pagination, and native Void navigation', asy
   expect(errors).toEqual([]);
 });
 
-test('deep links, encoded search, old hash links, and history work', async ({ page }) => {
+test('deep links, encoded search, old hash links, and history work', async ({
+  page,
+  isMobile,
+}, testInfo) => {
   await page.goto('/category/7/');
   await expect(page.getByRole('article').first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Life', exact: true })).toBeVisible();
+  if (isMobile) {
+    await page.getByRole('button', { name: 'Open navigation' }).click();
+    await page.getByRole('dialog').getByRole('link', { name: 'Search confessions' }).click();
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+  } else {
+    await page.getByRole('link', { name: 'Search confessions', exact: true }).click();
+  }
+  await expect(page.getByRole('searchbox')).toBeFocused();
+  await expect(page.getByText('Start with a word, a phrase or a confession number.')).toBeVisible();
+  await expect(page.getByRole('article')).toHaveCount(0);
   await page.getByRole('searchbox').fill('hello & #world');
   await page.getByRole('searchbox').press('Enter');
   await expect(page).toHaveURL(/\/search\/hello%20%26%20%23world\/?$/);
   await expect(page.getByRole('article').first()).toBeVisible();
   await page.goBack();
+  await expect(page).toHaveURL(/\/search\/?$/);
+  await page.goBack();
   await expect(page).toHaveURL(/\/category\/7\/?$/);
   await page.goto('/#!tag/nus');
   await expect(page).toHaveURL(/\/tag\/nus\/?$/);
   await expect(page.getByRole('article').first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: '#nus', exact: true })).toBeVisible();
   await page.goto('/mobile_submit');
-  await expect(page.getByRole('heading', { name: 'Submit a Confession' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Got something on your mind?' })).toBeVisible();
   await page.goto('/policy/');
   await expect(page.getByRole('heading', { name: 'Privacy Policy', exact: true })).toBeVisible();
+  await page.goto('/search/');
+  const searchbox = page.getByRole('searchbox');
+  await expect(searchbox).toBeFocused();
+  await expect(searchbox).toHaveCSS('outline-style', 'none');
+  await expect(
+    page.getByRole('navigation', { name: 'Main navigation', exact: true }).getByRole('link', {
+      name: 'Featured',
+      exact: true,
+    }),
+  ).toHaveAttribute('href', '/');
+  await page.screenshot({ path: testInfo.outputPath('search.png'), fullPage: true });
 });
 
 test('navigation is accessible on the current viewport', async ({ page, isMobile }, testInfo) => {
-  await page.goto('/home/');
+  await page.goto('/');
   if (isMobile) {
     await page.getByRole('button', { name: 'Open navigation' }).click();
     await expect(page.getByRole('dialog')).toBeVisible();
@@ -121,7 +149,7 @@ test('API errors are recoverable and do not block navigation', async ({ page }) 
   await page.goto('/favourites/');
   await expect(page.getByRole('alert')).toContainText('User not logged in.');
   await page.getByRole('link', { name: 'Post Confession', exact: true }).last().click();
-  await expect(page.getByRole('heading', { name: 'Submit a Confession' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Got something on your mind?' })).toBeVisible();
 });
 
 test('submits through Fate, retries validation errors, and preserves the daily limit', async ({
@@ -156,18 +184,18 @@ test('submits through Fate, retries validation errors, and preserves the daily l
     return route.fulfill({ json: { success: true, 'browser-test-fingerprint': 'new-token' } });
   });
   await page.goto('/submit/');
-  await page.getByLabel('Your Story').fill('  nus whispers and nus mods #nus  ');
+  await page.getByLabel('Your story').fill('  nus whispers and nus mods #nus  ');
   await page.getByRole('checkbox', { name: 'Life' }).check();
   await page.getByRole('button', { name: 'Complete test CAPTCHA' }).click();
-  await page.getByRole('button', { name: 'Submit', exact: true }).click();
+  await page.getByRole('button', { name: 'Send it our way', exact: true }).click();
   await expect(page.getByRole('alert')).toContainText('Please try reCAPTCHA again.');
   expect(await page.evaluate(() => localStorage.getItem('nuswhispers.confessionLimit.count'))).toBe(
     '3',
   );
-  await expect(page.getByRole('button', { name: 'Submit', exact: true })).toBeDisabled();
+  await expect(page.getByRole('button', { name: 'Send it our way', exact: true })).toBeDisabled();
   await page.getByRole('button', { name: 'Complete test CAPTCHA' }).click();
   await page.screenshot({ path: testInfo.outputPath('submit.png'), fullPage: true });
-  await page.getByRole('button', { name: 'Submit', exact: true }).click();
+  await page.getByRole('button', { name: 'Send it our way', exact: true }).click();
   await expect(page.getByRole('status')).toContainText('Thanks for telling us your story!');
   expect(submissions[1].get('content')).toBe('NUSWhispers and NUSMods #nus');
   expect(submissions[1].get('categories[0]')).toBe('7');
@@ -180,16 +208,72 @@ test('submits through Fate, retries validation errors, and preserves the daily l
   ).toBe('"new-token"');
 });
 
-test('slow initial feeds keep the same pagination timestamp', async ({ page }) => {
+test('slow initial feeds keep the same pagination timestamp', async ({ page }, testInfo) => {
   const requests: string[] = [];
   await page.route('**/api/confessions?**', async (route) => {
     requests.push(route.request().url());
     await new Promise((resolve) => setTimeout(resolve, 1250));
     return route.fulfill({ json: { data: { confessions: [story(1)] } } });
   });
-  await page.goto('/home/');
+  await page.goto('/');
+  const loading = page.getByRole('status').filter({ hasText: 'Loading confessions…' });
+  await expect(loading).toBeVisible();
+  await page.screenshot({ path: testInfo.outputPath('loading.png'), animations: 'disabled' });
   await expect(page.getByRole('article')).toHaveCount(1);
+  await expect(loading).toHaveCount(0);
   expect(requests).toHaveLength(1);
+});
+
+test('category headings retain their layout while the title and feed load', async ({
+  page,
+}, testInfo) => {
+  let releaseCategories: (() => void) | undefined;
+  let releaseFeed: (() => void) | undefined;
+  const categoriesPending = new Promise<void>((resolve) => {
+    releaseCategories = resolve;
+  });
+  const feedPending = new Promise<void>((resolve) => {
+    releaseFeed = resolve;
+  });
+  await page.route('**/api/categories', async (route) => {
+    await categoriesPending;
+    await route.fallback();
+  });
+  await page.route('**/api/confessions/category/7?**', async (route) => {
+    await feedPending;
+    await route.fulfill({ json: { data: { confessions: [story(1)] } } });
+  });
+  try {
+    await page.goto('/category/7/');
+    const main = page.getByRole('main');
+    const loading = main.getByRole('status').filter({ hasText: 'Loading confessions…' });
+    await expect(main.getByRole('heading', { name: 'Loading category…' })).toBeVisible();
+    await expect(main.getByText('Stories from around campus.')).toBeVisible();
+    await expect(loading).toBeVisible();
+    const initialFeedTop = (await loading.boundingBox())?.y;
+    await page.screenshot({
+      path: testInfo.outputPath('category-title-loading.png'),
+      animations: 'disabled',
+    });
+
+    releaseCategories?.();
+    await expect(main.getByRole('heading', { name: 'Life', exact: true })).toBeVisible();
+    await expect(loading).toBeVisible();
+    expect((await loading.boundingBox())?.y).toBe(initialFeedTop);
+    await page.screenshot({
+      path: testInfo.outputPath('category-loading.png'),
+      animations: 'disabled',
+    });
+
+    releaseFeed?.();
+    await expect(main.getByRole('article')).toHaveCount(1);
+    await expect(loading).toHaveCount(0);
+    expect((await main.getByRole('article').boundingBox())?.y).toBe(initialFeedTop);
+    await expect(main.getByRole('heading', { name: 'Life', exact: true })).toHaveCount(1);
+  } finally {
+    releaseCategories?.();
+    releaseFeed?.();
+  }
 });
 
 test('a failed later page retains the feed and can be retried', async ({ page }) => {

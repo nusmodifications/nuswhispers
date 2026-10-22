@@ -16,7 +16,7 @@ function decode(value: string) {
 export function legacyPath(hash: string): string | null {
   if (!hash.startsWith('#!')) return null;
   const path = hash.slice(2).replace(/^\/+/, '');
-  return path ? `/${path}` : '/home/';
+  return !path || /^home\/*$/.test(path) ? '/' : `/${path}`;
 }
 
 export function parseRoute(url: string | URL): PageRoute {
@@ -29,6 +29,7 @@ export function parseRoute(url: string | URL): PageRoute {
     '/submit': { kind: 'submit' },
     '/mobile_submit': { kind: 'submit' },
     '/policy': { kind: 'policy' },
+    '/search': { kind: 'search' },
     '/favourites': { kind: 'favourites' },
   };
   if (names[pathname]) return names[pathname];

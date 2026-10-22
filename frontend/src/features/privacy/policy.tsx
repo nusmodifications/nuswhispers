@@ -1,8 +1,8 @@
-export default function Policy() {
+export function Policy() {
   return (
     <>
-      <h1 className="fancy-header">Privacy Policy</h1>
-      <div className="privacy-content">
+      <h1 className="mb-5 px-1 text-2xl leading-tight font-normal sm:px-0">Privacy Policy</h1>
+      <div className="bg-white p-5 text-sm leading-7 sm:p-6 [&_h2]:mt-6 [&_h2]:mb-3 [&_h2]:text-base [&_h2]:font-medium [&_p+p]:mt-4 [&_strong]:font-medium">
         <p>
           Our Privacy Policy was last updated and posted on 30 April 2015. It governs the privacy
           terms of our Website, located at www.nuswhispers.com. This page informs you of our

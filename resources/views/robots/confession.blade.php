@@ -27,8 +27,8 @@
   <meta name="twitter:description" content="{{ $confession->content }}" />
   <meta name="twitter:url" content="<?php echo url('confession', $confession->confession_id) ?>" />
 
-  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="16x16 32x32 48x48">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any">
   <base href="/">
 </head>
 <body>

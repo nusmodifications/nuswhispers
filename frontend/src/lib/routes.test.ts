@@ -10,6 +10,7 @@ describe('public URLs', () => {
     ['/mobile_submit', 'submit'],
     ['/submit/', 'submit'],
     ['/policy/', 'policy'],
+    ['/search/', 'search'],
     ['/confession/123/', 'single'],
     ['/favourites/', 'favourites'],
     ['/unknown/', 'not-found'],
@@ -22,6 +23,8 @@ describe('public URLs', () => {
     );
     expect(legacyPath('#!tag/nus')).toBe('/tag/nus');
     expect(legacyPath('#!/submit')).toBe('/submit');
+    expect(legacyPath('#!')).toBe('/');
+    expect(legacyPath('#!/home/')).toBe('/');
     expect(legacyPath('#story')).toBeNull();
   });
   it('only renders safe external image and link protocols', () => {

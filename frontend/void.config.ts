@@ -19,9 +19,10 @@ export default defineConfig({
       { property: 'og:image', content: 'https://nuswhispers.com/favicon-512x512.png' },
     ],
     link: [
-      { rel: 'icon', href: '/favicon.ico' },
+      { rel: 'icon', href: '/favicon.ico', sizes: '16x16 32x32 48x48' },
+      { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml', sizes: 'any' },
       { rel: 'manifest', href: '/manifest.json' },
-      { rel: 'apple-touch-icon', href: '/apple-icon-180x180.png' },
+      { rel: 'apple-touch-icon', href: '/apple-icon-180x180.png', sizes: '180x180' },
     ],
   },
 });

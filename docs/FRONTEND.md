@@ -2,9 +2,24 @@
 
 The public website is a client-rendered React application built with Void's Pages Router and `output: 'static'`. It uses TypeScript, Tailwind, Base UI, and Fate. The PHP API, crawler previews, authentication, moderation, and database stay in Laravel. The admin stays Blade/jQuery/Bootstrap; Vite builds its existing assets into `public/build`. Public submissions contain text and categories; file uploads have been removed, including the legacy `/api/images` endpoint. Existing confession images continue to display.
 
+## Source organization
+
+Within `frontend/src/`:
+
+- `app.tsx` composes the application, routing, and Fate provider.
+- `features/confessions/` owns feeds, confession cards, and search.
+- `features/submissions/` owns the submission form, CAPTCHA, and submission storage.
+- `features/privacy/` owns the privacy policy page.
+- `layout/` owns the site header, navigation, and sidebar.
+- `components/` contains shared UI and loading states.
+- `lib/` contains the API adapter, request hook, configuration, and route utilities.
+- `assets/` and `styles.css` contain brand assets, fonts, and global Tailwind setup.
+
+Unit tests live beside their modules. Use direct imports, lowercase filenames, and named exports. The Void route entry points in `frontend/pages/` re-export the application as the framework-required default export.
+
 ## Data fetching
 
-`frontend/src/api.ts` defines the views, typed roots, mutations, and custom Fate transport. It adapts the existing REST envelopes to Fate's normalized cache. No Fate server or generated backend module is required. Confession connections translate Fate's `after` cursor into Laravel's offset, retaining the same timestamp while loading subsequent pages. Submissions keep Laravel's form encoding, CAPTCHA validation, fingerprint field, and error messages.
+`frontend/src/lib/api.ts` defines the views, typed roots, mutations, and custom Fate transport. It adapts the existing REST envelopes to Fate's normalized cache. No Fate server or generated backend module is required. Confession connections translate Fate's `after` cursor into Laravel's offset, retaining the same timestamp while loading subsequent pages. Submissions keep Laravel's form encoding, CAPTCHA validation, fingerprint field, and error messages.
 
 User content renders as React text, with separate links for hashtags and HTTP(S) URLs. The client keeps the existing `nuswhispers.*` local-storage keys for submission limits and fingerprint tokens. The limit is decremented only after a successful submission.
 
@@ -48,7 +63,7 @@ Include all five outputs together in a new release. Do not copy `frontend/dist/s
 
 Nginx keeps the current document root (`public`) and `try_files $uri $uri/ /index.php?$query_string`. It serves existing assets and JSON files directly. Laravel's `FrontendController` serves the root or catch-all HTML shell for other URLs, and a fixed catch-all JSON payload for dynamic Void navigation requests. The browser's actual URL determines the React screen; the static shell's prerender parameters are not used. No confession list is fetched during a build.
 
-Direct reloads and client navigation support `/home/`, `/popular/`, `/latest/`, `/category/:id/`, `/tag/:tag/`, `/search/:query/`, `/confession/:id/`, `/favourites/`, `/submit/`, `/mobile_submit`, and `/policy/`. Old `#!` links are converted in the browser. The existing Laravel confession route still returns crawler metadata to Facebook/search bots. API and admin routes retain priority over the SPA fallback.
+The Featured feed lives at `/`. Direct reloads and client navigation also support `/popular/`, `/latest/`, `/category/:id/`, `/tag/:tag/`, `/search/`, `/search/:query/`, `/confession/:id/`, `/favourites/`, `/submit/`, `/mobile_submit`, and `/policy/`. The old `/home/` URL remains an alias. Old `#!` links are converted in the browser. The existing Laravel confession route still returns crawler metadata to Facebook/search bots. API and admin routes retain priority over the SPA fallback.
 
 Deploy PHP routes/views and generated assets as one release, using the existing release symlink process. Before switching, check the build keys, asset responses, direct deep links, admin login/date pickers, and real reCAPTCHA against an isolated environment. This frontend change requires no database migration.
 

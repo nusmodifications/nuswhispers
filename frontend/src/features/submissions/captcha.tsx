@@ -1,5 +1,5 @@
 import { useEffect, useEffectEvent, useRef, useState } from 'react';
-import { config } from './config';
+import { config } from '../../lib/config';
 
 type Recaptcha = {
   ready: (callback: () => void) => void;
@@ -41,7 +41,7 @@ function loadCaptcha(): Promise<Recaptcha> {
   return loading;
 }
 
-export default function Captcha({
+export function Captcha({
   onChange,
   resetKey,
 }: {
