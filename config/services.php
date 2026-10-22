@@ -61,9 +61,4 @@ return [
         'redirect' => env('APP_URL', 'http://www.nuswhispers.com') . '/admin/profile/connect/facebook',
     ],
 
-    'imgur' => [
-        'client_id' => env('IMGUR_CLIENT_ID', ''),
-        'client_secret' => env('IMGUR_CLIENT_SECRET', ''),
-    ],
-
 ];

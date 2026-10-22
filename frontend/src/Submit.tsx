@@ -7,7 +7,6 @@ import { CategoryView, type AppSchema } from './api';
 import Captcha from './Captcha';
 import { Icon } from './components';
 import { config } from './config';
-import { safeUrl } from './routes';
 import {
   normalizeStory,
   recall,
@@ -22,36 +21,13 @@ export default function Submit() {
   const { categories: categoryRefs } = useAppRequest({ categories: { list: CategoryView } });
   const categories = useViews(CategoryView, categoryRefs);
   const [content, setContent] = useState('');
-  const [image, setImage] = useState('');
   const [selected, setSelected] = useState<string[]>([]);
   const [captcha, setCaptcha] = useState('');
   const [resetKey, setResetKey] = useState(0);
   const [pending, setPending] = useState(false);
-  const [uploading, setUploading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
   const [remaining, setRemaining] = useState(remainingSubmissions);
-
-  async function upload() {
-    setUploading(true);
-    setError('');
-    try {
-      const { init } = await import('filestack-js');
-      const picker = init(config.filestackKey).picker({
-        accept: ['image/*'],
-        maxFiles: 1,
-        onFileUploadFinished: (file) => {
-          const url = safeUrl(file.url);
-          if (url) setImage(url);
-        },
-      });
-      await picker.open();
-    } catch {
-      setError('Could not open the image picker. Please try again.');
-    } finally {
-      setUploading(false);
-    }
-  }
 
   async function submit(event: FormEvent) {
     event.preventDefault();
@@ -72,7 +48,6 @@ export default function Submit() {
           content: story,
           categories: selected,
           captcha,
-          image: image || undefined,
           fingerprint: recall(config.fingerprintStorageKey),
         },
       });
@@ -107,7 +82,6 @@ export default function Submit() {
               setSuccess(false);
               setContent('');
               setSelected([]);
-              setImage('');
             }}
           >
             write another confession
@@ -160,21 +134,6 @@ export default function Submit() {
           required
           rows={6}
         />
-        <div className="mt-4 flex flex-wrap items-center gap-2">
-          <Button className="button" disabled={!config.filestackKey || uploading} onClick={upload}>
-            <Icon name="image" />{' '}
-            {uploading ? 'Opening…' : image ? 'Choose Another Image' : 'Choose an Image'}
-          </Button>
-          <span className="text-[#8e8e8e]">You may add a suitable image to express yourself</span>
-        </div>
-        {image && (
-          <div className="mt-3 flex items-center gap-3">
-            <img className="w-24" src={image} alt="Selected attachment" />
-            <Button onClick={() => setImage('')} className="text-brand underline">
-              Remove image
-            </Button>
-          </div>
-        )}
       </div>
       <fieldset className="form-section">
         <legend className="sr-only">Category</legend>

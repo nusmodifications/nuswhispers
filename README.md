@@ -81,7 +81,7 @@ pnpm build
 
 Oxlint, Oxfmt, TypeScript, Vitest transport tests, and both production builds run in CI. Browser tests are available separately: run `pnpm --filter @nuswhispers/web exec playwright install chromium`, then `pnpm test:browser`. They use local API and CAPTCHA fixtures, with desktop and mobile viewports.
 
-PHPStan runs at level 5 with Larastan, Mockery support, and deprecated API checks over `app/` and `tests/`. Coverage requires PCOV or Xdebug; use `composer test -- --no-coverage` when neither is installed. The live Imgur upload test remains skipped.
+PHPStan runs at level 5 with Larastan, Mockery support, and deprecated API checks over `app/` and `tests/`. Coverage requires PCOV or Xdebug; use `composer test -- --no-coverage` when neither is installed.
 
 ## Sponsors
 

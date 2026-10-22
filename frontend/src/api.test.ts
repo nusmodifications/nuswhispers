@@ -71,7 +71,6 @@ describe('Laravel Fate transport', () => {
       input: {
         content: 'Hello & goodbye',
         captcha: 'captcha',
-        image: 'https://example.com/pic.png',
         categories: ['2', '7'],
       },
     });
@@ -81,7 +80,6 @@ describe('Laravel Fate transport', () => {
     expect(Object.fromEntries(options?.body as URLSearchParams)).toEqual({
       content: 'Hello & goodbye',
       captcha: 'captcha',
-      image: 'https://example.com/pic.png',
       'categories[0]': '2',
       'categories[1]': '7',
     });

@@ -51,7 +51,6 @@ export type Submission = {
   content: string;
   categories: string[];
   captcha: string;
-  image?: string;
   fingerprint?: string;
 };
 type Mutations = {
@@ -201,7 +200,6 @@ export function createLaravelTransport(
         path = '/confessions';
         data.set('content', submission.content);
         data.set('captcha', submission.captcha);
-        if (submission.image) data.set('image', submission.image);
         submission.categories.forEach((id, index) => data.append(`categories[${index}]`, id));
         if (config.fingerprintApiKey && submission.fingerprint)
           data.set(config.fingerprintApiKey, submission.fingerprint);

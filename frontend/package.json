@@ -13,7 +13,6 @@
     "@base-ui/react": "1.9.0",
     "@hono/node-server": "2.1.5",
     "@nkzw/fate": "1.11.0",
-    "filestack-js": "4.3.9",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "react-fate": "1.11.0",

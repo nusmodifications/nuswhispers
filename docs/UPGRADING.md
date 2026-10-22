@@ -30,7 +30,7 @@ pnpm build
 
 Use an isolated database for testing. Fresh migrations were verified on MariaDB 10.3, and the upgraded application was also checked against a copy of the local Laravel 6 schema and seed data. This is not verification against a production database dump. No database migrations were added or changed for this upgrade.
 
-Tests cover API date serialization and file caching, existing authentication and password resets, moderation and scheduling, and Facebook SDK posting, batch responses, and error handling using simulated HTTP responses. Live Facebook, reCAPTCHA, Imgur, and mail delivery still require staging verification with appropriate credentials. The existing live Imgur test is intentionally disabled.
+Tests cover API date serialization and file caching, existing authentication and password resets, moderation and scheduling, and Facebook SDK posting, batch responses, and error handling using simulated HTTP responses. Live Facebook, reCAPTCHA, and mail delivery still require staging verification with appropriate credentials.
 
 ## Existing deployment
 

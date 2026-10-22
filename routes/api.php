@@ -24,8 +24,6 @@ Route::resource('confessions', 'ConfessionsController', ['only' => ['index', 'st
 
 Route::resource('categories', 'CategoriesController', ['only' => ['index', 'show']]);
 
-Route::resource('images', 'ImagesController', ['only' => ['store']])->middleware('throttle:5,1');
-
 Route::name('tags.')->prefix('tags')->group(function () {
     Route::get('top/{num}', 'TagsController@topNTags')->name('top');
 });

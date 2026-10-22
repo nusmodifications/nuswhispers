@@ -1,6 +1,6 @@
 # Public frontend
 
-The public website is a client-rendered React application built with Void's Pages Router and `output: 'static'`. It uses TypeScript, Tailwind, Base UI, and Fate. The PHP API, crawler previews, authentication, moderation, database, and uploads stay in Laravel. The admin stays Blade/jQuery/Bootstrap; Vite builds its existing assets into `public/build`.
+The public website is a client-rendered React application built with Void's Pages Router and `output: 'static'`. It uses TypeScript, Tailwind, Base UI, and Fate. The PHP API, crawler previews, authentication, moderation, and database stay in Laravel. The admin stays Blade/jQuery/Bootstrap; Vite builds its existing assets into `public/build`. Public submissions contain text and categories; file uploads have been removed, including the legacy `/api/images` endpoint. Existing confession images continue to display.
 
 ## Data fetching
 
@@ -19,12 +19,11 @@ Set these public values before `pnpm build`; Vite embeds them in the static bund
 | `VITE_API_URL`                 | REST base URL; defaults to `/api` (`API_URL`)                                                                                |
 | `VITE_API_PROXY`               | Development proxy target only; defaults to `http://127.0.0.1:8000`                                                           |
 | `VITE_FB_PAGE_ID`              | Facebook page ID for confession permalinks (`FB_PAGE_ID`)                                                                    |
-| `VITE_FILESTACK_KEY`           | Public Filestack picker key (`FILESTACK_KEY`); image button is disabled without it                                           |
 | `VITE_RECAPTCHA_KEY`           | Public reCAPTCHA v2 site key (`RECAPTCHA_KEY`); submission is disabled without it                                            |
 | `VITE_FINGERPRINT_API_KEY`     | Public request/response field name (`FINGERPRINT_API_KEY`); must match Laravel's `FINGERPRINT_KEY` or its configured default |
 | `VITE_FINGERPRINT_STORAGE_KEY` | Preserve the previous public frontend value (`FINGERPRINT_STORAGE_KEY`) so existing browser tokens survive                   |
 
-The Facebook JavaScript SDK and its `FB_APP_ID` build setting are no longer needed for the page widget or share links. The old Universal Analytics tracking tag is omitted; a replacement analytics integration is outside this migration. Filestack loads only when the user opens the image picker; reCAPTCHA loads only on submission pages. Keep `RECAPTCHA_SECRET`, Facebook app secrets/page tokens, database passwords, and `APP_KEY` outside `VITE_*` variables.
+The Facebook JavaScript SDK and its `FB_APP_ID` build setting are no longer needed for the page widget or share links. The old Universal Analytics tracking tag is omitted; a replacement analytics integration is outside this migration. reCAPTCHA loads only on submission pages. Keep `RECAPTCHA_SECRET`, Facebook app secrets/page tokens, database passwords, and `APP_KEY` outside `VITE_*` variables.
 
 Node is needed to build the release, including Void's prerender step. It is not a production web server requirement. Use the pinned Node version from `.node-version` and pnpm from `package.json`:
 
@@ -51,7 +50,7 @@ Nginx keeps the current document root (`public`) and `try_files $uri $uri/ /inde
 
 Direct reloads and client navigation support `/home/`, `/popular/`, `/latest/`, `/category/:id/`, `/tag/:tag/`, `/search/:query/`, `/confession/:id/`, `/favourites/`, `/submit/`, `/mobile_submit`, and `/policy/`. Old `#!` links are converted in the browser. The existing Laravel confession route still returns crawler metadata to Facebook/search bots. API and admin routes retain priority over the SPA fallback.
 
-Deploy PHP routes/views and generated assets as one release, using the existing release symlink process. Before switching, check the build keys, asset responses, direct deep links, admin login/date pickers, real reCAPTCHA, and the Filestack picker against an isolated environment. This frontend change requires no database migration.
+Deploy PHP routes/views and generated assets as one release, using the existing release symlink process. Before switching, check the build keys, asset responses, direct deep links, admin login/date pickers, and real reCAPTCHA against an isolated environment. This frontend change requires no database migration.
 
 ## Browser verification
 
