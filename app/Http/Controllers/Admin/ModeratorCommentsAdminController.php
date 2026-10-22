@@ -39,6 +39,6 @@ class ModeratorCommentsAdminController extends AdminController
     protected function canDeleteComment(Request $request, ModeratorComment $comment): bool
     {
         return $request->user()->role === 'Administrator' ||
-            $request->user()->user_id !== $comment->user_id;
+            (string) $request->user()->user_id === (string) $comment->user_id;
     }
 }
