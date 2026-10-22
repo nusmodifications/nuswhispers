@@ -1,11 +1,22 @@
 <?php
 
-$factory->define(\NUSWhispers\Models\UserProfile::class, function ($faker) {
-    return [
-        'user_id' => function () {
-            return factory(\NUSWhispers\Models\User::class)->create()->getKey();
-        },
-        'provider_name' => $faker->word . microtime(),
-        'provider_id' => $faker->word,
-    ];
-});
+namespace Database\Factories;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+use NUSWhispers\Models\User;
+use NUSWhispers\Models\UserProfile;
+
+/** @extends Factory<UserProfile> */
+class UserProfileFactory extends Factory
+{
+    protected $model = UserProfile::class;
+
+    public function definition(): array
+    {
+        return [
+            'user_id' => User::factory(),
+            'provider_name' => $this->faker->unique()->word,
+            'provider_id' => $this->faker->word,
+        ];
+    }
+}

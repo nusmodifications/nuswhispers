@@ -26,7 +26,7 @@ class FacebookBatchProcessor
     /**
      * Creates a new FacebookBatchProcessor instance.
      *
-     * @param \Facebook\Facebook $fb
+     * @param  \Facebook\Facebook  $fb
      */
     public function __construct(Facebook $fb)
     {
@@ -36,10 +36,10 @@ class FacebookBatchProcessor
     /**
      * Requests information from Facebook about the confession.
      *
-     * @param \NUSWhispers\Models\Confession $confession
-     *
+     * @param  \NUSWhispers\Models\Confession  $confession
      * @return \NUSWhispers\Models\Confession $confession
-     * @throws \Facebook\Exceptions\FacebookSDKException
+     *
+     * @throws \Facebook\Exception\SDKException
      */
     public function processConfession(Confession $confession): Confession
     {
@@ -53,10 +53,10 @@ class FacebookBatchProcessor
      * Batch requests information from Facebook about the confessions.
      * This is faster than individually sending a request per confession.
      *
-     * @param \Illuminate\Support\Collection $confessions List of confessions.
-     *
+     * @param  \Illuminate\Support\Collection  $confessions  List of confessions.
      * @return \Illuminate\Support\Collection List of processed confessions.
-     * @throws \Facebook\Exceptions\FacebookSDKException
+     *
+     * @throws \Facebook\Exception\SDKException
      */
     public function processConfessions(Collection $confessions): Collection
     {
@@ -95,8 +95,7 @@ class FacebookBatchProcessor
     /**
      * Parse the correct Facebook post ID to pass in through.
      *
-     * @param \NUSWhispers\Models\Confession $confession
-     *
+     * @param  \NUSWhispers\Models\Confession  $confession
      * @return mixed|string
      */
     protected function parseFacebookPostId(Confession $confession)

@@ -10,8 +10,7 @@ class ApiKeysAdminController extends AdminController
     /**
      * Deletes an API key.
      *
-     * @param \NUSWhispers\Models\ApiKey $key
-     *
+     * @param  \NUSWhispers\Models\ApiKey  $key
      * @return mixed
      */
     public function getDelete(ApiKey $key)
@@ -38,8 +37,7 @@ class ApiKeysAdminController extends AdminController
     /**
      * Adds a new API key.
      *
-     * @param \Illuminate\Http\Request $request
-     *
+     * @param  \Illuminate\Http\Request  $request
      * @return mixed
      */
     public function getAdd(Request $request)

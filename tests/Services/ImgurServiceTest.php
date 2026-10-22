@@ -23,6 +23,7 @@ class ImgurServiceTest extends TestCase
     {
         $this->markTestSkipped();
 
+        // @phpstan-ignore deadCode.unreachable (Live uploads are intentionally disabled.)
         $url = $this->service->upload(new UploadedFile(__DIR__ . '/test.jpg', 'test.jpg'));
 
         $this->assertStringStartsWith('https', $url);

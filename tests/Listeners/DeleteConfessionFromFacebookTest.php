@@ -31,10 +31,9 @@ class DeleteConfessionFromFacebookTest extends TestCase
         Mockery::close();
     }
 
-    /** @test */
     public function testHandleUnpublishedConfession()
     {
-        $confession = factory(Confession::class)->create([
+        $confession = Confession::factory()->create([
             'fb_post_id' => '',
         ]);
 
@@ -43,12 +42,11 @@ class DeleteConfessionFromFacebookTest extends TestCase
         $this->listener->handle(new ConfessionWasDeleted($confession));
     }
 
-    /** @test */
     public function testHandleManualMode()
     {
         $this->app['config']->set('app.manual_mode', true);
 
-        $confession = factory(Confession::class)->create([
+        $confession = Confession::factory()->create([
             'fb_post_id' => '123',
         ]);
 
@@ -57,10 +55,9 @@ class DeleteConfessionFromFacebookTest extends TestCase
         $this->listener->handle(new ConfessionWasDeleted($confession));
     }
 
-    /** @test */
     public function testHandleApproved()
     {
-        $confession = factory(Confession::class)->create([
+        $confession = Confession::factory()->create([
             'fb_post_id' => '123',
             'status' => 'Approved',
         ]);
@@ -70,10 +67,9 @@ class DeleteConfessionFromFacebookTest extends TestCase
         $this->listener->handle(new ConfessionWasDeleted($confession));
     }
 
-    /** @test */
     public function testHandlePhoto()
     {
-        $confession = factory(Confession::class)->create([
+        $confession = Confession::factory()->create([
             'images' => 'foobar.jpg',
             'fb_post_id' => '123',
             'status' => 'Rejected',
@@ -86,10 +82,9 @@ class DeleteConfessionFromFacebookTest extends TestCase
         $this->assertEmpty($confession->fb_post_id);
     }
 
-    /** @test */
     public function testHandleStatus()
     {
-        $confession = factory(Confession::class)->create([
+        $confession = Confession::factory()->create([
             'images' => '',
             'fb_post_id' => '123',
             'status' => 'Rejected',

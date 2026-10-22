@@ -9,9 +9,9 @@ class ConfessionsControllerTagTest extends ConfessionsControllerTestCase
 {
     public function testTag()
     {
-        $tag = factory(Tag::class)->create();
+        $tag = Tag::factory()->create();
 
-        $confession = factory(Confession::class)->states('approved')->create();
+        $confession = Confession::factory()->approved()->create();
         $confession->tags()->sync([$tag->getKey()]);
 
         $this->json('GET', '/api/confessions/tag/' . substr($tag->confession_tag, 1))

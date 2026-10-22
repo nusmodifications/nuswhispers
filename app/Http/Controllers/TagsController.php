@@ -28,8 +28,7 @@ class TagsController extends Controller
      * method: get
      * route: api/tags/<tag_id>.
      *
-     * @param int $tag_id
-     *
+     * @param  int  $tag_id
      * @return mixed
      */
     public function show($tag_id)
@@ -47,8 +46,7 @@ class TagsController extends Controller
      * method: get
      * route: api/tags/top/<num> (if not clashes with api below).
      *
-     * @param int $num
-     *
+     * @param  int  $num
      * @return mixed
      */
     public function topNTags($num = 5)
@@ -62,8 +60,8 @@ class TagsController extends Controller
                 ->where('confession_tag', 'REGEXP', '#[a-z]+')
                 ->select(\DB::raw('tags.*, (confessions.fb_like_count + (confessions.fb_comment_count * 2)) / POW(DATEDIFF(NOW(), confessions.status_updated_at) + 2, 1.8) AS `popularity_rating`'))
                 ->groupBy('confession_tag_id')
-                ->orderBy('popularity_rating', 'DESC')
-                ->orderBy('status_updated_at', 'DESC')
+                ->orderBy('popularity_rating', 'desc')
+                ->orderBy('status_updated_at', 'desc')
                 ->limit($num)
                 ->get();
 
@@ -96,8 +94,7 @@ class TagsController extends Controller
     /**
      * Transform tags to its correct type.
      *
-     * @param $tags
-     *
+     * @param  $tags
      * @return mixed
      */
     protected function transformTags($tags)

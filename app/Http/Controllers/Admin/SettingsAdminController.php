@@ -22,8 +22,7 @@ class SettingsAdminController extends AdminController
     /**
      * Updates the settings.
      *
-     * @param \NUSWhispers\Http\Requests\AdminSettingsRequest $request
-     *
+     * @param  \NUSWhispers\Http\Requests\AdminSettingsRequest  $request
      * @return mixed
      */
     public function postIndex(AdminSettingsRequest $request)

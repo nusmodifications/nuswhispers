@@ -3,18 +3,12 @@
 namespace NUSWhispers\Providers;
 
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
 use ReCaptcha\ReCaptcha;
 
-class ReCaptchaServiceProvider extends ServiceProvider
+class ReCaptchaServiceProvider extends ServiceProvider implements DeferrableProvider
 {
-    /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = true;
-
     /**
      * Get the services provided by the provider.
      *
@@ -22,7 +16,7 @@ class ReCaptchaServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return [ReCaptcha::class];
+        return ['recaptcha', ReCaptcha::class];
     }
 
     /**

@@ -17,7 +17,7 @@ class ImgurService
     /**
      * Constructs an instance of ImgurService.
      *
-     * @param \Illuminate\Contracts\Config\Repository $config
+     * @param  \Illuminate\Contracts\Config\Repository  $config
      */
     public function __construct(Config $config)
     {
@@ -32,8 +32,7 @@ class ImgurService
     /**
      * Uploads an image to Imgur.
      *
-     * @param \Illuminate\Http\UploadedFile $image
-     *
+     * @param  \Illuminate\Http\UploadedFile  $image
      * @return string
      *
      * @throws \GuzzleHttp\Exception\GuzzleException

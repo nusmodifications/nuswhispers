@@ -23,7 +23,7 @@ class ConfessionsAdminController extends AdminController
     /**
      * Constructs an instance of the controller.
      *
-     * @param \NUSWhispers\Services\ConfessionService $service
+     * @param  \NUSWhispers\Services\ConfessionService  $service
      */
     public function __construct(ConfessionService $service)
     {
@@ -33,8 +33,7 @@ class ConfessionsAdminController extends AdminController
     /**
      * Retrieves a list of confessions.
      *
-     * @param \Illuminate\Http\Request $request
-     *
+     * @param  \Illuminate\Http\Request  $request
      * @return mixed
      */
     public function getIndex(Request $request)
@@ -60,8 +59,7 @@ class ConfessionsAdminController extends AdminController
     /**
      * Displays the form to edit an existing confession.
      *
-     * @param \NUSWhispers\Models\Confession $confession
-     *
+     * @param  \NUSWhispers\Models\Confession  $confession
      * @return mixed
      */
     public function getEdit(Confession $confession)
@@ -80,10 +78,10 @@ class ConfessionsAdminController extends AdminController
     /**
      * Updates an existing confession.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \NUSWhispers\Models\Confession $confession
-     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \NUSWhispers\Models\Confession  $confession
      * @return mixed
+     *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function postEdit(Request $request, Confession $confession)
@@ -114,7 +112,7 @@ class ConfessionsAdminController extends AdminController
             $data = $request->only(['content', 'status', 'images', 'schedule']);
             $data['categories'] = $request->input('categories', []);
 
-            if (env('MANUAL_MODE', false) && request()->input('fb_post_id')) {
+            if (config('app.manual_mode') && request()->input('fb_post_id')) {
                 $data['fb_post_id'] = $request->input('fb_post_id');
             }
 
@@ -127,10 +125,9 @@ class ConfessionsAdminController extends AdminController
     /**
      * Approves a confession.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \NUSWhispers\Models\Confession $confession
-     * @param mixed $hours
-     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \NUSWhispers\Models\Confession  $confession
+     * @param  mixed  $hours
      * @return mixed
      */
     public function getApprove(Request $request, Confession $confession, $hours = 0)
@@ -141,10 +138,9 @@ class ConfessionsAdminController extends AdminController
     /**
      * Features a confession.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \NUSWhispers\Models\Confession $confession
-     * @param mixed $hours
-     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \NUSWhispers\Models\Confession  $confession
+     * @param  mixed  $hours
      * @return mixed
      */
     public function getFeature(Request $request, Confession $confession, $hours = 0)
@@ -155,11 +151,10 @@ class ConfessionsAdminController extends AdminController
     /**
      * Switch or schedule a confession.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \NUSWhispers\Models\Confession $confession
-     * @param string $status
-     * @param int $hours
-     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \NUSWhispers\Models\Confession  $confession
+     * @param  string  $status
+     * @param  int  $hours
      * @return mixed
      */
     protected function switchOrScheduleConfession(Request $request, Confession $confession, string $status, int $hours)
@@ -185,9 +180,8 @@ class ConfessionsAdminController extends AdminController
     /**
      * Removes a confession from Featured.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \NUSWhispers\Models\Confession $confession
-     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \NUSWhispers\Models\Confession  $confession
      * @return mixed
      */
     public function getUnfeature(Request $request, Confession $confession)
@@ -207,9 +201,8 @@ class ConfessionsAdminController extends AdminController
     /**
      * Rejects a confession.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \NUSWhispers\Models\Confession $confession
-     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \NUSWhispers\Models\Confession  $confession
      * @return mixed
      */
     public function getReject(Request $request, Confession $confession)
@@ -229,8 +222,7 @@ class ConfessionsAdminController extends AdminController
     /**
      * Deletes a confession.
      *
-     * @param \NUSWhispers\Models\Confession $confession
-     *
+     * @param  \NUSWhispers\Models\Confession  $confession
      * @return mixed
      */
     public function getDelete(Confession $confession)
@@ -245,8 +237,7 @@ class ConfessionsAdminController extends AdminController
     /**
      * Builds query from request.
      *
-     * @param \Illuminate\Http\Request $request
-     *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Database\Eloquent\Builder
      */
     protected function buildQueryFromRequest(Request $request): Builder
@@ -291,8 +282,7 @@ class ConfessionsAdminController extends AdminController
     /**
      * Checks if the user has page token.
      *
-     * @param \Illuminate\Http\Request $request
-     *
+     * @param  \Illuminate\Http\Request  $request
      * @return bool
      */
     protected function userHasPageToken(Request $request): bool

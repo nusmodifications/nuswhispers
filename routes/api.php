@@ -42,6 +42,6 @@ Route::name('fbuser.')->prefix('fbuser')->group(function () {
 Route::options('{any}', 'ApiController@index')
     ->where('any', '.*')
     ->fallback()
-    ->name('index');
+    ->name('preflight');
 
 Route::fallback('ApiController@index')->name('index');

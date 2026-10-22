@@ -2,8 +2,6 @@
 
 namespace NUSWhispers\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 class FbUser extends Model
 {
     protected $table = 'fb_users';
@@ -14,7 +12,7 @@ class FbUser extends Model
     /**
      * The attributes that should be casted to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'fb_user_id' => 'string',
@@ -23,7 +21,7 @@ class FbUser extends Model
     /**
      * Defines favourites fb_users relationship to model.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Confession, $this>
      */
     public function favourites()
     {

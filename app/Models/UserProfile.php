@@ -2,14 +2,17 @@
 
 namespace NUSWhispers\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class UserProfile extends Model
 {
+    /** @use HasFactory<\Database\Factories\UserProfileFactory> */
+    use HasFactory;
+
     /**
      * The attributes that should be casted to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'profile_id' => 'string',
@@ -39,14 +42,14 @@ class UserProfile extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = ['provider_name', 'provider_id', 'provider_token', 'page_token', 'data'];
 
     /**
      * Defines user relationship from model.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, $this>
      */
     public function user()
     {

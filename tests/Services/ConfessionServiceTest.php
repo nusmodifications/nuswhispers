@@ -3,6 +3,7 @@
 namespace NUSWhispers\Tests\Services;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Event;
 use NUSWhispers\Events\ConfessionStatusWasChanged;
 use NUSWhispers\Events\ConfessionWasApproved;
 use NUSWhispers\Events\ConfessionWasCreated;
@@ -28,7 +29,7 @@ class ConfessionServiceTest extends TestCase
 
     public function testCountByFingerprint(): void
     {
-        $confessions = factory(Confession::class, 5)->create([
+        $confessions = Confession::factory(5)->create([
             'fingerprint' => 'test',
         ]);
 
@@ -37,14 +38,14 @@ class ConfessionServiceTest extends TestCase
 
     public function testCountByFingerprintWithStatus(): void
     {
-        $confessions = factory(Confession::class, 5)
-            ->states(['approved'])
+        $confessions = Confession::factory(5)
+            ->approved()
             ->create([
                 'fingerprint' => 'test',
             ]);
 
-        factory(Confession::class, 15)
-            ->states(['rejected'])
+        Confession::factory(15)
+            ->rejected()
             ->create([
                 'fingerprint' => 'test',
             ]);
@@ -54,30 +55,34 @@ class ConfessionServiceTest extends TestCase
 
     public function testCreate(): void
     {
-        $this->expectsEvents(ConfessionWasCreated::class);
-        $this->doesntExpectEvents(ConfessionStatusWasChanged::class);
+        Event::fake([ConfessionWasCreated::class, ConfessionStatusWasChanged::class]);
 
         $confession = $this->service->create([
             'content' => 'Test Content',
         ]);
 
         $this->assertInstanceOf(Confession::class, $confession);
+
+        Event::assertDispatched(ConfessionWasCreated::class);
+        Event::assertNotDispatched(ConfessionStatusWasChanged::class);
     }
 
     public function testCreateFingerprint(): void
     {
-        $this->expectsEvents(ConfessionWasCreated::class);
+        Event::fake([ConfessionWasCreated::class]);
 
         $confession = $this->service->create([
             'content' => 'Test Content',
         ]);
 
         $this->assertNotNull($confession->fingerprint);
+
+        Event::assertDispatched(ConfessionWasCreated::class);
     }
 
     public function testCreateExistingFingerprint(): void
     {
-        $this->expectsEvents(ConfessionWasCreated::class);
+        Event::fake([ConfessionWasCreated::class]);
 
         $confession = $this->service->create([
             'content' => 'Test Content',
@@ -85,15 +90,13 @@ class ConfessionServiceTest extends TestCase
         ]);
 
         $this->assertEquals('abc', $confession->fingerprint);
+
+        Event::assertDispatched(ConfessionWasCreated::class);
     }
 
     public function testCreateScheduled(): void
     {
-        $this->expectsEvents([
-            ConfessionWasCreated::class,
-            ConfessionWasScheduled::class,
-        ]);
-        $this->doesntExpectEvents(ConfessionStatusWasChanged::class);
+        Event::fake([ConfessionWasCreated::class, ConfessionWasScheduled::class, ConfessionStatusWasChanged::class]);
 
         $confession = $this->service->create([
             'content' => 'Hello World',
@@ -103,14 +106,17 @@ class ConfessionServiceTest extends TestCase
 
         $this->assertEquals($confession->status, 'Scheduled');
         $this->assertEquals($confession->queue()->count(), 1);
+
+        Event::assertDispatched(ConfessionWasCreated::class);
+        Event::assertDispatched(ConfessionWasScheduled::class);
+        Event::assertNotDispatched(ConfessionStatusWasChanged::class);
     }
 
     public function testCreateWithCategories(): void
     {
-        $this->expectsEvents(ConfessionWasCreated::class);
-        $this->doesntExpectEvents(ConfessionStatusWasChanged::class);
+        Event::fake([ConfessionWasCreated::class, ConfessionStatusWasChanged::class]);
 
-        $categories = factory(Category::class, 5)->create()
+        $categories = Category::factory(5)->create()
             ->map(static function ($item) {
                 return $item->getKey();
             })
@@ -122,11 +128,14 @@ class ConfessionServiceTest extends TestCase
         ]);
 
         $this->assertEquals(count($categories), $confession->categories()->count());
+
+        Event::assertDispatched(ConfessionWasCreated::class);
+        Event::assertNotDispatched(ConfessionStatusWasChanged::class);
     }
 
     public function testCreateCategoriesNull(): void
     {
-        $this->withoutEvents();
+        Event::fake();
 
         $confession = $this->service->create([
             'content' => 'Test Content',
@@ -138,14 +147,17 @@ class ConfessionServiceTest extends TestCase
 
     public function testDelete(): void
     {
-        $this->expectsEvents(ConfessionWasDeleted::class);
-        $confession = factory(Confession::class)->create();
+        Event::fake([ConfessionWasDeleted::class]);
+
+        $confession = Confession::factory()->create();
         $this->assertTrue($this->service->delete($confession->getKey()));
+
+        Event::assertDispatched(ConfessionWasDeleted::class);
     }
 
     public function testFindByFingerprint(): void
     {
-        $confessions = factory(Confession::class, 5)->create([
+        $confessions = Confession::factory(5)->create([
             'fingerprint' => 'test',
         ]);
 
@@ -158,14 +170,14 @@ class ConfessionServiceTest extends TestCase
 
     public function testFindByFingerprintWithStatus(): void
     {
-        $confessions = factory(Confession::class, 5)
-            ->states(['approved'])
+        $confessions = Confession::factory(5)
+            ->approved()
             ->create([
                 'fingerprint' => 'test',
             ]);
 
-        factory(Confession::class, 15)
-            ->states(['rejected'])
+        Confession::factory(15)
+            ->rejected()
             ->create([
                 'fingerprint' => 'test',
             ]);
@@ -180,18 +192,22 @@ class ConfessionServiceTest extends TestCase
 
     public function testUpdate(): void
     {
-        $this->expectsEvents(ConfessionWasUpdated::class);
-        $confession = factory(Confession::class)->create();
+        Event::fake([ConfessionWasUpdated::class]);
+
+        $confession = Confession::factory()->create();
         $confession = $this->service->update($confession->getKey(), ['content' => 'Part II']);
 
         $this->assertEquals('Part II', $confession->content);
+
+        Event::assertDispatched(ConfessionWasUpdated::class);
     }
 
     public function testUpdateCategories(): void
     {
-        $this->expectsEvents(ConfessionWasUpdated::class);
-        $confession = factory(Confession::class)->create();
-        $categories = factory(Category::class, 3)->create()
+        Event::fake([ConfessionWasUpdated::class]);
+
+        $confession = Confession::factory()->create();
+        $categories = Category::factory(3)->create()
             ->map(static function ($item) {
                 return $item->getKey();
             })
@@ -200,28 +216,33 @@ class ConfessionServiceTest extends TestCase
         $confession = $this->service->update($confession->getKey(), ['categories' => $categories]);
 
         $this->assertEquals(count($categories), $confession->categories()->count());
+
+        Event::assertDispatched(ConfessionWasUpdated::class);
     }
 
     public function testUpdateNoNewCategories(): void
     {
-        $this->expectsEvents(ConfessionWasUpdated::class);
-        $confession = factory(Confession::class)->create();
-        $confession->categories()->saveMany(factory(Category::class, 3)->create());
+        Event::fake([ConfessionWasUpdated::class]);
+
+        $confession = Confession::factory()->create();
+        $confession->categories()->saveMany(Category::factory(3)->create());
 
         $confession = $this->service->update($confession->getKey(), []);
         $this->assertEquals(3, $confession->categories()->count());
+
+        Event::assertDispatched(ConfessionWasUpdated::class);
     }
 
     public function testUpdatePending(): void
     {
-        $confession = factory(Confession::class)->states('approved')->create();
+        $confession = Confession::factory()->approved()->create();
         $this->expectException(\InvalidArgumentException::class);
         $this->service->update($confession->getKey(), ['status' => 'Pending']);
     }
 
     public function testUpdatePendingSameStatus(): void
     {
-        $confession = factory(Confession::class)->states('pending')->create();
+        $confession = Confession::factory()->pending()->create();
         $this->service->update($confession->getKey(), ['status' => 'Pending']);
 
         $this->assertEquals('Pending', $confession->status);
@@ -229,13 +250,9 @@ class ConfessionServiceTest extends TestCase
 
     public function testUpdateScheduled(): void
     {
-        $this->expectsEvents([
-            ConfessionStatusWasChanged::class,
-            ConfessionWasUpdated::class,
-            ConfessionWasScheduled::class,
-        ]);
+        Event::fake([ConfessionStatusWasChanged::class, ConfessionWasUpdated::class, ConfessionWasScheduled::class]);
 
-        $confession = factory(Confession::class)->states('pending')->create();
+        $confession = Confession::factory()->pending()->create();
         $confession = $this->service->update($confession, [
             'schedule' => 3,
             'status' => 'Approved',
@@ -243,19 +260,19 @@ class ConfessionServiceTest extends TestCase
 
         $this->assertEquals($confession->status, 'Scheduled');
         $this->assertEquals($confession->queue()->count(), 1);
+
+        Event::assertDispatched(ConfessionStatusWasChanged::class);
+        Event::assertDispatched(ConfessionWasUpdated::class);
+        Event::assertDispatched(ConfessionWasScheduled::class);
     }
 
     public function testUpdateScheduledDate(): void
     {
-        $this->expectsEvents([
-            ConfessionStatusWasChanged::class,
-            ConfessionWasUpdated::class,
-            ConfessionWasScheduled::class,
-        ]);
+        Event::fake([ConfessionStatusWasChanged::class, ConfessionWasUpdated::class, ConfessionWasScheduled::class]);
 
         $schedule = Carbon::create(2018, 1, 1);
 
-        $confession = factory(Confession::class)->states('pending')->create();
+        $confession = Confession::factory()->pending()->create();
         $confession = $this->service->update($confession, [
             'schedule' => (string) $schedule->timestamp,
             'status' => 'Approved',
@@ -263,36 +280,40 @@ class ConfessionServiceTest extends TestCase
 
         $this->assertEquals($confession->status, 'Scheduled');
         $this->assertEquals($schedule, $confession->queue()->first()->update_status_at);
+
+        Event::assertDispatched(ConfessionStatusWasChanged::class);
+        Event::assertDispatched(ConfessionWasUpdated::class);
+        Event::assertDispatched(ConfessionWasScheduled::class);
     }
 
     public function testUpdateStatus(): void
     {
-        $this->expectsEvents([
-            ConfessionStatusWasChanged::class,
-            ConfessionWasApproved::class,
-        ]);
+        Event::fake([ConfessionStatusWasChanged::class, ConfessionWasApproved::class]);
 
-        $confession = factory(Confession::class)->states('pending')->create();
+        $confession = Confession::factory()->pending()->create();
 
         $confession = $this->service->updateStatus($confession, 'Approved');
 
         $this->assertEquals('Approved', $confession->status);
+
+        Event::assertDispatched(ConfessionStatusWasChanged::class);
+        Event::assertDispatched(ConfessionWasApproved::class);
     }
 
     public function testUpdateStatusScheduled(): void
     {
-        $this->expectsEvents([
-            ConfessionStatusWasChanged::class,
-            ConfessionWasScheduled::class,
-        ]);
+        Event::fake([ConfessionStatusWasChanged::class, ConfessionWasScheduled::class]);
 
-        $confession = factory(Confession::class)->states('pending')->create();
-        $confession->queue()->save(factory(ConfessionQueue::class)->make());
+        $confession = Confession::factory()->pending()->create();
+        $confession->queue()->save(ConfessionQueue::factory()->make());
 
         $confession = $this->service->updateStatus($confession, 'Approved', 3);
 
         $this->assertEquals($confession->queue()->count(), 1);
         $this->assertEquals($confession->queue()->first()->status_after, 'Approved');
         $this->assertEquals($confession->status, 'Scheduled');
+
+        Event::assertDispatched(ConfessionStatusWasChanged::class);
+        Event::assertDispatched(ConfessionWasScheduled::class);
     }
 }

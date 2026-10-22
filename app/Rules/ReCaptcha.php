@@ -2,33 +2,18 @@
 
 namespace NUSWhispers\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
 
-class ReCaptcha implements Rule
+class ReCaptcha implements ValidationRule
 {
-    /**
-     * Determine if the validation rule passes.
-     *
-     * @param  string $attribute
-     * @param  mixed $value
-     *
-     * @return bool
-     */
-    public function passes($attribute, $value)
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         /** @var \ReCaptcha\ReCaptcha $recaptcha */
         $recaptcha = app(\ReCaptcha\ReCaptcha::class);
 
-        return $recaptcha->verify($value, request()->getClientIp())->isSuccess();
-    }
-
-    /**
-     * Get the validation error message.
-     *
-     * @return string
-     */
-    public function message()
-    {
-        return 'The :attribute was not entered correctly. Please try again.';
+        if (! $recaptcha->verify($value, request()->getClientIp())->isSuccess()) {
+            $fail('The :attribute was not entered correctly. Please try again.');
+        }
     }
 }

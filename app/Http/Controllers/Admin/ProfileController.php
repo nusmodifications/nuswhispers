@@ -20,7 +20,7 @@ class ProfileController extends AdminController
     /**
      * Constructs an instance of the controller.
      *
-     * @param \Facebook\Facebook $fb
+     * @param  \Facebook\Facebook  $fb
      */
     public function __construct(Facebook $fb)
     {
@@ -30,8 +30,7 @@ class ProfileController extends AdminController
     /**
      * Displays the current user's profile page.
      *
-     * @param \Illuminate\Http\Request $request
-     *
+     * @param  \Illuminate\Http\Request  $request
      * @return mixed
      */
     public function getIndex(Request $request)
@@ -48,9 +47,9 @@ class ProfileController extends AdminController
     /**
      * Edits the current user's profile.
      *
-     * @param \Illuminate\Http\Request $request
-     *
+     * @param  \Illuminate\Http\Request  $request
      * @return mixed
+     *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function postEdit(Request $request)
@@ -76,9 +75,8 @@ class ProfileController extends AdminController
     /**
      * Connects the existing user to a provider.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param string $provider
-     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $provider
      * @return mixed
      */
     public function getConnect(Request $request, $provider = 'facebook')
@@ -106,9 +104,8 @@ class ProfileController extends AdminController
     /**
      * Un-connects the user to a provider.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param string $provider
-     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $provider
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function getDelete(Request $request, $provider = 'facebook')
@@ -128,9 +125,9 @@ class ProfileController extends AdminController
      *
      * TODO: Refactor to somewhere better; somewhere like a UserRepository.
      *
-     * @param string $provider provider name
-     * @param \NUSWhispers\Models\User user model
-     * @param \Laravel\Socialite\Two\User $oauthUser oAuth user object
+     * @param  string  $provider  provider name
+     * @param  \NUSWhispers\Models\User  $user
+     * @param  \Laravel\Socialite\Two\User  $oauthUser  oAuth user object
      *
      * @throws \Throwable
      */
@@ -142,17 +139,17 @@ class ProfileController extends AdminController
         if ($provider === 'facebook') {
             try {
                 // Extend current token to long-lived access token.
-                /** @var \Facebook\FacebookResponse $response */
-                $response = $this->fb->get('/oauth/access_token?client_id=' . urlencode(env('FACEBOOK_APP_ID')) . '&client_secret=' . urlencode(env('FACEBOOK_APP_SECRET')) . '&grant_type=fb_exchange_token&fb_exchange_token=' . urlencode($oauthUser->token), $token);
+                /** @var \Facebook\Response $response */
+                $response = $this->fb->get('/oauth/access_token?client_id=' . urlencode(config('services.facebook.client_id')) . '&client_secret=' . urlencode(config('services.facebook.client_secret')) . '&grant_type=fb_exchange_token&fb_exchange_token=' . urlencode($oauthUser->token), $token);
 
                 if (! isset($response->getDecodedBody()['access_token'])) {
-                    throw new RuntimeException('User is not a page admin of Facebook page #' . env('FACEBOOK_PAGE_ID', '') . '.');
+                    throw new RuntimeException('User is not a page admin of Facebook page #' . config('services.facebook.page_id') . '.');
                 }
 
                 $token = $response->getDecodedBody()['access_token'];
 
                 // Get page token (never expires)
-                $response = $this->fb->get('/' . env('FACEBOOK_PAGE_ID', '') . '?fields=access_token', $token)->getGraphNode();
+                $response = $this->fb->get('/' . config('services.facebook.page_id') . '?fields=access_token', $token)->getDecodedBody();
 
                 $pageToken = $response['access_token'];
             } catch (Throwable $e) {

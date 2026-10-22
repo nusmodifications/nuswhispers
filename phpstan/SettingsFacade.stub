@@ -1,0 +1,13 @@
+<?php
+
+namespace anlutro\LaravelSettings;
+
+/**
+ * @method static array<string, mixed> all()
+ * @method static mixed get(string $key, mixed $default = null)
+ * @method static void set(string|array<string, mixed> $key, mixed $value = null)
+ * @method static void save()
+ */
+class Facade extends \Illuminate\Support\Facades\Facade
+{
+}

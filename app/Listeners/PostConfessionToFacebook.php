@@ -17,7 +17,7 @@ class PostConfessionToFacebook implements ShouldQueue
     /**
      * Constructs an instance of the event listener.
      *
-     * @param \Facebook\Facebook $fb
+     * @param  \Facebook\Facebook  $fb
      */
     public function __construct(Facebook $fb)
     {
@@ -27,11 +27,10 @@ class PostConfessionToFacebook implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param \NUSWhispers\Events\BaseConfessionEvent $event
-     *
+     * @param  \NUSWhispers\Events\BaseConfessionEvent  $event
      * @return mixed
      *
-     * @throws \Facebook\Exceptions\FacebookSDKException
+     * @throws \Facebook\Exception\SDKException
      */
     public function handle(BaseConfessionEvent $event)
     {
@@ -56,12 +55,11 @@ class PostConfessionToFacebook implements ShouldQueue
     /**
      * Create or update a Facebook photo post.
      *
-     * @param \NUSWhispers\Models\Confession $confession
-     * @param mixed $user
-     *
+     * @param  \NUSWhispers\Models\Confession  $confession
+     * @param  mixed  $user
      * @return string
      *
-     * @throws \Facebook\Exceptions\FacebookSDKException
+     * @throws \Facebook\Exception\SDKException
      */
     protected function createOrUpdatePhoto(Confession $confession, $user)
     {
@@ -78,7 +76,7 @@ class PostConfessionToFacebook implements ShouldQueue
                 'url' => $confession->images,
             ],
             $this->resolvePageToken($user)
-        )->getGraphNode();
+        )->getDecodedBody();
 
         return $fbPostId ?: $response['id'];
     }
@@ -86,12 +84,11 @@ class PostConfessionToFacebook implements ShouldQueue
     /**
      * Create or update a Facebook status update.
      *
-     * @param \NUSWhispers\Models\Confession $confession
-     * @param mixed $user
-     *
+     * @param  \NUSWhispers\Models\Confession  $confession
+     * @param  mixed  $user
      * @return string
      *
-     * @throws \Facebook\Exceptions\FacebookSDKException
+     * @throws \Facebook\Exception\SDKException
      */
     protected function createOrUpdateStatus(Confession $confession, $user)
     {
@@ -107,7 +104,7 @@ class PostConfessionToFacebook implements ShouldQueue
                 'message' => $confession->getFacebookMessage(),
             ],
             $this->resolvePageToken($user)
-        )->getGraphNode();
+        )->getDecodedBody();
 
         return $fbPostId ?: last(explode('_', $response['id']));
     }

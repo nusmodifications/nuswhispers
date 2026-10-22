@@ -22,7 +22,7 @@ class TagsControllerTest extends TestCase
 
     public function testShow()
     {
-        $tag = factory(Tag::class)->create();
+        $tag = Tag::factory()->create();
 
         $this->json('GET', '/api/tags/' . $tag->getKey())
             ->assertJsonFragment(['confession_tag_id' => $tag->getKey()]);
@@ -30,9 +30,9 @@ class TagsControllerTest extends TestCase
 
     public function testTopNTags()
     {
-        $tag = factory(Tag::class)->create();
+        $tag = Tag::factory()->create();
 
-        factory(Confession::class)->states('approved')
+        Confession::factory()->approved()
             ->create()
             ->tags()
             ->sync([$tag->getKey()]);

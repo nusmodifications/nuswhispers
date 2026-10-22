@@ -8,7 +8,7 @@ class ConfessionsControllerSearchTest extends ConfessionsControllerTestCase
 {
     public function testSearch()
     {
-        $confession = factory(Confession::class)->states('featured')->create([
+        $confession = Confession::factory()->featured()->create([
             'content' => 'Hello world',
         ]);
 

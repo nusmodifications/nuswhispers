@@ -1,19 +1,27 @@
 <?php
 
-$factory->define(\NUSWhispers\Models\ConfessionLog::class, function ($faker) {
-    $statusBefore = $faker->randomElement(\NUSWhispers\Models\Confession::statuses());
-    $statusAfter = $faker->randomElement(array_except(\NUSWhispers\Models\Confession::statuses(), $statusBefore));
+namespace Database\Factories;
 
-    return [
-        'confession_id' => function () use ($statusAfter) {
-            return factory(\NUSWhispers\Models\Confession::class)->create([
-                'status' => $statusAfter,
-            ])->getKey();
-        },
-        'changed_by_user' => function () {
-            return factory(\NUSWhispers\Models\User::class)->create()->getKey();
-        },
-        'status_before' => $statusBefore,
-        'status_after' => $statusAfter,
-    ];
-});
+use Illuminate\Database\Eloquent\Factories\Factory;
+use NUSWhispers\Models\Confession;
+use NUSWhispers\Models\ConfessionLog;
+use NUSWhispers\Models\User;
+
+/** @extends Factory<ConfessionLog> */
+class ConfessionLogFactory extends Factory
+{
+    protected $model = ConfessionLog::class;
+
+    public function definition(): array
+    {
+        $statusBefore = $this->faker->randomElement(Confession::statuses());
+        $statusAfter = $this->faker->randomElement(array_values(array_diff(Confession::statuses(), [$statusBefore])));
+
+        return [
+            'confession_id' => Confession::factory()->state(['status' => $statusAfter]),
+            'changed_by_user' => User::factory(),
+            'status_before' => $statusBefore,
+            'status_after' => $statusAfter,
+        ];
+    }
+}

@@ -15,24 +15,24 @@ class ConfessionTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->confession = factory(Confession::class)->create();
+        $this->confession = Confession::factory()->create();
     }
 
     public function testLogs()
     {
-        $this->confession->logs()->save(factory(ConfessionLog::class)->make());
+        $this->confession->logs()->save(ConfessionLog::factory()->make());
         $this->assertInstanceOf(ConfessionLog::class, $this->confession->logs->first());
     }
 
     public function testModeratorComments()
     {
-        $this->confession->moderatorComments()->save(factory(ModeratorComment::class)->make());
+        $this->confession->moderatorComments()->save(ModeratorComment::factory()->make());
         $this->assertInstanceOf(ModeratorComment::class, $this->confession->moderatorComments->first());
     }
 
     public function testQueue()
     {
-        $this->confession->queue()->save(factory(ConfessionQueue::class)->make());
+        $this->confession->queue()->save(ConfessionQueue::factory()->make());
         $this->assertInstanceOf(ConfessionQueue::class, $this->confession->queue->first());
     }
 }

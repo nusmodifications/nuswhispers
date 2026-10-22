@@ -13,11 +13,11 @@ class ConfessionStatusWasChanged extends BaseConfessionEvent
     /**
      * Create a new event instance.
      *
-     * @param \NUSWhispers\Models\Confession $confession
-     * @param string $originalStatus
-     * @param \NUSWhispers\Models\User|null  $user
+     * @param  \NUSWhispers\Models\Confession  $confession
+     * @param  string  $originalStatus
+     * @param  \NUSWhispers\Models\User|null  $user
      */
-    public function __construct(Confession $confession, $originalStatus, User $user = null)
+    public function __construct(Confession $confession, $originalStatus, ?User $user = null)
     {
         parent::__construct($confession, $user);
         $this->originalStatus = $originalStatus;

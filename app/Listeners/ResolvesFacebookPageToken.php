@@ -9,8 +9,7 @@ trait ResolvesFacebookPageToken
     /**
      * Resolves the Facebook Page token to be used to post / delete the confession.
      *
-     * @param mixed $user
-     *
+     * @param  mixed  $user
      * @return string
      */
     public function resolvePageToken($user): string

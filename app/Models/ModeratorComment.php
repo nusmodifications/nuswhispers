@@ -2,17 +2,21 @@
 
 namespace NUSWhispers\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ModeratorComment extends Model
 {
+    /** @use HasFactory<\Database\Factories\ModeratorCommentFactory> */
+    use HasFactory;
+
     /**
      * The attributes that should be casted to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'comment_id' => 'string',
+        'created_at' => 'datetime',
     ];
 
     /**
@@ -35,13 +39,6 @@ class ModeratorComment extends Model
     protected $fillable = ['user_id', 'content', 'created_at'];
 
     /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = ['created_at'];
-
-    /**
      * Disable timestamps functionality.
      *
      * @var bool
@@ -51,7 +48,7 @@ class ModeratorComment extends Model
     /**
      * Defines confession relationship from model.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Confession, $this>
      */
     public function confession()
     {
@@ -61,7 +58,7 @@ class ModeratorComment extends Model
     /**
      * Defines user relationship from model.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, $this>
      */
     public function user()
     {

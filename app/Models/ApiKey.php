@@ -2,11 +2,14 @@
 
 namespace NUSWhispers\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 
 class ApiKey extends Model
 {
+    /** @use HasFactory<\Database\Factories\ApiKeyFactory> */
+    use HasFactory;
+
     /**
      * Disable timestamps functionality.
      *
@@ -17,9 +20,11 @@ class ApiKey extends Model
     /**
      * The attributes that should be casted to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
+        'created_on' => 'datetime',
+        'last_used_on' => 'datetime',
         'api_key_id' => 'string',
     ];
 
@@ -42,6 +47,9 @@ class ApiKey extends Model
      */
     protected $table = 'api_keys';
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, $this>
+     */
     public function creator()
     {
         return $this->belongsTo(User::class, 'user_id', 'user_id');
@@ -50,15 +58,5 @@ class ApiKey extends Model
     public static function generateKey()
     {
         return hash_hmac('sha256', Str::random(128), microtime());
-    }
-
-    /**
-     * Automatically mutate the date fields.
-     *
-     * @return array
-     */
-    public function getDates()
-    {
-        return ['created_on', 'last_used_on'];
     }
 }

@@ -16,11 +16,10 @@ class FlushConfessionQueueTest extends TestCase
         $this->listener = new FlushConfessionQueue();
     }
 
-    /** @test */
     public function testHandle()
     {
-        $confession = factory(\NUSWhispers\Models\Confession::class)->states('approved')->create();
-        $confession->queue()->save(factory(\NUSWhispers\Models\ConfessionQueue::class)->make());
+        $confession = \NUSWhispers\Models\Confession::factory()->approved()->create();
+        $confession->queue()->save(\NUSWhispers\Models\ConfessionQueue::factory()->make());
 
         $this->listener->handle(new ConfessionStatusWasChanged($confession, 'Scheduled'));
 

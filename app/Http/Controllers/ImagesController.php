@@ -16,7 +16,7 @@ class ImagesController extends Controller
     /**
      * Constructs an instance of the controller.
      *
-     * @param \NUSWhispers\Services\ImgurService $service
+     * @param  \NUSWhispers\Services\ImgurService  $service
      */
     public function __construct(ImgurService $service)
     {
@@ -26,8 +26,7 @@ class ImagesController extends Controller
     /**
      * Uploads an image and returns the URL.
      *
-     * @param \Illuminate\Http\Request $request
-     *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      *
      * @throws \GuzzleHttp\Exception\GuzzleException

@@ -10,7 +10,7 @@ class ConfessionQueueTest extends TestCase
 {
     public function testConfession()
     {
-        $queue = factory(ConfessionQueue::class)->create();
+        $queue = ConfessionQueue::factory()->create();
         $this->assertInstanceOf(Confession::class, $queue->confession);
     }
 }

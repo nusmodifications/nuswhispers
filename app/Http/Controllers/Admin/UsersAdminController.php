@@ -36,9 +36,9 @@ class UsersAdminController extends AdminController
     /**
      * Creates a new user.
      *
-     * @param \Illuminate\Http\Request $request
-     *
+     * @param  \Illuminate\Http\Request  $request
      * @return mixed
+     *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function postAdd(Request $request)
@@ -68,8 +68,7 @@ class UsersAdminController extends AdminController
     /**
      * Displays the edit form.
      *
-     * @param \NUSWhispers\Models\User $user
-     *
+     * @param  \NUSWhispers\Models\User  $user
      * @return mixed
      */
     public function getEdit(User $user)
@@ -80,10 +79,10 @@ class UsersAdminController extends AdminController
     /**
      * Updates a user.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \NUSWhispers\Models\User $user
-     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \NUSWhispers\Models\User  $user
      * @return mixed
+     *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function postEdit(Request $request, User $user)
@@ -113,8 +112,7 @@ class UsersAdminController extends AdminController
     /**
      * Deletes a user.
      *
-     * @param \NUSWhispers\Models\User $user
-     *
+     * @param  \NUSWhispers\Models\User  $user
      * @return mixed
      */
     public function getDelete(User $user)

@@ -10,7 +10,7 @@ class UserProfileTest extends TestCase
 {
     public function testUser()
     {
-        $profile = factory(UserProfile::class)->create();
+        $profile = UserProfile::factory()->create();
         $this->assertInstanceOf(User::class, $profile->user);
     }
 }

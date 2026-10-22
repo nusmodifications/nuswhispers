@@ -9,10 +9,10 @@ class ConfessionsControllerCategoryTest extends ConfessionsControllerTestCase
 {
     public function testCategory()
     {
-        $category = factory(Category::class)->create();
+        $category = Category::factory()->create();
 
-        factory(Confession::class)
-            ->states('approved')
+        Confession::factory()
+            ->approved()
             ->create()
             ->categories()
             ->sync([$category->getKey()]);

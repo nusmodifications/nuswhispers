@@ -17,10 +17,9 @@ class SyncConfessionTagsTest extends TestCase
         $this->listener = new SyncConfessionTags();
     }
 
-    /** @test */
     public function testHandle()
     {
-        $confession = factory(\NUSWhispers\Models\Confession::class)->create([
+        $confession = \NUSWhispers\Models\Confession::factory()->create([
             'content' => 'Hello World #firstworldproblems',
         ]);
 
@@ -31,10 +30,9 @@ class SyncConfessionTagsTest extends TestCase
         ]);
     }
 
-    /** @test */
     public function testHandleDuplicateTags()
     {
-        $confession = factory(\NUSWhispers\Models\Confession::class)->create([
+        $confession = \NUSWhispers\Models\Confession::factory()->create([
             'content' => 'Hello World #firstworldproblems #firstworldproblems',
         ]);
 
@@ -44,14 +42,13 @@ class SyncConfessionTagsTest extends TestCase
         $this->assertEquals(1, $count);
     }
 
-    /** @test */
     public function testHandleUpdateDifferentTags()
     {
-        $confession = factory(\NUSWhispers\Models\Confession::class)->create([
+        $confession = \NUSWhispers\Models\Confession::factory()->create([
             'content' => 'Hello World #secondworldproblems',
         ]);
 
-        $firstTag = factory(\NUSWhispers\Models\Tag::class)->create([
+        $firstTag = \NUSWhispers\Models\Tag::factory()->create([
             'confession_tag' => '#firstworldproblems',
         ]);
 

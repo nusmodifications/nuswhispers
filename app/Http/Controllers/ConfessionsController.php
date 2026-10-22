@@ -38,8 +38,8 @@ class ConfessionsController extends Controller
     /**
      * Creates a new ConfessionsController instance.
      *
-     * @param \NUSWhispers\Services\FacebookBatchProcessor  $batchProcessor
-     * @param \NUSWhispers\Services\ConfessionService       $service
+     * @param  \NUSWhispers\Services\FacebookBatchProcessor  $batchProcessor
+     * @param  \NUSWhispers\Services\ConfessionService  $service
      */
     public function __construct(FacebookBatchProcessor $batchProcessor,
         ConfessionService $service)
@@ -51,17 +51,16 @@ class ConfessionsController extends Controller
     /**
      * Display a listing of the resource. Get confessions under a specific category.
      *
-     * @param  \Illuminate\Http\Request
-     * @param  mixed $categoryId
-     *
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $categoryId
+     * @return \Illuminate\Http\JsonResponse
      */
     public function category(Request $request, $categoryId)
     {
         $cacheId = $this->resolveCacheIdentifier($request);
         $output = Cache::remember($cacheId, now()->addSeconds(config('cache.api.timeout')), function () use ($categoryId) {
             $query = Confession::query()
-                ->orderBy('status_updated_at', 'DESC')
+                ->orderBy('status_updated_at', 'desc')
                 ->join('confession_categories', 'confessions.confession_id', '=', 'confession_categories.confession_id')
                 ->where('confession_categories.confession_category_id', '=', $categoryId)
                 ->with('favourites', 'categories')
@@ -76,9 +75,8 @@ class ConfessionsController extends Controller
     /**
      * Display a listing of the resource. Get favourite confessions.
      *
-     * @param  \Illuminate\Http\Request
-     *
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function favourites(Request $request)
     {
@@ -93,7 +91,7 @@ class ConfessionsController extends Controller
             $query = Confession::query()
                 ->join('favourites', 'confessions.confession_id', '=', 'favourites.confession_id')
                 ->where('favourites.fb_user_id', '=', $fbUserId)
-                ->orderBy('status_updated_at', 'DESC')
+                ->orderBy('status_updated_at', 'desc')
                 ->with('favourites', 'categories')
                 ->approved();
 
@@ -106,9 +104,8 @@ class ConfessionsController extends Controller
     /**
      * Display a listing of the resource. Get featured confessions.
      *
-     * @param  \Illuminate\Http\Request
-     *
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {
@@ -116,7 +113,7 @@ class ConfessionsController extends Controller
         $output = Cache::remember($cacheId, now()->addSeconds(config('cache.api.timeout')), function () {
             $query = Confession::query()
                 ->with('categories', 'favourites')
-                ->orderBy('status_updated_at', 'DESC')
+                ->orderBy('status_updated_at', 'desc')
                 ->featured();
 
             return $this->processList($query);
@@ -128,9 +125,8 @@ class ConfessionsController extends Controller
     /**
      * Display a listing of the resource. Get popular confessions.
      *
-     * @param  \Illuminate\Http\Request
-     *
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function popular(Request $request)
     {
@@ -139,8 +135,8 @@ class ConfessionsController extends Controller
             $query = Confession::query()
                 ->select(DB::raw('confessions.*,
                 (confessions.fb_like_count + (confessions.fb_comment_count * 2)) / POW(DATEDIFF(NOW(), confessions.status_updated_at) + 2, 1.8) AS popularity_rating'))
-                ->orderBy('popularity_rating', 'DESC')
-                ->orderBy('status_updated_at', 'DESC')
+                ->orderBy('popularity_rating', 'desc')
+                ->orderBy('status_updated_at', 'desc')
                 ->with('favourites', 'categories')
                 ->approved();
 
@@ -153,9 +149,8 @@ class ConfessionsController extends Controller
     /**
      * Display a listing of recent confessions.
      *
-     * @param  \Illuminate\Http\Request
-     *
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function recent(Request $request)
     {
@@ -163,7 +158,7 @@ class ConfessionsController extends Controller
         $output = Cache::remember($cacheId, now()->addSeconds(config('cache.api.timeout')), function () {
             $query = Confession::query()
                 ->with('favourites', 'categories')
-                ->orderBy('status_updated_at', 'DESC')
+                ->orderBy('status_updated_at', 'desc')
                 ->approved();
 
             return $this->processList($query);
@@ -177,10 +172,9 @@ class ConfessionsController extends Controller
      * method: get
      * route: api/confessions/search/<searchString>?timestamp=<time>&offset=<offset>&count=<count>.
      *
-     * @param  \Illuminate\Http\Request
-     * @param  string $searchString - non-empty string (of length at least 5? - maybe at least 1)
-     *
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $searchString  - non-empty string (of length at least 5? - maybe at least 1)
+     * @return \Illuminate\Http\JsonResponse
      */
     public function search(Request $request, $searchString)
     {
@@ -188,7 +182,7 @@ class ConfessionsController extends Controller
         $output = Cache::remember($cacheId, now()->addSeconds(config('cache.api.timeout')), function () use ($searchString) {
             // Naive search ...
             $query = Confession::query()
-                ->orderBy('status_updated_at', 'DESC')
+                ->orderBy('status_updated_at', 'desc')
                 ->where('content', 'LIKE', '%' . $searchString . '%')
                 ->with('favourites', 'categories')
                 ->approved();
@@ -202,9 +196,8 @@ class ConfessionsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
@@ -217,7 +210,7 @@ class ConfessionsController extends Controller
 
                 $confession = $this->batchProcessor->processConfession($confession);
 
-                return ['success' => true, 'data' => ['confession' => $confession]];
+                return ['success' => true, 'data' => ['confession' => $confession->toArray()]];
             }
 
             return ['success' => false];
@@ -229,9 +222,8 @@ class ConfessionsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request
-     *
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
@@ -275,10 +267,9 @@ class ConfessionsController extends Controller
     /**
      * List confessions based on a specific tag.
      *
-     * @param  \Illuminate\Http\Request
-     * @param  string $tagName
-     *
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $tagName
+     * @return \Illuminate\Http\JsonResponse
      */
     public function tag(Request $request, $tagName)
     {
@@ -292,7 +283,7 @@ class ConfessionsController extends Controller
                     $query->where('tags.confession_tag', '=', "#$tagName")
                         ->orWhere('confessions.confession_id', '=', $tagName);
                 })
-                ->orderBy('status_updated_at', 'DESC')
+                ->orderBy('status_updated_at', 'desc')
                 ->with('favourites', 'categories')
                 ->distinct()
                 ->approved();
@@ -306,9 +297,8 @@ class ConfessionsController extends Controller
     /**
      * Filters query based on inputs.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param array                                 $input
-     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  array  $input
      * @return \Illuminate\Database\Eloquent\Builder
      */
     protected function filterQuery($query, $input = [])
@@ -333,22 +323,20 @@ class ConfessionsController extends Controller
     /**
      * Normalize the timestamp; up to the highest minute.
      *
-     * @param int $timestamp
-     *
+     * @param  int  $timestamp
      * @return int
      */
     protected function normalizeTimestamp($timestamp): int
     {
         $seconds = config('cache.api.timeout', 5 * 60);
 
-        return ceil($timestamp / $seconds) * $seconds;
+        return (int) (ceil($timestamp / $seconds) * $seconds);
     }
 
     /**
      * Retrieve and transform the confessions list.
      *
-     * @param  mixed $query
-     *
+     * @param  mixed  $query
      * @return array
      */
     protected function processList($query): array
@@ -358,14 +346,13 @@ class ConfessionsController extends Controller
         $confessions = $query->get();
         $confessions = $this->batchProcessor->processConfessions($confessions);
 
-        return ['data' => ['confessions' => $confessions]];
+        return ['data' => ['confessions' => $confessions->toArray()]];
     }
 
     /**
      * Resolves the cache identifier.
      *
-     * @param \Illuminate\Http\Request $request
-     *
+     * @param  \Illuminate\Http\Request  $request
      * @return string
      */
     protected function resolveCacheIdentifier(Request $request): string
@@ -373,7 +360,7 @@ class ConfessionsController extends Controller
         $url = $request->fullUrl();
 
         if ($timestamp = $request->input('timestamp')) {
-            $url = str_replace($timestamp, $this->normalizeTimestamp($timestamp), $url);
+            $url = str_replace($timestamp, (string) $this->normalizeTimestamp($timestamp), $url);
         }
 
         return 'confessions/' . md5($url);

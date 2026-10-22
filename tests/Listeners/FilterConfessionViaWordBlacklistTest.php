@@ -20,10 +20,9 @@ class FilterConfessionViaWordBlacklistTest extends TestCase
         Settings::shouldReceive('get')->andReturn('foo, fcuk');
     }
 
-    /** @test */
     public function testHandle()
     {
-        $confession = factory(\NUSWhispers\Models\Confession::class)->create([
+        $confession = \NUSWhispers\Models\Confession::factory()->create([
             'status' => 'Pending',
             'content' => 'Hello Fcuk.',
         ]);
@@ -36,10 +35,9 @@ class FilterConfessionViaWordBlacklistTest extends TestCase
         ]);
     }
 
-    /** @test */
     public function testHandleValid()
     {
-        $confession = factory(\NUSWhispers\Models\Confession::class)->create([
+        $confession = \NUSWhispers\Models\Confession::factory()->create([
             'status' => 'Pending',
             'content' => 'Hello world.',
         ]);

@@ -11,10 +11,10 @@ use ReCaptcha\Response;
 
 class ConfessionsControllerStoreTest extends TestCase
 {
-    /** @var \ReCaptcha\ReCaptcha */
+    /** @var \ReCaptcha\ReCaptcha&\Mockery\MockInterface */
     protected $recaptcha;
 
-    /** @var \ReCaptcha\Response */
+    /** @var \ReCaptcha\Response&\Mockery\MockInterface */
     protected $response;
 
     public function setUp(): void
@@ -45,7 +45,7 @@ class ConfessionsControllerStoreTest extends TestCase
     {
         $this->json('POST', 'api/confessions', [
             'content' => 'Hello World!',
-            'api_key' => factory(ApiKey::class)->create()->key,
+            'api_key' => ApiKey::factory()->create()->key,
         ])
             ->assertStatus(200)
             ->assertJsonFragment(['success' => true]);
@@ -54,7 +54,7 @@ class ConfessionsControllerStoreTest extends TestCase
     public function testLastUsedOn()
     {
         Carbon::setTestNow(Carbon::create(2017, 1, 1, 0, 0));
-        $key = factory(ApiKey::class)->create();
+        $key = ApiKey::factory()->create();
 
         $this->json('POST', 'api/confessions', [
             'content' => 'Hello World!',

@@ -9,8 +9,7 @@ class RobotsController extends Controller
     /**
      * Display a confession based on ID for search engine crawlers.
      *
-     * @param int $id confession ID
-     *
+     * @param  int  $id  confession ID
      * @return mixed
      */
     public function getConfession($id)

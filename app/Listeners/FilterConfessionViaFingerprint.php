@@ -36,9 +36,8 @@ class FilterConfessionViaFingerprint implements ShouldQueue
     /**
      * Get net score based on fingerprint.
      *
-     * @param string $fingerprint
-     * @param int $decay
-     *
+     * @param  string  $fingerprint
+     * @param  int  $decay
      * @return int
      */
     protected function getNetScore($fingerprint, $decay)

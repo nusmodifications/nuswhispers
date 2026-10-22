@@ -17,15 +17,14 @@ class LogConfessionStatusChangeTest extends TestCase
         $this->listener = new LogConfessionStatusChange();
     }
 
-    /** @test */
     public function testHandle()
     {
         $updatedTime = Carbon::now()->toDateTimeString();
 
-        $confession = factory(\NUSWhispers\Models\Confession::class)->states('approved')->create([
+        $confession = \NUSWhispers\Models\Confession::factory()->approved()->create([
             'status_updated_at' => $updatedTime,
         ]);
-        $user = factory(\NUSWhispers\Models\User::class)->create();
+        $user = \NUSWhispers\Models\User::factory()->create();
 
         $this->listener->handle(new ConfessionStatusWasChanged($confession, 'Pending', $user));
 
@@ -38,10 +37,9 @@ class LogConfessionStatusChangeTest extends TestCase
         ]);
     }
 
-    /** @test */
     public function testHandleSameStatus()
     {
-        $confession = factory(\NUSWhispers\Models\Confession::class)->states('approved')->create();
+        $confession = \NUSWhispers\Models\Confession::factory()->approved()->create();
         $this->listener->handle(new ConfessionStatusWasChanged($confession, 'Approved'));
 
         $this->assertDatabaseMissing('confession_logs', [

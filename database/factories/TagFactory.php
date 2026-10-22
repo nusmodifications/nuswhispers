@@ -1,9 +1,19 @@
 <?php
 
-use Ramsey\Uuid\Uuid;
+namespace Database\Factories;
 
-$factory->define(\NUSWhispers\Models\Tag::class, function ($faker) {
-    return [
-        'confession_tag' => '#' . ucfirst($faker->word) . '-' . (string) Uuid::uuid4(),
-    ];
-});
+use Illuminate\Database\Eloquent\Factories\Factory;
+use NUSWhispers\Models\Tag;
+
+/** @extends Factory<Tag> */
+class TagFactory extends Factory
+{
+    protected $model = Tag::class;
+
+    public function definition(): array
+    {
+        return [
+            'confession_tag' => '#' . ucfirst($this->faker->word) . '-' . $this->faker->uuid,
+        ];
+    }
+}

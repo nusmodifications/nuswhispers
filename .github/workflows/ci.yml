@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  php:
+    runs-on: ubuntu-24.04
+    services:
+      mariadb:
+        image: mariadb:10.3
+        env:
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_DATABASE: homestead_test
+          MYSQL_USER: homestead
+          MYSQL_PASSWORD: secret
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -psecret"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+    env:
+      DB_CONNECTION: testing
+      DB_TEST_HOST: 127.0.0.1
+      DB_TEST_DATABASE: homestead_test
+      DB_TEST_USERNAME: homestead
+      DB_TEST_PASSWORD: secret
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: shivammathur/setup-php@2.40.0
+        with:
+          php-version: '8.5'
+          extensions: mbstring, pdo_mysql, gd, intl, zip
+          coverage: pcov
+          tools: composer:v2
+      - run: composer validate --strict
+      - run: cp .env.example .env
+      - run: composer install --prefer-dist --no-interaction --no-progress
+      - run: composer audit --locked
+      - run: php artisan key:generate
+      - run: php artisan migrate --database=testing --force
+      - run: composer analyse
+      - run: composer test
+
+  frontend:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: '11.15.0'
+          cache: npm
+      - run: npm ci --no-audit
+      - run: npm run production

@@ -4,17 +4,25 @@ namespace NUSWhispers\Models;
 
 use Facebook\Facebook;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations;
 
+/**
+ * @property 'Featured'|'Scheduled'|'Pending'|'Approved'|'Rejected' $status
+ * @property int|string|null $fb_post_id
+ */
 class Confession extends Model
 {
+    /** @use HasFactory<\Database\Factories\ConfessionFactory> */
+    use HasFactory;
+
     /**
      * The attributes that should be casted to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
+        'status_updated_at' => 'datetime',
         'confession_id' => 'string',
     ];
 
@@ -35,7 +43,7 @@ class Confession extends Model
     /**
      * Attributes should be mass-assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'content',
@@ -59,7 +67,7 @@ class Confession extends Model
     /**
      * Defines confession categories relationship to model.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Category, $this>
      */
     public function categories(): Relations\BelongsToMany
     {
@@ -69,7 +77,7 @@ class Confession extends Model
     /**
      * Defines confession tags relationship to model.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Tag, $this>
      */
     public function tags(): Relations\BelongsToMany
     {
@@ -79,7 +87,7 @@ class Confession extends Model
     /**
      * Defines confession favourites relationship to model.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<FbUser, $this>
      */
     public function favourites(): Relations\BelongsToMany
     {
@@ -89,7 +97,7 @@ class Confession extends Model
     /**
      * Defines confession logs relationship to model.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<ConfessionLog, $this>
      */
     public function logs(): Relations\HasMany
     {
@@ -100,7 +108,7 @@ class Confession extends Model
     /**
      * Defines moderator comments relationship to model.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<ModeratorComment, $this>
      */
     public function moderatorComments(): Relations\HasMany
     {
@@ -111,7 +119,7 @@ class Confession extends Model
     /**
      * Defines queue relationship to model.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne<ConfessionQueue, $this>
      */
     public function queue(): Relations\HasOne
     {
@@ -119,21 +127,11 @@ class Confession extends Model
     }
 
     /**
-     * Automatically mutate the date fields.
-     *
-     * @return array
-     */
-    public function getDates(): array
-    {
-        return ['created_at', 'updated_at', 'status_updated_at'];
-    }
-
-    /**
      * Retrieve Facebook information.
      *
      * @return void
      *
-     * @throws \Facebook\Exceptions\FacebookSDKException
+     * @throws \Facebook\Exception\SDKException
      */
     public function getFacebookInformation(): void
     {
@@ -146,7 +144,7 @@ class Confession extends Model
 
             $endpoint = sprintf('/%s?oauth_token=%s&fields=comments.summary(true).filter(toplevel).fields(parent.fields(id),comments.summary(true),message,from,created_time,is_hidden),likes.summary(true)', $pageId . '_' . $this->fb_post_id, $accessToken);
 
-            $this->facebook_information = $facebook->get($endpoint, $accessToken)->getDecodedBody();
+            $this->setAttribute('facebook_information', $facebook->get($endpoint, $accessToken)->getDecodedBody());
         }
     }
 
@@ -196,8 +194,7 @@ class Confession extends Model
     /**
      * Query scope for pending confessions.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopePending($query): Builder
@@ -208,8 +205,7 @@ class Confession extends Model
     /**
      * Query scope for featured confessions.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeFeatured($query): Builder
@@ -220,8 +216,7 @@ class Confession extends Model
     /**
      * Query scope for scheduled confessions.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeScheduled($query): Builder
@@ -232,8 +227,7 @@ class Confession extends Model
     /**
      * Query scope for approved confessions.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeApproved($query): Builder
@@ -247,8 +241,7 @@ class Confession extends Model
     /**
      * Query scope for rejected confessions.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeRejected($query): Builder

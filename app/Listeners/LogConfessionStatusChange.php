@@ -10,7 +10,7 @@ class LogConfessionStatusChange implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  \NUSWhispers\Events\ConfessionStatusWasChanged $event
+     * @param  \NUSWhispers\Events\ConfessionStatusWasChanged  $event
      * @return mixed
      */
     public function handle(ConfessionStatusWasChanged $event)

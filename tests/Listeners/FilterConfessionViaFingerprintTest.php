@@ -30,12 +30,12 @@ class FilterConfessionViaFingerprintTest extends TestCase
 
     public function testHandle()
     {
-        factory(\NUSWhispers\Models\Confession::class, 10)->create([
+        \NUSWhispers\Models\Confession::factory(10)->create([
             'status' => 'Rejected',
             'fingerprint' => 'foo',
         ]);
 
-        $confession = factory(\NUSWhispers\Models\Confession::class)->create([
+        $confession = \NUSWhispers\Models\Confession::factory()->create([
             'status' => 'Pending',
             'fingerprint' => 'foo',
         ]);
@@ -59,12 +59,12 @@ class FilterConfessionViaFingerprintTest extends TestCase
             ->with('rejection_decay', Mockery::any())
             ->andReturn(null);
 
-        factory(\NUSWhispers\Models\Confession::class, 10)->create([
+        \NUSWhispers\Models\Confession::factory(10)->create([
             'status' => 'Rejected',
             'fingerprint' => 'foo',
         ]);
 
-        $confession = factory(\NUSWhispers\Models\Confession::class)->create([
+        $confession = \NUSWhispers\Models\Confession::factory()->create([
             'status' => 'Pending',
             'fingerprint' => 'foo',
         ]);
@@ -79,7 +79,7 @@ class FilterConfessionViaFingerprintTest extends TestCase
 
     public function testHandleNewFingerprint()
     {
-        $confession = factory(\NUSWhispers\Models\Confession::class)->create([
+        $confession = \NUSWhispers\Models\Confession::factory()->create([
             'status' => 'Pending',
             'fingerprint' => 'foo',
         ]);
@@ -94,17 +94,17 @@ class FilterConfessionViaFingerprintTest extends TestCase
 
     public function testHandleNetScore()
     {
-        factory(\NUSWhispers\Models\Confession::class, 10)->create([
+        \NUSWhispers\Models\Confession::factory(10)->create([
             'status' => 'Rejected',
             'fingerprint' => 'foo',
         ]);
 
-        factory(\NUSWhispers\Models\Confession::class, 10)->create([
+        \NUSWhispers\Models\Confession::factory(10)->create([
             'status' => 'Approved',
             'fingerprint' => 'foo',
         ]);
 
-        $confession = factory(\NUSWhispers\Models\Confession::class)->create([
+        $confession = \NUSWhispers\Models\Confession::factory()->create([
             'status' => 'Pending',
             'fingerprint' => 'foo',
         ]);
@@ -119,13 +119,13 @@ class FilterConfessionViaFingerprintTest extends TestCase
 
     public function testHandleExpired()
     {
-        factory(\NUSWhispers\Models\Confession::class, 10)->create([
+        \NUSWhispers\Models\Confession::factory(10)->create([
             'status' => 'Rejected',
             'fingerprint' => 'foo',
             'created_at' => Carbon::now()->subDays(30)->toDateTimeString(),
         ]);
 
-        $confession = factory(\NUSWhispers\Models\Confession::class)->create([
+        $confession = \NUSWhispers\Models\Confession::factory()->create([
             'status' => 'Pending',
             'fingerprint' => 'foo',
         ]);

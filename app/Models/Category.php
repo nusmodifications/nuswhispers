@@ -2,14 +2,17 @@
 
 namespace NUSWhispers\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Category extends Model
 {
+    /** @use HasFactory<\Database\Factories\CategoryFactory> */
+    use HasFactory;
+
     /**
      * The attributes that should be casted to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'confession_category_id' => 'string',
@@ -36,6 +39,9 @@ class Category extends Model
      */
     public $timestamps = false;
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Confession, $this>
+     */
     public function confessions()
     {
         return $this->belongsToMany(Confession::class, 'confession_categories', 'confession_category_id', 'confession_id');
@@ -43,6 +49,6 @@ class Category extends Model
 
     public function scopeCategoryAsc($query)
     {
-        return $query->orderBy('confession_category', 'ASC');
+        return $query->orderBy('confession_category', 'asc');
     }
 }

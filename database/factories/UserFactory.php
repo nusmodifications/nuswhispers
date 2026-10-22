@@ -1,22 +1,33 @@
 <?php
 
-$factory->define(\NUSWhispers\Models\User::class, function ($faker) {
-    return [
-        'role' => $faker->randomElement(['Moderator', 'Administrator']),
-        'name' => $faker->name(),
-        'email' => $faker->email(),
-        'password' => Hash::make($faker->password()),
-    ];
-});
+namespace Database\Factories;
 
-$factory->state(\NUSWhispers\Models\User::class, 'moderator', function ($faker) {
-    return [
-        'role' => 'Moderator',
-    ];
-});
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Hash;
+use NUSWhispers\Models\User;
 
-$factory->state(\NUSWhispers\Models\User::class, 'admin', function ($faker) {
-    return [
-        'role' => 'Administrator',
-    ];
-});
+/** @extends Factory<User> */
+class UserFactory extends Factory
+{
+    protected $model = User::class;
+
+    public function definition(): array
+    {
+        return [
+            'role' => $this->faker->randomElement(['Moderator', 'Administrator']),
+            'name' => $this->faker->name(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'password' => Hash::make($this->faker->password()),
+        ];
+    }
+
+    public function moderator(): static
+    {
+        return $this->state(['role' => 'Moderator']);
+    }
+
+    public function admin(): static
+    {
+        return $this->state(['role' => 'Administrator']);
+    }
+}

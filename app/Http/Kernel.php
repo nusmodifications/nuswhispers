@@ -9,7 +9,7 @@ class Kernel extends HttpKernel
     /**
      * The application's global HTTP middleware stack.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $middleware = [
         \NUSWhispers\Http\Middleware\CheckForMaintenanceMode::class,
@@ -18,7 +18,7 @@ class Kernel extends HttpKernel
     /**
      * The application's route middleware groups.
      *
-     * @var array
+     * @var array<string, array<int, string>>
      */
     protected $middlewareGroups = [
         'web' => [
@@ -26,7 +26,7 @@ class Kernel extends HttpKernel
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \NUSWhispers\Http\Middleware\VerifyCsrfToken::class,
+            \NUSWhispers\Http\Middleware\PreventRequestForgery::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
         'admin' => [
@@ -42,9 +42,9 @@ class Kernel extends HttpKernel
     /**
      * The application's route middleware.
      *
-     * @var array
+     * @var array<string, string>
      */
-    protected $routeMiddleware = [
+    protected $middlewareAliases = [
         'auth' => \NUSWhispers\Http\Middleware\Authenticate::class,
         'auth.admin' => \NUSWhispers\Http\Middleware\AuthenticateAdmin::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,

@@ -2,16 +2,20 @@
 
 namespace NUSWhispers\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ConfessionQueue extends Model
 {
+    /** @use HasFactory<\Database\Factories\ConfessionQueueFactory> */
+    use HasFactory;
+
     /**
      * The attributes that should be casted to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
+        'update_status_at' => 'datetime',
         'confession_queue_id' => 'string',
     ];
 
@@ -44,20 +48,10 @@ class ConfessionQueue extends Model
     /**
      * Defines confession relationship from model.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Confession, $this>
      */
     public function confession()
     {
         return $this->belongsTo(Confession::class, 'confession_id', 'confession_id');
-    }
-
-    /**
-     * Automatically mutate the date fields.
-     *
-     * @return array
-     */
-    public function getDates()
-    {
-        return ['update_status_at'];
     }
 }

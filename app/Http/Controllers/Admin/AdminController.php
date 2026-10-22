@@ -11,9 +11,8 @@ abstract class AdminController extends Controller
     /**
      * Flashes messages.
      *
-     * @param string $message
-     * @param string $class
-     *
+     * @param  string  $message
+     * @param  string  $class
      * @return void
      */
     protected function flashMessage($message, $class = 'alert-success'): void
@@ -25,8 +24,7 @@ abstract class AdminController extends Controller
     /**
      * Redirects back to the previous page with success message.
      *
-     * @param string $message
-     *
+     * @param  string  $message
      * @return \Illuminate\Http\RedirectResponse
      */
     protected function backWithSuccess(string $message): RedirectResponse
@@ -39,8 +37,7 @@ abstract class AdminController extends Controller
     /**
      * Redirects back to the previous page with error message.
      *
-     * @param string $message
-     *
+     * @param  string  $message
      * @return \Illuminate\Http\RedirectResponse
      */
     protected function backWithError(string $message): RedirectResponse
@@ -53,9 +50,8 @@ abstract class AdminController extends Controller
     /**
      * Wrapper function to handle errors if any exception occurs.
      *
-     * @param callable $callback
-     * @param string $prefix
-     *
+     * @param  callable  $callback
+     * @param  string  $prefix
      * @return mixed
      */
     protected function withErrorHandling(callable $callback, string $prefix = '')

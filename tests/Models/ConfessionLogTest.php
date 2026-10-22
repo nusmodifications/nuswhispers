@@ -11,13 +11,13 @@ class ConfessionLogTest extends TestCase
 {
     public function testConfession()
     {
-        $log = factory(ConfessionLog::class)->create();
+        $log = ConfessionLog::factory()->create();
         $this->assertInstanceOf(Confession::class, $log->confession);
     }
 
     public function testUser()
     {
-        $log = factory(ConfessionLog::class)->create();
+        $log = ConfessionLog::factory()->create();
         $this->assertInstanceOf(User::class, $log->user);
     }
 }

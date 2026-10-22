@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 
@@ -14,7 +16,7 @@ class DatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        $this->call('CategoriesSeeder');
-        $this->call('UsersSeeder');
+        $this->call(CategoriesSeeder::class);
+        $this->call(UsersSeeder::class);
     }
 }

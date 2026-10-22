@@ -10,12 +10,12 @@ class CategoriesController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
         $output = Cache::rememberForever('categories', function () {
-            return ['data' => ['categories' => Category::categoryAsc()->get()]];
+            return ['data' => ['categories' => Category::categoryAsc()->get()->toArray()]];
         });
 
         return response()->json($output);
@@ -25,9 +25,8 @@ class CategoriesController extends Controller
      * Get the category JSON by a given category_id
      * route: api/categories/<category_id>.
      *
-     * @param int $category_id
-     *
-     * @return json {"success": true or false, "data": {"category": category}};
+     * @param  int  $categoryId
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($categoryId)
     {

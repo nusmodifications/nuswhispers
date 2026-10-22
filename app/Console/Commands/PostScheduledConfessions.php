@@ -31,7 +31,7 @@ class PostScheduledConfessions extends Command
     /**
      * Create a new command instance.
      *
-     * @param \NUSWhispers\Services\ConfessionService $service
+     * @param  \NUSWhispers\Services\ConfessionService  $service
      */
     public function __construct(ConfessionService $service)
     {
@@ -47,7 +47,7 @@ class PostScheduledConfessions extends Command
     public function handle()
     {
         $confessions = Confession::query()
-            ->orderBy('confession_queue.update_status_at', 'DESC')
+            ->orderBy('confession_queue.update_status_at', 'desc')
             ->join('confession_queue', 'confessions.confession_id', '=', 'confession_queue.confession_id')
             ->where('confession_queue.update_status_at', '<=', Carbon::now()->toDateTimeString())
             ->get();

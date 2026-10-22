@@ -2,7 +2,7 @@
 
 namespace NUSWhispers\Http\Controllers;
 
-use Facebook\Exceptions\FacebookSDKException;
+use Facebook\Exception\SDKException;
 use Facebook\Facebook;
 use NUSWhispers\Models\Confession;
 use NUSWhispers\Models\FbUser;
@@ -17,7 +17,7 @@ class FbUsersController extends Controller
     /**
      * Constructs an instance of the controller.
      *
-     * @param \Facebook\Facebook $fb
+     * @param  \Facebook\Facebook  $fb
      */
     public function __construct(Facebook $fb)
     {
@@ -39,7 +39,7 @@ class FbUsersController extends Controller
 
                     return response()->json(['success' => true]);
                 }
-            } catch (FacebookSDKException $e) {
+            } catch (SDKException $e) {
                 return response()->json(['success' => false, 'errors' => [$e->getMessage()]]);
             }
         }

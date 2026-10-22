@@ -58,6 +58,7 @@ yarn.lock
 # PHPUnit
 phpunit.xml
 .phpunit.result.cache
+.phpunit.cache/
 
 # Other folders
 build

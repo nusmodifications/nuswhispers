@@ -30,7 +30,7 @@ class UpdateConfessionFacebookInfo extends Command
     /**
      * Constructs an instance of the command.
      *
-     * @param \Facebook\Facebook $fb
+     * @param  \Facebook\Facebook  $fb
      */
     public function __construct(Facebook $fb)
     {
@@ -44,7 +44,7 @@ class UpdateConfessionFacebookInfo extends Command
      *
      * @return mixed
      *
-     * @throws \Facebook\Exceptions\FacebookSDKException
+     * @throws \Facebook\Exception\SDKException
      */
     public function handle()
     {

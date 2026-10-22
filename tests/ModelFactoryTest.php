@@ -17,7 +17,7 @@ class ModelFactoryTest extends TestCase
         ];
 
         foreach ($modelClasses as $modelClass) {
-            $model = factory($modelClass)->make();
+            $model = $modelClass::factory()->make();
             $this->assertInstanceOf($modelClass, $model);
         }
     }

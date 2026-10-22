@@ -10,9 +10,8 @@ class ModeratorCommentsAdminController extends AdminController
     /**
      * Deletes a moderator comment.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \NUSWhispers\Models\ModeratorComment $comment
-     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \NUSWhispers\Models\ModeratorComment  $comment
      * @return mixed
      */
     public function getDelete(Request $request, ModeratorComment $comment)
@@ -31,9 +30,8 @@ class ModeratorCommentsAdminController extends AdminController
     /**
      * Checks whether the existing user can delete the comment.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \NUSWhispers\Models\ModeratorComment $comment
-     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \NUSWhispers\Models\ModeratorComment  $comment
      * @return bool
      */
     protected function canDeleteComment(Request $request, ModeratorComment $comment): bool

@@ -8,7 +8,7 @@ class ConfessionsControllerShowTest extends ConfessionsControllerTestCase
 {
     public function testShow()
     {
-        $confession = factory(Confession::class)->states('featured')->create();
+        $confession = Confession::factory()->featured()->create();
 
         $this->json('GET', '/api/confessions/' . $confession->getKey())
             ->assertJsonFragment(['confession_id' => $confession->getKey()]);

@@ -15,6 +15,8 @@ $app = new Illuminate\Foundation\Application(
     dirname(__DIR__)
 );
 
+$app->useLangPath(dirname(__DIR__) . '/resources/lang');
+
 /*
 |--------------------------------------------------------------------------
 | Bind Important Interfaces

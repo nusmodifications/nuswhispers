@@ -4,6 +4,7 @@ namespace NUSWhispers\Tests\Console\Commands;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Event;
 use NUSWhispers\Models\Confession;
 use NUSWhispers\Models\User;
 use NUSWhispers\Tests\TestCase;
@@ -12,9 +13,9 @@ class PostScheduledConfessionsTest extends TestCase
 {
     public function testCommand()
     {
-        $this->withoutEvents();
+        Event::fake();
 
-        $confession = factory(Confession::class)->states('scheduled')->create();
+        $confession = Confession::factory()->scheduled()->create();
         $confession->queue()->create([
             'status_after' => 'rejected',
             'update_status_at' => Carbon::now()->subMinutes(5),
@@ -22,7 +23,7 @@ class PostScheduledConfessionsTest extends TestCase
         $confession->logs()->create([
             'status_before' => 'Pending',
             'status_after' => 'Scheduled',
-            'changed_by_user' => factory(User::class)->create()->getKey(),
+            'changed_by_user' => User::factory()->create()->getKey(),
             'created_on' => $confession->status_updated_at,
         ]);
 

@@ -16,10 +16,9 @@ class ResolvesFacebookPageTokenTest extends TestCase
         $this->app['config']->set('services.facebook.page_access_token', 'foobar');
     }
 
-    /** @test */
     public function testResolvePageToken()
     {
-        $user = factory(\NUSWhispers\Models\User::class)->create();
+        $user = \NUSWhispers\Models\User::factory()->create();
         $user->profiles()->create([
             'provider_name' => 'facebook',
             'page_token' => 'reaper',
@@ -28,10 +27,9 @@ class ResolvesFacebookPageTokenTest extends TestCase
         $this->assertEquals('reaper', $this->stub->resolvePageToken($user));
     }
 
-    /** @test */
     public function testResolvePageTokenEmptyToken()
     {
-        $user = factory(\NUSWhispers\Models\User::class)->create();
+        $user = \NUSWhispers\Models\User::factory()->create();
         $user->profiles()->create([
             'provider_name' => 'facebook',
             'page_token' => '',
@@ -40,16 +38,14 @@ class ResolvesFacebookPageTokenTest extends TestCase
         $this->assertEquals('foobar', $this->stub->resolvePageToken($user));
     }
 
-    /** @test */
     public function testResolvePageTokenNull()
     {
         $this->assertEquals('foobar', $this->stub->resolvePageToken(null));
     }
 
-    /** @test */
     public function testResolvePageTokenNoProfile()
     {
-        $user = factory(\NUSWhispers\Models\User::class)->create();
+        $user = \NUSWhispers\Models\User::factory()->create();
         $this->assertEquals('foobar', $this->stub->resolvePageToken($user));
     }
 }

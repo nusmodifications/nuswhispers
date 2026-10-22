@@ -15,7 +15,7 @@ class DeleteConfessionFromFacebook implements ShouldQueue
     /**
      * Constructs an instance of the event listener.
      *
-     * @param \Facebook\Facebook $fb
+     * @param  \Facebook\Facebook  $fb
      */
     public function __construct(Facebook $fb)
     {
@@ -25,11 +25,10 @@ class DeleteConfessionFromFacebook implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param mixed $event
-     *
+     * @param  mixed  $event
      * @return mixed
      *
-     * @throws \Facebook\Exceptions\FacebookSDKException
+     * @throws \Facebook\Exception\SDKException
      */
     public function handle($event)
     {

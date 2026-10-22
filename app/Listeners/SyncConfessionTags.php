@@ -12,7 +12,7 @@ class SyncConfessionTags implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  mixed $event
+     * @param  mixed  $event
      * @return mixed
      */
     public function handle($event)
@@ -37,9 +37,8 @@ class SyncConfessionTags implements ShouldQueue
     /**
      * Fetch tags from content.
      *
-     * @param $content
-     *
-     * @return array
+     * @param  $content
+     * @return \Illuminate\Support\Collection<int, string>
      */
     protected function fetchTagsFromContent($content)
     {

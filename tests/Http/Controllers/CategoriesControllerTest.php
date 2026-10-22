@@ -21,7 +21,7 @@ class CategoriesControllerTest extends TestCase
 
     public function testShow()
     {
-        $category = factory(Category::class)->create();
+        $category = Category::factory()->create();
 
         $this->json('GET', '/api/categories/' . $category->getKey())
             ->assertJsonFragment(['confession_category_id' => $category->getKey()]);

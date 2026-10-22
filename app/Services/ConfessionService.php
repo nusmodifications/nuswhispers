@@ -16,9 +16,8 @@ class ConfessionService
     /**
      * Returns confession count by fingerprint.
      *
-     * @param \NUSWhispers\Models\Confession
-     * @param string|null $status
-     *
+     * @param  \NUSWhispers\Models\Confession  $confession
+     * @param  string|null  $status
      * @return mixed
      */
     public function countByFingerprint(Confession $confession, $status = null)
@@ -29,8 +28,7 @@ class ConfessionService
     /**
      * Creates a new confession.
      *
-     * @param array $attributes
-     *
+     * @param  array  $attributes
      * @return \NUSWhispers\Models\Confession
      */
     public function create(array $attributes): Confession
@@ -52,8 +50,7 @@ class ConfessionService
     /**
      * Deletes a confession by its ID.
      *
-     * @param mixed $confession
-     *
+     * @param  mixed  $confession
      * @return mixed
      *
      * @throws \Exception
@@ -74,9 +71,8 @@ class ConfessionService
     /**
      * Returns confessions by fingerprint.
      *
-     * @param \NUSWhispers\Models\Confession
-     * @param string|null $status
-     *
+     * @param  \NUSWhispers\Models\Confession  $confession
+     * @param  string|null  $status
      * @return mixed
      */
     public function findByFingerprint(Confession $confession, $status = null)
@@ -87,10 +83,9 @@ class ConfessionService
     /**
      * Updates a confession status.
      *
-     * @param mixed $confession
-     * @param string $status
-     * @param int|null $hours
-     *
+     * @param  mixed  $confession
+     * @param  string  $status
+     * @param  int|null  $hours
      * @return \NUSWhispers\Models\Confession
      */
     public function updateStatus($confession, $status = 'Approved', $hours = null): Confession
@@ -101,9 +96,8 @@ class ConfessionService
     /**
      * Updates a confession based on its ID.
      *
-     * @param mixed $confession
-     * @param array $attributes
-     *
+     * @param  mixed  $confession
+     * @param  array  $attributes
      * @return \NUSWhispers\Models\Confession
      */
     public function update($confession, array $attributes = []): Confession
@@ -131,9 +125,8 @@ class ConfessionService
     /**
      * Build fingerprint query.
      *
-     * @param \NUSWhispers\Models\Confession $confession
-     * @param null $status
-     *
+     * @param  \NUSWhispers\Models\Confession  $confession
+     * @param  string|null  $status
      * @return \Illuminate\Database\Eloquent\Builder
      */
     protected function buildFingerprintQuery($confession, $status = null): Builder
@@ -151,8 +144,7 @@ class ConfessionService
     /**
      * Check fingerprint.
      *
-     * @param  array $attributes
-     *
+     * @param  array  $attributes
      * @return array
      */
     protected function checkFingerprint(array $attributes = []): array
@@ -169,9 +161,8 @@ class ConfessionService
     /**
      * Dispatches the respective events if the status is changed.
      *
-     * @param \NUSWhispers\Models\Confession $confession
-     * @param string $originalStatus
-     *
+     * @param  \NUSWhispers\Models\Confession  $confession
+     * @param  string  $originalStatus
      * @return void
      */
     protected function dispatchStatusEvents(Confession $confession, $originalStatus = ''): void
@@ -215,10 +206,9 @@ class ConfessionService
     /**
      * Schedules a confession to change status in x hours.
      *
-     * @param mixed $confession
-     * @param string $status
-     * @param \DateTime $updateAt
-     *
+     * @param  mixed  $confession
+     * @param  string  $status
+     * @param  \DateTime  $updateAt
      * @return \NUSWhispers\Models\Confession
      */
     protected function schedule($confession, $status, $updateAt): Confession
@@ -237,7 +227,7 @@ class ConfessionService
     /**
      * Normalize input.
      *
-     * @param array $attributes
+     * @param  array  $attributes
      * @return array
      */
     protected function normalize(array $attributes): array
@@ -259,9 +249,8 @@ class ConfessionService
     /**
      * Syncs confession's relations.
      *
-     * @param \NUSWhispers\Models\Confession $confession
-     * @param array $attributes
-     *
+     * @param  \NUSWhispers\Models\Confession  $confession
+     * @param  array  $attributes
      * @return \NUSWhispers\Models\Confession
      */
     protected function sync(Confession $confession, array $attributes = []): Confession
@@ -284,8 +273,7 @@ class ConfessionService
     /**
      * Resolves the confession.
      *
-     * @param mixed $confession
-     *
+     * @param  mixed  $confession
      * @return mixed
      */
     protected function resolveConfession($confession)
@@ -300,8 +288,7 @@ class ConfessionService
     /**
      * Resolves the user who modified the confession.
      *
-     * @param  \NUSWhispers\Models\Confession $confession
-     *
+     * @param  \NUSWhispers\Models\Confession  $confession
      * @return \NUSWhispers\Models\User|null
      */
     protected function resolveUser(Confession $confession): ?User

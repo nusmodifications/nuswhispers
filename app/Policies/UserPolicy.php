@@ -9,8 +9,7 @@ class UserPolicy
     /**
      * Determine if the given user can manage users.
      *
-     * @param \NUSWhispers\Models\User $user
-     *
+     * @param  \NUSWhispers\Models\User  $user
      * @return bool
      */
     public function manage(User $user): bool
@@ -21,9 +20,8 @@ class UserPolicy
     /**
      * Determine if the given user can delete users.
      *
-     * @param \NUSWhispers\Models\User $user
-     * @param \NUSWhispers\Models\User $target
-     *
+     * @param  \NUSWhispers\Models\User  $user
+     * @param  \NUSWhispers\Models\User  $target
      * @return bool
      */
     public function delete(User $user, User $target): bool

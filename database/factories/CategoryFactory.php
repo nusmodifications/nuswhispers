@@ -1,9 +1,19 @@
 <?php
 
-use Ramsey\Uuid\Uuid;
+namespace Database\Factories;
 
-$factory->define(\NUSWhispers\Models\Category::class, function ($faker) {
-    return [
-        'confession_category' => ucfirst($faker->word) . '-' . (string) Uuid::uuid4(),
-    ];
-});
+use Illuminate\Database\Eloquent\Factories\Factory;
+use NUSWhispers\Models\Category;
+
+/** @extends Factory<Category> */
+class CategoryFactory extends Factory
+{
+    protected $model = Category::class;
+
+    public function definition(): array
+    {
+        return [
+            'confession_category' => ucfirst($this->faker->word) . '-' . $this->faker->uuid,
+        ];
+    }
+}
